@@ -7,3 +7,5 @@
 <svelte:head>
 	<title>Profile-Administration</title>
 </svelte:head>
+
+<div>{data}</div>
