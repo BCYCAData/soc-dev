@@ -1,14 +1,10 @@
 import '$lib/dbClient';
-import { supabaseRedirectBase } from '$lib/dbClient';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import type { Handle } from '@sveltejs/kit';
+import type { HandleClientError } from '@sveltejs/kit';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	console.log('Client Handle Here?');
-	const { session, supabaseClient } = await getSupabase(event);
-	console.log('Client session', session);
-	event.locals.dbClient = supabaseClient;
-	event.locals.session = session;
-	event.locals.supabaseRedirectBase = supabaseRedirectBase;
-	return resolve(event);
+export const handleError: HandleClientError = async ({ error, event }) => {
+    console.log('HandleClientError error '), error;
+    console.log('HandleClientError event '), event;
+	return {
+		message: 'Whoops'
+	};
 };

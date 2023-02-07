@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { json } from '@sveltejs/kit';
-
 	import Spinner from '$components/page/Spinner.svelte';
 
 	import type { AddressPointData } from '$lib/types';
@@ -23,7 +21,6 @@
 		loading = !loading;
 		let data: AddressPointData;
 		searchAddress = `${replaceAbbreviations(streetaddress.toUpperCase())} ${suburb.toUpperCase()}`;
-		console.log('searchAddress', searchAddress);
 		try {
 			const response = await fetch('/api/data/validateaddress', {
 				method: 'POST',
@@ -33,7 +30,6 @@
 				})
 			});
 			data = await response.json();
-			console.log('validaddress', data.validaddress);
 			if (data.apistatus === 200) {
 				addressPointData.status = data.status;
 				addressPointData.communityname = data.communityname ? data.communityname : null;
@@ -104,46 +100,50 @@
 		<p class="m-1">Abbreviations are not allowed.</p>
 	</div>
 {/if}
-<h4 class=" text-center mt-5">Membership is restricted to specific Communities</h4>
-<p class="text-center mb-2">
-	Please enter your Street Address and Suburb to check your qualification
-</p>
+<div class="flex flex-col items-center  max-w-container mx-auto justify-center">
+	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
+		<h1 class="text-2xl text-center">Membership is restricted to specific Communities</h1>
+		<p class="text-center mb-2">
+			Please enter your Street Address and Suburb to check your qualification
+		</p>
 
-<form on:submit|preventDefault={submitForm}>
-	<input
-		id="streetaddress"
-		type="text"
-		class="form-input !border !border-orange-700 w-full py-3 rounded mb-4"
-		name="streetaddress"
-		required={true}
-		placeholder="Street Address"
-		autocomplete="street-address"
-		style="text-transform:uppercase"
-		bind:value={streetaddress}
-	/>
-	<div class="flex justify-between">
-		<input
-			id="suburb"
-			type="text"
-			class="form-input !w-1/2 !border !border-orange-700 py-3 rounded"
-			name="suburb"
-			required
-			placeholder="Suburb"
-			autocomplete="address-level2"
-			style="text-transform:uppercase"
-			bind:value={suburb}
-		/>
-		{#if !canGo && streetaddress.length > 0}
-			<div class="bg-red-100 rounded-lg my-1 text-base text-red-700" role="alert">
-				The address must have a number.
+		<form on:submit|preventDefault={submitForm}>
+			<input
+				id="streetaddress"
+				type="text"
+				class="form-input !border !border-orange-700 w-full py-3 rounded mb-4"
+				name="streetaddress"
+				required={true}
+				placeholder="Street Address"
+				autocomplete="street-address"
+				style="text-transform:uppercase"
+				bind:value={streetaddress}
+			/>
+			<div class="flex justify-between">
+				<input
+					id="suburb"
+					type="text"
+					class="form-input !w-1/2 !border !border-orange-700 py-3 rounded"
+					name="suburb"
+					required
+					placeholder="Suburb"
+					autocomplete="address-level2"
+					style="text-transform:uppercase"
+					bind:value={suburb}
+				/>
+				{#if !canGo && streetaddress.length > 0}
+					<div class="bg-red-100 rounded-lg my-1 text-base text-red-700" role="alert">
+						The address must have a number.
+					</div>
+				{/if}
+				<button
+					type="submit"
+					class="w-1/3 text-center rounded-full cursor-pointer bg-orange-500 text-stone-100 hover:bg-orange-700 focus:outline-none disabled:opacity-25"
+					disabled={!canGo}
+				>
+					Check
+				</button>
 			</div>
-		{/if}
-		<button
-			type="submit"
-			class="w-1/3 text-center rounded-full  cursor-pointer bg-orange-500 text-stone-100 hover:bg-orange-700 focus:outline-none my-1 disabled:opacity-25"
-			disabled={!canGo}
-		>
-			Check
-		</button>
+		</form>
 	</div>
-</form>
+</div>

@@ -45,7 +45,6 @@ export const POST = (async ({ locals, request }) => {
 			addresspoint: resultData.addresspoint_geom,
 			message: resultData.message,
 			status: resultData.return_status,
-			// status: 401,
 			apistatus: sbStatus,
 			apistatustext: statusText,
 			error: null

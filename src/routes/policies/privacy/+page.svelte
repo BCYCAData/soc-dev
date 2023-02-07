@@ -1,4 +1,8 @@
-<h1 class="title-font text-center font-bold sm:text-4xl sm:mt-4 text-orange-600">
+<svelte:head>
+	<title>Privacy Policy</title>
+</svelte:head>
+
+<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
 	Strengthen OUR Community
 </h1>
 <h1 class="text-center sm:text-3xl sm:mt-4 text-gray-900">PRIVACY POLICY</h1>

@@ -7,26 +7,33 @@
 </script>
 
 <div class="bg-green-100 mt-1 rounded-lg">
-	<p class="font-semibold text-center text-lg m-1">
+	<h1 class="text-xl text-center">
 		{searchaddress}
-	</p>
+	</h1>
 	{#if searchaddress.replace(',', '') !== addressPointData.validaddress}
-		<p class="text-center m-1">( {addressPointData.validaddress} )</p>
+		<h1 class="text-xl text-center">( {addressPointData.validaddress} )</h1>
 	{/if}
-	<p class="text-center m-1">
+	<h1 class="text-xl text-center">
 		is part of the
 		<span class="font-semibold">{addressPointData.communityname}</span>
 		community.
-	</p>
+	</h1>
 </div>
 
-<div class="max-w-sm mx-auto flex-1 flex flex-col items-center justify-center px-2">
-	<div class="px-6 py-2 rounded shadow-md text-gray-900 w-full">
+<div class="flex flex-col items-center max-w-xl mx-auto justify-center">
+	<div class="text-center bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
 		<p class="font-semibold text-center m-1">Thanks for your interest in our project</p>
 		<p class="font-semibold text-center">
 			We are not currently engaging with the {addressPointData.communityname} community. But we will
 			be soon.
 		</p>
-		<p>If you would like information on future rollouts please call Sue on 0492 802 129</p>
+		<p class="font-semibold text-gray-800">
+			If you would like information on future rollouts please call
+		</p>
+		<p class="font-semibold text-gray-800">
+			<span class="text-lg text-orange-600">Sue</span>
+			<span>on</span>
+			<span>0492 802 129</span>
+		</p>
 	</div>
 </div>

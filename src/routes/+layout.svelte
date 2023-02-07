@@ -21,8 +21,7 @@
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			console.log('Auth state change detected');
+		} = supabaseClient.auth.onAuthStateChange(async (event, session) => {
 			invalidateAll();
 		});
 		return () => {
@@ -75,10 +74,7 @@
 	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
 	<!-- Router Slot -->
 	<slot />
-	<!-- ---- / ---- -->
 	<svelte:fragment slot="pageFooter">
-		<!-- <div class="col-span-8 row-span-1">
-			<div class="flex items-center text-center content-center justify-around w-full"> -->
 		<img
 			class="ml-2 mb-2 h-10 md:ml-26"
 			src="/ag.png"
@@ -91,8 +87,6 @@
 			Commonwealth/State Disaster Recovery Funding Arrangements
 		</p>
 		<img class="mr-2 mb-2 h-10 md:mr-26" src="/nswg.jpg" alt="NSW Government logo" />
-		<!-- </div> -->
-		<!-- </div> -->
 	</svelte:fragment>
 	<svelte:fragment slot="footer"><Footer /></svelte:fragment>
 </AppShell>

@@ -1,5 +1,9 @@
 <script lang="ts">
 	import AboutMap from '$components/map/AboutMap.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	let mapLayers = data.mapData;
 </script>
 
 <svelte:head>
@@ -15,7 +19,7 @@
 			This project is about empowering our community to take responsibility for being prepared and
 			working together to make a difference.
 		</h4>
-		<h3>Our aim is to Prepare, Connect and Rebound</h3>
+		<h2>Our aim is to Prepare, Connect and Rebound</h2>
 		<div class="text-left">
 			<p class="mt-2">The project focuses on four areas:</p>
 			<ol class="list">
@@ -54,7 +58,7 @@
 			</p>
 		</div>
 		<div class="main-map w-7/8 h-[58%]">
-			<AboutMap />
+			<AboutMap {mapLayers} />
 		</div>
 	</div>
 </div>

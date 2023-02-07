@@ -5,7 +5,7 @@
 	import { onMount, onDestroy } from 'svelte';
 
 	export let mapObject: MapObject;
-	export let mapData: MapDataJSON;
+	export let mapLayers: MapDataJSON;
 	export let mapTileLayer: MapTileLayerObject;
 
 	let map: Map;
@@ -30,9 +30,9 @@
 		}
 		leaflet.tileLayer(mapTileLayer.url, mapTileLayer.layerOptions).addTo(map);
 
-		if (mapData.jsonLayers) {
+		if (mapLayers.jsonLayers) {
 			let features = [];
-			let g = mapData.jsonLayers[0];
+			let g = mapLayers.jsonLayers[0];
 			for (let j = 0; j < g.length; j++) {
 				let p = g[j].geom.coordinates;
 				let lon = p[0];
@@ -44,10 +44,9 @@
 			featureGroup = leaflet.featureGroup(features);
 			map.addLayer(featureGroup);
 			features = [];
-			g = mapData.jsonLayers[1];
+			g = mapLayers.jsonLayers[1];
 			for (let j = 0; j < g.length; j++) {
 				let p = g[j].geom.coordinates;
-				// let n = g[j].addresspointtype;
 				let lon = p[0];
 				let lat = p[1];
 				let markerLocation: LatLngExpression = new leaflet.LatLng(lat, lon, 0);

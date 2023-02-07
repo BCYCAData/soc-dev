@@ -42,11 +42,6 @@
 			future challenges and be armed with knowledge that helps us to tackle whatever natural
 			disaster comes our way.
 		</p>
-		<!-- {#if modalVisible}
-			<Modal on:exit={() => (modalVisible = !modalVisible)}>
-				<AddressChallenge />
-			</Modal>
-		{/if} -->
 		<p class="unstyled text-base md:text-lg text-gray-900 font-semibold mt-1 mb-0">
 			Above all, we want our community to feel prepared, safe and connected.
 		</p>

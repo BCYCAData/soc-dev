@@ -54,7 +54,7 @@
 				<a
 					class:active={$page.url.pathname.endsWith('/admin')}
 					href="/admin"
-					class="btn-ringed text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+					class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 					>Administrator</a
 				>
 			{/if}
@@ -66,7 +66,7 @@
 			>
 			<form method="POST" action="/api/auth/signout">
 				<button
-					class="btn-ringed text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+					class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 					type="submit"
 				>
 					Sign Out
@@ -76,7 +76,7 @@
 			<a
 				class:active={$page.url.pathname.endsWith('/signin')}
 				href="/auth/signin"
-				class="btn-ringed text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+				class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 			>
 				Sign In
 			</a>

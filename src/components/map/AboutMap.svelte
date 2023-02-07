@@ -2,9 +2,11 @@
 	import MapLeaflet from '$components/map/leaflet/MapLeaflet.svelte';
 	import { env } from '$env/dynamic/public';
 
+	import type { MapDataJSON } from '$lib/types';
+
 	let mapObject = {
 		divId: 'basicMap',
-		centre: [-31.955815, 152.300884], //-31.955814913,152.300883592
+		centre: [-31.955815, 152.300884],
 		zoomControl: false,
 		doubleClickZoom: false,
 		scrollWheelZoom: false,
@@ -30,19 +32,14 @@
 	};
 
 	// '© State of New South Wales (Spatial Services, a business unit of the Department of Customer Service NSW). For current information go to spatial.nsw.gov.au.’
-	async function getMapData() {
-		const response = await fetch('/api/data/addresspoints');
-		const data = await response.json();
-		return data.mapData;
-	}
-	let mapData = getMapData();
+	export let mapLayers: MapDataJSON;
 </script>
 
-{#await mapData}
+{#await mapLayers}
 	<p>...waiting</p>
-{:then mapData}
+{:then mapLayers}
 	<div class="border-double border-stone-100 h-full">
-		<MapLeaflet {mapObject} {mapTileLayer} {mapData} />
+		<MapLeaflet {mapObject} {mapTileLayer} {mapLayers} />
 	</div>
 {:catch error}
 	<p style="color: red">{error.message}</p>
