@@ -16,3 +16,15 @@ export const formatPhone = (phoneNumber: string, digit: string) => {
 	}
 	return phoneNumber;
 };
+
+export const geometryToGeoJson = (featureType: string, geometryObject: any) => {
+	let geojson = {
+		featureType: featureType,
+		geometry: {
+			type: geometryObject.type,
+			crs: geometryObject.crs,
+			coordinates: geometryObject.coordinates
+		}
+	};
+	return geojson;
+};

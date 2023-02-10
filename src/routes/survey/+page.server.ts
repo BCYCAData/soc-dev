@@ -15,16 +15,31 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const { error: agentError, data: agent } = await locals.dbClient.rpc('get_agent_for_user', {
 		id_input
 	});
+	if (agentError) {
+		console.log('error get Agent for User:', agentError);
+		throw error(400, agentError.message);
+	}
 	if (agent?.length === 0) {
 		agentData = [{ agent_name: '', agent_mobile: '', agent_phone: '', created_at: '' }];
 	}
-	const { data: userBCYCAData } = await locals.dbClient
+	const { error: userBCYCAError, data: userBCYCAData } = await locals.dbClient
 		.from('user_bcyca_profile')
 		.select('*')
 		.eq('user_id', locals.session?.user.id);
-	const { data: propertyProfileData } = await locals.dbClient.rpc('get_property_for_user', {
-		id_input
-	});
+	if (userBCYCAError) {
+		console.log('error get BCYCA Data for User:', userBCYCAError);
+		throw error(400, userBCYCAError.message);
+	}
+	const { error: propertyProfileError, data: propertyProfileData } = await locals.dbClient.rpc(
+		'get_property_for_user',
+		{
+			id_input
+		}
+	);
+	if (propertyProfileError) {
+		console.log('error get Property Profile Data for User:', propertyProfileError);
+		throw error(400, propertyProfileError.message);
+	}
 	return {
 		agent: agentData?.[0],
 		userProfile: userProfileData?.[0],

@@ -7,5 +7,5 @@ node_modules
 .env.*
 /src/routes/test
 !.env.example
-.todo.txt
+*todo*
 notes.md

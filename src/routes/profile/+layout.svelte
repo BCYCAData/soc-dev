@@ -3,7 +3,7 @@
 	import { AppShell, Drawer, Modal } from '@skeletonlabs/skeleton';
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
-
+	import MessageContainer from '$components/message/MessageContainer.svelte';
 	// import {
 	// 	User,
 	// 	Home2,
@@ -35,6 +35,8 @@
 	import Map2 from 'tabler-icons-svelte/icons/Map2.svelte';
 	import CalendarEvent from 'tabler-icons-svelte/icons/CalendarEvent.svelte';
 
+	import type { PageData } from './$types';
+
 	let pathLables = {
 		profile: ['Profile', 'carbon:home'],
 		aboutme: ['About Me', 'User'],
@@ -58,6 +60,10 @@
 	$: classesSidebarLeft = 'w-1/6 bg-stone-200';
 	$: classesMain = 'mx-4';
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
+
+	// profileMessages
+	export let data: PageData;
+	$: ({ profileMessages: messages } = data);
 </script>
 
 <AppShell
@@ -190,11 +196,12 @@
 		</div></svelte:fragment
 	>
 	<svelte:fragment slot="sidebarRight">
-		<div class="flex flex-row justify-around pt-2 text-xl">Messages</div>
+		<!-- <div class="flex flex-row justify-around pt-2 text-xl">Messages</div>
 		<div class="flex flex-col my-4 mx-4">
 			<p class="m-2">Congratulations you are now eligible for your FREE Emergency Starter Kit.</p>
 			<p class="m-2">We will be in touch soon.</p>
-		</div>
+		</div> -->
+		<MessageContainer {messages} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<slot />
