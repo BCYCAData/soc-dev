@@ -1,5 +1,6 @@
 <script lang="ts">
-	import MapLeaflet from '$components/map/leaflet/MapLeaflet.svelte';
+	import AboutMapLeaflet from '$components/map/leaflet/AboutMapLeaflet.svelte';
+	import Spinner from '$components/page/Spinner.svelte';
 	import { env } from '$env/dynamic/public';
 
 	import type { MapDataJSON } from '$lib/types';
@@ -36,10 +37,10 @@
 </script>
 
 {#await mapLayers}
-	<p>...waiting</p>
+	<Spinner />
 {:then mapLayers}
 	<div class="border-double border-stone-100 h-full">
-		<MapLeaflet {mapObject} {mapTileLayer} {mapLayers} />
+		<AboutMapLeaflet {mapObject} {mapTileLayer} {mapLayers} />
 	</div>
 {:catch error}
 	<p style="color: red">{error.message}</p>

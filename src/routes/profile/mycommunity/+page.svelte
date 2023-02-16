@@ -25,13 +25,11 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
 	export let data: PageData;
-	$: ({ myCommunityData } = data);
+	$: ({ userBCYCAData, userPostalAddressData, userProfileData } = data);
 </script>
 
 <svelte:head>
@@ -58,7 +56,7 @@
 					class="w-4 h-4 ml-8"
 					name="stay_in_touch_choices"
 					type="checkbox"
-					bind:group={myCommunityData.stay_in_touch_choices}
+					bind:group={userProfileData.stay_in_touch_choices}
 					{value}
 				/>
 				<label
@@ -70,7 +68,7 @@
 	</div>
 
 	<!-- Postal address -->
-	<div class:hidden={!myCommunityData.stay_in_touch_choices.includes(5)}>
+	<div class:hidden={!userProfileData.stay_in_touch_choices?.includes(5)}>
 		<div class="flex flex-row mx-2">
 			<div class="flex flex-col basis-7/12 mx-2">
 				<label class="text-base font-semibold text-gray-900" for="postal_address_street">
@@ -83,7 +81,7 @@
 					placeholder="Postal Address"
 					autocomplete="street-address"
 					style="text-transform:uppercase sm:text-lg"
-					bind:value={myCommunityData.postal_address_street}
+					bind:value={userPostalAddressData.postal_address_street}
 				/>
 			</div>
 			<div class="flex flex-col basis-3/12 mx-2">
@@ -97,7 +95,7 @@
 					placeholder="Suburb"
 					autocomplete=""
 					style="text-transform:uppercase sm:text-lg"
-					bind:value={myCommunityData.postal_address_suburb}
+					bind:value={userPostalAddressData.postal_address_suburb}
 				/>
 			</div>
 			<div class="flex flex-col basis-2/12 mx-2">
@@ -110,7 +108,7 @@
 					class="border w-full border-orange-700 rounded bg-orange-50 py-1 sm:text-lg"
 					placeholder="Postcode"
 					autocomplete=""
-					bind:value={myCommunityData.postal_address_postcode}
+					bind:value={userPostalAddressData.postal_address_postcode}
 				/>
 			</div>
 		</div>
@@ -123,7 +121,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_comments"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={myCommunityData.other_comments}
+		bind:inputValue={userProfileData.other_comments}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">

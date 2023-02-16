@@ -1,0 +1,11 @@
+<script lang="ts">
+	import type { PageData } from './$types';
+
+	export let data: PageData;
+	$: ({ usersAdminData } = data);
+</script>
+
+<svelte:head>
+	<title>Users Administration</title>
+</svelte:head>
+<div>{usersAdminData}</div>

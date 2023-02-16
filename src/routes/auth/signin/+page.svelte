@@ -7,20 +7,12 @@
 
 	function triggerCustomModal(): void {
 		const modalComponent: ModalComponent = {
-			// Pass a reference to your custom component
 			ref: AddressChallenge
-			// Add your props as key/value pairs !!!! ONLY FOR BUILT IN ALERTS !!!!
-			// props: { regionHeader: '!text-2xl !font-bold !text-blue-500' }
-			// Provide default slot content as a template literal
-			// slot: '<p>Skeleton</p>'
 		};
 		const d: ModalSettings = {
 			type: 'component',
 			component: modalComponent,
-			// title: 'Address Check',
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}

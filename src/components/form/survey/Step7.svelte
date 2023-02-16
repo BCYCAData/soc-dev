@@ -6,11 +6,12 @@
 		stayGoOptions
 	} from '$lib/profileOptions';
 
-	import type { UserProfileData } from '$lib/types';
+	// import type { UserProfileData } from '$lib/types';
 
-	export let userProfileData: UserProfileData;
+	export let userProfileData: any;
 </script>
 
+<pre>{userProfileData.send_rfs_survival_plan}</pre>
 <h2 class="mb-1 text-xl font-semibold text-gray-900">
 	Have you completed a RFS Bushfire survival plan?
 </h2>

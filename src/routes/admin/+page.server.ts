@@ -5,17 +5,19 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals?.session?.user) {
 		throw redirect(307, '/auth/signin');
 	}
-	const { error: aboutMeError, data: aboutMeData } = await locals.dbClient
-		.from('user_profile')
-		.select('*')
-		.eq('id', locals.session?.user.id);
-	if (aboutMeError) {
-		throw error(400, `get myPlace Error ${aboutMeError.message}`);
-	}
-	if (aboutMeData.length === 1) {
-		return { adminData: 'It works' };
-	}
-	throw error(400, 'Something went wrong retrieving the Administration data.');
+	// console.log(locals?.session?.user.id);
+	// console.log(locals?.session?.user.app_metadata.bcyca);
+	// const { error: adminDataError, data: adminData } = await locals.dbClient
+	// 	.from('user_profile')
+	// 	.select('*')
+	// 	.eq('id', locals.session?.user.id);
+	// if (adminDataError) {
+	// 	throw error(400, `get Admin Data Error ${adminDataError.message}`);
+	// }
+	// if (adminData.length === 1) {
+	return { adminData: 'It works' };
+	// }
+	// throw error(400, 'Something went wrong retrieving the Administration data.');
 };
 
 export const actions: Actions = {

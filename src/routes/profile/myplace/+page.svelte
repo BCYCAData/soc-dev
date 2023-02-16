@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { formatMobile, formatPhone } from '$lib/utils';
+	import { formatPhone } from '$lib/utils';
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
@@ -17,8 +17,6 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
@@ -31,9 +29,7 @@
 	});
 
 	export let data: PageData;
-
-	$: ({ myPlaceData, renting, agentData } = data);
-	$: isRented = renting;
+	$: ({ propertyProfileData, agentData, property_was_rented } = data);
 
 	let unsaved = false;
 </script>
@@ -59,7 +55,7 @@
 				class="col-span-6 w-full p-0.5"
 				placeholder="Street Address"
 				disabled
-				bind:value={myPlaceData.property_address_street}
+				bind:value={propertyProfileData.property_address_street}
 			/>
 			<input
 				type="text"
@@ -69,7 +65,7 @@
 				autocomplete="address-level2"
 				style="text-transform:uppercase sm:text-base"
 				disabled
-				bind:value={myPlaceData.property_address_suburb}
+				bind:value={propertyProfileData.property_address_suburb}
 			/>
 			<input
 				type="text"
@@ -78,37 +74,53 @@
 				placeholder="Postcode"
 				autocomplete="postal-code"
 				disabled
-				bind:value={myPlaceData.property_address_postcode}
+				bind:value={propertyProfileData.property_address_postcode}
 			/>
 		</div>
 		<h2 class="text-base font-semibold text-gray-900">Are you renting this property?</h2>
 		<div class="grid gap-0 p-1 rounded-lg bg-orange-300 sm:grid-cols-10 grid-rows-2 sm:gap-0">
 			<div class="flex items-center mr-4 col-span-3">
-				<!-- {#each noYesOptions as { value, lable }} -->
-				<!-- {#if lable === 'Yes'} -->
 				<div class="flex items-center">
-					<input
-						class="w-4 h-4 ml-8"
-						id="property_rented"
-						type="checkbox"
-						name="property_rented"
-						on:click={() => {
-							isRented = !renting;
-						}}
-						bind:checked={isRented}
-					/>
-					<label
-						class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-						for="property_rented"
-						>{isRented ? 'Yes  (Click to Change)' : 'No (Click to Change)'}</label
-					>
+					{#each noYesOptions as { value, lable }}
+						{#if lable === 'Yes'}
+							<div class="flex items-center">
+								<input
+									class="w-6 h-6 ml-8"
+									id="property_rented"
+									type="radio"
+									name="property_rented"
+									bind:group={propertyProfileData.property_rented}
+									{value}
+								/>
+								<label
+									class="ml-2 text-xl font-medium text-orange-700 font-Poppins"
+									for="property_rented">{lable}</label
+								>
+							</div>
+						{:else}
+							<div class="flex items-center mr-4">
+								<input
+									class="w-6 h-6 ml-8"
+									id="property_rented"
+									name="property_rented"
+									type="radio"
+									bind:group={propertyProfileData.property_rented}
+									{value}
+								/>
+								<label
+									class="ml-2 text-xl font-medium text-orange-700 font-Poppins"
+									for="property_rented">{lable}</label
+								>
+							</div>
+						{/if}
+					{/each}
 				</div>
 			</div>
 			<div class="flex items-center col-span-10 sm:text-base">
 				<label
 					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
 					for="agent_name"
-					hidden={!isRented}>Agent</label
+					hidden={!propertyProfileData.property_rented}>Agent</label
 				>
 				<input
 					type="text"
@@ -116,13 +128,13 @@
 					id="agent_name"
 					name="agent_name"
 					autocomplete="off"
-					hidden={!isRented}
+					hidden={!propertyProfileData.property_rented}
 					bind:value={agentData.agent_name}
 				/>
 				<label
 					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
 					for="agent_mobile"
-					hidden={!isRented}>Mobile</label
+					hidden={!propertyProfileData.property_rented}>Mobile</label
 				>
 				<input
 					type="text"
@@ -130,13 +142,13 @@
 					id="agent_mobile"
 					name="agent_mobile"
 					autocomplete="off"
-					hidden={!isRented}
+					hidden={!propertyProfileData.property_rented}
 					bind:value={agentData.agent_mobile}
 				/>
 				<label
 					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
 					for="agent_phone"
-					hidden={!isRented}>Landline</label
+					hidden={!propertyProfileData.property_rented}>Landline</label
 				>
 				<input
 					type="text"
@@ -144,7 +156,7 @@
 					id="agent_phone"
 					name="agent_phone"
 					autocomplete="off"
-					hidden={!isRented}
+					hidden={!propertyProfileData.property_rented}
 					bind:value={agentData.agent_phone}
 				/>
 			</div>
@@ -158,7 +170,7 @@
 					class="w-4 h-4 ml-8"
 					name="sign_posted"
 					type="radio"
-					bind:group={myPlaceData.sign_posted}
+					bind:group={propertyProfileData.sign_posted}
 					{value}
 				/>
 				<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="sign_posted"
@@ -179,7 +191,7 @@
 							class="w-4 h-4 ml-8"
 							name="truck_access"
 							type="radio"
-							bind:group={myPlaceData.truck_access}
+							bind:group={propertyProfileData.truck_access}
 							{value}
 						/>
 					{:else}
@@ -187,7 +199,7 @@
 							class="w-4 h-4 ml-8"
 							name="truck_access"
 							type="radio"
-							bind:group={myPlaceData.truck_access}
+							bind:group={propertyProfileData.truck_access}
 							{value}
 						/>
 					{/if}
@@ -197,17 +209,23 @@
 				</div>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900" hidden={myPlaceData.truck_access !== 4}>
+		<h2
+			class="text-base font-semibold text-gray-900"
+			hidden={propertyProfileData.truck_access !== 4}
+		>
 			Other Access Information:
 		</h2>
-		<div class="p-2 rounded-lg bg-orange-300 sm:text-lg" hidden={myPlaceData.truck_access !== 4}>
+		<div
+			class="p-2 rounded-lg bg-orange-300 sm:text-lg"
+			hidden={propertyProfileData.truck_access !== 4}
+		>
 			<input
 				type="text"
 				class="border w-full border-orange-700 rounded bg-orange-50 py-1 sm:text-base"
-				hidden={myPlaceData.truck_access !== 4}
+				hidden={propertyProfileData.truck_access !== 4}
 				id="truck_access_other_information"
 				name="truck_access_other_information"
-				bind:value={myPlaceData.truck_access_other_information}
+				bind:value={propertyProfileData.truck_access_other_information}
 			/>
 		</div>
 		<h2 class="text-base font-semibold text-gray-900">How many people usually live here?</h2>
@@ -217,28 +235,28 @@
 				lable="0-18 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={myPlaceData.residents0_18}
+				bind:inputValue={propertyProfileData.residents0_18}
 			/>
 			<NumberInput
 				name="residents19_50"
 				lable="19-50 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={myPlaceData.residents19_50}
+				bind:inputValue={propertyProfileData.residents19_50}
 			/>
 			<NumberInput
 				name="residents51_70"
 				lable="51-70 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={myPlaceData.residents51_70}
+				bind:inputValue={propertyProfileData.residents51_70}
 			/>
 			<NumberInput
 				name="residents71_"
 				lable="71+ yrs"
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={myPlaceData.residents71_}
+				bind:inputValue={propertyProfileData.residents71_}
 			/>
 		</div>
 		<h2 class="text-base font-semibold text-gray-900">
@@ -250,7 +268,7 @@
 					class="w-4 h-4 ml-8"
 					name="vulnerable_residents"
 					type="radio"
-					bind:group={myPlaceData.vulnerable_residents}
+					bind:group={propertyProfileData.vulnerable_residents}
 					{value}
 				/>
 				<label
@@ -272,16 +290,16 @@
 					placeholder="Landline XXXX XXXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
-							myPlaceData.phone = e.currentTarget.value;
+							propertyProfileData.phone = e.currentTarget.value;
 						} else {
 							e.preventDefault();
-							myPlaceData.phone = e.currentTarget.value;
+							propertyProfileData.phone = e.currentTarget.value;
 							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								myPlaceData.phone = formatPhone(myPlaceData.phone, e.key);
+								propertyProfileData.phone = formatPhone(propertyProfileData.phone, e.key);
 							}
 						}
 					}}
-					bind:value={myPlaceData.phone}
+					bind:value={propertyProfileData.phone}
 				/>
 			</div>
 		</div>
@@ -298,7 +316,7 @@
 								name="mobile_reception"
 								type="radio"
 								class="w-4 h-4 text-orange-700 bg-gray-100 border-gray-300 focus:ring-orange-700 checked:ring-orange-700"
-								bind:group={myPlaceData.mobile_reception}
+								bind:group={propertyProfileData.mobile_reception}
 								value={i + 1}
 							/>
 							<label class="inline-block ml-1 text-primary-700 font-Poppins" for="mobile_reception">
@@ -310,10 +328,8 @@
 				</div>
 			</div>
 		</div>
-		<input type="text" name="property_key" value={myPlaceData.id} hidden />
-		<input type="text" name="property_rented" value={myPlaceData.property_rented} hidden />
-		<input type="text" name="isRented" value={isRented} hidden />
-		<input type="text" name="wasRented" value={renting} hidden />
+		<input type="text" name="property_key" value={propertyProfileData.id} hidden />
+		<input type="text" name="property_was_rented" value={property_was_rented} hidden />
 		<div class="sticky mt-5 bottom-2">
 			<div class="flex flex-row">
 				<div class="w-1/2" />

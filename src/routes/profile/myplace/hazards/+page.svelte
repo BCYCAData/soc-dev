@@ -26,13 +26,11 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
 	export let data: PageData;
-	$: ({ hazardsData } = data);
+	$: ({ propertyProfileData } = data);
 </script>
 
 <svelte:head>
@@ -58,7 +56,7 @@
 					class="w-4 h-4 ml-8"
 					name="site_hazards"
 					type="checkbox"
-					bind:group={hazardsData.site_hazards}
+					bind:group={propertyProfileData.site_hazards}
 					{value}
 				/>
 				<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="site_hazards"
@@ -75,7 +73,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_site_hazards"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={hazardsData.other_site_hazards}
+		bind:inputValue={propertyProfileData.other_site_hazards}
 	/>
 	<h2 class="text-base font-semibold text-gray-900">Does any adjoining land represent a hazard?</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -84,7 +82,7 @@
 				class="w-4 h-4 ml-8"
 				name="land_adjacent_hazard"
 				type="radio"
-				bind:group={hazardsData.land_adjacent_hazard}
+				bind:group={propertyProfileData.land_adjacent_hazard}
 				{value}
 			/>
 			<label
@@ -101,9 +99,9 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_hazards"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={hazardsData.other_hazards}
+		bind:inputValue={propertyProfileData.other_hazards}
 	/>
-	<input type="text" name="property_key" value={hazardsData.id} hidden />
+	<input type="text" name="property_key" value={propertyProfileData.id} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

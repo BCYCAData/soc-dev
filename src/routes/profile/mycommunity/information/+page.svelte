@@ -26,14 +26,12 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
 
 	export let data: PageData;
-	$: ({ myCommunityInformationData } = data);
+	$: ({ userBCYCAData } = data);
 </script>
 
 <svelte:head>
@@ -62,7 +60,7 @@
 					class="w-4 h-4 ml-8"
 					name="information_sheet_choices"
 					type="checkbox"
-					bind:group={myCommunityInformationData.information_sheet_choices}
+					bind:group={userBCYCAData.information_sheet_choices}
 					{value}
 				/>
 				<label
@@ -82,7 +80,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_information_sheet"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={myCommunityInformationData.other_information_sheet}
+		bind:inputValue={userBCYCAData.other_information_sheet}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">

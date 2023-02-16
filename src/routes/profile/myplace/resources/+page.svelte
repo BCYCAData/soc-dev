@@ -30,8 +30,6 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
@@ -60,7 +58,7 @@
 	};
 
 	export let data: PageData;
-	$: ({ resourcesData } = data);
+	$: ({ propertyProfileData } = data);
 </script>
 
 <svelte:head>
@@ -87,7 +85,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={resourcesData.static_water_available}
+					bind:group={propertyProfileData.static_water_available}
 					{value}
 					on:change={(e) => {
 						setStaticWater(e);
@@ -98,7 +96,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={resourcesData.static_water_available}
+					bind:group={propertyProfileData.static_water_available}
 					{value}
 					on:change={(e) => {
 						unCheckAllStaticWater(e);
@@ -119,12 +117,12 @@
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				on:change={() => {
-					resourcesData.have_stortz = value;
+					propertyProfileData.have_stortz = value;
 				}}
 				class="w-4 h-4 ml-8"
 				name="have_stortz"
 				type="radio"
-				bind:group={resourcesData.have_stortz}
+				bind:group={propertyProfileData.have_stortz}
 				{value}
 			/>
 			<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="have_stortz"
@@ -138,7 +136,7 @@
 		id="stortz_size"
 		name="stortz_size"
 		class="border border-orange-700 w-20 rounded ml-4 py-1 sm:text-lg"
-		bind:value={resourcesData.stortz_size}
+		bind:value={propertyProfileData.stortz_size}
 	/>
 	<h2 class="text-base font-semibold text-gray-900">
 		Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
@@ -151,7 +149,7 @@
 				class="w-4 h-4 ml-8"
 				name="fire_fighting_resources"
 				type="checkbox"
-				bind:group={resourcesData.fire_fighting_resources}
+				bind:group={propertyProfileData.fire_fighting_resources}
 				{value}
 			/>
 			<label
@@ -172,7 +170,7 @@
 					class="w-4 h-4 ml-8"
 					name="fire_hazard_reduction"
 					type="checkbox"
-					bind:group={resourcesData.fire_hazard_reduction}
+					bind:group={propertyProfileData.fire_hazard_reduction}
 					{value}
 				/>
 				<label
@@ -182,7 +180,7 @@
 			</div>
 		{/each}
 	</div>
-	<input type="text" name="property_key" value={resourcesData.id} hidden />
+	<input type="text" name="property_key" value={propertyProfileData.id} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

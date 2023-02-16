@@ -2,10 +2,10 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
+	$: ({ bcycaAdminData } = data);
 </script>
 
 <svelte:head>
-	<title>Profile-Administration</title>
+	<title>BCYCA Administration</title>
 </svelte:head>
-
-<div>{data}</div>
+<div>{bcycaAdminData}</div>

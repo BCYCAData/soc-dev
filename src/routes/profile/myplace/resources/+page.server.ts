@@ -1,38 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import { getFormData } from '$lib/utils';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals?.session?.user) {
-		throw redirect(307, '/auth/signin');
-	}
-	const { data: myPlaceResourcesData, error: myPlaceResourcesError } = await locals.dbClient
-		.from('property_profile')
-		.select(
-			'id,static_water_available,have_stortz,stortz_size,fire_fighting_resources,fire_hazard_reduction, user_profile(id), temp_user:user_profile!inner(id)'
-		)
-		.in('temp_user.id', [locals.session?.user.id]);
+import type { Actions } from './$types';
+import type { PropertyProfileData } from '$lib/db.types';
 
-	if (myPlaceResourcesError) {
-		console.log('error profileResources:', myPlaceResourcesError);
-		throw error(400, `get myPlace Resources Error ${myPlaceResourcesError.message}`);
-	}
-	if (myPlaceResourcesData.length === 1) {
-		const profileResources = myPlaceResourcesData[0];
-		if (null == profileResources.static_water_available) {
-			profileResources.static_water_available = [];
-		}
-		if (null == profileResources.fire_fighting_resources) {
-			profileResources.fire_fighting_resources = [];
-		}
-		if (null == profileResources.fire_hazard_reduction) {
-			profileResources.fire_hazard_reduction = [];
-		}
-		return {
-			resourcesData: profileResources
-		};
-	}
-	throw error(400, 'Something went wrong retrieving the Profile My Place Resources data.');
-};
+let propertyProfileData: PropertyProfileData;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -40,29 +12,30 @@ export const actions: Actions = {
 			throw redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const { data: myPlaceResourcesData, error: myPlaceResourcesError } = await locals.dbClient
+		const pid = formData.get('property_key') as string;
+		const body = getFormData(formData, locals.session.user.id);
+		const { data: myPlaceResources, error: myPlaceResourcesError } = await locals.dbClient
 			.from('property_profile')
 			.update({
-				static_water_available: formData.getAll('static_water_available'),
-				have_stortz: formData.get('have_stortz'),
-				stortz_size: parseInt(formData.get('stortz_size') as string) || 0,
-				fire_fighting_resources: formData.getAll('fire_fighting_resources'),
-				fire_hazard_reduction: formData.getAll('fire_hazard_reduction')
+				static_water_available: body.propertyProfileData.static_water_available,
+				have_stortz: body.propertyProfileData.have_stortz,
+				stortz_size: body.propertyProfileData.stortz_size,
+				fire_fighting_resources: body.propertyProfileData.fire_fighting_resources,
+				fire_hazard_reduction: body.propertyProfileData.fire_hazard_reduction
 			})
-			.eq('id', formData.get('property_key'))
+			.eq('id', pid)
 			.select();
 		if (myPlaceResourcesError) {
-			console.log('update error profileResources:', myPlaceResourcesError);
+			console.log('error profileMyPlaceResources update property_profile: ', myPlaceResourcesError);
 			throw error(
 				400,
-				`save Profile MyPlace Resources data Error ${myPlaceResourcesError.message}`
+				`error profileMyPlaceResources update property_profile: ${myPlaceResourcesError.message}`
 			);
 		}
-		if (myPlaceResourcesData.length === 1) {
-			const profileResources = myPlaceResourcesData[0];
+		if (myPlaceResources.length === 1) {
+			propertyProfileData = myPlaceResources[0];
 			return {
-				user: locals.session.user,
-				profileMyPlaceResources: profileResources
+				propertyProfileData
 			};
 		}
 		throw error(400, 'Could not POST Profile MyPlace Resources data');

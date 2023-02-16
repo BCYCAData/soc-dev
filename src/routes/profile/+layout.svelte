@@ -63,7 +63,7 @@
 
 	// profileMessages
 	export let data: PageData;
-	$: ({ profileMessages: messages } = data);
+	$: ({ profileMessagesData } = data);
 </script>
 
 <AppShell
@@ -196,12 +196,7 @@
 		</div></svelte:fragment
 	>
 	<svelte:fragment slot="sidebarRight">
-		<!-- <div class="flex flex-row justify-around pt-2 text-xl">Messages</div>
-		<div class="flex flex-col my-4 mx-4">
-			<p class="m-2">Congratulations you are now eligible for your FREE Emergency Starter Kit.</p>
-			<p class="m-2">We will be in touch soon.</p>
-		</div> -->
-		<MessageContainer {messages} />
+		<MessageContainer {profileMessagesData} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<slot />

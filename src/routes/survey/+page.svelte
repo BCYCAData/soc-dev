@@ -3,10 +3,13 @@
 	import ProgressBar from '$components/form/ProgressBar.svelte';
 	import type { PageData } from './$types';
 
+	export let data: PageData;
+
 	let steps = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 	let currentActive = 1;
 	let progressBar: ProgressBar;
 
+	$: data;
 	const handleProgress = (stepIncrement: number) => {
 		progressBar.handleProgress(stepIncrement);
 	};
@@ -19,12 +22,6 @@
 	) => {
 		progressBar.skipTo(e);
 	};
-
-	export let data: PageData;
-	let agentData = data.agent;
-	let userProfileData = data.userProfile;
-	let userBCYCAData = data.userBCYCA;
-	let propertyProfileData = data.propertyProfile;
 </script>
 
 <svelte:head>
@@ -33,13 +30,7 @@
 
 <div class="h-full w-full mx-auto flex justify-center text-gray-900 bg-orange-50">
 	<div class="bg-orange-100 mb-5 sm:w-11/12">
-		<SurveyFormContainer
-			active_step={steps[currentActive - 1]}
-			{userProfileData}
-			{agentData}
-			{userBCYCAData}
-			{propertyProfileData}
-		/>
+		<SurveyFormContainer active_step={steps[currentActive - 1]} {data} />
 		<div class="pt-0 mx-auto sm:w-8/12">
 			<ProgressBar
 				{steps}

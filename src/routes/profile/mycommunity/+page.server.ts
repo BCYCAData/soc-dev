@@ -1,31 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import { getFormData } from '$lib/utils';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals?.session?.user) {
-		throw redirect(307, '/auth/signin');
-	}
-	const { data: userProfileData, error: userProfileError } = await locals.dbClient
-		.from('user_profile')
-		.select(
-			'stay_in_touch_choices,postal_address_street,postal_address_suburb,postal_address_postcode,other_comments'
-		)
-		.eq('id', locals.session?.user.id);
-	if (userProfileError) {
-		console.log('error profileCommunity:', userProfileError);
-		throw error(400, `get myCommunity Error ${userProfileError.message}`);
-	}
-	if (userProfileData.length === 1) {
-		const myCommunityData = userProfileData[0];
-		if (null == myCommunityData.stay_in_touch_choices) {
-			myCommunityData.stay_in_touch_choices = [];
-		}
-		return {
-			myCommunityData: myCommunityData
-		};
-	}
-	throw error(400, 'Something went wrong retrieving the Profile My Place Community data.');
-};
+import type { Actions } from './$types';
+import type { UserProfileData } from '$lib/db.types';
+
+let userProfileData: UserProfileData;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -33,26 +12,26 @@ export const actions: Actions = {
 			throw redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const { data: myCommunityData, error: myCommunityError } = await locals.dbClient
+		const body = getFormData(formData, locals.session.user.id);
+		const { data: userProfile, error: myCommunityUserProfileError } = await locals.dbClient
 			.from('user_profile')
 			.update({
-				stay_in_touch_choices: formData.getAll('stay_in_touch_choices'),
-				postal_address_street: formData.get('postal_address_street'),
-				postal_address_suburb: formData.get('postal_address_suburb'),
-				postal_address_postcode: formData.get('postal_address_postcode'),
-				other_comments: formData.get('other_comments')
+				stay_in_touch_choices: body.userProfileData.stay_in_touch_choices,
+				other_comments: body.userProfileData.other_comments
 			})
 			.eq('id', locals.session.user.id)
 			.select();
-		if (myCommunityError) {
-			console.log('update error profile myCommunity:', myCommunityError);
-			throw error(400, `save Profile MyCommunity data Error ${myCommunityError.message}`);
+		if (myCommunityUserProfileError) {
+			console.log('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
+			throw error(
+				400,
+				`error profileMyCommunity update user_profile: ${myCommunityUserProfileError.message}`
+			);
 		}
-		if (myCommunityData.length === 1) {
-			const profileResources = myCommunityData[0];
+		if (userProfile.length === 1) {
+			userProfileData = userProfile[0];
 			return {
-				user: locals.session.user,
-				profileMyCommunity: profileResources
+				userProfileData
 			};
 		}
 		throw error(400, 'Could not POST Profile MyCommunity data');

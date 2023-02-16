@@ -13,17 +13,24 @@
 	import Step12 from '$components/form/survey/Step12.svelte';
 
 	import type {
-		UserProfileData,
-		PropertyProfileData,
 		AgentData,
-		UserBCYCAProfileData
-	} from '$lib/types';
+		PropertyProfileData,
+		UserBCYCAProfileData,
+		UserPostalAddressData,
+		UserProfileData
+	} from '$lib/db.types';
 
 	export let active_step: string;
-	export let userProfileData: UserProfileData;
-	export let propertyProfileData: PropertyProfileData;
-	export let agentData: AgentData;
-	export let userBCYCAData: UserBCYCAProfileData;
+
+	export let data: any;
+
+	let agentData: AgentData;
+	let userProfileData: UserProfileData;
+	let userBCYCAData: UserBCYCAProfileData;
+	let userPostalAddressData: UserPostalAddressData;
+	let propertyProfileData: PropertyProfileData;
+	$: ({ agentData, userProfileData, userBCYCAData, userPostalAddressData, propertyProfileData } =
+		data);
 </script>
 
 <div class="mx-auto sm:w-11/12">
@@ -70,11 +77,12 @@
 			<Step10 {userBCYCAData} />
 		</div>
 		<div hidden={active_step != '11'}>
-			<Step11 {userProfileData} />
+			<Step11 {userProfileData} {userPostalAddressData} />
 		</div>
 		<div hidden={active_step != '12'}>
 			<Step12 />
 		</div>
+		<input type="text" name="property_key" value={propertyProfileData.id} hidden />
 		<div class="flex flex-col justify-center items-center sm:text-lg">
 			<button
 				class="w-1/4 mx-3 mb-3 rounded-lg text-base font-semibold bg-[#0099E8] text-stone-100 border border-purple-700"

@@ -1,27 +1,10 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import { getFormData } from '$lib/utils';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals?.session?.user) {
-		throw redirect(307, '/auth/signin');
-	}
-	const { data: myPlaceAssetsData, error: myPlaceAssetsError } = await locals.dbClient
-		.from('property_profile')
-		.select(
-			'id,number_dogs,number_cats,number_birds,number_other_pets,live_stock_present, live_stock_safe_area,share_livestock_safe_area,other_essential_assets, user_profile(id), temp_user:user_profile!inner(id)'
-		)
-		.in('temp_user.id', [locals.session?.user.id]);
-	if (myPlaceAssetsError) {
-		console.log('error profileAssets:', myPlaceAssetsError);
-		throw error(400, `get myPlace Assets Error ${myPlaceAssetsError.message}`);
-	}
-	if (myPlaceAssetsData?.length === 1) {
-		return {
-			assetsData: myPlaceAssetsData[0]
-		};
-	}
-	throw error(400, 'Something went wrong retrieving the My Place Assets data.');
-};
+import type { Actions } from './$types';
+import type { PropertyProfileData } from '$lib/db.types';
+
+let propertyProfileData: PropertyProfileData;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -29,29 +12,33 @@ export const actions: Actions = {
 			throw redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const { data: myPlaceAssetsData, error: myPlaceAssetsError } = await locals.dbClient
+		const pid = formData.get('property_key') as string;
+		const body = getFormData(formData, locals.session.user.id);
+		const { data: myPlaceAssets, error: myPlaceAssetsError } = await locals.dbClient
 			.from('property_profile')
 			.update({
-				number_dogs: parseInt(formData.get('number_dogs') as string) || 0,
-				number_cats: parseInt(formData.get('number_cats') as string) || 0,
-				number_birds: parseInt(formData.get('number_birds') as string) || 0,
-				number_other_pets: parseInt(formData.get('number_other_pets') as string) || 0,
-				live_stock_present: formData.get('live_stock_present'),
-				live_stock_safe_area: formData.get('live_stock_safe_area'),
-				share_livestock_safe_area: formData.get('share_livestock_safe_area'),
-				other_essential_assets: formData.get('other_essential_assets')
+				number_dogs: body.propertyProfileData.number_dogs,
+				number_cats: body.propertyProfileData.number_cats,
+				number_birds: body.propertyProfileData.number_birds,
+				number_other_pets: body.propertyProfileData.number_other_pets,
+				live_stock_present: body.propertyProfileData.live_stock_present,
+				live_stock_safe_area: body.propertyProfileData.live_stock_safe_area,
+				share_livestock_safe_area: body.propertyProfileData.share_livestock_safe_area,
+				other_essential_assets: body.propertyProfileData.other_essential_assets
 			})
-			.eq('id', formData.get('property_key'))
+			.eq('id', pid)
 			.select();
 		if (myPlaceAssetsError) {
-			console.log('update error profileAssets:', myPlaceAssetsError);
-			throw error(400, `save Profile MyPlace Assets data Error ${myPlaceAssetsError.message}`);
+			console.log('error profileMyPlaceAssets update property_profile: ', myPlaceAssetsError);
+			throw error(
+				400,
+				`error profileMyPlaceAssets update property_profile: ${myPlaceAssetsError.message}`
+			);
 		}
-		if (myPlaceAssetsData.length === 1) {
-			const profileAssets = myPlaceAssetsData[0];
+		if (myPlaceAssets.length === 1) {
+			propertyProfileData = myPlaceAssets[0];
 			return {
-				user: locals.session.user,
-				profileMyPlaceAssets: profileAssets
+				propertyProfileData
 			};
 		}
 		throw error(400, 'Could not POST Profile MyPlace Assets data');

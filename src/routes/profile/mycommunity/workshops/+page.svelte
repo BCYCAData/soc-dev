@@ -26,14 +26,12 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
 
 	export let data: PageData;
-	$: ({ myCommunityWorkshopsData } = data);
+	$: ({ userBCYCAData } = data);
 </script>
 
 <svelte:head>
@@ -64,7 +62,7 @@
 					class="w-4 h-4 ml-8"
 					name="community_workshop_choices"
 					type="checkbox"
-					bind:group={myCommunityWorkshopsData.community_workshop_choices}
+					bind:group={userBCYCAData.community_workshop_choices}
 					{value}
 				/>
 				<label
@@ -83,7 +81,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_community_workshop"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={myCommunityWorkshopsData.other_community_workshop}
+		bind:inputValue={userBCYCAData.other_community_workshop}
 	/>
 	<TextAreaInput
 		headingClass="pt-2 text-base font-semibold text-gray-900"
@@ -94,7 +92,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="will_run_community_workshops"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={myCommunityWorkshopsData.will_run_community_workshops}
+		bind:inputValue={userBCYCAData.will_run_community_workshops}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">

@@ -7,7 +7,7 @@
 
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { PropertyProfileData } from '$lib/types';
+	import type { PropertyProfileData } from '$lib/db.types';
 
 	export let propertyProfileData: PropertyProfileData;
 

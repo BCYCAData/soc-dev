@@ -1,39 +1,11 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './$types';
+import { getFormData } from '$lib/utils';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals?.session?.user) {
-		throw redirect(307, '/auth/signin');
-	}
-	const { error: myPlaceError, data: myPlaceData } = await locals.dbClient
-		.from('property_profile')
-		.select(
-			'id, property_address_street,property_address_suburb,property_address_postcode,property_rented,phone,mobile_reception,sign_posted,truck_access,truck_access_other_information,residents0_18,residents19_50,residents51_70,residents71_,vulnerable_residents, user_profile(id), temp_user:user_profile!inner(id)'
-		)
-		.in('temp_user.id', [locals.session?.user.id]);
-	if (myPlaceError) {
-		throw error(400, `get myPlace Error ${myPlaceError.message}`);
-	}
-	if (myPlaceData.length === 1) {
-		let renting = false;
-		let agent: any;
-		if (myPlaceData?.[0].property_rented) {
-			renting = true;
-			const { error: agentError, data: agentData } = await locals.dbClient
-				.from('agent')
-				.select('agent_name,agent_mobile,agent_phone')
-				.eq('id', [myPlaceData?.[0].property_rented]);
-			if (agentError) {
-				throw error(400, `get agent Error ${agentError.message}`);
-			}
-			agent = agentData[0];
-		} else {
-			agent = [{ agent_name: '', agent_mobile: '', agent_phone: '' }];
-		}
-		return { myPlaceData: myPlaceData[0], renting: renting, agentData: agent };
-	}
-	throw error(400, 'Something went wrong retrieving the Profile My Place data.');
-};
+import type { Actions } from './$types';
+import type { AgentData, PropertyProfileData } from '$lib/db.types';
+
+let agentData: AgentData;
+let propertyProfileData: PropertyProfileData;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -41,62 +13,67 @@ export const actions: Actions = {
 			throw redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		console.log(formData);
-		const body = Object.fromEntries(formData);
-		if (body.isRented != body.wasRented) {
-			if (body.isRented == 'true') {
-				const pk = body.property_key;
-				const name = body.agent_name;
-				const phone = body.agent_phone;
-				const mobile = body.agent_mobile;
-				const { error: addAgentError } = await locals.dbClient.rpc('add_agent', {
-					property_uid: pk,
-					var_agent_name: name,
-					var_agent_phone: phone,
-					var_agent_mobile: mobile
-				});
-				if (addAgentError) {
-					console.log('update error profileMyPlace addAgent:', addAgentError);
-					throw error(400, `addAgent Error ${addAgentError.message}`);
+		const pid = formData.get('property_key') as string;
+		const wasRented = formData.get('property_was_rented') as string;
+		const body = getFormData(formData, locals.session.user.id);
+		if (body.propertyProfileData?.property_rented?.toString() != wasRented) {
+			if (body.propertyProfileData.property_rented == true) {
+				const { data: agentReturnData, error: agentUpsertError } = await locals.dbClient
+					.from('agent')
+					.upsert({
+						user_id: locals.session.user.id,
+						agent_mobile: body.agentData.agent_mobile,
+						agent_name: body.agentData.agent_name,
+						agent_phone: body.agentData.agent_phone
+					})
+					.select();
+				if (agentUpsertError) {
+					console.log('error profileMyPlace upsertAgent:', agentUpsertError);
+					throw error(400, `error profileMyPlace upsertAgent ${agentUpsertError.message}`);
+				}
+				if (agentReturnData?.length === 1) {
+					agentData = agentReturnData[0];
 				}
 			} else {
-				const pk = body.property_key;
-				const fk = body.property_rented;
-				const { error: deleteAgentError } = await locals.dbClient.rpc('delete_agent', {
-					property_uid: pk,
-					agent_uid: fk
-				});
+				const { error: deleteAgentError } = await locals.dbClient
+					.from('agent')
+					.delete()
+					.eq('user_id', locals.session.user.id);
 				if (deleteAgentError) {
-					console.log('update error profileMyPlace deleteAgent:', deleteAgentError);
-					throw error(400, `deleteAgent Error ${deleteAgentError.message}`);
+					console.log('error profileMyPlace delete agent: ', deleteAgentError);
+					throw error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
 				}
 			}
 		}
-		const { error: userProfileDataError, data: userProfileData } = await locals.dbClient
+		const { error: profileMyPlaceDataError, data: profileMyPlace } = await locals.dbClient
 			.from('property_profile')
 			.update({
-				sign_posted: formData.get('sign_posted'),
+				sign_posted: (formData.get('sign_posted') as unknown as boolean) || null,
 				truck_access: parseInt(formData.get('truck_access') as string),
-				truck_access_other_information: formData.get('truck_access_other_information'),
+				truck_access_other_information:
+					(formData.get('truck_access_other_information') as string) || null,
 				residents0_18: parseInt(formData.get('residents0_18') as string) || 0,
 				residents19_50: parseInt(formData.get('residents19_50') as string) || 0,
 				residents51_70: parseInt(formData.get('residents51_70') as string) || 0,
 				residents71_: parseInt(formData.get('residents71_') as string) || 0,
-				vulnerable_residents: formData.get('vulnerable_residents'),
-				phone: formData.get('phone'),
-				mobile_reception: formData.get('mobile_reception')
+				vulnerable_residents: (formData.get('vulnerable_residents') as unknown as boolean) || null,
+				phone: formData.get('phone') as string,
+				mobile_reception: parseInt(formData.get('mobile_reception') as string) || null
 			})
-			.eq('id', formData.get('property_key'))
+			.eq('id', pid)
 			.select();
-		if (userProfileDataError) {
-			console.log('update error myPlace:', userProfileDataError);
-			throw error(400, `save Profile MyPlace data Error ${userProfileDataError.message}`);
+		if (profileMyPlaceDataError) {
+			console.log('error profileMyPlace update property_profile: ', profileMyPlaceDataError);
+			throw error(
+				400,
+				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
+			);
 		}
-		if (userProfileData.length === 1) {
-			const profileMyPlace = userProfileData[0];
+		if (profileMyPlace.length === 1) {
+			propertyProfileData = profileMyPlace[0];
 			return {
-				user: locals?.session?.user,
-				profileMyPlace: profileMyPlace
+				agentData,
+				propertyProfileData
 			};
 		}
 		throw error(400, 'Could not POST Profile My Place data');

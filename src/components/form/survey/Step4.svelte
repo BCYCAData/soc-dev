@@ -3,7 +3,7 @@
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
-	import type { PropertyProfileData } from '$lib/types';
+	import type { PropertyProfileData } from '$lib/db.types';
 
 	export let propertyProfileData: PropertyProfileData;
 
@@ -51,6 +51,7 @@
 	{#each yesNoOptions as { value, lable }}
 		<div class="flex items-center">
 			<input
+				form="surveyForm"
 				class="w-6 h-6 ml-8"
 				id="live_stock_present"
 				type="radio"
@@ -76,6 +77,7 @@
 		{#each yesNoMaybeOptions as { value, lable }}
 			<div class="flex items-center">
 				<input
+					form="surveyForm"
 					class="w-6 h-6 ml-8"
 					id="live_stock_safe_area"
 					type="radio"
@@ -102,6 +104,7 @@
 			{#each yesNoMaybeOptions as { value, lable }}
 				<div class="flex items-center">
 					<input
+						form="surveyForm"
 						class="w-6 h-6 ml-8"
 						id="share_livestock_safe_area"
 						type="radio"

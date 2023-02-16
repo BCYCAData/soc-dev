@@ -25,8 +25,6 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
@@ -40,7 +38,7 @@
 		}
 	});
 
-	$: ({ aboutMeData } = data);
+	$: ({ userProfileData } = data);
 </script>
 
 <svelte:head>
@@ -66,7 +64,7 @@
 				autocomplete="given-name"
 				style="text-transform:uppercase"
 				placeholder="FIRST NAME "
-				bind:value={aboutMeData.first_name}
+				bind:value={userProfileData.first_name}
 			/>
 			<input
 				type="text"
@@ -76,7 +74,7 @@
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 				style="text-transform:uppercase"
 				placeholder="FAMILY NAME"
-				bind:value={aboutMeData.family_name}
+				bind:value={userProfileData.family_name}
 			/>
 		</div>
 		<h2 class="text-base font-semibold text-gray-900">Are you:</h2>
@@ -90,7 +88,7 @@
 						id="residency_profile"
 						type="radio"
 						name="residency_profile"
-						bind:group={aboutMeData.residency_profile}
+						bind:group={userProfileData.residency_profile}
 						{value}
 					/>
 					<label
@@ -113,16 +111,16 @@
 					placeholder="Mobile 0XXX XXX XXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
-							aboutMeData.mobile = e.currentTarget.value;
+							userProfileData.mobile = e.currentTarget.value;
 						} else {
 							e.preventDefault();
-							aboutMeData.mobile = e.currentTarget.value;
+							userProfileData.mobile = e.currentTarget.value;
 							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								aboutMeData.mobile = formatMobile(aboutMeData.mobile, e.key);
+								userProfileData.mobile = formatMobile(userProfileData.mobile, e.key);
 							}
 						}
 					}}
-					bind:value={aboutMeData.mobile}
+					bind:value={userProfileData.mobile}
 				/>
 			</div>
 		</div>
@@ -137,7 +135,7 @@
 						id="rfs_survival_plan"
 						type="radio"
 						name="rfs_survival_plan"
-						bind:group={aboutMeData.rfs_survival_plan}
+						bind:group={userProfileData.rfs_survival_plan}
 						{value}
 					/>
 					<label
@@ -149,28 +147,28 @@
 			<div class="flex items-center">
 				<input
 					on:change={() => {
-						if (aboutMeData.send_rfs_survival_plan) {
-							aboutMeData.rfs_survival_plan = 'N';
+						if (userProfileData.send_rfs_survival_plan) {
+							userProfileData.rfs_survival_plan = 'N';
 						} else {
-							aboutMeData.rfs_survival_plan = null;
+							userProfileData.rfs_survival_plan = null;
 						}
 					}}
 					on:click={() => {
-						aboutMeData.send_rfs_survival_plan = !aboutMeData.send_rfs_survival_plan;
+						userProfileData.send_rfs_survival_plan = !userProfileData.send_rfs_survival_plan;
 					}}
 					class="w-4 h-4 ml-8"
 					id="send_rfs_survival_plan"
 					type="checkbox"
 					name="send_rfs_survival_plan"
-					bind:checked={aboutMeData.send_rfs_survival_plan}
+					bind:checked={userProfileData.send_rfs_survival_plan}
 				/>
 				<label
 					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
 					for="send_rfs_survival_plan">Please send one</label
 				>
-				{#if aboutMeData.sent_rfs_survival_plan}
+				{#if userProfileData.sent_rfs_survival_plan}
 					<div class="ml-4 text-base font-semibold text-orange-900 font-Poppins">
-						RFS Survival Plan Details were sent on {aboutMeData.sent_rfs_survival_plan}
+						RFS Survival Plan Details were sent on {userProfileData.sent_rfs_survival_plan}
 					</div>
 				{/if}
 			</div>
@@ -188,7 +186,7 @@
 						id="fire_fighting_experience"
 						type="radio"
 						name="fire_fighting_experience"
-						bind:group={aboutMeData.fire_fighting_experience}
+						bind:group={userProfileData.fire_fighting_experience}
 						{value}
 					/>
 					<label
@@ -209,7 +207,7 @@
 						id="fire_trauma"
 						type="radio"
 						name="fire_trauma"
-						bind:group={aboutMeData.fire_trauma}
+						bind:group={userProfileData.fire_trauma}
 						{value}
 					/>
 					<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="fire_trauma"
@@ -231,7 +229,7 @@
 						id="plan_to_leave_before_fire"
 						type="radio"
 						name="plan_to_leave_before_fire"
-						bind:group={aboutMeData.plan_to_leave_before_fire}
+						bind:group={userProfileData.plan_to_leave_before_fire}
 						{value}
 					/>
 					<label
@@ -254,7 +252,7 @@
 						id="plan_to_leave_before_flood"
 						type="radio"
 						name="plan_to_leave_before_flood"
-						bind:group={aboutMeData.plan_to_leave_before_flood}
+						bind:group={userProfileData.plan_to_leave_before_flood}
 						{value}
 					/>
 					<label

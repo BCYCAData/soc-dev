@@ -20,8 +20,6 @@
 			type: 'component',
 			component: modalComponent,
 			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
 		};
 		modalStore.trigger(d);
 	}
@@ -34,7 +32,7 @@
 	});
 
 	export let data: PageData;
-	$: ({ assetsData } = data);
+	$: ({ propertyProfileData } = data);
 </script>
 
 <svelte:head>
@@ -58,28 +56,28 @@
 			lable="Dogs"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={assetsData.number_dogs}
+			bind:inputValue={propertyProfileData.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={assetsData.number_cats}
+			bind:inputValue={propertyProfileData.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={assetsData.number_birds}
+			bind:inputValue={propertyProfileData.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={assetsData.number_other_pets}
+			bind:inputValue={propertyProfileData.number_other_pets}
 		/>
 	</div>
 	<h2 class="text-base font-semibold text-gray-900">Do you have livestock?</h2>
@@ -89,7 +87,7 @@
 				class="w-4 h-4 ml-8"
 				name="live_stock_present"
 				type="radio"
-				bind:group={assetsData.live_stock_present}
+				bind:group={propertyProfileData.live_stock_present}
 				{value}
 			/>
 			<label
@@ -107,7 +105,7 @@
 				class="w-4 h-4 ml-8"
 				name="live_stock_safe_area"
 				type="radio"
-				bind:group={assetsData.live_stock_safe_area}
+				bind:group={propertyProfileData.live_stock_safe_area}
 				{value}
 			/>
 			<label
@@ -125,7 +123,7 @@
 				class="w-4 h-4 ml-8"
 				name="share_livestock_safe_area"
 				type="radio"
-				bind:group={assetsData.share_livestock_safe_area}
+				bind:group={propertyProfileData.share_livestock_safe_area}
 				{value}
 			/>
 			<label
@@ -142,9 +140,9 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_essential_assets"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={assetsData.other_essential_assets}
+		bind:inputValue={propertyProfileData.other_essential_assets}
 	/>
-	<input type="text" name="property_key" value={assetsData.id} hidden />
+	<input type="text" name="property_key" value={propertyProfileData.id} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

@@ -56,21 +56,50 @@ export interface Database {
 					agent_name: string | null;
 					agent_phone: string | null;
 					created_at: string | null;
-					id: string;
+					last_updated: string | null;
+					user_id: string;
 				};
 				Insert: {
 					agent_mobile?: string | null;
 					agent_name?: string | null;
 					agent_phone?: string | null;
 					created_at?: string | null;
-					id?: string;
+					last_updated?: string | null;
+					user_id: string;
 				};
 				Update: {
 					agent_mobile?: string | null;
 					agent_name?: string | null;
 					agent_phone?: string | null;
 					created_at?: string | null;
-					id?: string;
+					last_updated?: string | null;
+					user_id?: string;
+				};
+			};
+			app_message: {
+				Row: {
+					context: string;
+					created_at: string;
+					id: number;
+					message: string;
+					recalled: string | null;
+					scope: string;
+				};
+				Insert: {
+					context?: string;
+					created_at?: string;
+					id?: number;
+					message: string;
+					recalled?: string | null;
+					scope?: string;
+				};
+				Update: {
+					context?: string;
+					created_at?: string;
+					id?: number;
+					message?: string;
+					recalled?: string | null;
+					scope?: string;
 				};
 			};
 			communities: {
@@ -107,6 +136,7 @@ export interface Database {
 					address_point: unknown | null;
 					created_at: string | null;
 					id: string;
+					last_updated: string | null;
 					principaladdresssiteoid: number | null;
 					property: unknown | null;
 					way_point: unknown | null;
@@ -115,6 +145,7 @@ export interface Database {
 					address_point?: unknown | null;
 					created_at?: string | null;
 					id: string;
+					last_updated?: string | null;
 					principaladdresssiteoid?: number | null;
 					property?: unknown | null;
 					way_point?: unknown | null;
@@ -123,6 +154,7 @@ export interface Database {
 					address_point?: unknown | null;
 					created_at?: string | null;
 					id?: string;
+					last_updated?: string | null;
 					principaladdresssiteoid?: number | null;
 					property?: unknown | null;
 					way_point?: unknown | null;
@@ -136,6 +168,7 @@ export interface Database {
 					have_stortz: string | null;
 					id: string;
 					land_adjacent_hazard: string | null;
+					last_updated: string | null;
 					live_stock_present: boolean | null;
 					live_stock_safe_area: string | null;
 					mobile_reception: number | null;
@@ -150,7 +183,7 @@ export interface Database {
 					property_address_postcode: string | null;
 					property_address_street: string | null;
 					property_address_suburb: string | null;
-					property_rented: string | null;
+					property_rented: boolean | null;
 					residents0_18: number | null;
 					residents19_50: number | null;
 					residents51_70: number | null;
@@ -171,6 +204,7 @@ export interface Database {
 					have_stortz?: string | null;
 					id?: string;
 					land_adjacent_hazard?: string | null;
+					last_updated?: string | null;
 					live_stock_present?: boolean | null;
 					live_stock_safe_area?: string | null;
 					mobile_reception?: number | null;
@@ -185,7 +219,7 @@ export interface Database {
 					property_address_postcode?: string | null;
 					property_address_street?: string | null;
 					property_address_suburb?: string | null;
-					property_rented?: string | null;
+					property_rented?: boolean | null;
 					residents0_18?: number | null;
 					residents19_50?: number | null;
 					residents51_70?: number | null;
@@ -206,6 +240,7 @@ export interface Database {
 					have_stortz?: string | null;
 					id?: string;
 					land_adjacent_hazard?: string | null;
+					last_updated?: string | null;
 					live_stock_present?: boolean | null;
 					live_stock_safe_area?: string | null;
 					mobile_reception?: number | null;
@@ -220,7 +255,7 @@ export interface Database {
 					property_address_postcode?: string | null;
 					property_address_street?: string | null;
 					property_address_suburb?: string | null;
-					property_rented?: string | null;
+					property_rented?: boolean | null;
 					residents0_18?: number | null;
 					residents19_50?: number | null;
 					residents51_70?: number | null;
@@ -404,12 +439,30 @@ export interface Database {
 					willRunCommunityWorkshops?: string | null;
 				};
 			};
+			test: {
+				Row: {
+					created_at: string | null;
+					id: number;
+					willitwork: number[];
+				};
+				Insert: {
+					created_at?: string | null;
+					id?: number;
+					willitwork?: number[];
+				};
+				Update: {
+					created_at?: string | null;
+					id?: number;
+					willitwork?: number[];
+				};
+			};
 			user_bcyca_profile: {
 				Row: {
 					community_meeting_choices: number[] | null;
 					community_workshop_choices: number[] | null;
 					created_at: string | null;
 					information_sheet_choices: number[] | null;
+					last_updated: string | null;
 					other_community_meeting: string | null;
 					other_community_workshop: string | null;
 					other_information_sheet: string | null;
@@ -421,6 +474,7 @@ export interface Database {
 					community_workshop_choices?: number[] | null;
 					created_at?: string | null;
 					information_sheet_choices?: number[] | null;
+					last_updated?: string | null;
 					other_community_meeting?: string | null;
 					other_community_workshop?: string | null;
 					other_information_sheet?: string | null;
@@ -432,11 +486,38 @@ export interface Database {
 					community_workshop_choices?: number[] | null;
 					created_at?: string | null;
 					information_sheet_choices?: number[] | null;
+					last_updated?: string | null;
 					other_community_meeting?: string | null;
 					other_community_workshop?: string | null;
 					other_information_sheet?: string | null;
 					user_id?: string;
 					will_run_community_workshops?: string | null;
+				};
+			};
+			user_postal_address: {
+				Row: {
+					created_at: string | null;
+					last_updated: string | null;
+					postal_address_postcode: string | null;
+					postal_address_street: string | null;
+					postal_address_suburb: string | null;
+					user_id: string;
+				};
+				Insert: {
+					created_at?: string | null;
+					last_updated?: string | null;
+					postal_address_postcode?: string | null;
+					postal_address_street?: string | null;
+					postal_address_suburb?: string | null;
+					user_id: string;
+				};
+				Update: {
+					created_at?: string | null;
+					last_updated?: string | null;
+					postal_address_postcode?: string | null;
+					postal_address_street?: string | null;
+					postal_address_suburb?: string | null;
+					user_id?: string;
 				};
 			};
 			user_profile: {
@@ -447,13 +528,11 @@ export interface Database {
 					fire_trauma: boolean | null;
 					first_name: string | null;
 					id: string;
+					last_updated: string | null;
 					mobile: string | null;
 					other_comments: string | null;
 					plan_to_leave_before_fire: number | null;
 					plan_to_leave_before_flood: number | null;
-					postal_address_postcode: string | null;
-					postal_address_street: string | null;
-					postal_address_suburb: string | null;
 					residency_profile: number | null;
 					rfs_survival_plan: string | null;
 					send_rfs_survival_plan: boolean | null;
@@ -467,13 +546,11 @@ export interface Database {
 					fire_trauma?: boolean | null;
 					first_name?: string | null;
 					id: string;
+					last_updated?: string | null;
 					mobile?: string | null;
 					other_comments?: string | null;
 					plan_to_leave_before_fire?: number | null;
 					plan_to_leave_before_flood?: number | null;
-					postal_address_postcode?: string | null;
-					postal_address_street?: string | null;
-					postal_address_suburb?: string | null;
 					residency_profile?: number | null;
 					rfs_survival_plan?: string | null;
 					send_rfs_survival_plan?: boolean | null;
@@ -487,13 +564,11 @@ export interface Database {
 					fire_trauma?: boolean | null;
 					first_name?: string | null;
 					id?: string;
+					last_updated?: string | null;
 					mobile?: string | null;
 					other_comments?: string | null;
 					plan_to_leave_before_fire?: number | null;
 					plan_to_leave_before_flood?: number | null;
-					postal_address_postcode?: string | null;
-					postal_address_street?: string | null;
-					postal_address_suburb?: string | null;
 					residency_profile?: number | null;
 					rfs_survival_plan?: string | null;
 					send_rfs_survival_plan?: boolean | null;
@@ -671,9 +746,42 @@ export interface Database {
 			};
 		};
 		Functions: {
+			add_agent: {
+				Args: {
+					property_uid: string;
+					var_agent_name: string;
+					var_agent_phone: string;
+					var_agent_mobile: string;
+				};
+				Returns: undefined;
+			};
+			delete_agent: {
+				Args: {
+					property_uid: string;
+					agent_uid: string;
+				};
+				Returns: undefined;
+			};
+			delete_claim_for_email_array: {
+				Args: {
+					emails: string[];
+					claim: string;
+				};
+				Returns: string;
+			};
+			delete_email_claim: {
+				Args: {
+					email_input: string;
+					claim: string;
+				};
+				Returns: string;
+			};
 			get_address_point_extract_wgs84: {
 				Args: Record<PropertyKey, never>;
-				Returns: { addresspointtype: number; geom: unknown }[];
+				Returns: {
+					addresspointtype: number;
+					geom: unknown;
+				}[];
 			};
 			get_addresspoint_from_address: {
 				Args: {
@@ -693,8 +801,20 @@ export interface Database {
 					postcode: string;
 				}[];
 			};
+			get_admin_messages_for_user: {
+				Args: {
+					id_input: string;
+				};
+				Returns: {
+					id: number;
+					message: string;
+					created_at: string;
+				}[];
+			};
 			get_agent_for_user: {
-				Args: { id_input: string };
+				Args: {
+					id_input: string;
+				};
 				Returns: {
 					agent_name: string;
 					agent_mobile: string;
@@ -702,12 +822,31 @@ export interface Database {
 					created_at: string;
 				}[];
 			};
+			get_profile_messages_for_user: {
+				Args: {
+					id_input: string;
+				};
+				Returns: {
+					id: number;
+					message: string;
+					created_at: string;
+				}[];
+			};
 			get_property_data: {
-				Args: { principaladdresssiteoid: number; out_srid_value: number };
-				Returns: { gurasid: number; waypoint: unknown; property: unknown }[];
+				Args: {
+					principaladdresssiteoid: number;
+					out_srid_value: number;
+				};
+				Returns: {
+					gurasid: number;
+					waypoint: unknown;
+					property: unknown;
+				}[];
 			};
 			get_property_for_user: {
-				Args: { id_input: string };
+				Args: {
+					id_input: string;
+				};
 				Returns: {
 					id: string;
 					property_address_street: string;
@@ -744,25 +883,78 @@ export interface Database {
 					created_at: string;
 				}[];
 			};
+			get_property_geometry_for_user: {
+				Args: {
+					id_input: string;
+				};
+				Returns: {
+					id: string;
+					principaladdresssiteoid: number;
+					address_point: unknown;
+					way_point: unknown;
+					property: unknown;
+					created_at: string;
+				}[];
+			};
 			get_query_address: {
-				Args: { address_text: string; given_suburb: string };
+				Args: {
+					address_text: string;
+					given_suburb: string;
+				};
 				Returns: string;
 			};
 			get_registered_addresspoints: {
 				Args: Record<PropertyKey, never>;
-				Returns: { addresspointtype: number; geom: unknown }[];
+				Returns: {
+					addresspointtype: number;
+					geom: unknown;
+				}[];
+			};
+			get_tester_messages_for_user: {
+				Args: {
+					id_input: string;
+				};
+				Returns: {
+					id: number;
+					message: string;
+					created_at: string;
+				}[];
 			};
 			jsonb_array_to_smallint_array: {
-				Args: { _js: Json };
+				Args: {
+					_js: Json;
+				};
 				Returns: number[];
 			};
 			trim_address_suburb: {
-				Args: { given_suburb: string };
+				Args: {
+					given_suburb: string;
+				};
 				Returns: string;
 			};
 		};
 		Enums: {
 			[_ in never]: never;
 		};
+		CompositeTypes: {
+			[_ in never]: never;
+		};
 	};
 }
+
+export type AddressPointExtractWGS84Data =
+	Database['public']['Tables']['address_point_extract_wgs84']['Row'];
+export type AgentData = Database['public']['Tables']['agent']['Row'];
+export type AppMessageData = Database['public']['Tables']['app_message']['Row'];
+export type ProfileMessageData =
+	Database['public']['Functions']['get_profile_messages_for_user']['Returns'];
+export type CommunitiesData = Database['public']['Tables']['communities']['Row'];
+export type PropertyGeometryData = Database['public']['Tables']['property_geometry']['Row'];
+export type PropertyProfileData = Database['public']['Tables']['property_profile']['Row'];
+export type SuburbAliasesData = Database['public']['Tables']['suburb_aliases']['Row'];
+export type SurveyResponsesData = Database['public']['Tables']['survey_responses']['Row'];
+export type UserBCYCAProfileData = Database['public']['Tables']['user_bcyca_profile']['Row'];
+export type UserPostalAddressData = Database['public']['Tables']['user_postal_address']['Row'];
+export type UserProfileData = Database['public']['Tables']['user_profile']['Row'];
+export type AppMessageFunctionData =
+	Database['public']['Functions']['get_profile_messages_for_user']['Returns'];

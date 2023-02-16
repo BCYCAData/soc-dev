@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 import type { MapDataJSON } from '$lib/types';
 // import { map } from 'leaflet';
 
-let mapData: MapDataJSON = { jsonLayers: [] };
+let mapLayers: MapDataJSON = { jsonLayers: [] };
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals?.session?.user) {
@@ -19,16 +19,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 		console.log('error get Property Geometry:', propertyGeometryError);
 		throw error(400, propertyGeometryError);
 	}
-	console.log(propertyGeometryData);
-
 	if (propertyGeometryData.length > 0) {
-		console.log(propertyGeometryData[0].property);
-
-		mapData.jsonLayers[0] = geometryToGeoJson('property', propertyGeometryData[0].property);
-		console.log(mapData.jsonLayers[0]);
+		mapLayers.jsonLayers[0] = geometryToGeoJson('property', propertyGeometryData[0].property);
+		mapLayers.jsonLayers[1] = geometryToGeoJson(
+			'address_point',
+			propertyGeometryData[0].address_point
+		);
+		mapLayers.jsonLayers[2] = geometryToGeoJson('way_point', propertyGeometryData[0].way_point);
 	}
-	if (mapData.jsonLayers.length > 0) {
-		return { mapData: mapData };
+	if (mapLayers.jsonLayers.length > 0) {
+		return { mapLayers };
 	}
-	throw error(400, 'Something went wrong with the map');
+	throw error(400, 'Something went wrong with getting the property geometry');
 };

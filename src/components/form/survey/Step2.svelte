@@ -2,14 +2,14 @@
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
 	import { formatMobile, formatPhone } from '$lib/utils';
 
-	import type { UserProfileData, PropertyProfileData, AgentData } from '$lib/types';
+	import type { AgentData, UserProfileData, PropertyProfileData } from '$lib/db.types';
 
+	export let agentData: AgentData;
 	export let userProfileData: UserProfileData;
 	export let propertyProfileData: PropertyProfileData;
-	export let agentData: AgentData;
 
 	let otherAccessChecked = propertyProfileData.truck_access === 4 ? true : false;
-	let rentingChecked = propertyProfileData.property_rented !== null;
+	let rentingChecked = propertyProfileData.property_rented === true;
 </script>
 
 <div class="py-2 mx-auto lg:py-2">
@@ -40,7 +40,7 @@
 			/>
 		</div>
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">What is your property address?</h2>
+	<h2 class="mb-1 text-xl font-semibold text-gray-900">Your property address is:</h2>
 	<div class="p-2 rounded-lg bg-orange-200">
 		<div class="grid sm:grid-cols-12 gap-0">
 			<div class="flex items-center">
@@ -59,6 +59,7 @@
 					autocomplete="street-address"
 					style="text-transform:uppercase"
 					bind:value={propertyProfileData.property_address_street}
+					disabled
 				/>
 			</div>
 		</div>
@@ -80,6 +81,7 @@
 						placeholder="Suburb"
 						autocomplete="address-level2"
 						style="text-transform:uppercase"
+						disabled
 						bind:value={propertyProfileData.property_address_suburb}
 					/>
 				</div>
@@ -98,13 +100,19 @@
 						placeholder="Postcode"
 						autocomplete="postal-code"
 						style="text-transform:uppercase"
+						disabled
 						bind:value={propertyProfileData.property_address_postcode}
 					/>
 				</div>
 			</div>
 		</div>
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">Are you renting this property?</h2>
+	<div class="flex items-center mb-1">
+		<h2 class="text-xl font-semibold text-gray-900">Are you renting this property?</h2>
+		<p class="pt-1 pl-12" hidden={!rentingChecked}>
+			Please enter your Agent's Name and at least one contact number if you can.
+		</p>
+	</div>
 	<div class="p-2 h-[62px] w-full flex flex-row rounded-lg bg-orange-200">
 		<div class="flex items-center w-1/8 mr-4">
 			{#each noYesOptions as { value, lable }}

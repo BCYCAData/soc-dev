@@ -4,6 +4,10 @@ import type { Session } from '@supabase/supabase-js';
 declare global {
 	declare namespace App {
 		// interface Error {}
+		interface Supabase {
+			Database: import('$lib/db.types').Database;
+			SchemaName: 'public';
+		}
 		interface Locals {
 			dbClient: TypedSupabaseClient;
 			session: Session | null;

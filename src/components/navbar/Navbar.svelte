@@ -50,23 +50,23 @@
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if $page?.data?.session?.user?.id}
-			{#if $page?.data?.session?.user?.app_metadata.tester}
+			{#if $page?.data?.session?.user?.app_metadata?.bcyca?.includes('tester') | $page?.data?.session?.user?.app_metadata?.bcyca?.includes('admin')}
 				<a
 					class:active={$page.url.pathname.endsWith('/admin')}
 					href="/admin"
-					class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+					class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 					>Administrator</a
 				>
 			{/if}
 			<a
 				class:active={$page.url.pathname.endsWith('/profile')}
 				href="/profile"
-				class="btn-ringed text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+				class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 				>Profile</a
 			>
 			<form method="POST" action="/api/auth/signout">
 				<button
-					class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+					class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 					type="submit"
 				>
 					Sign Out
@@ -76,7 +76,7 @@
 			<a
 				class:active={$page.url.pathname.endsWith('/signin')}
 				href="/auth/signin"
-				class="btn-ringed bg-primary-500 text-surface-50 ring-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
+				class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 			>
 				Sign In
 			</a>
@@ -88,5 +88,7 @@
 	a.active {
 		background-color: #fdba74;
 		color: #7c2d12;
+		border-width: 2px;
+		border-color: #fafaf9;
 	}
 </style>

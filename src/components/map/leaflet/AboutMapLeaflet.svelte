@@ -30,7 +30,7 @@
 		}
 		leaflet.tileLayer(mapTileLayer.url, mapTileLayer.layerOptions).addTo(map);
 
-		if (mapLayers.jsonLayers) {
+		if ((mapLayers.jsonLayers.length = 2)) {
 			let features = [];
 			let g = mapLayers.jsonLayers[0];
 			for (let j = 0; j < g.length; j++) {
@@ -56,7 +56,11 @@
 			}
 			registeredGroup = leaflet.featureGroup(features);
 			map.addLayer(registeredGroup);
+		} else if ((mapLayers.jsonLayers.length = 3)) {
+			let features = [];
+			let g = mapLayers.jsonLayers[0];
 		}
+
 		map.on('resize', function () {
 			map.setMinZoom(0);
 			map.setMaxZoom(20);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	// import type { UserProfileData } from '$lib/types';
 
-	// export let userProfileData: UserProfileData;
+	// let userProfileData: UserProfileData
 </script>
 
 <h1
