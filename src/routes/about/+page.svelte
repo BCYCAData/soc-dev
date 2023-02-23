@@ -4,6 +4,7 @@
 
 	export let data: PageData;
 	let mapLayers = data.mapData;
+	console.log(mapLayers);
 </script>
 
 <svelte:head>

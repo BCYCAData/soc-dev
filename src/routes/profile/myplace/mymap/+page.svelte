@@ -1,16 +1,13 @@
 <script lang="ts">
-	import PropertyMap from '$components/map/PropertyMap.svelte';
 	import type { PageData } from './$types';
 
+	import PropertyMap from '$components/map/PropertyMap.svelte';
 	export let data: PageData;
-	$: ({ mapLayers } = data);
-	let test = JSON.stringify(mapLayers);
+	$: ({ mapLayers, mapCentre, minZoom } = data);
 </script>
 
 <svelte:head>
 	<title>Profile-My Place-Map</title>
 </svelte:head>
 
-<!-- <pre>{JSON.stringify(mapData)}</pre> -->
-
-<PropertyMap {mapLayers} />
+<PropertyMap {mapLayers} {mapCentre} {minZoom} />

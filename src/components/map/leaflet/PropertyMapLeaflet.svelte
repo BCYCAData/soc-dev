@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Map as leafletMap, FeatureGroup, LatLngExpression, Map } from 'leaflet';
+	import type { Map as LeafletMap, FeatureGroup } from 'leaflet';
 	import { tiledMapLayer } from 'esri-leaflet';
 	import type { MapDataJSON, MapObject, MapTileLayerObject } from '$lib/types';
 
@@ -7,9 +7,8 @@
 
 	export let mapObject: MapObject;
 	export let mapLayers: MapDataJSON;
-	export let mapTileLayer: MapTileLayerObject;
 
-	let map: Map;
+	let map: LeafletMap;
 	let waypointGroup: FeatureGroup;
 	let addresspointGroup: FeatureGroup;
 
@@ -99,9 +98,9 @@
 </script>
 
 <div class="w-full h-full z-0" id={mapObject.divId}>
-	{#if mapObject.mapTiler}
+	<!-- {#if mapObject.mapTiler}
 		<a href="https://www.maptiler.com" style="position:absolute;left:10px;bottom:10px;z-index:999;">
 			<img src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo" />
 		</a>
-	{/if}
+	{/if} -->
 </div>

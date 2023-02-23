@@ -29,7 +29,7 @@
 		modalStore.trigger(d);
 	}
 	export let data: PageData;
-	$: ({ userBCYCAData, userPostalAddressData, userProfileData } = data);
+	$: ({ userPostalAddressData, userProfileData } = data);
 </script>
 
 <svelte:head>

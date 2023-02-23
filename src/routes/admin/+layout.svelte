@@ -41,8 +41,8 @@
 		site: ['Site Administration', 'Stack2'],
 		messages: ['Site Messages', 'Messages'],
 		roles: ['Role Management', 'Analyze'],
-		users: ['New Users', 'Users'],
-		new: ['Firefighting Hazards', 'ReportAnalytics'],
+		users: ['User Administration', 'Users'],
+		new: ['New Users', 'ReportAnalytics'],
 		kits: ['Kits Delivered', 'ReportMoney'],
 		emergency: ['Emergency Administration', 'Ambulance'],
 		information: ['Information', 'InfoSquareRounded'],
@@ -61,7 +61,7 @@
 
 	// adminMessages
 	export let data: PageData;
-	$: ({ adminMessages: messages } = data);
+	$: ({ adminMessages: messagesData } = data);
 </script>
 
 <AppShell
@@ -194,7 +194,7 @@
 			<p class="m-2">Congratulations you are now eligible for your FREE Emergency Starter Kit.</p>
 			<p class="m-2">We will be in touch soon.</p>
 		</div> -->
-		<MessageContainer {messages} />
+		<MessageContainer {messagesData} />
 	</svelte:fragment>
 	<!-- Router Slot -->
 	<slot />

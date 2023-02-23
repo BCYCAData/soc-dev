@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(307, '/auth/signin');
 	}
 	// console.log(locals?.session?.user.id);
-	// console.log(locals?.session?.user.app_metadata.bcyca);
+	// console.log(locals?.session?.user.app_metadata.claims);
 	// const { error: adminDataError, data: adminData } = await locals.dbClient
 	// 	.from('user_profile')
 	// 	.select('*')

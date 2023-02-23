@@ -50,16 +50,16 @@
 	</svelte:fragment>
 	<svelte:fragment slot="trail">
 		{#if $page?.data?.session?.user?.id}
-			{#if $page?.data?.session?.user?.app_metadata?.bcyca?.includes('tester') | $page?.data?.session?.user?.app_metadata?.bcyca?.includes('admin')}
+			{#if $page?.data?.session?.user?.app_metadata?.claims?.includes('tester') | $page?.data?.session?.user?.app_metadata?.claims?.includes('admin')}
 				<a
-					class:active={$page.url.pathname.endsWith('/admin')}
+					class:active={$page.url.pathname.includes('/admin')}
 					href="/admin"
 					class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 					>Administrator</a
 				>
 			{/if}
 			<a
-				class:active={$page.url.pathname.endsWith('/profile')}
+				class:active={$page.url.pathname.includes('/profile')}
 				href="/profile"
 				class="btn bg-primary-500 text-surface-50 btn-base mr-2 font-semibold invisible rounded-xl lg:visible"
 				>Profile</a

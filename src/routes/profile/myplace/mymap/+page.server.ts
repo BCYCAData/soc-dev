@@ -3,7 +3,6 @@ import { geometryToGeoJson } from '$lib/utils';
 
 import type { PageServerLoad } from './$types';
 import type { MapDataJSON } from '$lib/types';
-// import { map } from 'leaflet';
 
 let mapLayers: MapDataJSON = { jsonLayers: [] };
 
@@ -11,6 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals?.session?.user) {
 		throw redirect(307, '/auth/signin');
 	}
+
 	const { data: propertyGeometryData, error: propertyGeometryError } = await locals.dbClient.rpc(
 		'get_property_geometry_for_user',
 		{ id_input: locals.session?.user.id }
@@ -19,6 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		console.log('error get Property Geometry:', propertyGeometryError);
 		throw error(400, propertyGeometryError);
 	}
+
 	if (propertyGeometryData.length > 0) {
 		mapLayers.jsonLayers[0] = geometryToGeoJson('property', propertyGeometryData[0].property);
 		mapLayers.jsonLayers[1] = geometryToGeoJson(
@@ -27,8 +28,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 		);
 		mapLayers.jsonLayers[2] = geometryToGeoJson('way_point', propertyGeometryData[0].way_point);
 	}
+	const minZoom: number = 19;
+
 	if (mapLayers.jsonLayers.length > 0) {
-		return { mapLayers };
+		const mapCentre: [number, number] = [
+			mapLayers.jsonLayers[1].geometry.coordinates[1],
+			mapLayers.jsonLayers[1].geometry.coordinates[0]
+		];
+		return { mapLayers, mapCentre, minZoom };
 	}
 	throw error(400, 'Something went wrong with getting the property geometry');
 };

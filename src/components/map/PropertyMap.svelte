@@ -1,65 +1,138 @@
 <script lang="ts">
-	import PropertyMapLeaflet from '$components/map/leaflet/PropertyMapLeaflet.svelte';
-	import Spinner from '$components/page/Spinner.svelte';
-	import { env } from '$env/dynamic/public';
+	import {
+		Map as LeafletMap,
+		control,
+		Control,
+		tileLayer,
+		FeatureGroup,
+		geoJSON,
+		CircleMarker,
+		LatLng,
+		featureGroup
+	} from 'leaflet';
+	import { TiledMapLayer } from 'esri-leaflet';
+	import { vectorTileLayer } from 'esri-leaflet-vector';
 
+	import 'leaflet/dist/leaflet.css';
 	import type { MapDataJSON } from '$lib/types';
 
+	export let mapCentre: [number, number];
 	export let mapLayers: MapDataJSON;
 
-	let mapObject = {
-		divId: 'basicMap',
-		centre: [
-			mapLayers.jsonLayers[1].geometry.coordinates[1],
-			mapLayers.jsonLayers[1].geometry.coordinates[0]
-		],
-		zoomControl: false,
-		doubleClickZoom: false,
-		scrollWheelZoom: true,
-		zoomSnap: 0.25,
-		zoom: 15,
-		minZoom: 15,
-		maxZoom: 16,
-		maxBounds: undefined,
-		dragging: false,
-		mapTiler: true
+	let waypointGroup: FeatureGroup;
+	let addresspointGroup: FeatureGroup;
+	let propertyGroup: FeatureGroup;
+
+	let propertyMap: LeafletMap;
+
+	const map = (domNode: HTMLDivElement) => {
+		propertyMap = new LeafletMap(domNode);
+		propertyMap.setView(mapCentre, 20);
+
+		const hybridStreets = vectorTileLayer(
+			'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_Hybrid/VectorTileServer',
+			{}
+		);
+
+		const streets = vectorTileLayer(
+			'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_Streets/VectorTileServer',
+			{}
+		);
+
+		const vectorTerrain = vectorTileLayer(
+			'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_Terrain/VectorTileServer',
+			{}
+		).addTo(propertyMap);
+
+		const aerial = new TiledMapLayer({
+			url: 'http://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer'
+		}).addTo(propertyMap);
+
+		const baseMap = new TiledMapLayer({
+			url: 'http://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Base_Map/MapServer'
+		});
+
+		const darkBase = vectorTileLayer(
+			'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_DarkGrey/VectorTileServer',
+			{}
+		);
+
+		const baseMaps = {
+			Aerial: aerial,
+			'Street Map': baseMap,
+			'Dark Street': darkBase
+		};
+		const overlay = {
+			hybridStreets: hybridStreets,
+			streets: streets,
+			vectorTerrain: vectorTerrain
+		};
+
+		// var base1 = PanelLayers(conf.base.layers, null, {
+		// 	title: conf.base.title,
+		// 	position: 'topright',
+		// 	compact: false
+		// }).addTo(propertyMap);
+
+		// var over1 = PanelLayers(null, conf.tree.layers, {
+		// 	title: conf.tree.title,
+		// 	position: 'topright',
+		// 	compact: false
+		// }).addTo(propertyMap);
+		let propertyFeature: GeoJSON.Feature = {
+			type: 'Feature',
+			properties: {},
+			geometry: mapLayers.jsonLayers[0].geometry
+		};
+		let myStyle = {
+			color: '#ff7800',
+			weight: 1,
+			opacity: 1,
+			fillOpacity: 0.05
+		};
+		let features = [];
+		const property = geoJSON(propertyFeature, {
+			style: myStyle
+		});
+		features.push(property);
+		propertyGroup = featureGroup(features);
+		propertyMap.addLayer(propertyGroup);
+		features = [];
+		let g = mapLayers.jsonLayers[1];
+		let p = g.geometry.coordinates;
+		let marker = new CircleMarker(new LatLng(p[1], p[0], 0));
+		marker.setStyle({ color: '#f97316', weight: 0, radius: 3, fillOpacity: 0.75 });
+		features.push(marker);
+		addresspointGroup = featureGroup(features);
+		propertyMap.addLayer(addresspointGroup);
+		features = [];
+		g = mapLayers.jsonLayers[2];
+		p = g.geometry.coordinates;
+		marker = new CircleMarker(new LatLng(p[1], p[0], 0));
+		marker.setStyle({ color: '#a5a5a5', weight: 0, radius: 3, fillOpacity: 0.75 });
+		features.push(marker);
+		waypointGroup = featureGroup(features);
+		propertyMap.addLayer(waypointGroup);
+		// propertyMap.on('resize', function () {
+		propertyMap.setMinZoom(0);
+		propertyMap.setMaxZoom(20);
+		propertyMap.fitBounds(propertyGroup.getBounds());
+		propertyMap.invalidateSize();
+		// });
+
+		const layerControl = control
+			.layers(baseMaps, overlay, {
+				collapsed: true
+			})
+			.addTo(propertyMap);
 	};
-
-	// let mapTileLayer = {
-	// 	url: `https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=${env.PUBLIC_MAPTILER_KEY}`,
-	// 	layerOptions: {
-	// 		tileSize: 512,
-	// 		zoomOffset: -1,
-	// 		minZoom: 1,
-	// 		attribution:
-	// 			'\u003ca href="https://www.maptiler.com/copyright/" target="_blank"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href="https://www.openstreetmap.org/copyright" target="_blank"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e \u003ca href="https://www.spatial.nsw.gov.au" target="_blank"\u003e\u0026copy; Spatial Services NSW \u003c/a\u003e',
-	// 		crossOrigin: true
-	// 	}
-	// };
-
-	// let mapTileLayer = {
-	// 	url: 'https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Base_Map/MapServer/WmsServer',
-	// 	layerOptions: {
-	// 		layers: 'LPIMap_PlacePoint'
-	// 	}
-	// };
-
-	let mapTileLayer = {
-		url: 'https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Imagery/MapServer/WmsServer',
-		layerOptions: {
-			layers: '0'
-		}
-	};
-
-	// '© State of New South Wales (Spatial Services, a business unit of the Department of Customer Service NSW). For current information go to spatial.nsw.gov.au.’
 </script>
 
-{#await mapLayers}
-	<Spinner />
-{:then mapLayers}
-	<div class="border-double border-stone-100 h-full">
-		<PropertyMapLeaflet {mapObject} {mapTileLayer} {mapLayers} />
-	</div>
-{:catch error}
-	<p style="color: red">{error.message}</p>
-{/await}
+<div use:map />
+
+<style>
+	div {
+		height: 100%;
+		width: 100%;
+	}
+</style>

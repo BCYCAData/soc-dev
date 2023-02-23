@@ -4,8 +4,8 @@ import { error, redirect } from '@sveltejs/kit';
 export const load: LayoutServerLoad = async (event) => {
 	if (
 		!(
-			event.locals.session?.user?.app_metadata.bcyca.includes('tester') |
-			event.locals.session?.user?.app_metadata.bcyca.includes('admin')
+			event.locals.session?.user?.app_metadata.claims.includes('tester') |
+			event.locals.session?.user?.app_metadata.claims.includes('admin')
 		)
 	) {
 		throw redirect(307, '/auth/signin');

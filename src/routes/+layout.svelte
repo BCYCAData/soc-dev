@@ -7,7 +7,6 @@
 	import '../theme.postcss';
 	import '@skeletonlabs/skeleton/styles/all.css';
 	import '../app.postcss';
-	import '../../node_modules/leaflet/dist/leaflet.css';
 
 	import { AppShell, Drawer, Modal } from '@skeletonlabs/skeleton';
 

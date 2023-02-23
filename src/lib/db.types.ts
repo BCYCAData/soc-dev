@@ -1,5 +1,4 @@
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
-
 export interface Database {
 	public: {
 		Tables: {
@@ -456,6 +455,29 @@ export interface Database {
 					willitwork?: number[];
 				};
 			};
+			user_admin: {
+				Row: {
+					created_at: string | null;
+					kitdate: string | null;
+					last_updated: string | null;
+					user_id: string;
+					vetted: boolean | null;
+				};
+				Insert: {
+					created_at?: string | null;
+					kitdate?: string | null;
+					last_updated?: string | null;
+					user_id: string;
+					vetted?: boolean | null;
+				};
+				Update: {
+					created_at?: string | null;
+					kitdate?: string | null;
+					last_updated?: string | null;
+					user_id?: string;
+					vetted?: boolean | null;
+				};
+			};
 			user_bcyca_profile: {
 				Row: {
 					community_meeting_choices: number[] | null;
@@ -746,22 +768,6 @@ export interface Database {
 			};
 		};
 		Functions: {
-			add_agent: {
-				Args: {
-					property_uid: string;
-					var_agent_name: string;
-					var_agent_phone: string;
-					var_agent_mobile: string;
-				};
-				Returns: undefined;
-			};
-			delete_agent: {
-				Args: {
-					property_uid: string;
-					agent_uid: string;
-				};
-				Returns: undefined;
-			};
 			delete_claim_for_email_array: {
 				Args: {
 					emails: string[];
@@ -811,17 +817,6 @@ export interface Database {
 					created_at: string;
 				}[];
 			};
-			get_agent_for_user: {
-				Args: {
-					id_input: string;
-				};
-				Returns: {
-					agent_name: string;
-					agent_mobile: string;
-					agent_phone: string;
-					created_at: string;
-				}[];
-			};
 			get_profile_messages_for_user: {
 				Args: {
 					id_input: string;
@@ -852,7 +847,7 @@ export interface Database {
 					property_address_street: string;
 					property_address_suburb: string;
 					property_address_postcode: string;
-					property_rented: string;
+					property_rented: boolean;
 					phone: string;
 					mobile_reception: number;
 					sign_posted: boolean;
@@ -881,6 +876,7 @@ export interface Database {
 					other_site_hazards: string;
 					land_adjacent_hazard: string;
 					created_at: string;
+					last_updated: string;
 				}[];
 			};
 			get_property_geometry_for_user: {
@@ -894,6 +890,7 @@ export interface Database {
 					way_point: unknown;
 					property: unknown;
 					created_at: string;
+					last_updated: string;
 				}[];
 			};
 			get_query_address: {
@@ -918,6 +915,17 @@ export interface Database {
 					id: number;
 					message: string;
 					created_at: string;
+				}[];
+			};
+			get_user_vetting_data: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					email: string;
+					name: string;
+					property_address: string;
+					landline: string;
+					mobile: string;
+					unanswered: string;
 				}[];
 			};
 			jsonb_array_to_smallint_array: {
