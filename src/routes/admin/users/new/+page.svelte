@@ -58,5 +58,3 @@
 		</tbody>
 	</table>
 </div>
-
-<pre>{vetted.join()}</pre>
