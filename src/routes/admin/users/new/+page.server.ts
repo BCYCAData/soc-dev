@@ -17,7 +17,16 @@ export const load: PageServerLoad = async ({ locals }) => {
 		console.log('error get New Users Admin Data:', usersAdminNewUsersError);
 		throw error(400, usersAdminNewUsersError.message);
 	}
+	const { data: usersSendRFSPlanData, error: usersSendRFSPlanError } = await locals.dbClient.rpc(
+		'get_user_sendrfsplan_data',
+		{}
+	);
+	if (usersSendRFSPlanError) {
+		console.log('error get New Users Admin Data:', usersSendRFSPlanError);
+		throw error(400, usersSendRFSPlanError.message);
+	}
 	return {
-		usersAdminNewUsersData: usersAdminNewUsersData
+		usersAdminNewUsersData: usersAdminNewUsersData,
+		usersSendRFSPlanData: usersSendRFSPlanData
 	};
 };

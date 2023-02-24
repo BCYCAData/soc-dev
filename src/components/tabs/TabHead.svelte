@@ -1,10 +1,18 @@
 <script lang="ts">
-	export let divClass = '';
-	export let ulClass = 'flex flex-wrap -mb-px';
+	export let tabStyle: 'default' | 'underline' = 'default';
+
+	export const divClasses = {
+		default: '',
+		underline: 'mb-1 text-sm font-medium text-center text-gray-500'
+	};
+	export const ulClasses = {
+		default: 'flex flex-wrap',
+		underline: 'flex flex-wrap mb-1'
+	};
 </script>
 
-<div class={divClass}>
-	<ul class={ulClass} role="tablist">
+<div class={divClasses[tabStyle]}>
+	<ul class={ulClasses[tabStyle]} role="tablist">
 		<slot />
 	</ul>
 </div>

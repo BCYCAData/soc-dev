@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"update-types": "npx supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" --schema public > src/lib/db.types.ts",
+		"update-types": "npx supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" --schema public > src/lib/update.db.types.ts",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -25,6 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.13",
+		"classnames": "^2.3.2",
 		"esbuild": "^0.16.10",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",

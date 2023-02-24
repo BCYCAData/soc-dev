@@ -22,7 +22,7 @@
 		}
 	};
 
-	$: ({ usersAdminNewUsersData } = data);
+	$: ({ usersAdminNewUsersData, usersSendRFSPlanData } = data);
 	$: vetted;
 </script>
 
@@ -32,17 +32,50 @@
 
 <TabWrapper>
 	<TabHead>
-		<TabHeadItem id={'1'} liClass="bg-tertiary-200 rounded-xl px-5" on:click={handleTabClick('1')}
-			>Send RFS Plan</TabHeadItem
+		<TabHeadItem id={'1'} on:click={handleTabClick('1')} {activeTabValue}>Send RFS Plan</TabHeadItem
 		>
-		<TabHeadItem id={'2'} liClass="bg-tertiary-200 rounded-xl px-5" on:click={handleTabClick('2')}
+		<TabHeadItem id={'2'} on:click={handleTabClick('2')} {activeTabValue}
 			>Review Answers</TabHeadItem
 		>
 	</TabHead>
-	<TabContentItem id={'1'} {activeTabValue}>Send RFS Plan</TabContentItem>
-	<TabContentItem id={'2'} {activeTabValue}
-		><div class="table-container">
+	<TabContentItem id={'1'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
+		<div class="table-container" id="SendRFSPlan">
 			<table class="table table-hover">
+				<thead>
+					<tr class="bg-orange-400">
+						<th class="text-center">Email</th>
+						<th class="text-center">Name</th>
+						<th class="text-center">Address</th>
+						<th class="text-center">Created At</th>
+						<th class="text-center">Sent</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!--  -->
+					{#each usersSendRFSPlanData as row}
+						<tr class="bg-orange-50">
+							<td>{row.email}</td>
+							<td>{row.name}</td>
+							<td>{row.address}</td>
+							<td>{row.created_at}</td>
+							<td style="text-align: center"
+								><input
+									type="checkbox"
+									name={row.email}
+									on:change={(e) => {
+										handleCheckClick(e);
+									}}
+								/></td
+							>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div></TabContentItem
+	>
+	<TabContentItem id={'2'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}
+		><div class="table-container">
+			<table class="table table-hover" id="ReviewNewUsers">
 				<thead>
 					<tr class="bg-orange-400">
 						<th class="text-center">Email</th>

@@ -917,6 +917,15 @@ export interface Database {
 					created_at: string;
 				}[];
 			};
+			get_user_sendrfsplan_data: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					email: string;
+					name: string;
+					address: string;
+					created_at: string;
+				}[];
+			};
 			get_user_vetting_data: {
 				Args: Record<PropertyKey, never>;
 				Returns: {
