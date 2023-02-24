@@ -6,7 +6,7 @@
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
 	function triggerCustomModal(): void {

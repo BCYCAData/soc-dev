@@ -2,9 +2,6 @@
 	import SetPassword from '$components/form/auth/SetPassword.svelte';
 	import SetEmail from '$components/form/auth/SetEmail.svelte';
 	import AuthErrorMessage from '$components/error/AuthErrorMessage.svelte';
-	import AuthSuccessMessage from '$components/form/AuthSuccessMessage.svelte';
-
-	import { validate_component } from 'svelte/internal';
 
 	import type { AddressPointData } from '$lib/types';
 

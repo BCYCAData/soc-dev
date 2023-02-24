@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { onMount } from 'svelte';
 
 	import { PUBLIC_SUPABASE_EMAIL_ADDRESS } from '$env/static/public';
 
@@ -10,9 +9,6 @@
 	const url = new URLSearchParams($page.url.hash.substring(1));
 	const redirectType = url.get('type');
 	const message = url.get('message');
-	onMount(async () => {
-		alert(redirectType);
-	});
 
 	let haveSurvey = false;
 </script>
@@ -35,7 +31,10 @@
 		</h1>
 		<div class="bg-green-100 rounded-lg mt-2 text-gray-900 items-center w-full">
 			<p class="my-1 text-xl">You need to validate your new email address.</p>
-			<p>{message}</p>
+			<p class="my-1 text-xl">You have confirmed your old email address.</p>
+			<p class="my-1 text-xl">
+				Please check the mailbox of your new email address for a confirmation request.
+			</p>
 		</div>
 	</section>
 {:else if redirectType === 'email_change'}

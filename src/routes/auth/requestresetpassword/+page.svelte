@@ -27,7 +27,7 @@
 				<p>Please wait while we validate your email address...</p>
 			{/if}
 			{#if form?.success}
-				<AuthSuccessMessage message={'Your request has been lodged. Check your Inbox.'} />
+				<AuthSuccessMessage message={['Your request has been lodged. Check your Inbox.']} />
 			{/if}
 			<button
 				type="submit"

@@ -24,20 +24,20 @@
 <div class="table-container">
 	<table class="table table-hover">
 		<thead>
-			<tr>
-				<th>Email</th>
-				<th>Name</th>
-				<th>Address</th>
-				<th>Phone</th>
-				<th>Mobile</th>
-				<th>Unanswered</th>
-				<th>Accepted</th>
+			<tr class="bg-orange-400">
+				<th class="text-center">Email</th>
+				<th class="text-center">Name</th>
+				<th class="text-center">Address</th>
+				<th class="text-center">Phone</th>
+				<th class="text-center">Mobile</th>
+				<th class="text-center">Unanswered</th>
+				<th class="text-center">Accepted</th>
 			</tr>
 		</thead>
 		<tbody>
 			<!--  -->
 			{#each usersAdminNewUsersData as row}
-				<tr>
+				<tr class="bg-orange-50">
 					<td>{row.email}</td>
 					<td>{row.name}</td>
 					<td>{row.property_address}</td>
