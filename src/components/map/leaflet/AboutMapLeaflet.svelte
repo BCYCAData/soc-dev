@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { FeatureGroup, LatLngExpression, Map } from 'leaflet';
+	import { onMount, onDestroy } from 'svelte';
+
 	import type { MapDataJSON, MapObject, MapTileLayerObject } from '$lib/types';
 
-	import { onMount, onDestroy } from 'svelte';
+	import 'leaflet/dist/leaflet.css';
 
 	export let mapObject: MapObject;
 	export let mapLayers: MapDataJSON;

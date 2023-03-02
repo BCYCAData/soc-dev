@@ -7,8 +7,11 @@
 	export let userProfileData: UserProfileData;
 	export let userPostalAddressData: UserPostalAddressData;
 
+	const postalWasChecked = userProfileData?.stay_in_touch_choices?.includes(5);
 	let postalChecked: boolean | undefined;
-	$: postalChecked = userProfileData.stay_in_touch_choices?.includes(5);
+	$: postalChecked = userProfileData?.stay_in_touch_choices?.includes(5);
+
+	console.log(postalWasChecked);
 </script>
 
 <h2 class="mb-1 text-xl font-semibold text-gray-900">
@@ -39,6 +42,7 @@
 		</div>
 	{/each}
 </div>
+<input type="text" name="postal_was_rented" value={postalWasChecked} hidden />
 <h2 hidden={!postalChecked} class="mb-1 text-xl font-semibold text-gray-900">
 	Please enter your postal address:
 </h2>

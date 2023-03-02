@@ -1,9 +1,11 @@
 <script lang="ts">
 	import type { Map as LeafletMap, FeatureGroup } from 'leaflet';
 	import { tiledMapLayer } from 'esri-leaflet';
+	import { onMount, onDestroy } from 'svelte';
+
 	import type { MapDataJSON, MapObject, MapTileLayerObject } from '$lib/types';
 
-	import { onMount, onDestroy } from 'svelte';
+	import 'leaflet/dist/leaflet.css';
 
 	export let mapObject: MapObject;
 	export let mapLayers: MapDataJSON;
@@ -81,7 +83,6 @@
 		features.push(marker);
 		waypointGroup = leaflet.featureGroup(features);
 		map.addLayer(waypointGroup);
-		console.log(mapLayers.jsonLayers[0]);
 		map.on('resize', function () {
 			map.setMinZoom(0);
 			map.setMaxZoom(20);

@@ -7,7 +7,7 @@
 	};
 	const inactiveClasses: classOptions = {
 		default:
-			'inline-block px-4 pt-4 pb-2 text-base font-medium text-center text-primary-800 bg-stone-300 rounded-t-lg active',
+			'inline-block px-4 pt-4 pb-2 text-base font-medium text-center text-primary-900 bg-stone-300 rounded-t-lg active',
 		underline: 'inline-block p-4 text-primary-600 rounded-t-lg border-b-2 border-primary-600 active'
 	};
 	const activeClasses: classOptions = {

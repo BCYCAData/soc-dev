@@ -8,6 +8,7 @@
 	export let userProfileData: UserProfileData;
 	export let propertyProfileData: PropertyProfileData;
 
+	const propertyWasRented = propertyProfileData.property_rented;
 	let otherAccessChecked = propertyProfileData.truck_access === 4 ? true : false;
 	let rentingChecked = propertyProfileData.property_rented === true;
 </script>
@@ -107,6 +108,7 @@
 			</div>
 		</div>
 	</div>
+	<input type="text" name="property_was_rented" value={propertyWasRented} hidden />
 	<div class="flex items-center mb-1">
 		<h2 class="text-xl font-semibold text-gray-900">Are you renting this property?</h2>
 		<p class="pt-1 pl-12" hidden={!rentingChecked}>
@@ -180,7 +182,19 @@
 				class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 				id="agent_mobile"
 				name="agent_mobile"
-				autocomplete="off"
+				autocomplete="do-not-autofill"
+				placeholder="Mobile 0XXX XXX XXX"
+				on:keydown={(e) => {
+					if (['Backspace', 'Delete'].includes(e.key)) {
+						agentData.agent_mobile = e.currentTarget.value;
+					} else {
+						e.preventDefault();
+						agentData.agent_mobile = e.currentTarget.value;
+						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+							agentData.agent_mobile = formatMobile(agentData.agent_mobile, e.key);
+						}
+					}
+				}}
 				hidden={!rentingChecked}
 				bind:value={agentData.agent_mobile}
 			/>
@@ -193,8 +207,19 @@
 				type="text"
 				class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 				id="agent_phone"
-				name="agent_phone"
-				autocomplete="off"
+				autocomplete="do-not-autofill"
+				placeholder="Landline XXXX XXXX"
+				on:keydown={(e) => {
+					if (['Backspace', 'Delete'].includes(e.key)) {
+						agentData.agent_phone = e.currentTarget.value;
+					} else {
+						e.preventDefault();
+						agentData.agent_phone = e.currentTarget.value;
+						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+							agentData.agent_phone = formatPhone(agentData.agent_phone, e.key);
+						}
+					}
+				}}
 				hidden={!rentingChecked}
 				bind:value={agentData.agent_phone}
 			/>
@@ -259,6 +284,8 @@
 						}}
 						class="w-6 h-6 ml-8"
 						name="truck_access"
+						autocomplete="do-not-autofill"
+						placeholder="Other Access Information..."
 						type="radio"
 						bind:group={propertyProfileData.truck_access}
 						{value}

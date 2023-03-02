@@ -44,6 +44,9 @@
 <script lang="ts">
 	import { onMount, setContext } from 'svelte';
 	import { Map as LeafletMap } from 'leaflet';
+
+	import 'leaflet/dist/leaflet.css';
+
 	setContext('leaflet_map', {
 		getMap: () => map
 	});

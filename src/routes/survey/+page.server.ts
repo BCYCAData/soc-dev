@@ -105,46 +105,52 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
 		const bodyObject = getFormData(formData, locals.session.user.id);
-		if (bodyObject?.propertyProfileData?.property_rented?.toString() == 'true') {
-			const { data: agentReturnData, error: agentUpsertError } = await locals.dbClient
-				.from('agent')
-				.upsert({
+		const wasRented = formData.get('property_was_rented') as string;
+		if (bodyObject.propertyProfileData?.property_rented?.toString() != wasRented) {
+			if (wasRented === 'false') {
+				console.log('Add agent');
+				const { error: agentUpsertError } = await locals.dbClient.from('agent').upsert({
 					user_id: locals.session.user.id,
 					agent_mobile: bodyObject.agentData.agent_mobile,
 					agent_name: bodyObject.agentData.agent_name,
 					agent_phone: bodyObject.agentData.agent_phone
-				})
-				.select();
-			if (agentUpsertError) {
-				throw error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
-			}
-			if (agentReturnData?.length === 1) {
-				agentData = agentReturnData[0];
+				});
+				if (agentUpsertError) {
+					throw error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
+				}
+			} else {
+				console.log('Delete agent');
+				const { error: deleteAgentError } = await locals.dbClient
+					.from('agent')
+					.delete()
+					.eq('user_id', locals.session.user.id);
+				if (deleteAgentError) {
+					console.log('error profileMyPlace delete agent: ', deleteAgentError);
+					throw error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
+				}
 			}
 		}
 		if (bodyObject.userProfileData.stay_in_touch_choices?.includes(5)) {
-			console.log('Postal Address');
-			const { data: userPostalAddressReturnData, error: userPostalAddressUpsertError } =
-				await locals.dbClient
-					.from('user_postal_address')
-					.upsert({
-						user_id: locals.session.user.id,
-						postal_address_street: bodyObject.userPostalAddressData.postal_address_street,
-						postal_address_suburb: bodyObject.userPostalAddressData.postal_address_suburb,
-						postal_address_postcode: bodyObject.userPostalAddressData.postal_address_postcode
-					})
-					.select();
+			const { error: userPostalAddressUpsertError } = await locals.dbClient
+				.from('user_postal_address')
+				.upsert({
+					user_id: locals.session.user.id,
+					postal_address_street: bodyObject.userPostalAddressData.postal_address_street,
+					postal_address_suburb: bodyObject.userPostalAddressData.postal_address_suburb,
+					postal_address_postcode: bodyObject.userPostalAddressData.postal_address_postcode
+				});
 			if (userPostalAddressUpsertError) {
+				console.log(
+					'error Survey upsert User Postal Address Data Error: ',
+					userPostalAddressUpsertError
+				);
 				throw error(
 					400,
-					`upsert User Postal Address Data Error ${userPostalAddressUpsertError.message}`
+					`error Survey upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
 				);
 			}
-			if (userPostalAddressReturnData?.length === 1) {
-				userPostalAddressData = userPostalAddressReturnData[0];
-			}
 		}
-		const { data: userProfileReturnData, error: userProfileUpdateError } = await locals.dbClient
+		const { error: userProfileUpdateError } = await locals.dbClient
 			.from('user_profile')
 			.update({
 				family_name: bodyObject.userProfileData.family_name,
@@ -160,87 +166,64 @@ export const actions: Actions = {
 				sent_rfs_survival_plan: bodyObject.userProfileData.sent_rfs_survival_plan,
 				stay_in_touch_choices: bodyObject.userProfileData.stay_in_touch_choices
 			})
-			.eq('id', locals.session.user.id)
-			.select();
+			.eq('id', locals.session.user.id);
 		if (userProfileUpdateError) {
 			throw error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
 		}
-		const { data: userBCYCAProfileReturnData, error: userBCYCAProfileUpdateError } =
-			await locals.dbClient
-				.from('user_bcyca_profile')
-				.update({
-					community_meeting_choices: bodyObject.userBCYCAProfileData.community_meeting_choices,
-					community_workshop_choices: bodyObject.userBCYCAProfileData.community_workshop_choices,
-					information_sheet_choices: bodyObject.userBCYCAProfileData.information_sheet_choices,
-					other_community_meeting: bodyObject.userBCYCAProfileData.other_community_meeting,
-					other_community_workshop: bodyObject.userBCYCAProfileData.other_community_workshop,
-					other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
-					will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
-				})
-				.eq('user_id', locals.session.user.id)
-				.select();
+		const { error: userBCYCAProfileUpdateError } = await locals.dbClient
+			.from('user_bcyca_profile')
+			.update({
+				community_meeting_choices: bodyObject.userBCYCAProfileData.community_meeting_choices,
+				community_workshop_choices: bodyObject.userBCYCAProfileData.community_workshop_choices,
+				information_sheet_choices: bodyObject.userBCYCAProfileData.information_sheet_choices,
+				other_community_meeting: bodyObject.userBCYCAProfileData.other_community_meeting,
+				other_community_workshop: bodyObject.userBCYCAProfileData.other_community_workshop,
+				other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
+				will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
+			})
+			.eq('user_id', locals.session.user.id);
 		if (userBCYCAProfileUpdateError) {
 			throw error(
 				400,
 				`update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`
 			);
 		}
-		const { data: propertyProfileReturnData, error: propertyProfileUpdateError } =
-			await locals.dbClient
-				.from('property_profile')
-				.update({
-					fire_fighting_resources: bodyObject.propertyProfileData.fire_fighting_resources,
-					fire_hazard_reduction: bodyObject.propertyProfileData.fire_hazard_reduction,
-					have_stortz: bodyObject.propertyProfileData.have_stortz,
-					land_adjacent_hazard: bodyObject.propertyProfileData.land_adjacent_hazard,
-					live_stock_present: bodyObject.propertyProfileData.live_stock_present,
-					live_stock_safe_area: bodyObject.propertyProfileData.live_stock_safe_area,
-					mobile_reception: bodyObject.propertyProfileData.mobile_reception,
-					number_birds: bodyObject.propertyProfileData.number_birds,
-					number_cats: bodyObject.propertyProfileData.number_cats,
-					number_dogs: bodyObject.propertyProfileData.number_dogs,
-					number_other_pets: bodyObject.propertyProfileData.number_other_pets,
-					other_essential_assets: bodyObject.propertyProfileData.other_essential_assets,
-					other_hazards: bodyObject.propertyProfileData.other_hazards,
-					other_site_hazards: bodyObject.propertyProfileData.other_site_hazards,
-					phone: bodyObject.propertyProfileData.phone,
-					property_rented: bodyObject.propertyProfileData.property_rented,
-					residents0_18: bodyObject.propertyProfileData.residents0_18,
-					residents19_50: bodyObject.propertyProfileData.residents19_50,
-					residents51_70: bodyObject.propertyProfileData.residents51_70,
-					residents71_: bodyObject.propertyProfileData.residents71_,
-					share_livestock_safe_area: bodyObject.propertyProfileData.share_livestock_safe_area,
-					sign_posted: bodyObject.propertyProfileData.sign_posted,
-					site_hazards: bodyObject.propertyProfileData.site_hazards,
-					static_water_available: bodyObject.propertyProfileData.static_water_available,
-					stortz_size: bodyObject.propertyProfileData.stortz_size,
-					truck_access: bodyObject.propertyProfileData.truck_access,
-					truck_access_other_information:
-						bodyObject.propertyProfileData.truck_access_other_information,
-					vulnerable_residents: bodyObject.propertyProfileData.vulnerable_residents
-				})
-				.eq('id', pid)
-				.select();
+		const { error: propertyProfileUpdateError } = await locals.dbClient
+			.from('property_profile')
+			.update({
+				fire_fighting_resources: bodyObject.propertyProfileData.fire_fighting_resources,
+				fire_hazard_reduction: bodyObject.propertyProfileData.fire_hazard_reduction,
+				have_stortz: bodyObject.propertyProfileData.have_stortz,
+				land_adjacent_hazard: bodyObject.propertyProfileData.land_adjacent_hazard,
+				live_stock_present: bodyObject.propertyProfileData.live_stock_present,
+				live_stock_safe_area: bodyObject.propertyProfileData.live_stock_safe_area,
+				mobile_reception: bodyObject.propertyProfileData.mobile_reception,
+				number_birds: bodyObject.propertyProfileData.number_birds,
+				number_cats: bodyObject.propertyProfileData.number_cats,
+				number_dogs: bodyObject.propertyProfileData.number_dogs,
+				number_other_pets: bodyObject.propertyProfileData.number_other_pets,
+				other_essential_assets: bodyObject.propertyProfileData.other_essential_assets,
+				other_hazards: bodyObject.propertyProfileData.other_hazards,
+				other_site_hazards: bodyObject.propertyProfileData.other_site_hazards,
+				phone: bodyObject.propertyProfileData.phone,
+				property_rented: bodyObject.propertyProfileData.property_rented,
+				residents0_18: bodyObject.propertyProfileData.residents0_18,
+				residents19_50: bodyObject.propertyProfileData.residents19_50,
+				residents51_70: bodyObject.propertyProfileData.residents51_70,
+				residents71_: bodyObject.propertyProfileData.residents71_,
+				share_livestock_safe_area: bodyObject.propertyProfileData.share_livestock_safe_area,
+				sign_posted: bodyObject.propertyProfileData.sign_posted,
+				site_hazards: bodyObject.propertyProfileData.site_hazards,
+				static_water_available: bodyObject.propertyProfileData.static_water_available,
+				stortz_size: bodyObject.propertyProfileData.stortz_size,
+				truck_access: bodyObject.propertyProfileData.truck_access,
+				truck_access_other_information:
+					bodyObject.propertyProfileData.truck_access_other_information,
+				vulnerable_residents: bodyObject.propertyProfileData.vulnerable_residents
+			})
+			.eq('id', pid);
 		if (propertyProfileUpdateError) {
 			throw error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
 		}
-		if (userProfileReturnData.length === 1) {
-			const userProfileData: UserProfileData = userProfileReturnData[0];
-			if (userBCYCAProfileReturnData.length === 1) {
-				const userBCYCAProfileData: UserBCYCAProfileData = userBCYCAProfileReturnData[0];
-				if (propertyProfileReturnData.length === 1) {
-					const propertyProfileData: PropertyProfileData = propertyProfileReturnData[0];
-					return {
-						user: locals?.session?.user,
-						agentData: agentData,
-						userPostalAddressData: userPostalAddressData,
-						userProfileData: userProfileData,
-						userBCYCAProfileData: userBCYCAProfileData,
-						propertyProfileData: propertyProfileData
-					};
-				}
-			}
-		}
-		throw error(400, 'Could not POST Survey data');
 	}
 };

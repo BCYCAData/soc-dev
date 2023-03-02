@@ -1,11 +1,13 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 	$: ({ usersAdminData } = data);
-</script>
+</script> -->
 
 <svelte:head>
 	<title>Users Administration</title>
 </svelte:head>
-<div>{usersAdminData}</div>
+<div>
+	<h1>This will probably contain information about hoow to use the contained pages</h1>
+</div>

@@ -4,7 +4,6 @@
 
 	export let data: PageData;
 	let mapLayers = data.mapData;
-	console.log(mapLayers);
 </script>
 
 <svelte:head>
@@ -16,13 +15,13 @@
 		<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
 			Strengthen OUR Community
 		</h1>
-		<h4>
+		<h2>Our aim is to Prepare, Connect and Rebound</h2>
+		<h3>
 			This project is about empowering our community to take responsibility for being prepared and
 			working together to make a difference.
-		</h4>
-		<h2>Our aim is to Prepare, Connect and Rebound</h2>
+		</h3>
 		<div class="text-left">
-			<p class="mt-2">The project focuses on four areas:</p>
+			<h4 class="mt-2">The project focuses on four areas:</h4>
 			<ol class="list">
 				<li class="!pt-0 !pb-0 !m-0">
 					<span class="font-semibold">The Burrell Creek Hall</span>
@@ -55,7 +54,7 @@
 
 			<p class="my-3 font-semibold text-center">
 				This map shows in the <span class="text-orange-600">properties</span>
-				that have participated
+				that are participating
 			</p>
 		</div>
 		<div class="main-map w-7/8 h-[58%]">

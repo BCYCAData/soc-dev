@@ -3,6 +3,8 @@
 	import Spinner from '$components/page/Spinner.svelte';
 	import { env } from '$env/dynamic/public';
 
+	import 'leaflet/dist/leaflet.css';
+
 	import type { MapDataJSON } from '$lib/types';
 
 	let mapObject = {

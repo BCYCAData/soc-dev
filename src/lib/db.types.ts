@@ -907,6 +907,38 @@ export interface Database {
 					geom: unknown;
 				}[];
 			};
+			get_rfs_property_data_for_street: {
+				Args: {
+					street_input: string;
+				};
+				Returns: {
+					property_id: string;
+					phone: string;
+					address: string;
+					agent: Json;
+					property: Json;
+					onsite_hazards: Json;
+					other_local_hazards: Json;
+					fire_fighting_assets: Json;
+					site_animals: Json;
+				}[];
+			};
+			get_rfs_user_data_for_porperties: {
+				Args: {
+					property_ids: string[];
+				};
+				Returns: {
+					user_id: string;
+					property_id: string;
+					residents: Json;
+				}[];
+			};
+			get_street_list: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					streets: string;
+				}[];
+			};
 			get_tester_messages_for_user: {
 				Args: {
 					id_input: string;
@@ -914,6 +946,40 @@ export interface Database {
 				Returns: {
 					id: number;
 					message: string;
+					created_at: string;
+				}[];
+			};
+			get_user_bcyca_events_data: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					email: string;
+					name: string;
+					address: string;
+					event_choices: number[];
+					other_event: string;
+					created_at: string;
+				}[];
+			};
+			get_user_bcyca_information_data: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					email: string;
+					name: string;
+					address: string;
+					informatiion_choices: number[];
+					other_information: string;
+					created_at: string;
+				}[];
+			};
+			get_user_bcyca_workshops_data: {
+				Args: Record<PropertyKey, never>;
+				Returns: {
+					email: string;
+					name: string;
+					address: string;
+					workshop_choices: number[];
+					other_wokshop: string;
+					will_run_wokshop: string;
 					created_at: string;
 				}[];
 			};

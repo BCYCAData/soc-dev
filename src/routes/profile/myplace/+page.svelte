@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { formatPhone } from '$lib/utils';
+	import { formatMobile, formatPhone } from '$lib/utils';
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { PageData, ActionData } from './$types';
+	import type { PageData } from './$types';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
 	function triggerCustomModal(): void {
@@ -41,6 +41,7 @@
 <section class="mx-auto">
 	<form
 		id="profileMyPlaceForm"
+		autocomplete="do-not-autofill"
 		on:change={() => {
 			unsaved = true;
 		}}
@@ -118,7 +119,7 @@
 			</div>
 			<div class="flex items-center col-span-10 sm:text-base">
 				<label
-					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
+					class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 					for="agent_name"
 					hidden={!propertyProfileData.property_rented}>Agent</label
 				>
@@ -127,12 +128,12 @@
 					class="bg-gray-50 border border-gray-300 flex-initial w-3/4 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 					id="agent_name"
 					name="agent_name"
-					autocomplete="off"
+					autocomplete="do-not-autofill"
 					hidden={!propertyProfileData.property_rented}
 					bind:value={agentData.agent_name}
 				/>
 				<label
-					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
+					class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 					for="agent_mobile"
 					hidden={!propertyProfileData.property_rented}>Mobile</label
 				>
@@ -141,12 +142,24 @@
 					class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 					id="agent_mobile"
 					name="agent_mobile"
-					autocomplete="off"
 					hidden={!propertyProfileData.property_rented}
+					autocomplete="do-not-autofill"
+					placeholder="Mobile 0XXX XXX XXX"
+					on:keydown={(e) => {
+						if (['Backspace', 'Delete'].includes(e.key)) {
+							agentData.agent_mobile = e.currentTarget.value;
+						} else {
+							e.preventDefault();
+							agentData.agent_mobile = e.currentTarget.value;
+							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+								agentData.agent_mobile = formatMobile(agentData.agent_mobile, e.key);
+							}
+						}
+					}}
 					bind:value={agentData.agent_mobile}
 				/>
 				<label
-					class="unstyled flex-initial px-3 text-base text-primary-700 font-Poppins"
+					class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 					for="agent_phone"
 					hidden={!propertyProfileData.property_rented}>Landline</label
 				>
@@ -155,8 +168,20 @@
 					class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 					id="agent_phone"
 					name="agent_phone"
-					autocomplete="off"
 					hidden={!propertyProfileData.property_rented}
+					autocomplete="do-not-autofill"
+					placeholder="Landline XXXX XXXX"
+					on:keydown={(e) => {
+						if (['Backspace', 'Delete'].includes(e.key)) {
+							agentData.agent_phone = e.currentTarget.value;
+						} else {
+							e.preventDefault();
+							agentData.agent_phone = e.currentTarget.value;
+							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+								agentData.agent_phone = formatPhone(agentData.agent_phone, e.key);
+							}
+						}
+					}}
 					bind:value={agentData.agent_phone}
 				/>
 			</div>
@@ -225,6 +250,7 @@
 				hidden={propertyProfileData.truck_access !== 4}
 				id="truck_access_other_information"
 				name="truck_access_other_information"
+				autocomplete="do-not-autofill"
 				bind:value={propertyProfileData.truck_access_other_information}
 			/>
 		</div>
@@ -309,7 +335,7 @@
 			</h2>
 			<div class="p-1 ml-4 rounded-lg bg-orange-300">
 				<div class="flex my-0 items-center list-none text-base sm:w-full sm:mx-auto">
-					<div class="flex-auto mx-4 text-primary-700 font-semibold font-Poppins">Poor</div>
+					<div class="flex-auto mx-4 text-primary-900 font-semibold font-Poppins">Poor</div>
 					{#each Array(5) as _, i}
 						<li class="flex-auto mx-3 ">
 							<input
@@ -319,12 +345,12 @@
 								bind:group={propertyProfileData.mobile_reception}
 								value={i + 1}
 							/>
-							<label class="inline-block ml-1 text-primary-700 font-Poppins" for="mobile_reception">
+							<label class="inline-block ml-1 text-primary-900 font-Poppins" for="mobile_reception">
 								{i + 1}
 							</label>
 						</li>
 					{/each}
-					<div class="flex-auto mx-4 text-primary-700 font-semibold font-Poppins">Excellent</div>
+					<div class="flex-auto mx-4 text-primary-900 font-semibold font-Poppins">Excellent</div>
 				</div>
 			</div>
 		</div>

@@ -2,10 +2,6 @@ import { error, redirect } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
 import type { Actions } from './$types';
-import type { AgentData, PropertyProfileData } from '$lib/db.types';
-
-let agentData: AgentData;
-let propertyProfileData: PropertyProfileData;
 
 export const actions: Actions = {
 	default: async ({ request, locals }) => {
@@ -17,7 +13,7 @@ export const actions: Actions = {
 		const wasRented = formData.get('property_was_rented') as string;
 		const body = getFormData(formData, locals.session.user.id);
 		if (body.propertyProfileData?.property_rented?.toString() != wasRented) {
-			if (body.propertyProfileData.property_rented == true) {
+			if (wasRented === 'false') {
 				const { data: agentReturnData, error: agentUpsertError } = await locals.dbClient
 					.from('agent')
 					.upsert({
@@ -30,9 +26,6 @@ export const actions: Actions = {
 				if (agentUpsertError) {
 					console.log('error profileMyPlace upsertAgent:', agentUpsertError);
 					throw error(400, `error profileMyPlace upsertAgent ${agentUpsertError.message}`);
-				}
-				if (agentReturnData?.length === 1) {
-					agentData = agentReturnData[0];
 				}
 			} else {
 				const { error: deleteAgentError } = await locals.dbClient
@@ -48,6 +41,7 @@ export const actions: Actions = {
 		const { error: profileMyPlaceDataError, data: profileMyPlace } = await locals.dbClient
 			.from('property_profile')
 			.update({
+				property_rented: (formData.get('property_rented') as unknown as boolean) || null,
 				sign_posted: (formData.get('sign_posted') as unknown as boolean) || null,
 				truck_access: parseInt(formData.get('truck_access') as string),
 				truck_access_other_information:
@@ -69,13 +63,5 @@ export const actions: Actions = {
 				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
 			);
 		}
-		if (profileMyPlace.length === 1) {
-			propertyProfileData = profileMyPlace[0];
-			return {
-				agentData,
-				propertyProfileData
-			};
-		}
-		throw error(400, 'Could not POST Profile My Place data');
 	}
 };

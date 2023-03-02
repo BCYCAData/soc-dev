@@ -196,8 +196,5 @@
 		</div> -->
 		<MessageContainer {messagesData} />
 	</svelte:fragment>
-	<!-- Router Slot -->
 	<slot />
-	<!-- ---- / ---- -->
-	<!-- <svelte:fragment slot="pageFooter">Page Footer</svelte:fragment> -->
 </AppShell>

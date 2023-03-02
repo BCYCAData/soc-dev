@@ -41,8 +41,8 @@ export const getFormData = (body: FormData, uid: string) => {
 	const pid = body.get('property_key') as string;
 	const agentData: AgentData = {
 		agent_mobile: (body.get('agent_mobile') as string) || null,
-		agent_name: (body.get('agent_mobile') as string) || null,
-		agent_phone: (body.get('agent_mobile') as string) || null,
+		agent_name: (body.get('agent_name') as string) || null,
+		agent_phone: (body.get('agent_phone') as string) || null,
 		created_at: null,
 		user_id: uid,
 		last_updated: null

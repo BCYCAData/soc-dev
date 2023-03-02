@@ -42,36 +42,11 @@
 	slotPageFooter="flex items-center text-center content-center justify-around w-full"
 >
 	<svelte:fragment slot="header">
-		<!-- <AppBar background="bg-primary-500" slotDefault="flex justify-center items-center">
-			<svelte:fragment slot="lead">
-				<button class="lg:hidden btn btn-sm mr-4" on:click={drawerOpen}>
-					<span>
-						<svg viewBox="0 0 100 80" class="fill-token w-4 h-4">
-							<rect width="100" height="20" />
-							<rect y="30" width="100" height="20" />
-							<rect y="60" width="100" height="20" />
-						</svg>
-					</span>
-				</button><button class="btn invisible lg:visible">Left-Button</button>
-				<a href="/" class="btn invisible lg:visible">Left-Anchor</a></svelte:fragment
-			>
-			<svelte:fragment slot="default">
-				<button class="btn invisible lg:visible">Centre-Button</button>
-				<a href="/" class="btn invisible lg:visible">Centre-Anchor</a>
-			</svelte:fragment>
-			<svelte:fragment slot="trail"
-				><button class="btn invisible lg:visible">Right-Button</button>
-				<a href="/" class="btn invisible lg:visible">Right-Anchor</a>
-			</svelte:fragment>
-		</AppBar> -->
 		<Navbar />
 	</svelte:fragment>
 	<svelte:fragment slot="sidebarLeft">
 		<MobileNavbar />
 	</svelte:fragment>
-	<!-- <svelte:fragment slot="sidebarRight">Sidebar Right</svelte:fragment> -->
-	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
-	<!-- Router Slot -->
 	<slot />
 	<svelte:fragment slot="pageFooter">
 		<img

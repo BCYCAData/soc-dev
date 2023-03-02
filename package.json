@@ -45,13 +45,16 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@pdf-lib/fontkit": "^1.1.1",
 		"@supabase/auth-helpers-sveltekit": "^0.8.6",
 		"@supabase/supabase-js": "^2.2.1",
 		"@types/esri-leaflet": "^2.1.9",
 		"@types/leaflet": "^1.9.0",
 		"esri-leaflet": "^3.0.10",
 		"esri-leaflet-vector": "^4.0.0",
+		"jspdf": "^2.5.1",
 		"leaflet": "^1.9.3",
-		"leaflet-panel-layers": "^1.3.1"
+		"leaflet-panel-layers": "^1.3.1",
+		"pdf-lib": "^1.17.1"
 	}
 }
