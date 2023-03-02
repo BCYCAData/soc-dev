@@ -52,7 +52,7 @@
 				</li>
 			</ol>
 
-			<p class="my-3 font-semibold text-center">
+			<p class="my-1 font-semibold text-center">
 				This map shows in the <span class="text-orange-600">properties</span>
 				that are participating
 			</p>
