@@ -1,14 +1,27 @@
 import PdfPrinter from 'pdfmake';
 import blobStream, { type IBlobStream } from 'blob-stream';
 
+import poppinsRegular from '../pdf/fonts/Poppins-Regular.ttf';
+import poppinsMedium from '../pdf/fonts/Poppins-Medium.ttf';
+import poppinsItalic from '../pdf/fonts/Poppins-Italic.ttf';
+import poppinsMediumItalic from '../pdf/fonts/Poppins-MediumItalic.ttf';
+
 import type { TDocumentDefinitions, TFontDictionary } from 'pdfmake/interfaces';
 
+console.log(poppinsRegular);
+
 const fonts: TFontDictionary = {
+	// Poppins: {
+	// 	normal: 'src/lib/server/pdf/fonts/Poppins-Regular.ttf',
+	// 	bold: 'src/lib/server/pdf/fonts/Poppins-Medium.ttf',
+	// 	italics: 'src/lib/server/pdf/fonts/Poppins-Italic.ttf',
+	// 	bolditalics: 'src/lib/server/pdf/fonts/Poppins-MediumItalic.ttf'
+	// }
 	Poppins: {
-		normal: 'src/lib/server/pdf/fonts/Poppins-Regular.ttf',
-		bold: 'src/lib/server/pdf/fonts/Poppins-Medium.ttf',
-		italics: 'src/lib/server/pdf/fonts/Poppins-Italic.ttf',
-		bolditalics: 'src/lib/server/pdf/fonts/Poppins-MediumItalic.ttf'
+		normal: poppinsRegular,
+		bold: poppinsMedium,
+		italics: poppinsItalic,
+		bolditalics: poppinsMediumItalic
 	}
 };
 const printer = new PdfPrinter(fonts);
