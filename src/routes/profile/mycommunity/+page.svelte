@@ -48,7 +48,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		How would you prefer to stay in touch?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -120,7 +120,7 @@
 		</div>
 	</div>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="If you have any other comments, add them here."
 		lableClass={null}
 		lableText={null}

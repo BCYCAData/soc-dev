@@ -8,13 +8,13 @@
 </script>
 
 <div class="bg-green-100 mt-1 rounded-lg">
-	<h1 class="text-xl text-center">
+	<h1 class="unstyled text-xl text-center">
 		{searchaddress}
 	</h1>
 	{#if searchaddress !== validaddress}
-		<h1 class="text-xl text-center">( {addressPointData.validaddress} )</h1>
+		<h1 class="unstyled text-xl text-center">( {addressPointData.validaddress} )</h1>
 	{/if}
-	<h1 class="text-xl text-center">
+	<h1 class="unstyled text-xl text-center">
 		is part of the
 		<span class="font-semibold">{addressPointData.communityname}</span>
 		community.

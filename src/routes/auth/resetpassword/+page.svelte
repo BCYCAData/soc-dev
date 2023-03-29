@@ -9,9 +9,9 @@
 	$: canGo = validPassword;
 </script>
 
-<div class="flex flex-col items-center  max-w-container mx-auto justify-center">
+<div class="flex flex-col items-center max-w-container mx-auto justify-center">
 	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
-		<h1 class="text-2xl text-center">{heading}</h1>
+		<h1 class="unstyled text-2xl text-center">{heading}</h1>
 		<form action="?/resetpassword" method="POST">
 			<SetPassword bind:validPassword />
 			<button

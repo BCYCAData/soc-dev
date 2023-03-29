@@ -22,7 +22,7 @@
 </script>
 
 <div class="py-2 mx-auto lg:py-2">
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">What is your name?</h2>
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">What is your name?</h2>
 	<div class="grid gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:gap-2">
 		<div class="w-full">
 			<input
@@ -51,7 +51,7 @@
 			/>
 		</div>
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">Your property address is:</h2>
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">Your property address is:</h2>
 	<div class="p-2 rounded-lg bg-orange-200">
 		<div class="grid sm:grid-cols-12 gap-0">
 			<div class="flex items-center">
@@ -122,7 +122,7 @@
 	</div>
 	<input type="text" name="property_was_rented" value={propertyWasRented} hidden />
 	<div class="flex items-center mb-1">
-		<h2 class="text-xl font-semibold text-gray-900">Are you renting this property?</h2>
+		<h2 class="unstyled text-xl font-semibold text-gray-900">Are you renting this property?</h2>
 		<p class="pt-1 pl-12" hidden={!rentingChecked}>
 			Please enter your Agent's Name and at least one contact number if you can.
 		</p>
@@ -237,7 +237,7 @@
 			/>
 		</div>
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 		Is your property well sign-posted and numbered clearly from the road?
 	</h2>
 	<div class="p-2 flex flex-wrap rounded-lg bg-orange-200">
@@ -257,7 +257,7 @@
 			</div>
 		{/each}
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 		Is there easy truck access to the buildings, boundaries and paddocks?
 	</h2>
 	<div class="p-2 flex flex-wrap rounded-lg bg-orange-200">
@@ -311,7 +311,7 @@
 		{/each}
 		<!-- </ul> -->
 	</div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">What is your phone number?</h2>
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">What is your phone number?</h2>
 	<div class="p-2 rounded-lg bg-orange-200">
 		<div class="flex flex-row sm:text-lg">
 			<label class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins" for="mobile"

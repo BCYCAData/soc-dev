@@ -54,6 +54,7 @@
 		"esri-leaflet": "^3.0.10",
 		"esri-leaflet-vector": "^4.0.1",
 		"leaflet": "^1.9.3",
-		"pdfmake": "^0.2.7"
+		"pdfmake": "^0.2.7",
+		"svelte-email": "^0.0.4"
 	}
 }

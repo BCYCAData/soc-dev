@@ -7,7 +7,7 @@
 	export let userBCYCAData: UserBCYCAProfileData;
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
 		(Check all that apply)</span
 	>
@@ -33,7 +33,7 @@
 </div>
 
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="Is there other information which you would find useful?"
 	lableClass={null}
 	lableText={null}

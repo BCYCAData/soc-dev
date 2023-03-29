@@ -9,7 +9,7 @@
 >
 	Strengthen OUR Community
 </h1>
-<h1 class="mx-auto mt-2 text-center">Thank you for completing the questionnaire.</h1>
+<h1 class="unstyled mx-auto mt-2 text-center">Thank you for completing the questionnaire.</h1>
 <div class="text-base w-3/5 mx-auto sm:text-xl">
 	<p class="unstyled pt-0 text-center">
 		The information you have provided will be used to create a digital "map" of the area providing

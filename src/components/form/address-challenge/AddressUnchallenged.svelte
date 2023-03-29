@@ -93,7 +93,7 @@
 
 {#if addressPointData.status === 400 || addressPointData.status === 404}
 	<div class="bg-red-100 rounded-lg">
-		<h2 class=" text-center mt-5 ">This address could not be found.</h2>
+		<h2 class="unstyled text-center mt-5">This address could not be found.</h2>
 		<p class="m-1 mt-2">
 			Please check that your Street Address and Suburb are correctly structured and try again.
 		</p>
@@ -101,9 +101,9 @@
 		<p class="m-1">Abbreviations are not allowed.</p>
 	</div>
 {/if}
-<div class="flex flex-col items-center  max-w-container mx-auto justify-center">
+<div class="flex flex-col items-center max-w-container mx-auto justify-center">
 	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
-		<h1 class="text-2xl text-center">Membership is restricted to specific Communities</h1>
+		<h1 class="unstyled text-2xl text-center">Membership is restricted to specific Communities</h1>
 		<p class="text-center mb-2">
 			Please enter your Street Address and Suburb to check your qualification
 		</p>

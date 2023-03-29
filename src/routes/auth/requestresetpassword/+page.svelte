@@ -15,7 +15,7 @@
 
 <div class="flex flex-col items-center max-w-md mx-auto justify-center">
 	<div class="bg-orange-100 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
-		<h1 class="text-2xl text-center">Reset Password</h1>
+		<h1 class="unstyled text-2xl text-center">Reset Password</h1>
 		<p>Please enter the email address you registered with.</p>
 		<p>If it is validated you will receive an email with a link to enable your password reset.</p>
 		<form class="pt-2" action="?/requestresetpassword" method="POST">

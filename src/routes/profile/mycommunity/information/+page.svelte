@@ -46,7 +46,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -73,7 +73,7 @@
 
 	<!-- other_information_sheet -->
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="Is there other information which you would find useful?"
 		lableClass={null}
 		lableText={null}

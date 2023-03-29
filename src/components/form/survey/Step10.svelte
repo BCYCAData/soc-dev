@@ -7,7 +7,7 @@
 	export let userBCYCAData: UserBCYCAProfileData;
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	What Community Events are you interested in?<span class="ml-2 text-sm text-gray-500">
 		(Check all that apply)</span
 	>
@@ -32,7 +32,7 @@
 	{/each}
 </div>
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="If there are other events you would be interested in, please add them
 			below."
 	lableClass={null}

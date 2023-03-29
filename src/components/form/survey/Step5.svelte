@@ -37,7 +37,7 @@
 	};
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Are there any static water supplies on the property?<span class="ml-2 text-sm text-gray-500">
 		(Check all that apply)</span
 	>
@@ -85,7 +85,7 @@
 	{/each}
 </div>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Do you have a Stortz fitting attached to a water tank?
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -109,7 +109,7 @@
 	{/each}
 </div>
 {#if have_stortzChecked}
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">Please include the size</h2>
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">Please include the size</h2>
 	<div class="p-2 flex flex-wrap justify-between rounded-lg bg-orange-200">
 		<div class="flex items-center">
 			<NumberInput
@@ -136,7 +136,7 @@
 	</div>
 {/if}
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
 		(Check all that apply)</span
 	>

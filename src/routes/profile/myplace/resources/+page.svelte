@@ -73,7 +73,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Are there any static water supplies on the property?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -110,7 +110,7 @@
 			>
 		{/each}
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have a Stortz fitting attached to a water tank?
 	</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -130,7 +130,7 @@
 			>
 		{/each}
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">Please include the size (mm)</h2>
+	<h2 class="unstyled text-base font-semibold text-gray-900">Please include the size (mm)</h2>
 	<input
 		type="number"
 		id="stortz_size"
@@ -138,7 +138,7 @@
 		class="border border-orange-700 w-20 rounded ml-4 py-1 sm:text-lg"
 		bind:value={propertyProfileData.stortz_size}
 	/>
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -158,7 +158,7 @@
 			>
 		{/each}
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Does your property have?<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
 	</h2>
 	<div

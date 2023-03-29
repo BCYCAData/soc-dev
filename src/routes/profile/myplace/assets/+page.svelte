@@ -47,7 +47,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		How many pets do you usually have at this property?
 	</h2>
 	<div class="flex flex-row justify-around p-2 rounded-lg bg-orange-300 sm:text-lg">
@@ -80,7 +80,7 @@
 			bind:inputValue={propertyProfileData.number_other_pets}
 		/>
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">Do you have livestock?</h2>
+	<h2 class="unstyled text-base font-semibold text-gray-900">Do you have livestock?</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
 		{#each yesNoOptions as { value, lable }}
 			<input
@@ -96,7 +96,7 @@
 			>
 		{/each}
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have a safe area for stock in the event of a bushfire or flood?
 	</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -114,7 +114,7 @@
 			>
 		{/each}
 	</div>
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Would you let others leave their stock in your safe area, for a short time, in an emergency?
 	</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -133,7 +133,7 @@
 		{/each}
 	</div>
 	<TextAreaInput
-		headingClass="text-base font-semibold pt-2 text-gray-900"
+		headingClass="unstyled unstyled text-base font-semibold pt-2 text-gray-900"
 		headingText="If there are assets, other than the residence, that you consider essential (eg crops, sheds with equipment or antique cars) please describe them here."
 		lableClass={null}
 		lableText={null}

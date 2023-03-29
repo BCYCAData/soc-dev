@@ -46,7 +46,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Which of these community initiated workshops would be useful to you?<span
 			class="ml-2 text-sm text-gray-500"
 		>
@@ -73,7 +73,7 @@
 		{/each}
 	</div>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="If there are other workshops that you would like to see run, please add
 			the details here"
 		lableClass={null}
@@ -84,7 +84,7 @@
 		bind:inputValue={userBCYCAData.other_community_workshop}
 	/>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="If you would like to help run any of the workshops, please indicate which
 			ones below."
 		lableClass={null}

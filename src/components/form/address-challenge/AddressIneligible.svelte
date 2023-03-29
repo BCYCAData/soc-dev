@@ -7,10 +7,10 @@
 </script>
 
 <div class="bg-red-100 mt-1 rounded-lg">
-	<h1 class="text-2xl text-center">
+	<h1 class="unstyled text-2xl text-center">
 		Unfortunately {searchaddress}
 	</h1>
-	<h1 class="text-2xl text-center">
+	<h1 class="unstyled text-2xl text-center">
 		is not part of any of the communities we are engaging with at the moment.
 	</h1>
 </div>

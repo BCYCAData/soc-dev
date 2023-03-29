@@ -46,7 +46,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		What Community Events are you interested in?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -71,7 +71,7 @@
 		{/each}
 	</div>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="If there are other events you would be interested in, please add them
 			below."
 		lableClass={null}

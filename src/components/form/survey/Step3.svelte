@@ -8,7 +8,7 @@
 	export let propertyProfileData: PropertyProfileData;
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	What is the quality of your mobile reception at the property?
 </h2>
 <div class="p-1 rounded-lg bg-orange-200">
@@ -31,7 +31,7 @@
 		<div class="flex-auto text-primary-700 font-semibold font-Poppins">Excellent</div>
 	</ul>
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">Are you:</h2>
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">Are you:</h2>
 <div
 	class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 >
@@ -51,7 +51,7 @@
 		</div>
 	{/each}
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Please record the number of people who usually live at this property:
 </h2>
 <div class="p-2 rounded-lg bg-orange-200">
@@ -87,7 +87,7 @@
 	</ul>
 </div>
 <div>
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 		Do you consider any person on the property to be vulnerable?
 	</h2>
 	<div class="p-2 flex justify-start rounded-lg bg-orange-200">

@@ -11,7 +11,7 @@
 	let live_stock_safe_area = propertyProfileData.live_stock_safe_area;
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Please record the number of pets you have on this property:
 </h2>
 <div class="p-2 rounded-lg bg-orange-200">
@@ -46,7 +46,7 @@
 		/>
 	</ul>
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">Do you have livestock?</h2>
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">Do you have livestock?</h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
 	{#each yesNoOptions as { value, lable }}
 		<div class="flex items-center">
@@ -70,7 +70,7 @@
 </div>
 
 {#if live_stock_present === true}
-	<h2 class="mb-1 text-xl font-semibold text-gray-900">
+	<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 		Do you have an area which would be safe for stock in the event of a bushfire or flood?
 	</h2>
 	<div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -96,7 +96,7 @@
 		{/each}
 	</div>
 	{#if live_stock_present && live_stock_safe_area != 'N'}
-		<h2 class="mb-1 text-xl font-semibold text-gray-900">
+		<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 			Would you be happy for other people to leave their stock on your property, in your safe area,
 			for a short period in an emergency?
 		</h2>
@@ -123,7 +123,7 @@
 {/if}
 
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="If there are assets, other than the residence, that you consider essential (eg crops, sheds with equipment or antique cars) please describe them here."
 	lableClass={null}
 	lableText={null}

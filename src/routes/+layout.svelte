@@ -17,7 +17,7 @@
 
 <Modal />
 <Drawer>
-	<h2 class="p-1">MobileNavbar</h2>
+	<h2 class="unstyled p-1">MobileNavbar</h2>
 	<hr />
 	<MobileNavbar />
 </Drawer>

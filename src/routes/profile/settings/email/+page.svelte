@@ -22,9 +22,9 @@
 <svelte:head>
 	<title>Profile-Settings-Email</title>
 </svelte:head>
-<div class="flex flex-col items-center  max-w-container mx-auto justify-center">
+<div class="flex flex-col items-center max-w-container mx-auto justify-center">
 	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
-		<h1 class="text-2xl text-center">Please enter your new email address.</h1>
+		<h1 class="unstyled text-2xl text-center">Please enter your new email address.</h1>
 		<form action="?/changeEmail" method="POST">
 			<SetEmail bind:validEmail />
 			<button

@@ -3,7 +3,7 @@
 >
 	Strengthen OUR Community
 </h1>
-<h1 class="mx-auto mt-2 text-center">Project Survey</h1>
+<h1 class="unstyled mx-auto mt-2 text-center">Project Survey</h1>
 <div class="text-base w-3/5 mx-auto sm:text-xl">
 	<p class="unstyled pt-2">
 		The answers you provide to these questions will assist you in preparing yourself and your

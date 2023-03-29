@@ -16,7 +16,7 @@
 	$: postalChecked = userProfileData?.stay_in_touch_choices?.includes(5);
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	How would you prefer to stay in touch?<span class="ml-2 text-sm text-gray-500">
 		(Check all that apply)</span
 	>
@@ -120,7 +120,7 @@
 	</div>
 </div>
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="Do you have any other comments that you would like to add?"
 	lableClass={null}
 	lableText={null}

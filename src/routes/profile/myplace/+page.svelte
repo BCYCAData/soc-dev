@@ -52,7 +52,8 @@
 		class="flex flex-col py-1 mx-auto w-full"
 		method="POST"
 	>
-		<h2 class="text-base font-semibold text-gray-900">What is your address?</h2>
+		<!-- <h2 class="unstyled text-base font-semibold text-gray-900">What is your address?</h2> -->
+		<h2 class="unstyled text-base font-semibold text-gray-900">What is your address?</h2>
 		<div class="grid gap-2 p-1 rounded-lg bg-orange-300 sm:grid-cols-10 sm:gap-2">
 			<input
 				type="text"
@@ -83,7 +84,7 @@
 				bind:value={propertyProfileData.property_address_postcode}
 			/>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">Are you renting this property?</h2>
+		<h2 class="unstyled text-base font-semibold text-gray-900">Are you renting this property?</h2>
 		<div class="grid gap-0 p-1 rounded-lg bg-orange-300 sm:grid-cols-10 grid-rows-2 sm:gap-0">
 			<div class="flex items-center mr-4 col-span-3">
 				<div class="flex items-center">
@@ -191,7 +192,7 @@
 				/>
 			</div>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			Is your property well sign posted and numbered clearly from the road?
 		</h2>
 		<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -208,7 +209,7 @@
 				>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			Is there easy truck access to the buildings, boundaries and paddocks?
 		</h2>
 		<div
@@ -259,7 +260,9 @@
 				bind:value={propertyProfileData.truck_access_other_information}
 			/>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">How many people usually live here?</h2>
+		<h2 class="unstyled text-base font-semibold text-gray-900">
+			How many people usually live here?
+		</h2>
 		<div class="flex flex-row justify-around p-2 rounded-lg bg-orange-300 sm:text-lg">
 			<NumberInput
 				name="residents0_18"
@@ -290,7 +293,7 @@
 				bind:inputValue={propertyProfileData.residents71_}
 			/>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			Do you consider any person on the property to be vulnerable?
 		</h2>
 		<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -309,7 +312,9 @@
 			{/each}
 		</div>
 		<div class="flex flex-row justify-start pt-2 items-center">
-			<h2 class="text-base font-semibold text-gray-900">What is your landline phone number?</h2>
+			<h2 class="unstyled text-base font-semibold text-gray-900">
+				What is your landline phone number?
+			</h2>
 			<div class="rounded-lg ml-3 p-1 bg-orange-300">
 				<input
 					on:change={() => {
@@ -335,14 +340,14 @@
 			</div>
 		</div>
 		<div class="flex flex-row justify-start pt-2 items-center">
-			<h2 class="text-base font-semibold text-gray-900">
+			<h2 class="unstyled text-base font-semibold text-gray-900">
 				What is the mobile reception quality at the property?
 			</h2>
 			<div class="p-1 ml-4 rounded-lg bg-orange-300">
 				<div class="flex my-0 items-center list-none text-base sm:w-full sm:mx-auto">
 					<div class="flex-auto mx-4 text-primary-900 font-semibold font-Poppins">Poor</div>
 					{#each Array(5) as _, i}
-						<li class="flex-auto mx-3 ">
+						<li class="flex-auto mx-3">
 							<input
 								name="mobile_reception"
 								type="radio"

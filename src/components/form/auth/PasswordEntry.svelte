@@ -46,13 +46,13 @@
 	}
 </script>
 
-<div class="flex flex-col items-center  max-w-container mx-auto justify-center">
+<div class="flex flex-col items-center max-w-container mx-auto justify-center">
 	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
-		<h1 class="text-2xl text-center">{redirectType}</h1>
+		<h1 class="unstyled text-2xl text-center">{redirectType}</h1>
 		<label class="inline uppercase text-orange-900 text-xs font-bold" for="password">
 			Password:
 			<span
-				class="toggle-password text-2xl text-gray-900 font-normal ml-3  align-middle "
+				class="toggle-password text-2xl text-gray-900 font-normal ml-3 align-middle"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
 			>
@@ -73,7 +73,7 @@
 		<label class="inline uppercase text-orange-900 text-xs font-bold" for="confirmPassword">
 			Confirm Password:
 			<span
-				class="toggle-password text-3xl text-gray-900 font-normal ml-3  align-middle "
+				class="toggle-password text-3xl text-gray-900 font-normal ml-3 align-middle"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
 			>

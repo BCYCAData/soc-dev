@@ -12,7 +12,7 @@
 </script>
 
 <pre>{userProfileData.send_rfs_survival_plan}</pre>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Have you completed a RFS Bushfire survival plan?
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -63,7 +63,7 @@
 		{/if}
 	</div>
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	What is your level of firefighting experience?
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -86,7 +86,7 @@
 		{/each}
 	</ul>
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Have you had unpleasant traumatic experience of bushfire?
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -106,7 +106,7 @@
 		</div>
 	{/each}
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	If your property is threatened by fire, are you:
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
@@ -129,7 +129,7 @@
 		{/each}
 	</ul>
 </div>
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	If your property is threatened by flood, are you:
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">

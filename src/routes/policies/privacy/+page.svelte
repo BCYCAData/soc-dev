@@ -2,13 +2,15 @@
 	<title>Privacy Policy</title>
 </svelte:head>
 
-<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
+<h1
+	class="unstyled text-center title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600"
+>
 	Strengthen OUR Community
 </h1>
-<h1 class="text-center sm:text-3xl sm:mt-4 text-gray-900">PRIVACY POLICY</h1>
+<h1 class="unstyled text-center sm:text-3xl sm:mt-4 text-gray-900">PRIVACY POLICY</h1>
 <section class="flex flex-col mx-auto h-full max-w-3xl text-gray-900">
 	<p class="m-1">Last updated: 1/7/22</p>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">1. Overview</h2>
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">1. Overview</h2>
 	<div class="mx-5">
 		<p class="m-1">
 			(a) As responsible data custodians we are committed to protecting your personal information,
@@ -26,7 +28,9 @@
 			accessed by unauthorised persons or disclosed without authorisation.
 		</p>
 	</div>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">2. Collecting information</h2>
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
+		2. Collecting information
+	</h2>
 	<div class="mx-5">
 		<p class="m-1">
 			(a) The Project survey will only collect information that is necessary for one or more of our
@@ -50,7 +54,9 @@
 			individuals.
 		</p>
 	</div>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">3. Disclosing information</h2>
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
+		3. Disclosing information
+	</h2>
 	<p class="m-1">The Project will only disclose personal information in accordance with the Act.</p>
 	<p class="m-1">This means that personal information may be disclosed:</p>
 	<div class="mx-5">
@@ -62,7 +68,7 @@
 		<p class="m-1">▪ As required by law; or</p>
 		<p class="m-1">▪ Under other circumstances where permitted under the Act.</p>
 	</div>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
 		4. Unauthorised disclosure or access
 	</h2>
 	<p class="m-1">
@@ -73,7 +79,7 @@
 	<p class="m-1">
 		Appropriate action (which may include disciplinary or legal action) will be taken in such cases.
 	</p>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
 		5. Access to personal information
 	</h2>
 	<div class="mx-5">
@@ -93,7 +99,7 @@
 			to correct the information in accordance with the Act.
 		</p>
 	</div>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">6. Security</h2>
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">6. Security</h2>
 	<div class="mx-5">
 		<p class="m-1">
 			(a) Our goal is to protect the personal information collected by the Project and its
@@ -105,13 +111,13 @@
 			safeguard personal information.
 		</p>
 	</div>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">7. Data Quality</h2>
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">7. Data Quality</h2>
 	<p class="m-1">
 		We will take all reasonable steps to ensure that the data we collect, use or disclose is
 		accurate, complete and up to date, and has been obtained directly from individuals by way of the
 		survey.
 	</p>
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
 		8. Availability and review of Policy
 	</h2>
 	<p class="m-1">
@@ -119,7 +125,7 @@
 		from time to time and any amendments will be incorporated into the updated policy.
 	</p>
 
-	<h2 class="title-font font-bold text-lg text-orange-600 m-1">
+	<h2 class="unstyled title-font font-bold text-lg text-orange-600 m-1">
 		9. Questions, Concerns and Complaints
 	</h2>
 	<p class="m-1 mb-3">

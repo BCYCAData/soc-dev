@@ -7,7 +7,7 @@
 	export let userBCYCAData: UserBCYCAProfileData;
 </script>
 
-<h2 class="mb-1 text-xl font-semibold text-gray-900">
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Which of these community initiated workshops would be useful to you?<span
 		class="text-sm text-gray-700"
 	>
@@ -34,7 +34,7 @@
 	{/each}
 </div>
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="If there are other workshops that you would like to see run, please add
 			the details here:"
 	lableClass={null}
@@ -45,7 +45,7 @@
 	bind:inputValue={userBCYCAData.other_community_workshop}
 />
 <TextAreaInput
-	headingClass="mb-1 text-xl font-semibold text-gray-900"
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
 	headingText="If you would like to help run any of the workshops, please indicate which
 			ones below."
 	lableClass={null}

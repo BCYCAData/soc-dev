@@ -58,7 +58,7 @@
 		class="flex flex-col py-1 mx-auto w-full"
 		method="POST"
 	>
-		<h2 class="text-base font-semibold text-gray-900">What is your name?</h2>
+		<h2 class="unstyled text-base font-semibold text-gray-900">What is your name?</h2>
 		<div class="grid gap-2 p-1 rounded-lg bg-orange-300 sm:grid-cols-2 sm:gap-2">
 			<input
 				type="text"
@@ -83,7 +83,7 @@
 				bind:value={userProfileData.family_name}
 			/>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">Are you:</h2>
+		<h2 class="unstyled text-base font-semibold text-gray-900">Are you:</h2>
 		<div
 			class="grid grid-flow-col gap-x-2 p-1 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-4 sm:gap-x-2"
 		>
@@ -105,7 +105,9 @@
 			{/each}
 		</div>
 		<div class="flex flex-row justify-start pt-2 items-center">
-			<h2 class="text-base font-semibold text-gray-900">What is your mobile phone number?</h2>
+			<h2 class="unstyled text-base font-semibold text-gray-900">
+				What is your mobile phone number?
+			</h2>
 			<div class="rounded-lg ml-3 p-1 bg-orange-300">
 				<input
 					on:change={() => {
@@ -130,7 +132,7 @@
 				/>
 			</div>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			Have you completed a RFS Bushfire survival plan?
 		</h2>
 		<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -179,7 +181,7 @@
 				{/if}
 			</div>
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			What is your level of firefighting experience?
 		</h2>
 		<div
@@ -202,7 +204,7 @@
 				</div>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			Have you had unpleasant traumatic experience of bushfire?
 		</h2>
 		<div class="flex justify-start rounded-lg p-1 bg-orange-300">
@@ -222,7 +224,7 @@
 				</div>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			If your property is threatened by fire, are you:
 		</h2>
 		<div
@@ -245,7 +247,7 @@
 				</div>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900">
+		<h2 class="unstyled text-base font-semibold text-gray-900">
 			If your property is threatened by flood, are you:
 		</h2>
 		<div

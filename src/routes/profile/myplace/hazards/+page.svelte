@@ -44,7 +44,7 @@
 	class="flex flex-col py-1 mx-auto w-full"
 	method="POST"
 >
-	<h2 class="text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have any of the following on your property?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
@@ -66,7 +66,7 @@
 		{/each}
 	</div>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="Are there any other hazards on the property that should be noted?"
 		lableClass={null}
 		lableText={null}
@@ -75,7 +75,9 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={propertyProfileData.other_site_hazards}
 	/>
-	<h2 class="text-base font-semibold text-gray-900">Does any adjoining land represent a hazard?</h2>
+	<h2 class="unstyled text-base font-semibold text-gray-900">
+		Does any adjoining land represent a hazard?
+	</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
@@ -92,7 +94,7 @@
 		{/each}
 	</div>
 	<TextAreaInput
-		headingClass="pt-2 text-base font-semibold text-gray-900"
+		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
 		headingText="Are there other areas that concern you or represent a potential threat?"
 		lableClass={null}
 		lableText={null}
