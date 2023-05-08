@@ -1,8 +1,7 @@
 <script lang="ts">
 	import AboutMap from '$components/map/AboutMap.svelte';
-	import type { PageData } from './$types';
 
-	export let data: PageData;
+	export let data;
 	let mapLayers = data.mapData;
 </script>
 

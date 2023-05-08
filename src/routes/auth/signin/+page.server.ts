@@ -1,17 +1,16 @@
 import { AuthApiError } from '@supabase/supabase-js';
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 
-export const actions: Actions = {
-	signin: async ({ request, locals: { supabase, getSession } }) => {
+export const actions = {
+	signin: async ({ request, locals: { supabase } }) => {
 		const body = Object.fromEntries(await request.formData());
-		const { error: err } = await supabase.auth.signInWithPassword({
+		const { error } = await supabase.auth.signInWithPassword({
 			email: body.email as string,
 			password: body.password as string
 		});
 
-		if (err) {
-			if (err instanceof AuthApiError && err.status === 400) {
+		if (error) {
+			if (error instanceof AuthApiError && error.status === 400) {
 				return fail(400, {
 					error: 'Invalid credentials'
 				});

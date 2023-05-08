@@ -11,9 +11,7 @@
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { PageData } from './$types';
-
-	export let data: PageData;
+	export let data;
 
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
@@ -75,7 +73,7 @@
 				type="text"
 				id="family_name"
 				name="family_name"
-				autocomplete="family_name"
+				autocomplete="off"
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 				style="text-transform:capitalize"
 				placeholder="Family Name"

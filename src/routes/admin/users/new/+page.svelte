@@ -3,27 +3,78 @@
 	import TabHead from '$components/tabs/TabHead.svelte';
 	import TabHeadItem from '$components/tabs/TabHeadItem.svelte';
 	import TabContentItem from '$components/tabs/TabContentItem.svelte';
+	import NewUsersTable from '$components/form/tables/NewUsersTable.svelte';
+	import SendRFSPlanTable from '$components/form/tables/SendRFSPlanTable.svelte';
 
-	import type { PageData } from './$types';
+	import type { CellComponent } from 'tabulator-tables';
 
-	export let data: PageData;
+	import type { HtmlEvents } from 'svelte-email/components/Html.svelte';
 
-	let vetted: string[] = [];
+	export let data;
+
+	// let vetted: string[] = [];
 	let activeTabValue = '1';
 
 	const handleTabClick = (tabValue: string) => () => {
 		activeTabValue = tabValue;
 	};
-	const handleCheckClick = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-		if (e.currentTarget.checked) {
-			vetted = [...vetted, e.currentTarget.name];
-		} else {
-			vetted = vetted.filter((value) => value !== e.currentTarget.name);
-		}
-	};
 
 	$: ({ usersAdminNewUsersData, usersSendRFSPlanData } = data);
-	$: vetted;
+
+	let newUserColumns = [
+		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
+		{
+			formatter: 'rowSelection',
+			titleFormatter: 'rowSelection',
+			hozAlign: 'center',
+			headerSort: false,
+			cellClick: function (e: UIEvent, cell: CellComponent) {
+				cell.getRow().toggleSelect();
+			}
+		},
+		{ title: 'Email', field: 'email' },
+		{ title: 'Name', field: 'name' },
+		{ title: 'Address', field: 'property_address' },
+		{ title: 'Landline', field: 'landline', contextPopup: 'Im a Popup' },
+		{ title: 'Mobile', field: 'mobile' },
+		{
+			formatter: 'responsiveCollapse',
+			width: 30,
+			minWidth: 30,
+			hozAlign: 'center',
+			resizable: false,
+			headerSort: false
+		},
+		{
+			title: 'Unanswered',
+			field: 'unanswered',
+			tooltip: function (e: any, cell: CellComponent, onRendered: any) {
+				//e - mouseover event
+				//cell - cell component
+				//onRendered - onRendered callback registration function
+				var el = document.createElement('div');
+				el.style.backgroundColor = 'red';
+				el.innerText = cell.getValue(); //return cells "field - value";
+				return el;
+			}
+		}
+	];
+	let sendRFSPlanColumns = [
+		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
+		{
+			formatter: 'rowSelection',
+			titleFormatter: 'rowSelection',
+			hozAlign: 'center',
+			headerSort: false,
+			cellClick: function (e: UIEvent, cell: CellComponent) {
+				cell.getRow().toggleSelect();
+			}
+		},
+		{ title: 'Email', field: 'email' },
+		{ title: 'Name', field: 'name' },
+		{ title: 'Address', field: 'address' },
+		{ title: 'Created At', field: 'created_at' }
+	];
 </script>
 
 <svelte:head>
@@ -46,77 +97,9 @@
 		>
 	</TabHead>
 	<TabContentItem id={'1'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
-		<div class="table-container" id="SendRFSPlan">
-			<table class="table table-hover">
-				<thead>
-					<tr class="bg-orange-400">
-						<th class="text-center">Email</th>
-						<th class="text-center">Name</th>
-						<th class="text-center">Address</th>
-						<th class="text-center">Created At</th>
-						<th class="text-center">Sent</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!--  -->
-					{#each usersSendRFSPlanData as row}
-						<tr class="bg-orange-50">
-							<td>{row.email}</td>
-							<td>{row.name}</td>
-							<td>{row.address}</td>
-							<td>{row.created_at}</td>
-							<td style="text-align: center"
-								><input
-									type="checkbox"
-									name={row.email}
-									on:change={(e) => {
-										handleCheckClick(e);
-									}}
-								/></td
-							>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div></TabContentItem
-	>
-	<TabContentItem id={'2'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}
-		><div class="table-container">
-			<table class="table table-hover" id="ReviewNewUsers">
-				<thead>
-					<tr class="bg-orange-400">
-						<th class="text-center">Email</th>
-						<th class="text-center">Name</th>
-						<th class="text-center">Address</th>
-						<th class="text-center">Phone</th>
-						<th class="text-center">Mobile</th>
-						<th class="text-center">Unanswered</th>
-						<th class="text-center">Accepted</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!--  -->
-					{#each usersAdminNewUsersData as row}
-						<tr class="bg-orange-50">
-							<td>{row.email}</td>
-							<td>{row.name}</td>
-							<td>{row.property_address}</td>
-							<td>{row.landline}</td>
-							<td>{row.mobile}</td>
-							<td>{row.unanswered}</td>
-							<td style="text-align: center"
-								><input
-									type="checkbox"
-									name={row.email}
-									on:change={(e) => {
-										handleCheckClick(e);
-									}}
-								/></td
-							>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+		<SendRFSPlanTable {sendRFSPlanColumns} {usersSendRFSPlanData} />
+	</TabContentItem>
+	<TabContentItem id={'2'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
+		<NewUsersTable {newUserColumns} {usersAdminNewUsersData} />
 	</TabContentItem>
 </TabWrapper>

@@ -12,10 +12,8 @@
 
 	import StreetSelectInput from '$components/form/inputs/StreetSelectInput.svelte';
 
-	import type { PageData, ActionData } from './$types';
-
-	export let data: PageData;
-	export let form: ActionData;
+	export let data;
+	export let form;
 
 	let classText =
 		'class="border mt-0 w-full border-orange-700 rounded bg-orange-50 py-1 sm:text-lg"';

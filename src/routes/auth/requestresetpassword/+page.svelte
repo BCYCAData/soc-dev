@@ -3,14 +3,12 @@
 	import AuthSuccessMessage from '$components/form/AuthSuccessMessage.svelte';
 	import SetEmail from '$components/form/auth/SetEmail.svelte';
 
-	import type { ActionData } from './$types';
-
 	let waiting = false;
 
 	$: canGo = validEmail;
 	$: validEmail = false;
 
-	export let form: ActionData;
+	export let form;
 </script>
 
 <div class="flex flex-col items-center max-w-md mx-auto justify-center">

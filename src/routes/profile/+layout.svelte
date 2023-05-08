@@ -6,8 +6,6 @@
 
 	import 'iconify-icon';
 
-	import type { PageData } from './$types';
-
 	let pathLables = {
 		profile: ['Profile', 'carbon:home'],
 		aboutme: ['About Me', 'User'],
@@ -33,7 +31,7 @@
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
 
 	// profileMessages
-	export let data: PageData;
+	export let data;
 	$: ({ profileMessagesData } = data);
 </script>
 

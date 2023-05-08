@@ -6,12 +6,12 @@
 		fireFightingResources,
 		fireHazardReductionOptions
 	} from '$lib/profileOptions';
-	import { modalStore } from '@skeletonlabs/skeleton/utilities/Modal/stores';
+
+	import { modalStore } from '@skeletonlabs/skeleton';
 
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { PageData } from './$types';
-	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton/utilities/Modal/types';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
 
@@ -57,7 +57,7 @@
 		}
 	};
 
-	export let data: PageData;
+	export let data;
 	$: ({ propertyProfileData } = data);
 </script>
 

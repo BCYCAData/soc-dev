@@ -5,7 +5,6 @@
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { PageData } from './$types';
 	import { type ModalSettings, type ModalComponent, modalStore } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
@@ -32,7 +31,7 @@
 		};
 		modalStore.trigger(d);
 	}
-	export let data: PageData;
+	export let data;
 	$: ({ userPostalAddressData, userProfileData } = data);
 </script>
 

@@ -1,9 +1,8 @@
 <script lang="ts">
 	import SurveyFormContainer from '$components/form/survey/SurveyFormContainer.svelte';
 	import ProgressBar from '$components/form/ProgressBar.svelte';
-	import type { PageData } from './$types';
 
-	export let data: PageData;
+	export let data;
 
 	let steps = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 	let currentActive = 1;

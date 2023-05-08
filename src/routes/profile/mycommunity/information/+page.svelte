@@ -5,9 +5,8 @@
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { PageData } from './$types';
-	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton/utilities/Modal/types';
-	import { modalStore } from '@skeletonlabs/skeleton/utilities/Modal/stores';
+	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
 
@@ -30,7 +29,7 @@
 		modalStore.trigger(d);
 	}
 
-	export let data: PageData;
+	export let data;
 	$: ({ userBCYCAData } = data);
 </script>
 

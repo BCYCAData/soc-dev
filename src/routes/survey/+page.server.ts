@@ -1,7 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
-import type { PageServerLoad, Actions } from './$types';
 import type {
 	AgentData,
 	PropertyProfileData,
@@ -16,7 +15,7 @@ let userProfileData: UserProfileData;
 let userBCYCAData: UserBCYCAProfileData;
 let propertyProfileData: PropertyProfileData;
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		throw redirect(307, '/auth/signin');
@@ -99,7 +98,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	};
 };
 
-export const actions: Actions = {
+export const actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {

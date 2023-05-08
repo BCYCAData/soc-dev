@@ -50,6 +50,7 @@
 				{showPassword ? '👁️' : '👁️'}
 			</span>
 		</div>
+		<!-- svelte-ignore a11y-autocomplete-valid -->
 		<input
 			class="form-input !border !border-orange-700 w-full py-3 rounded mb-4"
 			id="password"
@@ -73,6 +74,7 @@
 				{showPassword ? '👁️' : '👁️'}
 			</span>
 		</div>
+		<!-- svelte-ignore a11y-autocomplete-valid -->
 		<input
 			id="confirmPassword"
 			type={inputType}

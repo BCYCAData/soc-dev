@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-	import type { PageData } from './$types';
 
 	const summaryOpenStyle =
 		'py-2 px-4 text-base font-medium text-gray-800 bg-primary-300 !rounded-t-lg !rounded-b-none';
@@ -101,7 +100,7 @@
 	// 	summary12Style = summaryClosedStyle;
 	// }
 
-	export let data: PageData;
+	export let data;
 	$: ({ bcycaEventsData } = data);
 </script>
 

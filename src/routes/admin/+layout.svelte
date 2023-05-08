@@ -7,22 +7,6 @@
 
 	import 'iconify-icon';
 
-	// import { IconStack2 } from '@tabler/icons-svelte';
-	// import { IconAmbulance } from '@tabler/icons-svelte';
-	// import { IconUsers } from '@tabler/icons-svelte';
-	// import { IconSettings } from '@tabler/icons-svelte';
-	// import { IconMessages } from '@tabler/icons-svelte';
-	// import { IconAnalyze } from '@tabler/icons-svelte';
-	// import { IconReport } from '@tabler/icons-svelte';
-	// import { IconReportMoney } from '@tabler/icons-svelte';
-	// import { IconReportAnalytics } from '@tabler/icons-svelte';
-	// import { IconInfoSquareRounded } from '@tabler/icons-svelte';
-	// import { IconSchool } from '@tabler/icons-svelte';
-	// import { IconMap2 } from '@tabler/icons-svelte';
-	// import { IconCalendarEvent } from '@tabler/icons-svelte';
-
-	import type { PageData } from './$types';
-
 	let pathLables = {
 		admin: ['Administration', ''],
 		site: ['Site Administration', 'Stack2'],
@@ -47,7 +31,7 @@
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
 
 	// adminMessages
-	export let data: PageData;
+	export let data;
 	$: ({ adminMessages: messagesData } = data);
 </script>
 

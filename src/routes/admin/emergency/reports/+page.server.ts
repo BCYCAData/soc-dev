@@ -1,7 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (
 		!(
@@ -26,7 +25,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	throw error(400, 'Something went wrong retrieving the Street List data');
 };
 
-export const actions: Actions = {
+export const actions = {
 	generateStreetReport: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {

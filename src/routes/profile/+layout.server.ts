@@ -1,4 +1,3 @@
-import type { LayoutServerLoad } from './$types';
 import type {
 	AgentData,
 	ProfileMessageData,
@@ -16,7 +15,7 @@ let userBCYCAData: UserBCYCAProfileData;
 let propertyProfileData: PropertyProfileData;
 let profileMessagesData: ProfileMessageData;
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		throw redirect(307, '/auth/signin');

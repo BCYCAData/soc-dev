@@ -1,7 +1,6 @@
-import type { LayoutServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (
 		!(

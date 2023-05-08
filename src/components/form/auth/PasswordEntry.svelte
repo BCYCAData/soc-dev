@@ -59,6 +59,7 @@
 				{showPassword ? '👁️' : '👁️'}
 			</span>
 		</label>
+		<!-- svelte-ignore a11y-autocomplete-valid -->
 		<input
 			id="password"
 			type={inputType}
@@ -80,6 +81,7 @@
 				{showPassword ? '👁️' : '👁️'}
 			</span>
 		</label>
+		<!-- svelte-ignore a11y-autocomplete-valid -->
 		<input
 			id="confirmPassword"
 			type={inputType}

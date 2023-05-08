@@ -3,8 +3,6 @@
 	import AuthSuccessMessage from '$components/form/AuthSuccessMessage.svelte';
 	import SetEmail from '$components/form/auth/SetEmail.svelte';
 
-	import type { ActionData } from './$types';
-
 	let heading = 'Please enter your new email address.';
 	let caution = 'Make sure you enter the correct address. THERE IS NO WAY TO UNDO THIS.';
 	let errorMessage = 'There was an error changing your email address';
@@ -13,7 +11,7 @@
 		'Please check the mailbox of your old address for a confirmation email.'
 	];
 
-	export let form: ActionData;
+	export let form;
 
 	$: validEmail = false;
 	$: canGo = validEmail;

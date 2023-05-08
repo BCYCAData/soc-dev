@@ -1,11 +1,10 @@
-import { fail, redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
+import { fail } from '@sveltejs/kit';
 
-export const actions: Actions = {
+export const actions = {
 	requestresetpassword: async ({ request, locals: { supabase, supabaseRedirectBase } }) => {
 		const body = Object.fromEntries(await request.formData());
 		let email = body.email.toString();
-		const { data, error: err } = await supabase.auth.resetPasswordForEmail(email, {
+		const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
 			redirectTo: `${supabaseRedirectBase}/auth/resetpassword`
 		});
 		if (err) {

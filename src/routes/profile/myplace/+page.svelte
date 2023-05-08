@@ -6,7 +6,6 @@
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { PageData } from './$types';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
 	function setUpperCase(e: Event) {
@@ -32,7 +31,7 @@
 		}
 	});
 
-	export let data: PageData;
+	export let data;
 	$: ({ propertyProfileData, agentData, property_was_rented } = data);
 
 	let unsaved = false;
@@ -45,7 +44,7 @@
 <section class="mx-auto">
 	<form
 		id="profileMyPlaceForm"
-		autocomplete="do-not-autofill"
+		autocomplete="off"
 		on:change={() => {
 			unsaved = true;
 		}}
@@ -134,7 +133,7 @@
 					class="bg-gray-50 border border-gray-300 flex-initial w-3/4 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 					id="agent_name"
 					name="agent_name"
-					autocomplete="do-not-autofill"
+					autocomplete="off"
 					hidden={!propertyProfileData.property_rented}
 					bind:value={agentData.agent_name}
 				/>
@@ -149,7 +148,7 @@
 					id="agent_mobile"
 					name="agent_mobile"
 					hidden={!propertyProfileData.property_rented}
-					autocomplete="do-not-autofill"
+					autocomplete="off"
 					placeholder="Mobile 0XXX XXX XXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -175,7 +174,7 @@
 					id="agent_phone"
 					name="agent_phone"
 					hidden={!propertyProfileData.property_rented}
-					autocomplete="do-not-autofill"
+					autocomplete="off"
 					placeholder="Landline XXXX XXXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -256,7 +255,7 @@
 				hidden={propertyProfileData.truck_access !== 4}
 				id="truck_access_other_information"
 				name="truck_access_other_information"
-				autocomplete="do-not-autofill"
+				autocomplete="off"
 				bind:value={propertyProfileData.truck_access_other_information}
 			/>
 		</div>

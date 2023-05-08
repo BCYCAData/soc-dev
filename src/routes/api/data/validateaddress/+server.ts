@@ -1,9 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { splitFullAddress, splitStreetAddress } from '$lib/utils';
 
-import type { RequestHandler } from './$types';
-
-export const POST: RequestHandler = async ({ locals: { supabase }, request }) => {
+export const POST = async ({ locals: { supabase }, request }) => {
 	const body = await request.json();
 	const {
 		data: addressData,

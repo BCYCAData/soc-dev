@@ -31,7 +31,7 @@
 		<Navbar />
 	</svelte:fragment>
 	<svelte:fragment slot="sidebarLeft">
-		<MobileNavbar />
+		<mobilenavbar />
 	</svelte:fragment>
 	<slot />
 	<svelte:fragment slot="pageFooter">
@@ -43,7 +43,7 @@
 			height="40"
 		/>
 		<p class="text-[0.6rem] md:text-sm">
-			This is a Bushfire Community Recovery & Resilience Fund project through the joint
+			This is a Bushfire Community Recovery &amp; Resilience Fund project through the joint
 			Commonwealth/State Disaster Recovery Funding Arrangements
 		</p>
 		<img class="mr-2 mb-2 h-10 md:mr-26" src="/nswg.jpg" alt="NSW Government logo" />

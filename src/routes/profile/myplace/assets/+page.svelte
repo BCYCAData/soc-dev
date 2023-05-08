@@ -7,7 +7,6 @@
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { PageData } from './$types';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
@@ -31,7 +30,7 @@
 		}
 	});
 
-	export let data: PageData;
+	export let data;
 	$: ({ propertyProfileData } = data);
 </script>
 

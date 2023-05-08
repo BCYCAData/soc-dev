@@ -3,13 +3,11 @@
 	import AuthSuccessMessage from '$components/form/AuthSuccessMessage.svelte';
 	import SetPassword from '$components/form/auth/SetPassword.svelte';
 
-	import type { ActionData } from './$types';
-
 	let heading = 'Please enter your new password.';
 	let errorMessage = 'There was an error changing your password';
 	let successMessage = ['Your password has been changed'];
 
-	export let form: ActionData;
+	export let form;
 
 	$: validPassword = false;
 	$: canGo = validPassword;

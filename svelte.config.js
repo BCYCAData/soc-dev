@@ -17,18 +17,10 @@ const config = {
 			$stores: './src/stores'
 		}
 	},
-	preprocess: [
-		vitePreprocess({
-			postcss: true
-		})
-	],
 	vitePlugin: {
-		experimental: {
-			inspector: {
-				holdMode: true,
-				showToggleButton: 'always'
-			}
-		}
+		// experimental: {
+		inspector: {}
+		// }
 	}
 };
 

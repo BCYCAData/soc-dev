@@ -1,12 +1,11 @@
 import { error, redirect } from '@sveltejs/kit';
 import { geometryToGeoJson } from '$lib/utils';
 
-import type { PageServerLoad } from './$types';
 import type { MapDataJSON } from '$lib/types';
 
 let mapLayers: MapDataJSON = { jsonLayers: [] };
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		throw redirect(307, '/auth/signin');

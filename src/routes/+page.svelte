@@ -2,10 +2,9 @@
 	import AddressChallenge from '$components/form/address-challenge/AddressChallenge.svelte';
 	import { modalStore } from '@skeletonlabs/skeleton';
 
-	import type { PageData } from './$types';
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
-	export let data: PageData;
+	export let data;
 	$: supabase = data.supabase;
 
 	function triggerCustomModal(): void {
@@ -42,7 +41,7 @@
 			This project, funded by the Bushfire Community Recovery Resilience Fund, is a response to the
 			community’s feedback following the 2019 bushfires.
 		</p>
-		<p class="unstyled text-base sm:text-lg  mt-1 mb-0">
+		<p class="unstyled text-base sm:text-lg mt-1 mb-0">
 			As a community we share the same environment.&nbsp; We want our community to feel prepared for
 			future challenges and be armed with knowledge that helps us to tackle whatever natural
 			disaster comes our way.

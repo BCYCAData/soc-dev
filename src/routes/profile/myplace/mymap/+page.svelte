@@ -1,8 +1,7 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
 	import PropertyMap from '$components/map/PropertyMap.svelte';
-	export let data: PageData;
+
+	export let data;
 	$: ({ mapLayers, mapCentre, minZoom } = data);
 </script>
 

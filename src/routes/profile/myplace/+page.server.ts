@@ -1,9 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
-import type { Actions } from './$types';
-
-export const actions: Actions = {
+export const actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {

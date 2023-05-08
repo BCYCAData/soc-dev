@@ -42,7 +42,7 @@
 				type="text"
 				id="family_name"
 				name="family_name"
-				autocomplete="family_name"
+				autocomplete="off"
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 				style="text-transform:capitalize"
 				placeholder="Family Name "
@@ -194,7 +194,7 @@
 				class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 				id="agent_mobile"
 				name="agent_mobile"
-				autocomplete="do-not-autofill"
+				autocomplete="off"
 				placeholder="Mobile 0XXX XXX XXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
@@ -219,7 +219,7 @@
 				type="text"
 				class="bg-gray-50 border border-gray-300 flex-auto w-1/8 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 				id="agent_phone"
-				autocomplete="do-not-autofill"
+				autocomplete="off"
 				placeholder="Landline XXXX XXXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
@@ -296,7 +296,7 @@
 						}}
 						class="w-6 h-6 ml-8"
 						name="truck_access"
-						autocomplete="do-not-autofill"
+						autocomplete="off"
 						placeholder="Other Access Information..."
 						type="radio"
 						bind:group={propertyProfileData.truck_access}

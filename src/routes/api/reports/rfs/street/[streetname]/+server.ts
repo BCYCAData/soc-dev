@@ -1,14 +1,6 @@
-// import { json } from '@sveltejs/kit';
-// import type { RequestHandler } from './$types';
-
-// export const GET: RequestHandler = async ({ params }) => {
-// 	const { streetname } = params;
-
-// 	return json(streetname);
-// };
-
 import { error } from '@sveltejs/kit';
 import generateRfsStreetReport from '$lib/server/pdf/generateRfsStreetReport';
+
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({
@@ -16,7 +8,6 @@ export const GET: RequestHandler = async ({
 	setHeaders,
 	locals: { supabase, getSession }
 }) => {
-	debugger;
 	const session = await getSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
