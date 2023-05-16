@@ -1,6 +1,6 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 
-export const actions = {
+export const actions: Actions = {
 	resetpassword: async ({ request, locals: { supabase, getSession } }) => {
 		const body = Object.fromEntries(await request.formData());
 		const password = body.password as string;

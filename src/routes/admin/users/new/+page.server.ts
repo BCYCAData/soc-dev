@@ -6,10 +6,12 @@ import Tester from '$components/email_templates/Tester.svelte';
 
 import type { ComponentType } from 'svelte';
 import type { SvelteComponentDev } from 'svelte/internal';
+import type { PageServerLoad } from './$types.js';
+import type { Actions } from './$types.js';
 
 const template = Tester as unknown as ComponentType<SvelteComponentDev>;
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (
 		!(
@@ -42,7 +44,7 @@ export const load = async ({ locals: { supabase, getSession } }) => {
 		usersSendRFSPlanData: usersSendRFSPlanData
 	};
 };
-export const actions = {
+export const actions: Actions = {
 	newusersemail: async ({ request, locals: { supabase, getSession } }) => {
 		console.log('Yay');
 		const session = await getSession();

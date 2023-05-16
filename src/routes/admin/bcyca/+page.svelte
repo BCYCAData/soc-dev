@@ -5,7 +5,7 @@
 	async function sendMailchimpEmail() {
 		try {
 			const response = await fetch('/api/emails/mailchimp', {
-				method: 'POST'
+				method: 'GET'
 			});
 			// Handle response from server here
 		} catch (err) {

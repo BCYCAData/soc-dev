@@ -1,6 +1,6 @@
-import { fail } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 
-export const actions = {
+export const actions: Actions = {
 	requestresetpassword: async ({ request, locals: { supabase, supabaseRedirectBase } }) => {
 		const body = Object.fromEntries(await request.formData());
 		let email = body.email.toString();

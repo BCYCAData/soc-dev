@@ -1,10 +1,11 @@
 import { error } from '@sveltejs/kit';
 
 import type { MapDataJSON } from '$lib/types';
+import type { PageServerLoad } from './$types';
 
 let mapData: MapDataJSON = { jsonLayers: [] };
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	const { data: allPoints, error: errorAll } = await supabase.rpc(
 		'get_address_point_extract_wgs84'

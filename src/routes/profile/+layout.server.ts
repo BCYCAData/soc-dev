@@ -7,6 +7,7 @@ import type {
 	UserProfileData
 } from '$lib/db.types';
 import { error, redirect } from '@sveltejs/kit';
+import type { LayoutServerLoad } from '../admin/$types';
 
 let agentData: AgentData;
 let userPostalAddressData: UserPostalAddressData;
@@ -15,7 +16,7 @@ let userBCYCAData: UserBCYCAProfileData;
 let propertyProfileData: PropertyProfileData;
 let profileMessagesData: ProfileMessageData;
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		throw redirect(307, '/auth/signin');

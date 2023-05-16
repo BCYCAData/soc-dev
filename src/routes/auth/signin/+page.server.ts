@@ -1,7 +1,7 @@
 import { AuthApiError } from '@supabase/supabase-js';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 
-export const actions = {
+export const actions: Actions = {
 	signin: async ({ request, locals: { supabase } }) => {
 		const body = Object.fromEntries(await request.formData());
 		const { error } = await supabase.auth.signInWithPassword({

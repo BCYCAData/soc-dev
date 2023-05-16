@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 
-export const actions = {
+export const actions: Actions = {
 	changeEmail: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {

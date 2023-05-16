@@ -1,4 +1,6 @@
-export const load = async ({ locals: { supabase, getSession } }) => {
+import type { LayoutServerLoad } from './$types';
+
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
 	return {
 		session: getSession()
 	};

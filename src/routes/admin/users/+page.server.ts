@@ -1,4 +1,4 @@
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { render } from 'svelte-email';
 import nodemailer from 'nodemailer';
 
@@ -6,10 +6,11 @@ import Tester from '$components/email_templates/Tester.svelte';
 
 import type { ComponentType } from 'svelte';
 import type { SvelteComponentDev } from 'svelte/internal';
+import type { PageServerLoad } from './$types.js';
 
 const template = Tester as unknown as ComponentType<SvelteComponentDev>;
 
-export const load = async ({ locals: { supabase, getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
 		// the user is not signed in
@@ -29,7 +30,7 @@ export const load = async ({ locals: { supabase, getSession } }) => {
 	};
 };
 
-export const actions = {
+export const actions: Actions = {
 	testemail: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (

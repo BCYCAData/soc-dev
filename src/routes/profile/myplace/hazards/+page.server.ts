@@ -1,11 +1,11 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
 import type { PropertyProfileData } from '$lib/db.types';
 
 let propertyProfileData: PropertyProfileData;
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
