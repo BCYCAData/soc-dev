@@ -1,11 +1,10 @@
-import StreetSelectInput from '$components/form/inputs/StreetSelectInput.svelte';
 import type {
 	AgentData,
 	PropertyProfileData,
 	UserBCYCAProfileData,
 	UserPostalAddressData,
 	UserProfileData
-} from '$lib/db.types';
+} from '$lib/custom.types';
 
 export const formatMobile = (mobileNumber: string, digit: string) => {
 	mobileNumber += digit;

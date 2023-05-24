@@ -3,14 +3,17 @@ import type { LayoutServerLoad } from '../$types';
 
 export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
-	if (
+	if (!session) {
+		throw redirect(307, '/auth/signin');
+	} else if (
 		!(
 			session?.user?.app_metadata.roles.includes('tester') |
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw redirect(307, '/auth/signin');
+		throw error(401, { message: 'Unauthorized' });
 	}
+
 	const { data: adminMessagesData, error: adminMessagesError } = await supabase.rpc(
 		'get_admin_messages_for_user',
 		{

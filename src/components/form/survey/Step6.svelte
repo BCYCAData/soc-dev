@@ -6,7 +6,7 @@
 	} from '$lib/profileOptions';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
-	import type { PropertyProfileData } from '$lib/db.types';
+	import type { PropertyProfileData } from '$lib/custom.types';
 
 	export let propertyProfileData: PropertyProfileData;
 </script>

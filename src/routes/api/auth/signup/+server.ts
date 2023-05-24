@@ -1,8 +1,9 @@
 import type { AddressPointData } from '$lib/types';
 import { AuthApiError } from '@supabase/supabase-js';
 import { error } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-export const POST = async ({ locals, request }) => {
+export const POST: RequestHandler = async ({ locals, request }) => {
 	const formData = await request.formData();
 	const user_metadata: AddressPointData = JSON.parse(
 		formData.get('addresspointdatajson')?.toString() || ''
@@ -36,7 +37,6 @@ export const POST = async ({ locals, request }) => {
 			);
 		}
 	}
-	console.log(signUpData);
 	if (signUpData?.user?.identities?.length === 0) {
 		return new Response(undefined, {
 			status: 302,

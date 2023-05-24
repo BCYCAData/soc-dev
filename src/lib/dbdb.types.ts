@@ -84,7 +84,7 @@ export interface Database {
       }
       app_message: {
         Row: {
-          context: Database["public"]["Enums"]["message_context"]
+          context: string
           created_at: string
           id: number
           message: string
@@ -92,7 +92,7 @@ export interface Database {
           scope: string
         }
         Insert: {
-          context?: Database["public"]["Enums"]["message_context"]
+          context?: string
           created_at?: string
           id?: number
           message: string
@@ -100,7 +100,7 @@ export interface Database {
           scope?: string
         }
         Update: {
-          context?: Database["public"]["Enums"]["message_context"]
+          context?: string
           created_at?: string
           id?: number
           message?: string
@@ -277,17 +277,6 @@ export interface Database {
           truck_access?: number | null
           truck_access_other_information?: string | null
           vulnerable_residents?: boolean | null
-        }
-      }
-      street_list: {
-        Row: {
-          json_agg: Json | null
-        }
-        Insert: {
-          json_agg?: Json | null
-        }
-        Update: {
-          json_agg?: Json | null
         }
       }
       suburb_aliases: {
@@ -817,17 +806,6 @@ export interface Database {
           created_at: string
         }[]
       }
-      get_app_messages: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          id: number
-          context: string
-          scope: string
-          message: string
-          created_at: string
-          recalled: string
-        }[]
-      }
       get_lists: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -1038,14 +1016,6 @@ export interface Database {
           unanswered: string
         }[]
       }
-      insert_message: {
-        Args: {
-          message_text: string
-          context_text: Database["public"]["Enums"]["message_context"]
-          ids?: string
-        }
-        Returns: number
-      }
       jsonb_array_to_smallint_array: {
         Args: {
           _js: Json
@@ -1107,7 +1077,7 @@ export interface Database {
       }
     }
     Enums: {
-      message_context: "users" | "admins" | "both"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never

@@ -18,7 +18,7 @@
 		UserBCYCAProfileData,
 		UserPostalAddressData,
 		UserProfileData
-	} from '$lib/db.types';
+	} from '$lib/custom.types';
 
 	export let active_step: string;
 

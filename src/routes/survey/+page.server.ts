@@ -7,7 +7,7 @@ import type {
 	UserBCYCAProfileData,
 	UserPostalAddressData,
 	UserProfileData
-} from '$lib/db.types';
+} from '$lib/custom.types';
 import type { PageServerLoad } from './$types';
 
 let agentData: AgentData;

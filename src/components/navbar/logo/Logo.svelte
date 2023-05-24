@@ -1,7 +1,5 @@
 <script lang="ts">
 	import logo from './hall_logo_image_90px.png';
-
-	console.log(logo);
 </script>
 
 <div class="ml-32">

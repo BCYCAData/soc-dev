@@ -1,7 +1,7 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
-import type { UserProfileData } from '$lib/db.types';
+import type { UserProfileData } from '$lib/custom.types';
 
 let userProfileData: UserProfileData;
 

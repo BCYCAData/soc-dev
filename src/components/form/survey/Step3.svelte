@@ -2,7 +2,7 @@
 	import { residencyOptions, yesNoOptions } from '$lib/profileOptions';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { UserProfileData, PropertyProfileData } from '$lib/db.types';
+	import type { UserProfileData, PropertyProfileData } from '$lib/custom.types';
 
 	export let userProfileData: UserProfileData;
 	export let propertyProfileData: PropertyProfileData;

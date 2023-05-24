@@ -240,7 +240,7 @@
 			{/each}
 		</div>
 		<h2
-			class="text-base font-semibold text-gray-900"
+			class="unstyled text-base font-semibold text-gray-900"
 			hidden={propertyProfileData.truck_access !== 4}
 		>
 			Other Access Information:

@@ -27,7 +27,7 @@
 
 	let border = 0;
 
-	console.log(heading1Type);
+	// console.log(heading1Type);
 	// export let logoImage = `${baseUrl}/static/airbnb-review-user.jpg`;
 	// export let copyrightText = `"Copyright © 2023 BCYCA Inc, All rights reserved."`;
 	// export let ourEmailAddress = `"BCYCA@outlook.com"`;

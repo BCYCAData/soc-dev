@@ -3,13 +3,15 @@ import type { PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
-	if (
+	if (!session) {
+		throw redirect(307, '/auth/signin');
+	} else if (
 		!(
 			session?.user?.app_metadata.roles.includes('tester') |
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw redirect(307, '/auth/signin');
+		throw error(401, { message: 'Unauthorized' });
 	}
 	const { data: streetsData, error: getStreetsError } = await supabase.rpc('get_street_list', {});
 	if (getStreetsError) {
@@ -29,8 +31,15 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 export const actions: Actions = {
 	generateStreetReport: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
-		if (!session?.user) {
+		if (!session) {
 			throw redirect(307, '/auth/signin');
+		} else if (
+			!(
+				session?.user?.app_metadata.roles.includes('tester') |
+				session?.user?.app_metadata.roles.includes('admin')
+			)
+		) {
+			throw error(401, { message: 'Unauthorized' });
 		}
 		const formData = await request.formData();
 		const street = formData.get('property_address_street') as string;

@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 
 	import '../soc_theme.postcss';
-	import '@skeletonlabs/skeleton/styles/all.css';
+	import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
 	import { AppShell, Drawer, Modal } from '@skeletonlabs/skeleton';

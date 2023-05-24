@@ -2,7 +2,7 @@
 	import { informationSheetOptions } from '$lib/profileOptions';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
-	import type { UserBCYCAProfileData } from '$lib/db.types';
+	import type { UserBCYCAProfileData } from '$lib/custom.types';
 
 	export let userBCYCAData: UserBCYCAProfileData;
 </script>

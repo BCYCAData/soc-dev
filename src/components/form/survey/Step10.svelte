@@ -2,7 +2,7 @@
 	import { communityMeetingOptions } from '$lib/profileOptions';
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
 
-	import type { UserBCYCAProfileData } from '$lib/db.types';
+	import type { UserBCYCAProfileData } from '$lib/custom.types';
 
 	export let userBCYCAData: UserBCYCAProfileData;
 </script>

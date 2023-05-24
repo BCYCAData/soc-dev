@@ -4,7 +4,13 @@ import type { PageServerLoad } from '../$types';
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
-		// the user is not signed in
+		throw redirect(307, '/auth/signin');
+	} else if (
+		!(
+			session?.user?.app_metadata.roles.includes('tester') |
+			session?.user?.app_metadata.roles.includes('admin')
+		)
+	) {
 		throw error(401, { message: 'Unauthorized' });
 	}
 	return {

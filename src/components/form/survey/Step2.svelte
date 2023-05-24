@@ -2,7 +2,7 @@
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
 	import { formatMobile, formatPhone, toTitleCase } from '$lib/utils';
 
-	import type { AgentData, UserProfileData, PropertyProfileData } from '$lib/db.types';
+	import type { AgentData, UserProfileData, PropertyProfileData } from '$lib/custom.types';
 
 	function setTitleCase(e: Event) {
 		(e.target as HTMLInputElement).value = toTitleCase((e.target as HTMLInputElement).value);

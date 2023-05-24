@@ -32,7 +32,8 @@
 
 	// adminMessages
 	export let data;
-	$: ({ adminMessages: messagesData } = data);
+	console.log('adminMessages', data.adminMessages);
+	$: ({ adminMessages } = data);
 </script>
 
 <AppShell
@@ -180,7 +181,7 @@
 			<p class="m-2">Congratulations you are now eligible for your FREE Emergency Starter Kit.</p>
 			<p class="m-2">We will be in touch soon.</p>
 		</div> -->
-		<MessageContainer {messagesData} />
+		<MessageContainer messagesData={adminMessages} />
 	</svelte:fragment>
 	<slot />
 </AppShell>

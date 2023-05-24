@@ -2,7 +2,7 @@
 	import { stayInTouchOptions } from '$lib/profileOptions';
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
 
-	import type { UserPostalAddressData, UserProfileData } from '$lib/db.types';
+	import type { UserPostalAddressData, UserProfileData } from '$lib/custom.types';
 
 	export let userProfileData: UserProfileData;
 	export let userPostalAddressData: UserPostalAddressData;

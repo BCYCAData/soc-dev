@@ -1,7 +1,7 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
 
-import type { PropertyProfileData } from '$lib/db.types';
+import type { PropertyProfileData } from '$lib/custom.types';
 
 let propertyProfileData: PropertyProfileData;
 

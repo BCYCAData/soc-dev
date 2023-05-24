@@ -5,7 +5,7 @@ import type {
 	UserBCYCAProfileData,
 	UserPostalAddressData,
 	UserProfileData
-} from '$lib/db.types';
+} from '$lib/custom.types';
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from '../admin/$types';
 

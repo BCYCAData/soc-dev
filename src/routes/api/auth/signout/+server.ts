@@ -1,6 +1,7 @@
 import { error, redirect } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
 
-export const POST = async ({ locals: { supabase, getSession } }) => {
+export const POST: RequestHandler = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
 		// the user is not signed in

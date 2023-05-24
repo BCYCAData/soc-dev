@@ -12,7 +12,6 @@
 	let table: Tabulator;
 
 	function makeTable(sendRFSPlanColumns: any[], usersSendRFSPlanData: any[]) {
-		console.log('makeTable');
 		if (browser) {
 			table = new Tabulator(tableComponent, {
 				data: usersSendRFSPlanData,
@@ -30,8 +29,6 @@
 	});
 
 	async function sendRFSPlanEmail() {
-		// const selectedData = table.getSelectedData();
-		// console.log('selectedData', selectedData);
 		const selectedData = [
 			{
 				email: 'alankeown@southernphone.com.au',

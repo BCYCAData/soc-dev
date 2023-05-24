@@ -514,7 +514,6 @@ async function generateRfsStreetReport(streetname: string, propertyData: any): P
 		pdf
 			.pipe(blobStream())
 			.on('finish', function (this: IBlobStream) {
-				console.log('Finished generating PDF');
 				resolve(this.toBlob('application/pdf'));
 			})
 			.on('error', (err) => {

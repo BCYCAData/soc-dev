@@ -3,7 +3,12 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
-	if (!session?.user) {
+	if (
+		!(
+			session?.user?.app_metadata.roles.includes('tester') |
+			session?.user?.app_metadata.roles.includes('admin')
+		)
+	) {
 		throw redirect(307, '/auth/signin');
 	}
 	return {
@@ -15,9 +20,17 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
-		if (!session?.user) {
+		if (!session) {
 			throw redirect(307, '/auth/signin');
+		} else if (
+			!(
+				session?.user?.app_metadata.roles.includes('tester') |
+				session?.user?.app_metadata.roles.includes('admin')
+			)
+		) {
+			throw error(401, { message: 'Unauthorized' });
 		}
+
 		const formData = await request.formData();
 		// const { error: userProfileDataError, data: userProfileData } = await supabase
 		// 	.from('user_profile')
