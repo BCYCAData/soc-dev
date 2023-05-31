@@ -1,20 +1,60 @@
 <script lang="ts">
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+	import BCYCARequestsTable from '$components/form/tables/BCYCARequestsTable.svelte';
 
-	const summaryOpenStyle =
-		'py-2 px-4 text-base font-medium text-gray-800 bg-primary-700 !rounded-t-lg !rounded-b-none';
-	const summaryClosedStyle = 'p-1 text-base font-medium text-primary-900 bg-stone-300';
-	const contentStyle = '!mt-0 text-base text-gray-800 bg-primary-300 rounded-b-lg';
-
-	const handleCheckClick = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-		// if (e.currentTarget.checked) {
-		// 	vetted = [...vetted, e.currentTarget.name];
-		// } else {
-		// 	vetted = vetted.filter((value) => value !== e.currentTarget.name);
-		// }
-	};
+	import type { CellComponent } from 'tabulator-tables';
 
 	export let data;
+
+	let bcycaInformationColumns = [
+		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
+		{
+			formatter: 'rowSelection',
+			titleFormatter: 'rowSelection',
+			hozAlign: 'center',
+			headerSort: false,
+			cellClick: function (e: UIEvent, cell: CellComponent) {
+				cell.getRow().toggleSelect();
+			}
+		},
+		{ title: 'Email', field: 'email' },
+		{ title: 'Name', field: 'name' },
+		{ title: 'Address', field: 'property_address' },
+		{ title: 'Created At', field: 'created_at' },
+		{
+			formatter: 'responsiveCollapse',
+			width: 30,
+			minWidth: 30,
+			hozAlign: 'center',
+			resizable: false,
+			headerSort: false
+		}
+	];
+	let bcycaOtherInformationColumns = [
+		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
+		{
+			formatter: 'rowSelection',
+			titleFormatter: 'rowSelection',
+			hozAlign: 'center',
+			headerSort: false,
+			cellClick: function (e: UIEvent, cell: CellComponent) {
+				cell.getRow().toggleSelect();
+			}
+		},
+		{ title: 'Email', field: 'email' },
+		{ title: 'Name', field: 'name' },
+		{ title: 'Address', field: 'property_address' },
+		{ title: 'Other Information', field: 'other_information' },
+		{ title: 'Created At', field: 'created_at' },
+		{
+			formatter: 'responsiveCollapse',
+			width: 30,
+			minWidth: 30,
+			hozAlign: 'center',
+			resizable: false,
+			headerSort: false
+		}
+	];
 	$: ({ bcycaInformationData } = data);
 </script>
 
@@ -30,37 +70,12 @@
 		<svelte:fragment slot="summary">Pre fire season checklist</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="PreFireSeasonChecklist">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(1)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(1)
+					)}
+				/>
 			</div>
 		</svelte:fragment>
 	</AccordionItem>
@@ -69,37 +84,12 @@
 		<svelte:fragment slot="summary">Lighting fires - facts and responsibilities</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="LightingFires_FactsResponsibilities">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(2)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(2)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -107,37 +97,12 @@
 		<svelte:fragment slot="summary">Fire ready - pets and animals</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_PetsAnimals">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(3)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(3)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -145,37 +110,12 @@
 		<svelte:fragment slot="summary">Fire ready - livestock & large animals</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_LivestockLargeAnimals">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(4)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(4)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -183,37 +123,12 @@
 		<svelte:fragment slot="summary">BCYCA leaflet</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BCYCALeaflet">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(5)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(5)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -221,37 +136,12 @@
 		<svelte:fragment slot="summary">How to be more active locally</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BeMoreActiveLocally">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(6)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(6)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -259,37 +149,12 @@
 		<svelte:fragment slot="summary">Strengthen Our Community Project Report</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SOCProjectReport">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.informatiion_choices.includes(7)}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter((item) =>
+						item.informatiion_choices.includes(7)
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
@@ -297,39 +162,12 @@
 		<svelte:fragment slot="summary">Other Information Requests</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherInformationRequests">
-				<table class="table table-hover">
-					<thead>
-						<tr class="bg-orange-400">
-							<th class="!p-1 text-center !font-semibold">Email</th>
-							<th class="!p-1 text-center !font-semibold">Name</th>
-							<th class="!p-1 text-center !font-semibold">Address</th>
-							<th class="!p-1 text-center !font-semibold">Other Event Suggestions</th>
-							<th class="!p-1 text-center !font-semibold">Created At</th>
-							<th class="!p-1 text-center !font-semibold">Sent</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each bcycaInformationData as row}
-							{#if row.other_information?.length > 0}
-								<tr class="bg-orange-50 font-normal">
-									<td class="!py-1">{row.email}</td>
-									<td class="!py-1">{row.name}</td>
-									<td class="!py-1">{row.address}</td>
-									<td class="!py-1">{row.other_information}</td>
-									<td class="!py-1">{row.created_at}</td>
-									<td class="!py-1" style="text-align: center"
-										><input
-											type="checkbox"
-											name={row.email}
-											on:change={(e) => {
-												handleCheckClick(e);
-											}}
-										/></td
-									>
-								</tr>{/if}
-						{/each}
-					</tbody>
-				</table>
+				<BCYCARequestsTable
+					bcycaRequestsColumns={bcycaOtherInformationColumns}
+					bcycaRequestsData={bcycaInformationData.filter(
+						(item) => item.other_information?.length > 0
+					)}
+				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>

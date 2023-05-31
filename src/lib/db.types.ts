@@ -88,7 +88,7 @@ export interface Database {
           created_at: string
           id: number
           message: string
-          recalled: string | null
+          revoked: string | null
           scope: string
         }
         Insert: {
@@ -96,7 +96,7 @@ export interface Database {
           created_at?: string
           id?: number
           message: string
-          recalled?: string | null
+          revoked?: string | null
           scope?: string
         }
         Update: {
@@ -104,7 +104,7 @@ export interface Database {
           created_at?: string
           id?: number
           message?: string
-          recalled?: string | null
+          revoked?: string | null
           scope?: string
         }
       }
@@ -825,7 +825,7 @@ export interface Database {
           scope: string
           message: string
           created_at: string
-          recalled: string
+          revoked: string
         }[]
       }
       get_lists: {
@@ -1051,6 +1051,12 @@ export interface Database {
           _js: Json
         }
         Returns: unknown
+      }
+      revoke_app_messages: {
+        Args: {
+          revoked_ids: string[]
+        }
+        Returns: number
       }
       temp: {
         Args: Record<PropertyKey, never>

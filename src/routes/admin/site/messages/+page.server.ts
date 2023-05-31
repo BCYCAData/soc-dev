@@ -72,7 +72,7 @@ export const actions: Actions = {
 		if (sendToAllUsersResponse === 200) {
 			return {};
 		}
-		throw error(400, 'Could not send message to Users by email address');
+		throw error(400, 'Could not send message to all Users');
 	},
 	sendToEmailList: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
@@ -100,6 +100,29 @@ export const actions: Actions = {
 				return {};
 			}
 		}
-		throw error(400, 'Could not send message to Users by email address');
+		throw error(400, `Could not send message to Users with ids: (${targetData}).`);
+	},
+	revokeMessages: async ({ request, locals: { supabase, getSession } }) => {
+		const session = await getSession();
+		if (!session?.user) {
+			throw redirect(307, '/auth/signin');
+		}
+		const formData = await request.formData();
+		const id_input = formData.get('revoke_ids')?.toString();
+		if (id_input != null) {
+			let revoked_ids = id_input.split(',');
+			const { data: revokeAppMessagesResponse, error: revokeAppMessagesError } = await supabase.rpc(
+				'revoke_app_messages',
+				{ revoked_ids }
+			);
+			if (revokeAppMessagesError) {
+				console.log('error sendToAllUsers: ', revokeAppMessagesError);
+				throw error(400, `error sendToAllUsers: ${revokeAppMessagesError.message}`);
+			}
+			if (revokeAppMessagesResponse === 200) {
+				return {};
+			}
+		}
+		throw error(400, `Could not revoke messages with ids: (${id_input}).`);
 	}
 };

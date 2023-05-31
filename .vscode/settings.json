@@ -1,4 +1,7 @@
 {
+	"terminal.integrated.env.linux": {
+		"EDITOR": "code"
+	},
 	"tailwindCSS.classAttributes": [
 		"class",
 		"accent",

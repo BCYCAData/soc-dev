@@ -9,7 +9,7 @@
 
 	import type { ComparisonOption, TabulatorProps } from '$lib/types';
 
-	export let newUserColumns: any[], usersAdminNewUsersData: any[];
+	export let bcycaRequestsColumns: any[], bcycaRequestsData: any[];
 
 	let tableComponent: HTMLElement;
 	let table: Tabulator;
@@ -18,8 +18,7 @@
 		{ value: 'email', lable: 'Email' },
 		{ lable: 'Name', value: 'name' },
 		{ lable: 'Address', value: 'property_address' },
-		{ lable: 'Landline', value: 'landline' },
-		{ lable: 'Mobile', value: 'mobile' }
+		{ lable: 'Created At', value: 'created_at' }
 	];
 
 	function makeTable() {
@@ -27,8 +26,8 @@
 			return;
 		}
 		const props: TabulatorProps = {
-			columns: newUserColumns,
-			data: usersAdminNewUsersData,
+			columns: bcycaRequestsColumns,
+			data: bcycaRequestsData,
 			layout: 'fitDataStretch',
 			responsiveLayout: 'collapse',
 			pagination: true,
@@ -47,10 +46,6 @@
 	async function downloadSelected() {
 		table.download('csv', 'data.csv');
 	}
-
-	async function emailDownloaded() {
-		alert('Not Yet');
-	}
 </script>
 
 <TabulatorTableSearch
@@ -61,14 +56,11 @@
 	{fieldOptions}
 />
 <div id="table_element" bind:this={tableComponent} />
-
-<button
-	class="w-1/4 text-center text-base rounded-full mt-4 py-2 bg-tertiary-400 hover:bg-orange-700 focus:outline-none"
-	on:click={downloadSelected}
->
-	Download Selected
-</button>
-
-<svelte:head>
-	<script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
-</svelte:head>
+<form on:submit|preventDefault={downloadSelected}>
+	<button
+		type="submit"
+		class="w-1/4 text-center text-base rounded-full mt-4 py-2 bg-tertiary-400 hover:bg-orange-700 focus:outline-none"
+	>
+		Download Selected
+	</button>
+</form>

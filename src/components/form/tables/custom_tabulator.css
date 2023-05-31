@@ -1,0 +1,77 @@
+/* .tabulator .tabulator-header {
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	border-radius: 18px 18px 0 0;
+	border-bottom: 1px solid #fb923c;
+	background-color: #fb923c;
+	color: #555;
+	font-weight: bold;
+	white-space: nowrap;
+	overflow: hidden;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+} */
+/* .tabulator .tabulator-header .tabulator-col {
+	display: inline-flex;
+	position: relative;
+	box-sizing: border-box;
+	flex-direction: column;
+	justify-content: flex-start;
+	border-right: 1px solid #aaa;
+	background: #fb923c;
+	text-align: left;
+	vertical-align: bottom;
+	overflow: hidden;
+} */
+
+.tabulator-page-size {
+	width: 60px;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	outline: none;
+	line-height: 24px;
+	margin: 0;
+	height: 28px;
+	/* background: transparent; */
+	/* width: auto; */
+	transition: all 0.1s;
+	/* box-sizing: border-box; */
+}
+
+/* .tabulator-footer {
+	background-color: chocolate;
+} */
+.tabulator-paginator {
+	display: flex;
+	justify-content:flex-end;
+	align-items: center;
+	/* background-color: chocolate; */
+}
+/* .tabulator-pages {
+	background-color: chocolate;
+} */
+.tabulator {
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+}
+/* .tabulator-header {
+	border-top-left-radius: 0.5rem;
+	background-color: bg-orange-400;
+} */
+.tabulator-header-contents {
+	/* border-top-left-radius: 40px; */
+	background-color:  #f97316;
+}
+.tabulator-col-content {
+	color: #fafaf9;
+	font-weight: 500;
+	background-color: #f97316;
+}
+
+.tabulator-row.tabulator-selected {
+  background-color: #fed7aa;
+}

@@ -4,7 +4,7 @@
 	import { browser } from '$app/environment';
 
 	// import 'tabulator-tables/dist/css/tabulator.css';
-	import './tabulator.css';
+	// import './custom_tabulator.css';
 
 	// tabulator-header
 	// tabulator-col-title
@@ -16,7 +16,7 @@
 	let tableComponent: HTMLElement;
 	let table: Tabulator;
 
-	function makeTable(columns: any[], tableData: any[]) {
+	function makeTable() {
 		if (browser) {
 			table = new Tabulator(tableComponent, {
 				data: tableData,
@@ -30,18 +30,8 @@
 	}
 
 	onMount(() => {
-		makeTable(columns, tableData);
+		makeTable();
 	});
-
-	function beforeUpdate() {
-		if (!table) {
-			makeTable(columns, tableData);
-		}
-	}
 </script>
 
 <div bind:this={tableComponent} />
-
-<svelte:head>
-	<script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
-</svelte:head>

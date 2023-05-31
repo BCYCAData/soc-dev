@@ -5,6 +5,34 @@ declare global {
 	}
 }
 
+export type ComparisonOption = {
+	value: string;
+	lable: string;
+};
+
+export interface TabulatorProps {
+	columns: any[];
+	data: any[];
+	layout: 'fitDataFill' | 'fitData' | 'fitColumns' | 'fitDataStretch' | 'fitDataTable' | undefined;
+	responsiveLayout?: boolean | 'collapse' | 'hide';
+	pagination?: boolean;
+	paginationSize?: number;
+	paginationSizeSelector?: any[];
+	movableColumns?: boolean;
+	paginationCounter?:
+		| 'rows'
+		| 'pages'
+		| ((
+				pageSize: number,
+				currentRow: number,
+				currentPage: number,
+				totalRows: number,
+				totalPages: number
+		  ) => string | HTMLElement)
+		| undefined;
+	// add other properties as needed
+}
+
 export type Crumb = {
 	label: string;
 	href: string;

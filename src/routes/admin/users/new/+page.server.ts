@@ -32,18 +32,9 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		console.log('error get New Users Admin Data:', usersAdminNewUsersError);
 		throw error(400, usersAdminNewUsersError.message);
 	}
-	const { data: usersSendRFSPlanData, error: usersSendRFSPlanError } = await supabase.rpc(
-		'get_user_sendrfsplan_data',
-		{}
-	);
-	if (usersSendRFSPlanError) {
-		console.log('error get New Users Admin Data:', usersSendRFSPlanError);
-		throw error(400, usersSendRFSPlanError.message);
-	}
 	return {
 		session,
-		usersAdminNewUsersData: usersAdminNewUsersData,
-		usersSendRFSPlanData: usersSendRFSPlanData
+		usersAdminNewUsersData: usersAdminNewUsersData
 	};
 };
 export const actions: Actions = {

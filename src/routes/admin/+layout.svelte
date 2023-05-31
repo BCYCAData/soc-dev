@@ -32,7 +32,7 @@
 
 	// adminMessages
 	export let data;
-	console.log('adminMessages', data.adminMessages);
+	// console.log('adminMessages', data.adminMessages);
 	$: ({ adminMessages } = data);
 </script>
 

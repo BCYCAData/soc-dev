@@ -18,7 +18,7 @@
 	<title>BCYCA Administration</title>
 </svelte:head>
 <div>
-	<h1>This will probably contain information about hoow to use the contained pages</h1>
+	<h1>This will probably contain information about how to use the contained pages</h1>
 
 	<form on:submit|preventDefault={sendMailchimpEmail}>
 		<button

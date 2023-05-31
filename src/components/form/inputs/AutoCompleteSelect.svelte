@@ -28,26 +28,6 @@
 		hiLiteIndex = -1;
 	}
 
-	// const makeMatchBold = (item: string) => {
-	// 	const matched = item.substring(0, inputValue.length);
-	// 	const makeBold = `<strong>${matched}</strong>`;
-	// 	const boldedMatch = item.replace(matched, makeBold);
-	// 	return boldedMatch;
-	// };
-
-	// const filterList = () => {
-	// 	if (inputValue) {
-	// 		filteredList = listData
-	// 			.filter((item: ListItem) => !selectedValues.includes(item.lut_text))
-	// 			.filter((item: ListItem) =>
-	// 				item.lut_text.toLowerCase().startsWith(inputValue.toLowerCase())
-	// 			)
-	// 			.map((item: ListItem) => makeMatchBold(item.lut_text));
-	// 	} else {
-	// 		filteredList = [];
-	// 	}
-	// };
-
 	const filterList = () => {
 		if (inputValue) {
 			filteredList = listData
@@ -73,9 +53,9 @@
 		targetData = JSON.stringify(targetValues);
 	};
 
-	const removeBold = (item: string) => {
-		return item.replace(/<(.)*?>/g, '');
-	};
+	// const removeBold = (item: string) => {
+	// 	return item.replace(/<(.)*?>/g, '');
+	// };
 
 	const removeValue = (valueToRemove: string) => {
 		selectedValues = selectedValues.filter((value) => value !== valueToRemove);

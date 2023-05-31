@@ -19,7 +19,11 @@ const config = {
 	},
 	vitePlugin: {
 		// experimental: {
-		inspector: {}
+		inspector: {
+			toggleKeyCombo: 'control-shift',
+			showToggleButton: 'always',
+			toggleButtonPos: 'bottom-right'
+		}
 		// }
 	}
 };

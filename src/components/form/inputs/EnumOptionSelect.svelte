@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	export let enumValue = '';
+
+	export let enumValue: string;
 	export let header: string;
 
 	let options: string[] = ['users', 'admins', 'both'];

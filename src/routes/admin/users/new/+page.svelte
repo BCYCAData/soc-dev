@@ -4,22 +4,18 @@
 	import TabHeadItem from '$components/tabs/TabHeadItem.svelte';
 	import TabContentItem from '$components/tabs/TabContentItem.svelte';
 	import NewUsersTable from '$components/form/tables/NewUsersTable.svelte';
-	import SendRFSPlanTable from '$components/form/tables/SendRFSPlanTable.svelte';
 
 	import type { CellComponent } from 'tabulator-tables';
 
-	import type { HtmlEvents } from 'svelte-email/components/Html.svelte';
-
 	export let data;
 
-	// let vetted: string[] = [];
-	let activeTabValue = '1';
+	let activeTabValue = 'review_answers';
 
 	const handleTabClick = (tabValue: string) => () => {
 		activeTabValue = tabValue;
 	};
 
-	$: ({ usersAdminNewUsersData, usersSendRFSPlanData } = data);
+	$: ({ usersAdminNewUsersData } = data);
 
 	let newUserColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
@@ -59,22 +55,6 @@
 			}
 		}
 	];
-	let sendRFSPlanColumns = [
-		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
-		{
-			formatter: 'rowSelection',
-			titleFormatter: 'rowSelection',
-			hozAlign: 'center',
-			headerSort: false,
-			cellClick: function (e: UIEvent, cell: CellComponent) {
-				cell.getRow().toggleSelect();
-			}
-		},
-		{ title: 'Email', field: 'email' },
-		{ title: 'Name', field: 'name' },
-		{ title: 'Address', field: 'address' },
-		{ title: 'Created At', field: 'created_at' }
-	];
 </script>
 
 <svelte:head>
@@ -84,22 +64,17 @@
 <TabWrapper>
 	<TabHead>
 		<TabHeadItem
-			id={'1'}
-			on:click={handleTabClick('1')}
-			on:keypress={handleTabClick('1')}
-			{activeTabValue}>Send RFS Plan</TabHeadItem
-		>
-		<TabHeadItem
-			id={'2'}
-			on:click={handleTabClick('2')}
-			on:keypress={handleTabClick('2')}
+			id={'review_answers'}
+			on:click={handleTabClick('review_answers')}
+			on:keypress={handleTabClick('review_answers')}
 			{activeTabValue}>Review Answers</TabHeadItem
 		>
 	</TabHead>
-	<TabContentItem id={'1'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
-		<SendRFSPlanTable {sendRFSPlanColumns} {usersSendRFSPlanData} />
-	</TabContentItem>
-	<TabContentItem id={'2'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
+	<TabContentItem
+		id={'review_answers'}
+		contentDivClass="p-4 bg-primary-300 rounded-b-lg"
+		{activeTabValue}
+	>
 		<NewUsersTable {newUserColumns} {usersAdminNewUsersData} />
 	</TabContentItem>
 </TabWrapper>

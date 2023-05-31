@@ -151,22 +151,6 @@ export const splitFullAddress = (fullAddress: string) => {
 	return result;
 };
 
-// function setNumberArray(value: FormDataEntryValue[]) {
-// 	if (value == null) {
-// 		return null;
-// 	} else if (Array.isArray(value)) {
-// 		if (value.length == 0) {
-// 			return [] as Number[];
-// 		} else {
-// 			let result: number[] = new Array();
-// 			for (let i = 0; i < value.length; i++) {
-// 				result[1] = parseInt(value[i] as string);
-// 			}
-// 			return result;
-// 		}
-// 	}
-// }
-
 export const toTitleCase = (text: string) => {
 	return text
 		.toLowerCase()
@@ -175,4 +159,19 @@ export const toTitleCase = (text: string) => {
 			return word.charAt(0).toUpperCase() + word.slice(1);
 		})
 		.join(' ');
+};
+export const getTimestamp = () => {
+	const now: Date = new Date();
+	const year: number = now.getFullYear();
+	const month: number = now.getMonth() + 1;
+	const day: number = now.getDate();
+	const hours: number = now.getHours();
+	const minutes: number = now.getMinutes();
+
+	const formattedMonth: string = month < 10 ? `0${month}` : `${month}`;
+	const formattedDay: string = day < 10 ? `0${day}` : `${day}`;
+	const formattedHours: string = hours < 10 ? `0${hours}` : `${hours}`;
+	const formattedMinutes: string = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+	return `${year}${formattedMonth}${formattedDay}-${formattedHours}${formattedMinutes}`;
 };
