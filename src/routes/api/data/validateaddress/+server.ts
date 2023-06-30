@@ -16,8 +16,13 @@ export const POST: RequestHandler = async ({ locals: { supabase }, request }) =>
 		out_srid_value: 4326
 	});
 	let result: Response;
-	let streetAddressParts = splitStreetAddress(body.streetAddress.toUpperCase());
-	let searchaddress = [streetAddressParts[0], streetAddressParts[1], body.suburb.toUpperCase(), ''];
+	const streetAddressParts = splitStreetAddress(body.streetAddress.toUpperCase());
+	const searchaddress = [
+		streetAddressParts[0],
+		streetAddressParts[1],
+		body.suburb.toUpperCase(),
+		''
+	];
 	if (addressError) {
 		result = json({
 			communityname: 'None identified',
@@ -32,10 +37,10 @@ export const POST: RequestHandler = async ({ locals: { supabase }, request }) =>
 			error: addressError
 		});
 	} else {
-		let resultData = addressData[0];
+		const resultData = addressData[0];
 		searchaddress.splice(3, 1, resultData.postcode);
-		let validAddressParts = splitFullAddress(resultData.valid_address.toUpperCase());
-		let validaddress = [
+		// const validAddressParts = splitFullAddress(resultData.valid_address.toUpperCase());
+		const validaddress = [
 			resultData.housenumber,
 			searchaddress[1],
 			resultData.suburb,

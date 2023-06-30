@@ -1,5 +1,5 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { getFormData, toTitleCase } from '$lib/utils';
+import { getFormData } from '$lib/utils';
 
 import type { UserProfileData } from '$lib/custom.types';
 

@@ -3,6 +3,7 @@ node_modules
 /.vercel
 /build
 /.svelte-kit
+/.here
 /src/routes/test
 /package
 .env

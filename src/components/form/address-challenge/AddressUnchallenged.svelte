@@ -64,7 +64,7 @@
 		}
 		loading = !loading;
 	}
-	const abbreviations: Object = {
+	const abbreviations: object = {
 		RD: 'ROAD',
 		L: 'LANE',
 		LN: 'LANE',

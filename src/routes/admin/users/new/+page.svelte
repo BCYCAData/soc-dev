@@ -1,19 +1,13 @@
 <script lang="ts">
-	import TabWrapper from '$components/tabs/TabWrapper.svelte';
-	import TabHead from '$components/tabs/TabHead.svelte';
-	import TabHeadItem from '$components/tabs/TabHeadItem.svelte';
-	import TabContentItem from '$components/tabs/TabContentItem.svelte';
+	import { TabGroup } from '@skeletonlabs/skeleton';
+	import { Tab } from '@skeletonlabs/skeleton';
 	import NewUsersTable from '$components/form/tables/NewUsersTable.svelte';
 
 	import type { CellComponent } from 'tabulator-tables';
 
+	let tabSet: number = 0;
+
 	export let data;
-
-	let activeTabValue = 'review_answers';
-
-	const handleTabClick = (tabValue: string) => () => {
-		activeTabValue = tabValue;
-	};
 
 	$: ({ usersAdminNewUsersData } = data);
 
@@ -44,11 +38,8 @@
 		{
 			title: 'Unanswered',
 			field: 'unanswered',
-			tooltip: function (e: any, cell: CellComponent, onRendered: any) {
-				//e - mouseover event
-				//cell - cell component
-				//onRendered - onRendered callback registration function
-				var el = document.createElement('div');
+			tooltip: function (cell: CellComponent) {
+				let el = document.createElement('div');
 				el.style.backgroundColor = 'red';
 				el.innerText = cell.getValue(); //return cells "field - value";
 				return el;
@@ -61,20 +52,25 @@
 	<title>Users Admin-NewUsers</title>
 </svelte:head>
 
-<TabWrapper>
-	<TabHead>
-		<TabHeadItem
-			id={'review_answers'}
-			on:click={handleTabClick('review_answers')}
-			on:keypress={handleTabClick('review_answers')}
-			{activeTabValue}>Review Answers</TabHeadItem
-		>
-	</TabHead>
-	<TabContentItem
-		id={'review_answers'}
-		contentDivClass="p-4 bg-primary-300 rounded-b-lg"
-		{activeTabValue}
-	>
-		<NewUsersTable {newUserColumns} {usersAdminNewUsersData} />
-	</TabContentItem>
-</TabWrapper>
+<TabGroup
+	justify="justify-left"
+	active="variant-filled-primary"
+	hover="hover:variant-soft-primary"
+	flex="flex-1 lg:flex-none"
+	rounded="rounded-tl-lg rounded-tr-lg"
+	border=""
+	class="w-full !space-y-0"
+	regionList="bg-primary-200"
+	regionPanel="variant-filled-primary p-2"
+>
+	<Tab bind:group={tabSet} name="tab1" value={0}>Review Answers</Tab>
+	<Tab bind:group={tabSet} name="tab2" value={1}>Something Else</Tab>
+	<!-- Tab Panels --->
+	<svelte:fragment slot="panel">
+		{#if tabSet === 0}
+			<NewUsersTable {newUserColumns} {usersAdminNewUsersData} />
+		{:else if tabSet === 1}
+			<div>Okay</div>
+		{/if}
+	</svelte:fragment>
+</TabGroup>

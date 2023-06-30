@@ -79,6 +79,8 @@
 				<div
 					id="clear-icon"
 					class="absolute top-1/2 right-2 transform -translate-y-1/2 cursor-pointer"
+					role="button"
+					tabindex="0"
 					on:click={clearValue}
 					on:keydown={(event) => {
 						if (event.key === 'Enter') {

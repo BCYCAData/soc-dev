@@ -10,7 +10,7 @@
 		{#each messagesData as profileMessage}
 			<!-- <p class="m-2">{profileMessage.message}</p> -->
 			<div class="card mt-2 rounded-b-md">
-				<header class="bg-primary-300 font-medium rounded-t-md px-2 pt-2 pb-1 card-header">
+				<header class="bg-tertiary-300 font-medium rounded-t-md px-2 py-1 card-header">
 					Message
 				</header>
 				<div class="px-2 text-sm bg-primary-50">{profileMessage.message}</div>

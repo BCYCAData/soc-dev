@@ -55,6 +55,8 @@
 				class="toggle-password text-2xl text-gray-900 font-normal ml-3 align-middle"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
+				role="button"
+				tabindex="0"
 			>
 				{showPassword ? '👁️' : '👁️'}
 			</span>
@@ -77,6 +79,8 @@
 				class="toggle-password text-3xl text-gray-900 font-normal ml-3 align-middle"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
+				role="button"
+				tabindex="0"
 			>
 				{showPassword ? '👁️' : '👁️'}
 			</span>

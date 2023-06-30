@@ -4,8 +4,8 @@
 
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
-	export let data;
-	$: supabase = data.supabase;
+	// export let data;
+	// $: supabase = data.supabase;
 
 	function triggerCustomModal(): void {
 		const modalComponent: ModalComponent = {

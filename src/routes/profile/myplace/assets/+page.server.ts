@@ -13,7 +13,7 @@ export const actions: Actions = {
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
-		const body = getFormData(
+		const body: { propertyProfileData: PropertyProfileData } = getFormData(
 			formData,
 			session.user.id,
 			session.user.app_metadata.principaladdresssiteoid
@@ -21,14 +21,7 @@ export const actions: Actions = {
 		const { data: myPlaceAssets, error: myPlaceAssetsError } = await supabase
 			.from('property_profile')
 			.update({
-				number_dogs: body.propertyProfileData.number_dogs,
-				number_cats: body.propertyProfileData.number_cats,
-				number_birds: body.propertyProfileData.number_birds,
-				number_other_pets: body.propertyProfileData.number_other_pets,
-				live_stock_present: body.propertyProfileData.live_stock_present,
-				live_stock_safe_area: body.propertyProfileData.live_stock_safe_area,
-				share_livestock_safe_area: body.propertyProfileData.share_livestock_safe_area,
-				other_essential_assets: body.propertyProfileData.other_essential_assets
+				...body.propertyProfileData
 			})
 			.eq('id', pid)
 			.select();

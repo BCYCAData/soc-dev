@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	import '../soc_theme.postcss';
 	import '@skeletonlabs/skeleton/styles/skeleton.css';
@@ -11,8 +13,25 @@
 	import Navbar from '$components/navbar/Navbar.svelte';
 	import Footer from '$components/page/Footer.svelte';
 
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => subscription.unsubscribe();
+	});
+
 	// Reactive Properties
 	$: classesSidebarLeft = $page.url.pathname.startsWith('/') ? 'w-0' : 'w-0 lg:w-64';
+	$: ({ supabase, session } = data);
 </script>
 
 <Modal />

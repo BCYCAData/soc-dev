@@ -65,6 +65,8 @@
 			on:keypress={(e) => {
 				skipTo(e);
 			}}
+			role="button"
+			tabindex="0"
 		/>
 	{/each}
 </div>

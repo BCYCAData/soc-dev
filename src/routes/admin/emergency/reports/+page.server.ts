@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		throw error(400, getStreetsError.message);
 	}
 	if (streetsData.length > 0) {
-		let streetList = streetsData.map(({ streets }) => streets);
+		const streetList = streetsData.map(({ streets }) => streets);
 		return {
 			session,
 			streetList
@@ -54,7 +54,7 @@ export const actions: Actions = {
 			throw error(400, streetError.message);
 		}
 		if (streetData.length > 0) {
-			let propertyList = streetData.map(({ property_id }) => property_id);
+			const propertyList = streetData.map(({ property_id }) => property_id);
 			const { data: residentData, error: residentError } = await supabase.rpc(
 				'get_rfs_user_data_for_porperties',
 				{

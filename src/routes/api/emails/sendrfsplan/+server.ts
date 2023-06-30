@@ -1,17 +1,10 @@
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { render } from 'svelte-email';
 import nodemailer from 'nodemailer';
 
-// import Tester from '$components/email_templates/Tester.svelte';
-import BCYCACommunityEmail from '$components/email_templates/BCYCACommunityEmail.svelte';
 import BCYCABaseTemplate from '$components/email_templates/BCYCABaseTemplate.svelte';
 
-import type { ComponentType } from 'svelte';
-import type { SvelteComponentDev } from 'svelte/internal';
-
-// const template = Tester as unknown as ComponentType<SvelteComponentDev>;
-// const template = BCYCACommunityEmail as unknown as ComponentType<SvelteComponentDev>;
-const template = BCYCABaseTemplate as unknown as ComponentType<SvelteComponentDev>;
+const template = BCYCABaseTemplate;
 
 import type { RequestHandler } from './$types';
 

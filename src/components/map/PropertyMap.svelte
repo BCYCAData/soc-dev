@@ -68,13 +68,13 @@
 			vectorTerrain: vectorTerrain
 		};
 
-		// var base1 = PanelLayers(conf.base.layers, null, {
+		// let base1 = PanelLayers(conf.base.layers, null, {
 		// 	title: conf.base.title,
 		// 	position: 'topright',
 		// 	compact: false
 		// }).addTo(propertyMap);
 
-		// var over1 = PanelLayers(null, conf.tree.layers, {
+		// let over1 = PanelLayers(null, conf.tree.layers, {
 		// 	title: conf.tree.title,
 		// 	position: 'topright',
 		// 	compact: false
@@ -128,11 +128,11 @@
 	};
 </script>
 
-<div use:map />
+<div class="h-full w-full" use:map />
 
-<style>
+<!-- <style>
 	div {
 		height: 100%;
 		width: 100%;
 	}
-</style>
+</style> -->

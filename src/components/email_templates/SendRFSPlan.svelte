@@ -1,18 +1,5 @@
 <script lang="ts">
-	import {
-		Button,
-		Container,
-		Column,
-		Head,
-		Heading,
-		Hr,
-		Html,
-		Img,
-		Link,
-		Preview,
-		Section,
-		Text
-	} from 'svelte-email';
+	import { Head, Html } from 'svelte-email';
 </script>
 
 <Html lang="en">

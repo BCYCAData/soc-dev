@@ -8,11 +8,11 @@
 		getMap: () => map
 	});
 
-	export let lat: number = -31.940026654472703;
-	export let lon: number = 152.40239389529367;
-	export let zoom: number = 15;
-	export let width: string = '100%';
-	export let height: string = '100%';
+	export let lat = -31.940026654472703;
+	export let lon = 152.40239389529367;
+	export let zoom = 15;
+	export let width = '100%';
+	export let height = '100%';
 
 	$: style = `width:${width};height:${height};`;
 

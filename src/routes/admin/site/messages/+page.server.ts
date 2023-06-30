@@ -110,7 +110,7 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const id_input = formData.get('revoke_ids')?.toString();
 		if (id_input != null) {
-			let revoked_ids = id_input.split(',');
+			const revoked_ids = id_input.split(',');
 			const { data: revokeAppMessagesResponse, error: revokeAppMessagesError } = await supabase.rpc(
 				'revoke_app_messages',
 				{ revoked_ids }

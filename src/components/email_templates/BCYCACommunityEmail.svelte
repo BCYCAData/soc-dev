@@ -1,18 +1,5 @@
 <script lang="ts">
-	import {
-		Button,
-		Container,
-		Column,
-		Head,
-		Heading,
-		Hr,
-		Html,
-		Img,
-		Link,
-		Preview,
-		Section,
-		Text
-	} from 'svelte-email';
+	import { Container, Column, Head, Hr, Html, Img, Preview, Section, Text } from 'svelte-email';
 
 	enum Heading1Type {
 		events = 'Events Information',
@@ -36,8 +23,8 @@
 
 	const fontFamily = '"Helvetica Neue",Helvetica,Arial,sans-serif';
 
-	const fontFamilySystem =
-		'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif';
+	// const fontFamilySystem =
+	// 	'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif';
 
 	const line = {
 		margin: '0 0 75px 0',

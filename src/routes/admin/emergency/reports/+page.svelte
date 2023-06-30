@@ -1,14 +1,7 @@
 <script lang="ts">
-	// import '../../../../lib/pdf/fonts/Poppins-Regular.ttf';
-	// import '../../../../lib/pdf/fonts/Poppins-Italic.ttf';
-	// import '../../../../lib/pdf/fonts/Poppins-Bold.ttf';
-	// import '../../../../lib/pdf/fonts/Poppins-BoldItalic.ttf';
-	// // import pdfFonts from 'pdfmake/vfs_fonts.js';
+	import { Tab, TabGroup } from '@skeletonlabs/skeleton';
 
-	import TabContentItem from '$components/tabs/TabContentItem.svelte';
-	import TabHead from '$components/tabs/TabHead.svelte';
-	import TabHeadItem from '$components/tabs/TabHeadItem.svelte';
-	import TabWrapper from '$components/tabs/TabWrapper.svelte';
+	let tabSet: number = 0;
 
 	import StreetSelectInput from '$components/form/inputs/StreetSelectInput.svelte';
 
@@ -392,47 +385,50 @@
 	<title>Emergency Admin-Reports</title>
 </svelte:head>
 
-<TabWrapper>
-	<TabHead>
-		<TabHeadItem
-			id={'1'}
-			on:click={handleTabClick('1')}
-			on:keypress={handleTabClick('1')}
-			{activeTabValue}>RFS Street Report</TabHeadItem
-		>
-		<TabHeadItem
-			id={'2'}
-			on:click={handleTabClick('2')}
-			on:keypress={handleTabClick('2')}
-			{activeTabValue}>RFS Property Report</TabHeadItem
-		>
-	</TabHead>
-	<TabContentItem id={'1'} contentDivClass="p-4 bg-primary-300 rounded-b-lg" {activeTabValue}>
-		<form
-			id="reportRFSByStreetForm"
-			class="flex flex-col py-3 mx-auto w-full text-orange-900 bg-orange-300"
-		>
-			<div class="flex flex-col basis-full mx-5">
-				<h3 class="mb-2">
-					This report lists reported information for all registered Users in a given street.
-				</h3>
-				<p class="mb-0">Select a street to report on</p>
-				<StreetSelectInput
-					{streetList}
-					{nameText}
-					{requiredValue}
-					{classText}
-					bind:selectedStreet
-				/>
-				<a
-					href={`/api/reports/rfs/street/${selectedStreet}`}
-					download={`${selectedStreet
-						?.toLocaleLowerCase()
-						.replaceAll(' ', '_')}_${date.toLocaleDateString()}.pdf`}
-					class="btn w-1/4 m-3 rounded-lg text-base font-semibold bg-[#0099E8] text-stone-100 border border-purple-700"
-					>Generate Report</a
-				>
-			</div>
-		</form></TabContentItem
-	>
-</TabWrapper>
+<TabGroup
+	justify="justify-left"
+	active="variant-filled-primary"
+	hover="hover:variant-soft-primary"
+	flex="flex-1 lg:flex-none"
+	rounded="rounded-tl-lg rounded-tr-lg"
+	border=""
+	class="w-full !space-y-0"
+	regionList="bg-primary-200"
+	regionPanel="variant-filled-primary p-2"
+>
+	<Tab bind:group={tabSet} name="tab1" value={0}>RFS Street Report</Tab>
+	<Tab bind:group={tabSet} name="tab2" value={1}>RFS Property Report</Tab>
+	<!-- Tab Panels --->
+	<svelte:fragment slot="panel">
+		{#if tabSet === 0}
+			<form
+				id="reportRFSByStreetForm"
+				class="flex flex-col py-3 mx-auto w-full text-orange-900 bg-orange-300"
+			>
+				<div class="flex flex-col basis-full mx-5">
+					<h3 class="mb-2">
+						This report lists reported information for all registered Users in a given street.
+					</h3>
+					<p class="mb-0">Select a street to report on</p>
+					<StreetSelectInput
+						{streetList}
+						{nameText}
+						{requiredValue}
+						{classText}
+						bind:selectedStreet
+					/>
+					<a
+						href={`/api/reports/rfs/street/${selectedStreet}`}
+						download={`${selectedStreet
+							?.toLocaleLowerCase()
+							.replaceAll(' ', '_')}_${date.toLocaleDateString()}.pdf`}
+						class="btn w-1/4 m-3 rounded-lg text-base font-semibold bg-[#0099E8] text-stone-100 border border-purple-700"
+						>Generate Report</a
+					>
+				</div>
+			</form>
+		{:else if tabSet === 1}
+			<div>Okay</div>
+		{/if}
+	</svelte:fragment>
+</TabGroup>

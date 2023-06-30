@@ -1,8 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load: LayoutServerLoad = async ({ locals: { getSession } }) => {
 	return {
-		session: getSession(),
-		wtf: 'Yay!'
+		session: getSession()
 	};
 };

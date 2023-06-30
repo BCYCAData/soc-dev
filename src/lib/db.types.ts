@@ -12,49 +12,41 @@ export interface Database {
       address_point_extract_wgs84: {
         Row: {
           address: string | null
-          addresspointtype: number | null
+          addresspointtype: string | null
           addressstringoid: number | null
-          containment: number | null
+          containment: string | null
           enddate: string | null
           geom: unknown | null
           gurasid: number | null
           housenumber: string | null
-          id: number
           lastupdate: string | null
           principaladdresssiteoid: number | null
-          startdate: string | null
-          urbanity: string | null
         }
         Insert: {
           address?: string | null
-          addresspointtype?: number | null
+          addresspointtype?: string | null
           addressstringoid?: number | null
-          containment?: number | null
+          containment?: string | null
           enddate?: string | null
           geom?: unknown | null
           gurasid?: number | null
           housenumber?: string | null
-          id?: number
           lastupdate?: string | null
           principaladdresssiteoid?: number | null
-          startdate?: string | null
-          urbanity?: string | null
         }
         Update: {
           address?: string | null
-          addresspointtype?: number | null
+          addresspointtype?: string | null
           addressstringoid?: number | null
-          containment?: number | null
+          containment?: string | null
           enddate?: string | null
           geom?: unknown | null
           gurasid?: number | null
           housenumber?: string | null
-          id?: number
           lastupdate?: string | null
           principaladdresssiteoid?: number | null
-          startdate?: string | null
-          urbanity?: string | null
         }
+        Relationships: []
       }
       agent: {
         Row: {
@@ -81,6 +73,14 @@ export interface Database {
           last_updated?: string | null
           property_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "agent_property_id_fkey"
+            columns: ["property_id"]
+            referencedRelation: "property_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       app_message: {
         Row: {
@@ -107,6 +107,7 @@ export interface Database {
           revoked?: string | null
           scope?: string
         }
+        Relationships: []
       }
       communities: {
         Row: {
@@ -136,6 +137,25 @@ export interface Database {
           streets?: string[] | null
           suburbs?: string[] | null
         }
+        Relationships: []
+      }
+      kyng_areas: {
+        Row: {
+          geom: unknown | null
+          kyng: string | null
+          pkuid: number
+        }
+        Insert: {
+          geom?: unknown | null
+          kyng?: string | null
+          pkuid: number
+        }
+        Update: {
+          geom?: unknown | null
+          kyng?: string | null
+          pkuid?: number
+        }
+        Relationships: []
       }
       property_geometry: {
         Row: {
@@ -165,6 +185,14 @@ export interface Database {
           property?: unknown | null
           way_point?: unknown | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "property_geometry_id_fkey"
+            columns: ["id"]
+            referencedRelation: "property_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       property_profile: {
         Row: {
@@ -278,6 +306,7 @@ export interface Database {
           truck_access_other_information?: string | null
           vulnerable_residents?: boolean | null
         }
+        Relationships: []
       }
       street_list: {
         Row: {
@@ -289,6 +318,7 @@ export interface Database {
         Update: {
           json_agg?: Json | null
         }
+        Relationships: []
       }
       suburb_aliases: {
         Row: {
@@ -309,6 +339,7 @@ export interface Database {
           id?: number
           suburb_name?: string
         }
+        Relationships: []
       }
       survey_responses: {
         Row: {
@@ -458,6 +489,7 @@ export interface Database {
           vulnerableResidents?: string | null
           willRunCommunityWorkshops?: string | null
         }
+        Relationships: []
       }
       test: {
         Row: {
@@ -475,6 +507,7 @@ export interface Database {
           id?: number
           willitwork?: number[]
         }
+        Relationships: []
       }
       user_bcyca_profile: {
         Row: {
@@ -513,6 +546,14 @@ export interface Database {
           user_id?: string
           will_run_community_workshops?: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_bcyca_profile_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_postal_address: {
         Row: {
@@ -539,6 +580,14 @@ export interface Database {
           postal_address_suburb?: string | null
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_postal_address_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_profile: {
         Row: {
@@ -595,6 +644,14 @@ export interface Database {
           sent_rfs_survival_plan?: string | null
           stay_in_touch_choices?: number[] | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_profile_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       user_property_profile_join: {
         Row: {
@@ -612,6 +669,20 @@ export interface Database {
           property_id?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "user_property_profile_join_property_id_fkey"
+            columns: ["property_id"]
+            referencedRelation: "property_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_property_profile_join_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -763,6 +834,7 @@ export interface Database {
           vulnerableResidents?: string | null
           willRunCommunityWorkshops?: string | null
         }
+        Relationships: []
       }
     }
     Functions: {
@@ -780,10 +852,14 @@ export interface Database {
         }
         Returns: string
       }
+      extract_addresspoints_wgs1984: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       get_address_point_extract_wgs84: {
         Args: Record<PropertyKey, never>
         Returns: {
-          addresspointtype: number
+          addresspointtype: string
           geom: unknown
         }[]
       }
@@ -929,7 +1005,7 @@ export interface Database {
       get_registered_addresspoints: {
         Args: Record<PropertyKey, never>
         Returns: {
-          addresspointtype: number
+          addresspointtype: string
           geom: unknown
         }[]
       }
@@ -1052,11 +1128,19 @@ export interface Database {
         }
         Returns: unknown
       }
+      make_kyng_address_points: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       revoke_app_messages: {
         Args: {
           revoked_ids: string[]
         }
         Returns: number
+      }
+      saveextractedaddresspoints: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       temp: {
         Args: Record<PropertyKey, never>
@@ -1065,23 +1149,6 @@ export interface Database {
       temp2: {
         Args: Record<PropertyKey, never>
         Returns: Json
-      }
-      temp3: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          address: string
-          longitude: number
-          latitude: number
-          enddate: string
-          gurasid: number
-          urbanity: string
-          startdate: string
-          containment: number
-          housenumber: string
-          addresspointtype: number
-          addressstringoid: number
-          principaladdresssiteoid: number
-        }[]
       }
       temp4: {
         Args: Record<PropertyKey, never>

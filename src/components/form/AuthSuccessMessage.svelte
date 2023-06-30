@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="bg-green-100  rounded-lg py-3 my-1 text-base text-green-700 inline-flex items-center w-full"
+	class="bg-green-100 rounded-lg py-3 my-1 text-base text-green-700 inline-flex items-center w-full"
 	role="alert"
 >
 	<div class="flex items-center mx-auto">

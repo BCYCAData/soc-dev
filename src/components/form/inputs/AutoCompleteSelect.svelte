@@ -114,7 +114,7 @@
 		<div class="modal-content py-4 text-left px-6">
 			<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				{#each modalList as item}
-					<li
+					<button
 						class="cursor-pointer hover:bg-gray-100 py-2 px-4"
 						on:click={() => selectValue(item)}
 						on:keydown={(event) => {
@@ -124,7 +124,7 @@
 						}}
 					>
 						{item.lut_text}
-					</li>
+					</button>
 				{/each}
 			</ul>
 

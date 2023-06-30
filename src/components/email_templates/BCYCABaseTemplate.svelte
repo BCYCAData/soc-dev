@@ -1,18 +1,20 @@
 <script lang="ts">
-	import {
-		Button,
-		Container,
-		Column,
-		Head,
-		Heading,
-		Hr,
-		Html,
-		Img,
-		Link,
-		Preview,
-		Section,
-		Text
-	} from 'svelte-email';
+	import { Head, Html, Preview, Section } from 'svelte-email';
+
+	// 	import {
+	// 	Button,
+	// 	Container,
+	// 	Column,
+	// 	Head,
+	// 	Heading,
+	// 	Hr,
+	// 	Html,
+	// 	Img,
+	// 	Link,
+	// 	Preview,
+	// 	Section,
+	// 	Text
+	// } from 'svelte-email';
 
 	enum Heading1Type {
 		events = 'Events Information',
@@ -27,10 +29,10 @@
 
 	const border = 0;
 
-	const fontFamily = '"Helvetica Neue",Helvetica,Arial,sans-serif';
+	// const fontFamily = '"Helvetica Neue",Helvetica,Arial,sans-serif';
 
-	const fontFamilySystem =
-		'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif';
+	// const fontFamilySystem =
+	// 	'system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif';
 
 	const main = {
 		backgroundColor: '#ffffff'
@@ -72,10 +74,7 @@
 		>
 			<tbody
 				><tr style="display:grid;grid-auto-columns:minmax(0, 1fr);grid-auto-flow:column;">
-					<td
-						style="display:inline-flex;justify-content:center;align-items:center;"
-						role="presentation"
-					>
+					<td style="display:inline-flex;justify-content:center;align-items:center;">
 						<img
 							alt="Strengthen Our Community project logo"
 							src="
@@ -85,9 +84,7 @@
 							style="display:block;outline:none;border:none;text-decoration:none;margin:0 auto;text-align:center;"
 						/></td
 					>
-					<td
-						style="display:table-cell;justify-content:center;align-items:center;align:center;"
-						role="presentation"
+					<td style="display:table-cell;justify-content:center;align-items:center;align:center;"
 						><p
 							style="font-size:32px;line-height:32px;margin:16px 0;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;font-weight:300;color:#9a3412;text-align:center;"
 						>
@@ -95,9 +92,7 @@
 						</p></td
 					>
 
-					<td
-						style="display:table-cell;justify-content:center;align-items:center;align:center;"
-						role="presentation"
+					<td style="display:table-cell;justify-content:center;align-items:center;align:center;"
 						><p
 							style="font-size:16px;line-height:16px;margin:16px 0;font-family:&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif;font-weight:300;color:#9a3412;text-align:center;"
 						>

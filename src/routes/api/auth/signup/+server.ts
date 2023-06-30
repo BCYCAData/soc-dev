@@ -8,7 +8,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	const user_metadata: AddressPointData = JSON.parse(
 		formData.get('addresspointdatajson')?.toString() || ''
 	);
-	let roles: string[] = [];
+	const roles: string[] = [];
 	const { data: signUpData, error: errorSignUp } = await locals.supabase.auth.signUp({
 		email: formData.get('email') as string,
 		password: formData.get('password') as string,

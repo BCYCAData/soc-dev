@@ -8,7 +8,7 @@
 <svelte:head>
 	<title>Site Administration</title>
 </svelte:head>
-<pre>{JSON.stringify(siteAdminData, null, 2)}</pre>
+<!-- <pre>{JSON.stringify(siteAdminData, null, 2)}</pre> -->
 <div>
 	<h1 class="unstyled text-xl font-semibold text-gray-900">
 		This page contains information specific to site administration

@@ -26,7 +26,7 @@ export const formatPhone = (phoneNumber: string, digit: string) => {
 };
 
 export const geometryToGeoJson = (featureType: string, geometryObject: any) => {
-	let geojson = {
+	const geojson = {
 		featureType: featureType,
 		geometry: {
 			type: geometryObject.type,
@@ -139,15 +139,15 @@ export const getFormData = (body: FormData, uid: string, principaladdresssiteoid
 };
 
 export const splitStreetAddress = (streetAddress: string) => {
-	let bits = streetAddress.split(' ');
-	let result = [bits[0], streetAddress.replace(bits[0], '').trim()];
+	const bits = streetAddress.split(' ');
+	const result = [bits[0], streetAddress.replace(bits[0], '').trim()];
 	return result;
 };
 
 export const splitFullAddress = (fullAddress: string) => {
-	let bits = fullAddress.split(' ');
-	let more = bits[bits.length - 1];
-	let result = [bits[0], fullAddress.replace(bits[0], '').replace(more, '').trim(), more];
+	const bits = fullAddress.split(' ');
+	const more = bits[bits.length - 1];
+	const result = [bits[0], fullAddress.replace(bits[0], '').replace(more, '').trim(), more];
 	return result;
 };
 
@@ -168,10 +168,10 @@ export const getTimestamp = () => {
 	const hours: number = now.getHours();
 	const minutes: number = now.getMinutes();
 
-	const formattedMonth: string = month < 10 ? `0${month}` : `${month}`;
-	const formattedDay: string = day < 10 ? `0${day}` : `${day}`;
-	const formattedHours: string = hours < 10 ? `0${hours}` : `${hours}`;
-	const formattedMinutes: string = minutes < 10 ? `0${minutes}` : `${minutes}`;
+	const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+	const formattedDay = day < 10 ? `0${day}` : `${day}`;
+	const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+	const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
 
 	return `${year}${formattedMonth}${formattedDay}-${formattedHours}${formattedMinutes}`;
 };

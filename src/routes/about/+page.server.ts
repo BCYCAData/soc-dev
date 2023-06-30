@@ -3,7 +3,7 @@ import { error } from '@sveltejs/kit';
 import type { MapDataJSON } from '$lib/types';
 import type { PageServerLoad } from './$types';
 
-let mapData: MapDataJSON = { jsonLayers: [] };
+const mapData: MapDataJSON = { jsonLayers: [] };
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();

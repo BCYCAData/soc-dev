@@ -9,7 +9,7 @@
 	<title>About</title>
 </svelte:head>
 
-<div class="container h-full max-h-3/4 max-w-3xl mx-auto flex justify-center">
+<div class="container h-full max-h-3/4 max-w-3xl mx-auto flex justify-center overflow-x-hidden">
 	<div class="text-center">
 		<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
 			Strengthen OUR Community
@@ -61,7 +61,7 @@
 				that are participating
 			</p>
 		</div>
-		<div class="main-map w-7/8 h-[58%]">
+		<div class="main-map w-7/8 h-[45%]">
 			<AboutMap {mapLayers} />
 		</div>
 	</div>

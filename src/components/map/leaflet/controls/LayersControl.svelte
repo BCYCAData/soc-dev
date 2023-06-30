@@ -1,20 +1,29 @@
 <script lang="ts">
-	import { getContext } from 'svelte';
-	import { control, type ControlPosition } from 'leaflet';
+	import { getContext, onDestroy, onMount, setContext } from 'svelte';
+	import { mapContext, layerControlContext } from '$lib/map/map';
 
-	import type { Map as LeafletMap } from 'leaflet';
+	import type { Map, Control, ControlPosition } from 'leaflet';
 
-	import 'leaflet/dist/leaflet.css';
-
-	export let baseMaps = {};
-	export let overlayMaps = {};
+	export let leaflet: typeof import('leaflet');
+	export let baseMaps: Control.LayersObject;
+	export let overlayMaps: Control.LayersObject;
 	export let position: ControlPosition = 'topright';
 
-	const { getMap } = getContext<{ getMap: () => LeafletMap }>('leaflet_map');
-	const map = getMap();
+	const { getMap } = getContext(mapContext) as { getMap: () => Map };
+	const map: Map = getMap();
 
-	if (map) {
-		const layerControl = control.layers(baseMaps, overlayMaps).addTo(map);
-		layerControl.setPosition(position); //Possible values are 'topleft', 'topright', 'bottomleft' or 'bottomright'
-	}
+	let layerControl: Control;
+
+	onMount(async () => {
+		if (map) {
+			layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
+			layerControl.setPosition(position); //Possible values are 'topleft', 'topright', 'bottomleft' or 'bottomright'
+		}
+	});
+
+	onDestroy(() => {
+		layerControl.remove();
+	});
 </script>
+
+<slot />

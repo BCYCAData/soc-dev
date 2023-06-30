@@ -1,14 +1,12 @@
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import { render } from 'svelte-email';
 import nodemailer from 'nodemailer';
 
 import Tester from '$components/email_templates/Tester.svelte';
 
-import type { ComponentType } from 'svelte';
-import type { SvelteComponentDev } from 'svelte/internal';
 import type { PageServerLoad } from './$types.js';
 
-const template = Tester as unknown as ComponentType<SvelteComponentDev>;
+const template = Tester;
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
@@ -37,7 +35,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 };
 
 export const actions: Actions = {
-	testemail: async ({ request, locals: { supabase, getSession } }) => {
+	testemail: async ({ locals: { getSession } }) => {
 		const session = await getSession();
 		if (!session) {
 			throw redirect(307, '/auth/signin');
@@ -57,11 +55,11 @@ export const actions: Actions = {
 				pass: 'CommunityInformationInfrastructure'
 			}
 		});
-		const emailHtml = await render({
-			template: template,
-			props: {
-				firstName: 'John'
-			}
+		const emailHtml = render({
+			template: template
+			// props: {
+			// 	firstName: 'John'
+			// }
 		});
 
 		const mailOptions: nodemailer.SendMailOptions = {
@@ -79,7 +77,7 @@ export const actions: Actions = {
 			}
 		});
 	},
-	newusersemail: async ({ request, locals: { supabase, getSession } }) => {
+	newusersemail: async ({ locals: { getSession } }) => {
 		console.log('Yay');
 		const session = await getSession();
 		if (

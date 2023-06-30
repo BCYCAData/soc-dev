@@ -46,6 +46,8 @@
 				class="text-xl text-gray-900 font-normal mr-3"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
+				role="button"
+				tabindex="0"
 			>
 				{showPassword ? '👁️' : '👁️'}
 			</span>
@@ -70,6 +72,8 @@
 				class="text-xl text-gray-900 font-normal mr-3"
 				on:mouseenter={() => (showPassword = true)}
 				on:mouseleave={() => (showPassword = false)}
+				role="button"
+				tabindex="0"
 			>
 				{showPassword ? '👁️' : '👁️'}
 			</span>
