@@ -3,6 +3,7 @@
 		"EDITOR": "code"
 	},
 	"prettier.prettierPath": "./node_modules/prettier",
+	"Prettier-SQL.SQLFlavourOverride": "postgresql",
 	"tailwindCSS.classAttributes": [
 		"class",
 		"accent",
@@ -77,5 +78,29 @@
 		"text",
 		"track",
 		"width"
+	],
+	"sqltools.connections": [
+		{
+			"previewLimit": 50,
+			"server": "db.oiwbamoupmoudqwautha.supabase.co",
+			"port": 6543,
+			"askForPassword": true,
+			"driver": "PostgreSQL",
+			"name": "SOC Prod",
+			"group": "Supabase",
+			"database": "postgres",
+			"username": "postgres"
+		},
+		{
+			"previewLimit": 50,
+			"server": "db.swyytxokzdqqitszxaep.supabase.co",
+			"port": 6543,
+			"askForPassword": true,
+			"driver": "PostgreSQL",
+			"name": "SOC Dev",
+			"database": "postgres",
+			"username": "postgres",
+			"group": "Supabase"
+		}
 	],
 }

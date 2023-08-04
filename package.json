@@ -42,9 +42,11 @@
 		"esri-leaflet": "^3.0.10",
 		"esri-leaflet-vector": "^4.0.2",
 		"iconify-icon": "^1.0.7",
+		"install": "^0.13.0",
 		"leaflet": "^1.9.3",
 		"leaflet-image": "^0.4.0",
 		"nodemailer": "^6.9.1",
+		"npm": "^9.7.2",
 		"pdfmake": "^0.2.7",
 		"postcss": "^8.4.21",
 		"prettier": "^2.8.8",
@@ -59,5 +61,8 @@
 		"vite": "^4.3.0",
 		"vitest": "^0.32.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"uninstall": "^0.0.0"
+	}
 }

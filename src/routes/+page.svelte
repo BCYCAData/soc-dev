@@ -32,7 +32,7 @@
 	<title>Home</title>
 </svelte:head>
 
-<div class="container h-full max-w-3xl mx-auto flex justify-center">
+<section class="flex flex-col items-center text-center mx-auto h-full max-w-5xl">
 	<div class="text-center">
 		<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
 			Strengthen OUR Community
@@ -60,5 +60,48 @@
 		</button>
 		<p class="unstyled text-sm md:text-lg mt-1 font-semibold">Want more information?</p>
 		<p class="unstyled text-sm md:text-lg mt-0 font-semibold">Call Helen 0424 515 963</p>
+		<div class="iframe-center mt-4">
+			<iframe
+				width="560"
+				height="315"
+				src="https://www.youtube.com/embed/Q6CCR6gBUkU"
+				title="YouTube video player"
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+			/>
+			<iframe
+				width="560"
+				height="315"
+				src="https://www.youtube.com/embed/ukXYzMK6zk4"
+				title="YouTube video player"
+				frameborder="0"
+				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+				allowfullscreen
+			/>
+		</div>
 	</div>
-</div>
+</section>
+
+<style>
+	/* Default styles for both iframes */
+	iframe {
+		width: 100%;
+		height: 315px; /* Adjust the height as needed */
+		margin: 5px; /* Remove margin between iframes */
+	}
+
+	/* Media query for larger screens (min-width: 768px) */
+	@media (min-width: 768px) {
+		.iframe-center {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+		}
+
+		iframe {
+			max-width: 75%;
+			margin: 10px; /* Remove margin between iframes */
+		}
+	}
+</style>

@@ -71,7 +71,46 @@ export type MapObject = {
 	mapTiler: boolean;
 };
 
+export type AddressPointType = {
+	addresspointtype: string;
+	geom: {
+		coordinates: [number, number];
+	};
+};
+
 export type MapTileLayerObject = {
 	url: string;
 	layerOptions: TileLayerOptions;
 };
+
+export type PropertyGeometryGeoJSON = {
+	id: string;
+	principaladdresssiteoid: number;
+	address_point: GeometryObject;
+	way_point: GeometryObject;
+	property: GeometryObject;
+	created_at: string;
+	last_updated: string;
+};
+
+export interface FeatureCollection<G = Geometry | GeometryCollection, P = Properties>
+	extends GeoJSONObject {
+	type: 'FeatureCollection';
+	features: Array<Feature<G, P>>;
+}
+
+export interface Feature<G = Geometry | GeometryCollection, P = Properties> extends GeoJSONObject {
+	type: 'Feature';
+	geometry: G;
+	id?: Id;
+	properties: P;
+}
+
+export interface GeoJSONObject {
+	type: string;
+	bbox?: BBox;
+}
+
+export declare type Properties = {
+	[name: string]: any;
+} | null;

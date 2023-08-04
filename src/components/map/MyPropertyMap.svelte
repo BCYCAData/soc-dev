@@ -1,21 +1,25 @@
 <script lang="ts">
 	import { onDestroy, onMount, setContext } from 'svelte';
-	import { mapContext, propertyFeatureStyle } from '$lib/map/map';
+	import {
+		mapContext,
+		propertyFeatureStyle,
+		type LeafletGeoJSON,
+		addresspointFeatureStyle,
+		waypointFeatureStyle
+	} from '$lib/map/map';
 
-	import type { MapDataJSON } from '$lib/types';
+	import type { GeoJSONObject, MapDataJSON } from '$lib/types';
 
-	import type { Map, Control, FeatureGroup, PM, Marker } from 'leaflet';
+	import type { Map } from 'leaflet';
+	import type { GeoJsonObject } from 'geojson';
 
+	export let leafletGeoJSONArray: LeafletGeoJSON[];
 	export let mapCentre: [number, number];
-	export let mapLayers: MapDataJSON;
+	export let minZoom: number;
 	export let map: Map;
 	export let leaflet: typeof import('leaflet');
 	export let esriLeaflet: typeof import('esri-leaflet');
 	export let esriLeafletVector: typeof import('esri-leaflet-vector');
-
-	let waypointGroup: FeatureGroup;
-	let addresspointGroup: FeatureGroup;
-	let propertyGroup: FeatureGroup;
 
 	let mapElement: string | HTMLElement;
 
@@ -32,91 +36,34 @@
 		leaflet = L;
 		esriLeaflet = eL;
 		esriLeafletVector = eLV;
-
-		map.setView(mapCentre, 16);
-
-		let propertyFeature: GeoJSON.Feature = {
-			type: 'Feature',
-			properties: {},
-			geometry: mapLayers.jsonLayers[0].geometry
-		};
-
-		let features = [];
-		const property = L.geoJSON(propertyFeature, {
-			style: propertyFeatureStyle
+		map.setView(mapCentre, minZoom);
+		const geoJSONLayer = L.geoJSON().addTo(map);
+		leafletGeoJSONArray.forEach((item) => {
+			const featureType = item.properties.featureType;
+			const latlng = L.latLng(item.geometry.coordinates[1], item.geometry.coordinates[0]);
+			const feature = {
+				type: 'Feature',
+				properties: item.properties,
+				geometry: item.geometry
+			};
+			let layer;
+			if (featureType === 'AddressPoint') {
+				layer = L.circleMarker(latlng, addresspointFeatureStyle);
+			} else if (featureType === 'WayPoint') {
+				layer = L.circleMarker(latlng, waypointFeatureStyle);
+			} else if (featureType === 'Property') {
+				layer = L.geoJSON(feature as GeoJsonObject, { style: propertyFeatureStyle });
+			}
+			if (layer) {
+				const properties = feature.properties;
+				const tooltipContent = `Feature: ${featureType}<br>ID: ${properties.id}<br>Principal Address Site OID: ${properties.principaladdresssiteoid}<br>Created At: ${properties.created_at}<br>Last Updated: ${properties.last_updated}`;
+				layer.bindTooltip(tooltipContent);
+				layer.addTo(geoJSONLayer);
+			}
 		});
-		features.push(property);
-		propertyGroup = L.featureGroup(features);
-		map.addLayer(propertyGroup);
-		features = [];
-		let g = mapLayers.jsonLayers[1];
-		let p = g.geometry.coordinates;
-		let marker = new L.CircleMarker(new L.LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#f97316', weight: 0, radius: 3, fillOpacity: 0.75 });
-		features.push(marker);
-		addresspointGroup = L.featureGroup(features);
-		map.addLayer(addresspointGroup);
-		features = [];
-		g = mapLayers.jsonLayers[2];
-		p = g.geometry.coordinates;
-		marker = new L.CircleMarker(new L.LatLng(p[1], p[0], 0));
-		const amarker: Marker = new L.Marker(new L.LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#a5a5a5', weight: 0, radius: 3, fillOpacity: 0.75 });
-		features.push(marker);
-		waypointGroup = L.featureGroup(features);
-		map.addLayer(waypointGroup);
-		// map.on('resize', function () {
 		map.setMinZoom(0);
 		map.setMaxZoom(20);
-		map.fitBounds(propertyGroup.getBounds());
-		map.invalidateSize();
-		// });
-
-		// const layerControl = L.control
-		// 	.layers(baseMaps, overlay, {
-		// 		collapsed: true
-		// 	})
-		// 	.addTo(map);
-
-		// add Leaflet-Geoman controls
-		// map.pm.addControls({
-		// 	position: 'topleft',
-		// 	cutPolygon: true
-		// });
-		// const addHazardPoint: (PM.ACTION_NAMES | PM.Action)[] = [
-		// 	// uses the default 'cancel' action
-		// 	'cancel',
-		// 	// creates a new action that has text, no click event
-		// 	{ text: 'Custom text, no click' },
-		// 	// creates a new action with text and a click event
-		// 	{
-		// 		text: 'click me',
-		// 		onClick: () => {
-		// 			map.pm.setPathOptions(
-		// 				{ color: 'orange' },
-		// 				{
-		// 					ignoreShapes: ['Circle', 'Rectangle']
-		// 				}
-		// 			);
-		// 		}
-		// 	}
-		// ];
-		// map.pm.Toolbar.copyDrawControl('drawCircleMarker', {
-		// 	name: 'HazardPoint',
-		// 	block: 'custom',
-		// 	title: 'Display text on hover button',
-		// 	actions: addHazardPoint
-		// });
-
-		// let MyCustomMarker = L.icon({
-		// 	shadowUrl: null,
-		// 	iconAnchor: new L.Point(12, 12),
-		// 	iconSize: new L.Point(24, 24),
-		// 	iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Information_icon4_orange.svg'
-		// });
-
-		// let infoMarker = map.pm.Toolbar.copyDrawControl('drawMarker', { name: 'infoMarker' });
-		// infoMarker.drawInstance.setOptions({ markerStyle: { icon: MyCustomMarker } });
+		map.fitBounds(geoJSONLayer.getBounds());
 
 		map.on('pm:buttonclick', function (e) {
 			console.log(e);

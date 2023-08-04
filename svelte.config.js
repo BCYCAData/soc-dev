@@ -17,14 +17,15 @@ const config = {
 			$stores: './src/stores'
 		}
 	},
+	compilerOptions: {
+		sourcemap: process.env.NODE_ENV === 'development' ? true : false
+	},
 	vitePlugin: {
-		// experimental: {
 		inspector: {
 			toggleKeyCombo: 'control-shift',
 			showToggleButton: 'always',
 			toggleButtonPos: 'bottom-right'
 		}
-		// }
 	}
 };
 

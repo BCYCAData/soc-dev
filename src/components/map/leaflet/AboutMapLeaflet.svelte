@@ -2,13 +2,14 @@
 	import type { FeatureGroup, LatLngExpression, Map } from 'leaflet';
 	import { onMount, onDestroy } from 'svelte';
 
-	import type { MapDataJSON, MapObject, MapTileLayerObject } from '$lib/types';
+	import type { AddressPointType, MapObject, MapTileLayerObject } from '$lib/types';
 
 	import 'leaflet/dist/leaflet.css';
 
 	export let mapObject: MapObject;
-	export let mapLayers: MapDataJSON;
 	export let mapTileLayer: MapTileLayerObject;
+	export let allPoints: AddressPointType[];
+	export let registeredPoints: AddressPointType[];
 
 	let map: Map;
 	let featureGroup: FeatureGroup;
@@ -20,8 +21,6 @@
 			center: new leaflet.LatLng(mapObject.centre[0], mapObject.centre[1], 0),
 			zoomSnap: mapObject.zoomSnap,
 			zoom: mapObject.zoom,
-			// minZoom: mapObject.minZoom,
-			// maxZoom: mapObject.maxZoom,
 			maxBounds: mapObject.maxBounds,
 			zoomControl: mapObject.zoomControl,
 			doubleClickZoom: mapObject.doubleClickZoom,
@@ -32,9 +31,9 @@
 		}
 		leaflet.tileLayer(mapTileLayer.url, mapTileLayer.layerOptions).addTo(map);
 
-		if ((mapLayers.jsonLayers.length = 2)) {
+		if (allPoints.length > 0) {
 			let features = [];
-			let g = mapLayers.jsonLayers[0];
+			let g = allPoints;
 			for (let j = 0; j < g.length; j++) {
 				let p = g[j].geom.coordinates;
 				let lon = p[0];
@@ -46,7 +45,7 @@
 			featureGroup = leaflet.featureGroup(features);
 			map.addLayer(featureGroup);
 			features = [];
-			g = mapLayers.jsonLayers[1];
+			g = registeredPoints;
 			for (let j = 0; j < g.length; j++) {
 				let p = g[j].geom.coordinates;
 				let lon = p[0];
@@ -58,19 +57,10 @@
 			}
 			registeredGroup = leaflet.featureGroup(features);
 			map.addLayer(registeredGroup);
-		} else if ((mapLayers.jsonLayers.length = 3)) {
-			let features = [];
-			let g = mapLayers.jsonLayers[0];
 		}
-
-		map.on('resize', function () {
-			map.setMinZoom(0);
-			map.setMaxZoom(20);
+		if (featureGroup.getBounds().isValid()) {
 			map.fitBounds(featureGroup.getBounds());
-			map.invalidateSize();
-			map.setMinZoom(map.getZoom());
-			map.invalidateSize();
-		});
+		}
 	});
 
 	onDestroy(async () => {

@@ -2,10 +2,9 @@
 	import AboutMapLeaflet from '$components/map/leaflet/AboutMapLeaflet.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import { env } from '$env/dynamic/public';
+	import type { AddressPointType } from '$lib/types';
 
 	import 'leaflet/dist/leaflet.css';
-
-	import type { MapDataJSON } from '$lib/types';
 
 	let mapObject = {
 		divId: 'basicMap',
@@ -34,15 +33,15 @@
 		}
 	};
 
-	// '© State of New South Wales (Spatial Services, a business unit of the Department of Customer Service NSW). For current information go to spatial.nsw.gov.au.’
-	export let mapLayers: MapDataJSON;
+	export let allPoints: AddressPointType[];
+	export let registeredPoints: AddressPointType[];
 </script>
 
-{#await mapLayers}
+{#await allPoints}
 	<Spinner />
 {:then mapLayers}
 	<div class="border-double border-stone-100 h-full">
-		<AboutMapLeaflet {mapObject} {mapTileLayer} {mapLayers} />
+		<AboutMapLeaflet {mapObject} {mapTileLayer} {allPoints} {registeredPoints} />
 	</div>
 {:catch error}
 	<p style="color: red">{error.message}</p>

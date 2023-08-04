@@ -6,10 +6,108 @@ export const esriLeafletContext = Symbol();
 // ---------styles---------------
 export const propertyFeatureStyle = {
 	color: '#ff7800',
-	weight: 1,
+	fillColor: '#ff7800',
+	weight: 2,
 	opacity: 1,
 	fillOpacity: 0.05
 };
+export const waypointFeatureStyle = {
+	radius: 6,
+	fillColor: 'blue',
+	color: 'white',
+	weight: 1,
+	opacity: 1,
+	fillOpacity: 0.7
+};
+export const addresspointFeatureStyle = {
+	radius: 6,
+	fillColor: 'blue',
+	color: 'white',
+	weight: 1,
+	opacity: 1,
+	fillOpacity: 0.7
+};
+
+export interface Geometry {
+	type: string;
+	crs: object;
+	coordinates: number[];
+}
+
+export interface LeafletGeoJSON {
+	type: string;
+	properties: {
+		id: string;
+		principaladdresssiteoid: number;
+		created_at: string;
+		last_updated: string;
+		featureType: string;
+	};
+	geometry: Geometry;
+}
+
+export function convertToLeafletGeoJSON(inputJSON: any[]): LeafletGeoJSON[] {
+	return inputJSON.flatMap((item) => {
+		const { id, principaladdresssiteoid, created_at, last_updated } = item;
+
+		const addressPoint: Geometry = {
+			type: item.address_point.type,
+			crs: item.address_point.crs,
+			coordinates: item.address_point.coordinates
+		};
+
+		const wayPoint: Geometry = {
+			type: item.way_point.type,
+			crs: item.way_point.crs,
+			coordinates: item.way_point.coordinates
+		};
+
+		const property: Geometry = {
+			type: item.property.type,
+			crs: item.property.crs,
+			coordinates: item.property.coordinates
+		};
+
+		const leafletGeoJSON: LeafletGeoJSON[] = [
+			{
+				type: 'Feature',
+				properties: {
+					id,
+					principaladdresssiteoid,
+					created_at,
+					last_updated,
+					featureType: 'AddressPoint'
+				},
+				geometry: addressPoint
+			},
+			{
+				type: 'Feature',
+				properties: {
+					id,
+					principaladdresssiteoid,
+					created_at,
+					last_updated,
+					featureType: 'WayPoint'
+				},
+				geometry: wayPoint
+			},
+			{
+				type: 'Feature',
+				properties: {
+					id,
+					principaladdresssiteoid,
+					created_at,
+					last_updated,
+					featureType: 'Property'
+				},
+				geometry: property
+			}
+		];
+
+		return leafletGeoJSON;
+	});
+}
+
 // ----Path Options-----
 // An abstract class that contains options and constants shared between vector overlays (Polygon, Polyline, Circle).
 // Do not use it directly. Extends Layer.
