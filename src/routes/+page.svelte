@@ -4,25 +4,13 @@
 
 	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
 
-	// export let data;
-	// $: supabase = data.supabase;
-
 	function triggerCustomModal(): void {
 		const modalComponent: ModalComponent = {
-			// Pass a reference to your custom component
 			ref: AddressChallenge
-			// Add your props as key/value pairs !!!! ONLY FOR BUILT IN ALERTS !!!!
-			// props: { regionHeader: '!text-2xl !font-bold !text-blue-500' }
-			// Provide default slot content as a template literal
-			// slot: '<p>Skeleton</p>'
 		};
 		const d: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			// title: 'Address Check',
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
-
-			// NOTE: title, body, response, etc are supported!
+			component: modalComponent
 		};
 		modalStore.trigger(d);
 	}
@@ -84,24 +72,20 @@
 </section>
 
 <style>
-	/* Default styles for both iframes */
 	iframe {
 		width: 100%;
-		height: 315px; /* Adjust the height as needed */
-		margin: 5px; /* Remove margin between iframes */
+		height: 315px;
+		margin: 5px;
 	}
-
-	/* Media query for larger screens (min-width: 768px) */
 	@media (min-width: 768px) {
 		.iframe-center {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-around;
 		}
-
 		iframe {
 			max-width: 75%;
-			margin: 10px; /* Remove margin between iframes */
+			margin: 10px;
 		}
 	}
 </style>

@@ -24,25 +24,29 @@
 	};
 </script>
 
-<button
-	class="absolute cursor-pointer bg-orange-500 text-stone-100 hover:font-bold top-0 right-0 px-1"
-	on:click={parent.onClose}
->
-	<span class="text-xs">EXIT</span>&times
-</button>
+<div class="flex flex-col items-center max-w-container mx-auto justify-center relative">
+	<div class="bg-orange-50 p-6 sm:ml-0 rounded shadow-md text-gray-900 w-5/6 sm:w-full">
+		<button
+			class="cursor-pointer bg-orange-500 text-stone-100 hover:font-bold absolute top-0 right-0 px-1"
+			on:click={parent.onClose}
+		>
+			&times
+		</button>
 
-{#if addressPointData.status === 100 || addressPointData.status === 400 || addressPointData.status === 404}
-	<AddressUnchallenged bind:addressPointData />
-{/if}
-{#if addressPointData.status === 403}
-	<AddressIneligible bind:addressPointData />
-{/if}
-{#if addressPointData.status === 401}
-	<AddressEligible bind:addressPointData />
-{/if}
-{#if addressPointData.status >= 500}
-	<AddressSystemError />
-{/if}
-{#if addressPointData.status === 200}
-	<AddressValid bind:addressPointData />
-{/if}
+		{#if addressPointData.status === 100 || addressPointData.status === 400 || addressPointData.status === 404}
+			<AddressUnchallenged bind:addressPointData />
+		{/if}
+		{#if addressPointData.status === 403}
+			<AddressIneligible bind:addressPointData />
+		{/if}
+		{#if addressPointData.status === 401}
+			<AddressEligible bind:addressPointData />
+		{/if}
+		{#if addressPointData.status >= 500}
+			<AddressSystemError />
+		{/if}
+		{#if addressPointData.status === 200}
+			<AddressValid bind:addressPointData />
+		{/if}
+	</div>
+</div>

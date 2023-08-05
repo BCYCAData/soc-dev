@@ -2,8 +2,9 @@
 	import type { AddressPointData } from '$lib/types';
 
 	export let addressPointData: AddressPointData;
+	console.log(addressPointData.searchaddress);
 
-	$: searchaddress = `${addressPointData.searchaddress[0]} ${addressPointData.searchaddress[1]} ${addressPointData.searchaddress[3]}`;
+	$: searchaddress = `${addressPointData.searchaddress[0]} ${addressPointData.searchaddress[1]} ${addressPointData.searchaddress[2]}`;
 </script>
 
 <div class="bg-red-100 mt-1 rounded-lg">
