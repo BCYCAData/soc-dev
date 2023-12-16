@@ -4,7 +4,7 @@ export const actions: Actions = {
 	changeEmail: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const { error } = await supabase.auth.updateUser({

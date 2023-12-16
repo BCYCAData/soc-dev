@@ -9,7 +9,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const body = getFormData(
@@ -30,10 +30,10 @@ export const actions: Actions = {
 				'error profileMyCommunityEvents update user_bcyca_profile: ',
 				myCommunityEventsError
 			);
-			throw error(
-				400,
-				`error profileMyCommunityEvents update user_bcyca_profile:  ${myCommunityEventsError.message}`
-			);
+			error(
+            				400,
+            				`error profileMyCommunityEvents update user_bcyca_profile:  ${myCommunityEventsError.message}`
+            			);
 		}
 		if (myCommunityEvents.length === 1) {
 			userBCYCAData = myCommunityEvents[0];
@@ -41,6 +41,6 @@ export const actions: Actions = {
 				userBCYCAData
 			};
 		}
-		throw error(400, 'Could not POST Profile MyCommunity Events data');
+		error(400, 'Could not POST Profile MyCommunity Events data');
 	}
 };

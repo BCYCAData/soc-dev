@@ -15,7 +15,7 @@ export const POST: RequestHandler = async (event) => {
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
 		!session?.user?.app_metadata?.roles?.includes('admin')
 	) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 	const data = await request.json();
 	const emails = data.map((item: { email: string }) => item.email).join(', ');

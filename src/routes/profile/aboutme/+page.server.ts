@@ -9,7 +9,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const body = getFormData(
@@ -34,7 +34,7 @@ export const actions: Actions = {
 			.select();
 		if (userProfileDataError) {
 			console.log('error profileAboutMe update user_profile: ', userProfileDataError);
-			throw error(400, `error profileAboutMe update user_profile: ${userProfileDataError.message}`);
+			error(400, `error profileAboutMe update user_profile: ${userProfileDataError.message}`);
 		}
 		if (userProfile.length === 1) {
 			userProfileData = userProfile[0];
@@ -42,6 +42,6 @@ export const actions: Actions = {
 				userProfileData
 			};
 		}
-		throw error(400, 'Could not POST Profile About Me data');
+		error(400, 'Could not POST Profile About Me data');
 	}
 };

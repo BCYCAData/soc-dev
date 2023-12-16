@@ -30,13 +30,13 @@ export const POST: RequestHandler = async (event) => {
 	if (errorSignUp) {
 		console.log("SignUpError: ", errorSignUp)
 		if (errorSignUp instanceof AuthApiError && errorSignUp.status === 400) {
-			throw error(400, 'Invalid email or password.');
+			error(400, 'Invalid email or password.');
 		} else {
-			throw error(
-				500,
-				`Server error. Please try again later.
+			error(
+            				500,
+            				`Server error. Please try again later.
 			${errorSignUp.message}`
-			);
+            			);
 		}
 	}
 	if (signUpData?.user?.identities?.length === 0) {

@@ -9,7 +9,7 @@ let mapLayers: MapDataJSON = { jsonLayers: [] };
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 
 	const { data: propertyGeometryData, error: propertyGeometryError } = await supabase.rpc(
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	);
 	if (propertyGeometryError) {
 		console.log('error get Property Geometry:', propertyGeometryError);
-		throw error(400, propertyGeometryError);
+		error(400, propertyGeometryError);
 	}
 
 	if (propertyGeometryData.length > 0) {
@@ -38,5 +38,5 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		];
 		return { mapLayers, mapCentre, minZoom };
 	}
-	throw error(400, 'Something went wrong with getting the property geometry');
+	error(400, 'Something went wrong with getting the property geometry');
 };

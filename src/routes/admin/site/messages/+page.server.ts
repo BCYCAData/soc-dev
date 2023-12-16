@@ -17,24 +17,24 @@ interface ListsData {
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	} else if (
 		!(
 			session?.user?.app_metadata.roles.includes('tester') |
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw error(401, { message: 'Unauthorized' });
+		error(401, { message: 'Unauthorized' });
 	}
 	const { data: listsData, error: getStreetsError } = await supabase.rpc('get_lists', {});
 	if (getStreetsError) {
 		console.log('error errorStreets:', getStreetsError);
-		throw error(400, getStreetsError.message);
+		error(400, getStreetsError.message);
 	}
 	const { data: appMessages, error: appMessagesError } = await supabase.rpc('get_app_messages', {});
 	if (appMessagesError) {
 		console.log('error appMessagesError:', appMessagesError);
-		throw error(400, appMessagesError.message);
+		error(400, appMessagesError.message);
 	}
 	return {
 		session,
@@ -52,7 +52,7 @@ export const actions: Actions = {
 	sendToAllUsers: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const message = formData.get('inputMessage')?.toString();
@@ -67,17 +67,17 @@ export const actions: Actions = {
 		);
 		if (sendToAllUsersError) {
 			console.log('error sendToAllUsers: ', sendToAllUsersError);
-			throw error(400, `error sendToAllUsers: ${sendToAllUsersError.message}`);
+			error(400, `error sendToAllUsers: ${sendToAllUsersError.message}`);
 		}
 		if (sendToAllUsersResponse === 200) {
 			return {};
 		}
-		throw error(400, 'Could not send message to all Users');
+		error(400, 'Could not send message to all Users');
 	},
 	sendToEmailList: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const message = formData.get('inputMessage')?.toString();
@@ -94,18 +94,18 @@ export const actions: Actions = {
 			);
 			if (sendToAllUsersError) {
 				console.log('error sendToAllUsers: ', sendToAllUsersError);
-				throw error(400, `error sendToAllUsers: ${sendToAllUsersError.message}`);
+				error(400, `error sendToAllUsers: ${sendToAllUsersError.message}`);
 			}
 			if (sendToAllUsersResponse === 200) {
 				return {};
 			}
 		}
-		throw error(400, `Could not send message to Users with ids: (${targetData}).`);
+		error(400, `Could not send message to Users with ids: (${targetData}).`);
 	},
 	revokeMessages: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const id_input = formData.get('revoke_ids')?.toString();
@@ -117,12 +117,12 @@ export const actions: Actions = {
 			);
 			if (revokeAppMessagesError) {
 				console.log('error sendToAllUsers: ', revokeAppMessagesError);
-				throw error(400, `error sendToAllUsers: ${revokeAppMessagesError.message}`);
+				error(400, `error sendToAllUsers: ${revokeAppMessagesError.message}`);
 			}
 			if (revokeAppMessagesResponse === 200) {
 				return {};
 			}
 		}
-		throw error(400, `Could not revoke messages with ids: (${id_input}).`);
+		error(400, `Could not revoke messages with ids: (${id_input}).`);
 	}
 };

@@ -19,7 +19,7 @@ let propertyProfileData: PropertyProfileData;
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 	const { error: agentError, data: agent } = await supabase
 		.from('agent')
@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		.eq('property_id', session.user.app_metadata.property_id);
 	if (agentError) {
 		console.log('error get Agent for User:', agentError);
-		throw error(400, agentError.message);
+		error(400, agentError.message);
 	}
 	if (agent?.length === 1) {
 		agentData = agent[0];
@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		.eq('user_id', session?.user.id);
 	if (userPostalAddressError) {
 		console.log('error get Postal Address Data for User:', userPostalAddressError);
-		throw error(400, userPostalAddressError.message);
+		error(400, userPostalAddressError.message);
 	}
 	if (userPostalAddressSelectData?.length === 1) {
 		userPostalAddressData = userPostalAddressSelectData[0];
@@ -67,7 +67,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		.eq('id', session.user.id);
 	if (userProfileError) {
 		console.log('error Get Profile Data for User:', userProfileError);
-		throw error(400, userProfileError.message);
+		error(400, userProfileError.message);
 	}
 	userProfileData = getUserProfileData[0];
 	const { error: userBCYCAError, data: getUserBCYCAData } = await supabase
@@ -76,7 +76,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		.eq('user_id', session?.user.id);
 	if (userBCYCAError) {
 		console.log('error get BCYCA Data for User:', userBCYCAError);
-		throw error(400, userBCYCAError.message);
+		error(400, userBCYCAError.message);
 	}
 	userBCYCAData = getUserBCYCAData[0];
 	const { error: propertyProfileError, data: getPropertyProfileData } = await supabase
@@ -85,7 +85,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		.in('temp_user.id', [session?.user.id]);
 	if (propertyProfileError) {
 		console.log('error get Property Profile Data for User:', propertyProfileError);
-		throw error(400, propertyProfileError.message);
+		error(400, propertyProfileError.message);
 	}
 	propertyProfileData = getPropertyProfileData[0];
 
@@ -103,7 +103,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
@@ -122,7 +122,7 @@ export const actions: Actions = {
 					agent_phone: bodyObject.agentData.agent_phone
 				});
 				if (agentUpsertError) {
-					throw error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
+					error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
 				}
 			} else {
 				const { error: deleteAgentError } = await supabase
@@ -131,7 +131,7 @@ export const actions: Actions = {
 					.eq('property_id', session.user.app_metadata.property_id);
 				if (deleteAgentError) {
 					console.log('error profileMyPlace delete agent: ', deleteAgentError);
-					throw error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
+					error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
 				}
 			}
 		}
@@ -149,10 +149,10 @@ export const actions: Actions = {
 					'error Survey upsert User Postal Address Data Error: ',
 					userPostalAddressUpsertError
 				);
-				throw error(
-					400,
-					`error Survey upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
-				);
+				error(
+                					400,
+                					`error Survey upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
+                				);
 			}
 		}
 		const { error: userProfileUpdateError } = await supabase
@@ -174,7 +174,7 @@ export const actions: Actions = {
 			})
 			.eq('id', session.user.id);
 		if (userProfileUpdateError) {
-			throw error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
+			error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
 		}
 		const { error: userBCYCAProfileUpdateError } = await supabase
 			.from('user_bcyca_profile')
@@ -189,10 +189,10 @@ export const actions: Actions = {
 			})
 			.eq('user_id', session.user.id);
 		if (userBCYCAProfileUpdateError) {
-			throw error(
-				400,
-				`update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`
-			);
+			error(
+            				400,
+            				`update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`
+            			);
 		}
 		const { error: propertyProfileUpdateError } = await supabase
 			.from('property_profile')
@@ -229,8 +229,8 @@ export const actions: Actions = {
 			})
 			.eq('id', pid);
 		if (propertyProfileUpdateError) {
-			throw error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
+			error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
 		}
-		throw redirect(303, '/profile');
+		redirect(303, '/profile');
 	}
 };

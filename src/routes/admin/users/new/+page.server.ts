@@ -10,14 +10,14 @@ import type { Actions } from './$types.js';
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	} else if (
 		!(
 			session?.user?.app_metadata.roles.includes('tester') |
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw error(401, { message: 'Unauthorized' });
+		error(401, { message: 'Unauthorized' });
 	}
 	const { data: usersAdminNewUsersData, error: usersAdminNewUsersError } = await supabase.rpc(
 		'get_user_vetting_data',
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
 	if (usersAdminNewUsersError) {
 		console.log('error get New Users Admin Data:', usersAdminNewUsersError);
-		throw error(400, usersAdminNewUsersError.message);
+		error(400, usersAdminNewUsersError.message);
 	}
 	return {
 		session,
@@ -43,7 +43,7 @@ export const actions: Actions = {
 				session?.user?.app_metadata.roles.includes('admin')
 			)
 		) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		// const transporter = nodemailer.createTransport({
 		// 	service: 'hotmail',

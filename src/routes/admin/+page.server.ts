@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 	return {
 		session,
@@ -21,14 +21,14 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		} else if (
 			!(
 				session?.user?.app_metadata.roles.includes('tester') |
 				session?.user?.app_metadata.roles.includes('admin')
 			)
 		) {
-			throw error(401, { message: 'Unauthorized' });
+			error(401, { message: 'Unauthorized' });
 		}
 
 		const formData = await request.formData();

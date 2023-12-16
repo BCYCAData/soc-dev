@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 	if (errorAll) {
 		console.log('error get Addresspoints:', errorAll);
-		throw error(400, errorAll);
+		error(400, errorAll);
 	}
 	if (allPoints.length > 0) {
 		const { data: registeredPoints, error: errorRegistered } = await supabase.rpc(
@@ -17,11 +17,11 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 		);
 		if (errorRegistered) {
 			console.log('error get registered Addresspoints:', errorRegistered);
-			throw error(400, errorRegistered);
+			error(400, errorRegistered);
 		}
 		if (registeredPoints.length > 0) {
 			return { allPoints, registeredPoints };
 		}
 	}
-	throw error(400, 'Something went wrong with the map');
+	error(400, 'Something went wrong with the map');
 };

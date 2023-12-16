@@ -5,7 +5,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
@@ -28,7 +28,7 @@ export const actions: Actions = {
 					.select();
 				if (agentUpsertError) {
 					console.log('error profileMyPlace upsertAgent:', agentUpsertError);
-					throw error(400, `error profileMyPlace upsertAgent ${agentUpsertError.message}`);
+					error(400, `error profileMyPlace upsertAgent ${agentUpsertError.message}`);
 				}
 			} else {
 				const { error: deleteAgentError } = await supabase
@@ -37,7 +37,7 @@ export const actions: Actions = {
 					.eq('property_id', session.user.app_metadata.property_id);
 				if (deleteAgentError) {
 					console.log('error profileMyPlace delete agent: ', deleteAgentError);
-					throw error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
+					error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
 				}
 			}
 		}
@@ -61,10 +61,10 @@ export const actions: Actions = {
 			.select();
 		if (profileMyPlaceDataError) {
 			console.log('error profileMyPlace update property_profile: ', profileMyPlaceDataError);
-			throw error(
-				400,
-				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
-			);
+			error(
+            				400,
+            				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
+            			);
 		}
 	}
 };

@@ -9,7 +9,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
@@ -31,10 +31,10 @@ export const actions: Actions = {
 			.select();
 		if (myPlaceResourcesError) {
 			console.log('error profileMyPlaceResources update property_profile: ', myPlaceResourcesError);
-			throw error(
-				400,
-				`error profileMyPlaceResources update property_profile: ${myPlaceResourcesError.message}`
-			);
+			error(
+            				400,
+            				`error profileMyPlaceResources update property_profile: ${myPlaceResourcesError.message}`
+            			);
 		}
 		if (myPlaceResources.length === 1) {
 			propertyProfileData = myPlaceResources[0];
@@ -42,6 +42,6 @@ export const actions: Actions = {
 				propertyProfileData
 			};
 		}
-		throw error(400, 'Could not POST Profile MyPlace Resources data');
+		error(400, 'Could not POST Profile MyPlace Resources data');
 	}
 };

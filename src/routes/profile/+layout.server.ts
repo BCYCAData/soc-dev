@@ -19,7 +19,7 @@ let profileMessagesData: ProfileMessageData;
 export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 	const { data: profileMessages, error: profileMessagesError } = await supabase.rpc(
 		'get_profile_messages_for_user',
@@ -29,7 +29,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 	);
 	if (profileMessagesError) {
 		console.log('error get Profile Messages for User:', profileMessagesError);
-		throw error(400, profileMessagesError.message);
+		error(400, profileMessagesError.message);
 	}
 	profileMessagesData = profileMessages;
 	const { error: agentError, data: agent } = await supabase
@@ -38,7 +38,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		.eq('property_id', session.user.app_metadata.property_id);
 	if (agentError) {
 		console.log('error get Agent for User:', agentError);
-		throw error(400, agentError.message);
+		error(400, agentError.message);
 	}
 	if (agent?.length === 1) {
 		agentData = agent[0];
@@ -58,7 +58,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		.eq('user_id', session?.user.id);
 	if (userPostalAddressError) {
 		console.log('error get Postal Address Data for User:', userPostalAddressError);
-		throw error(400, userPostalAddressError.message);
+		error(400, userPostalAddressError.message);
 	}
 	if (userPostalAddressSelectData?.length === 1) {
 		userPostalAddressData = userPostalAddressSelectData[0];
@@ -78,7 +78,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		.eq('id', session.user.id);
 	if (userProfileError) {
 		console.log('error Get Profile Data for User:', userProfileError);
-		throw error(400, userProfileError.message);
+		error(400, userProfileError.message);
 	}
 	userProfileData = getUserProfileData[0];
 	const { error: userBCYCAError, data: getUserBCYCAData } = await supabase
@@ -87,7 +87,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		.eq('user_id', session?.user.id);
 	if (userBCYCAError) {
 		console.log('error get BCYCA Data for User:', userBCYCAError);
-		throw error(400, userBCYCAError.message);
+		error(400, userBCYCAError.message);
 	}
 	userBCYCAData = getUserBCYCAData[0];
 	const { error: propertyProfileError, data: getPropertyProfileData } = await supabase
@@ -96,7 +96,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		.in('temp_user.id', [session?.user.id]);
 	if (propertyProfileError) {
 		console.log('error get Property Profile Data for User:', propertyProfileError);
-		throw error(400, propertyProfileError.message);
+		error(400, propertyProfileError.message);
 	}
 	propertyProfileData = getPropertyProfileData[0];
 	return {

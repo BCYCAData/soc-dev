@@ -44,10 +44,10 @@ export const GET = async (event) => {
                 default:
                     break;
             }
-            throw redirect(303, `/${next.slice(1)}`);
+            redirect(303, `/${next.slice(1)}`);
         }
     }
 
     // return the user to an error page with some instructions
-    throw redirect(303, '/auth/auth-code-error');
+    redirect(303, '/auth/auth-code-error');
 };

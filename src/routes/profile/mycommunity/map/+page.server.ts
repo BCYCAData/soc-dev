@@ -8,14 +8,14 @@ let mapData: MapDataJSON = { jsonLayers: [] };
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	}
 	const { data: allPoints, error: errorAll } = await supabase.rpc(
 		'get_address_point_extract'
 	);
 	if (errorAll) {
 		console.log('error get Addresspoints:', errorAll);
-		throw error(400, errorAll);
+		error(400, errorAll);
 	}
 
 	if (allPoints.length > 0) {
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		);
 		if (errorRegistered) {
 			console.log('error get registered Addresspoints:', errorRegistered);
-			throw error(400, errorRegistered);
+			error(400, errorRegistered);
 		}
 		if (registeredPoints.length > 0) {
 			mapData.jsonLayers[1] = registeredPoints;
@@ -34,5 +34,5 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	if (mapData.jsonLayers.length > 0) {
 		return { mapData };
 	}
-	throw error(400, 'Something went wrong with the map');
+	error(400, 'Something went wrong with the map');
 };

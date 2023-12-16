@@ -18,6 +18,6 @@ export const actions: Actions = {
 				message: message
 			});
 		}
-		throw redirect(303, '/profile');
+		redirect(303, '/profile');
 	}
 };

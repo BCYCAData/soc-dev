@@ -9,7 +9,7 @@ export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session?.user) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const body = getFormData(
@@ -27,10 +27,10 @@ export const actions: Actions = {
 			.select();
 		if (myCommunityUserProfileError) {
 			console.log('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
-			throw error(
-				400,
-				`error profileMyCommunity update user_profile: ${myCommunityUserProfileError.message}`
-			);
+			error(
+            				400,
+            				`error profileMyCommunity update user_profile: ${myCommunityUserProfileError.message}`
+            			);
 		}
 		if (userProfile.length === 1) {
 			userProfileData = userProfile[0];
@@ -38,6 +38,6 @@ export const actions: Actions = {
 				userProfileData
 			};
 		}
-		throw error(400, 'Could not POST Profile MyCommunity data');
+		error(400, 'Could not POST Profile MyCommunity data');
 	}
 };

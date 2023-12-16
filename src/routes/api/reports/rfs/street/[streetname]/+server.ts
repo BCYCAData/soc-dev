@@ -15,12 +15,12 @@ export const GET: RequestHandler = async (event) => {
 		!session?.user?.app_metadata?.roles?.includes('admin')
 	) {
 		// the user is not authorised
-		throw error(401, { message: 'Unauthorised' });
+		error(401, { message: 'Unauthorised' });
 	}
 	if (!params.streetname) {
-		throw error(404, {
-			message: 'Street not found'
-		});
+		error(404, {
+        			message: 'Street not found'
+        		});
 	}
 	const { data: propertyData, error: propertyError } = await supabase.rpc(
 		'get_rfs_property_data_for_street',

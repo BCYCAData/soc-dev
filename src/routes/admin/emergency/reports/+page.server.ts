@@ -4,19 +4,19 @@ import type { PageServerLoad } from './$types.js';
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session) {
-		throw redirect(307, '/auth/signin');
+		redirect(307, '/auth/signin');
 	} else if (
 		!(
 			session?.user?.app_metadata.roles.includes('tester') |
 			session?.user?.app_metadata.roles.includes('admin')
 		)
 	) {
-		throw error(401, { message: 'Unauthorized' });
+		error(401, { message: 'Unauthorized' });
 	}
 	const { data: streetsData, error: getStreetsError } = await supabase.rpc('get_street_list', {});
 	if (getStreetsError) {
 		console.log('error errorStreets:', getStreetsError);
-		throw error(400, getStreetsError.message);
+		error(400, getStreetsError.message);
 	}
 	if (streetsData.length > 0) {
 		const streetList = streetsData.map(({ streets }) => streets);
@@ -25,21 +25,21 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 			streetList
 		};
 	}
-	throw error(400, 'Something went wrong retrieving the Street List data');
+	error(400, 'Something went wrong retrieving the Street List data');
 };
 
 export const actions: Actions = {
 	generateStreetReport: async ({ request, locals: { supabase, getSession } }) => {
 		const session = await getSession();
 		if (!session) {
-			throw redirect(307, '/auth/signin');
+			redirect(307, '/auth/signin');
 		} else if (
 			!(
 				session?.user?.app_metadata.roles.includes('tester') |
 				session?.user?.app_metadata.roles.includes('admin')
 			)
 		) {
-			throw error(401, { message: 'Unauthorized' });
+			error(401, { message: 'Unauthorized' });
 		}
 		const formData = await request.formData();
 		const street = formData.get('property_address_street') as string;
@@ -51,7 +51,7 @@ export const actions: Actions = {
 		);
 		if (streetError) {
 			console.log('get error streetData:', streetError);
-			throw error(400, streetError.message);
+			error(400, streetError.message);
 		}
 		if (streetData.length > 0) {
 			const propertyList = streetData.map(({ property_id }) => property_id);
@@ -63,13 +63,13 @@ export const actions: Actions = {
 			);
 			if (residentError) {
 				console.log('get error residentData:', residentError);
-				throw error(400, residentError.message);
+				error(400, residentError.message);
 			}
 			return {
 				selectedStreet: street,
 				streetData: streetData
 			};
 		}
-		throw error(400, 'Could not POST Street data');
+		error(400, 'Could not POST Street data');
 	}
 };
