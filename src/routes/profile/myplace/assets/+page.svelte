@@ -1,32 +1,30 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { yesNoOptions, yesNoMaybeOptions } from '$lib/profileOptions';
-	import { modalStore } from '@skeletonlabs/skeleton';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
-	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
 
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: SaveProfilePrompt
-		};
-		const d: ModalSettings = {
+	const modalStore = getModalStore();
+
+	function triggerSaveProfilePrompt(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
+			component: 'modalSaveProfilePrompt'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerCustomModal();
+			triggerSaveProfilePrompt();
 		}
 	});
 

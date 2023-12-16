@@ -2,32 +2,30 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { formatMobile, formatPhone } from '$lib/utils';
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
-	import { modalStore } from '@skeletonlabs/skeleton';
-	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
 	function setUpperCase(e: Event) {
 		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
 	}
 
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: SaveProfilePrompt
-		};
-		const d: ModalSettings = {
+	const modalStore = getModalStore();
+
+	function triggerSaveProfilePrompt(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
+			component: 'modalSaveProfilePrompt'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerCustomModal();
+			triggerSaveProfilePrompt();
 		}
 	});
 

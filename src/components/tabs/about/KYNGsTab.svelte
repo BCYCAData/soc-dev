@@ -23,12 +23,12 @@
 		<p class="mb-0 mt-1"> -->
 			Relationships are key, they build community strength. We can make a difference by working together.
 		</p>
-		<h2 class="my-2 text-center text-orange-600">
+		<h2 class="h2 my-2 text-center text-orange-600">
 			Your Neighbours will always be your first responders!
 		</h2>
 	</div>
 	<div class="main-list pl-4">
-		<h3>WHAT ARE KYNGS? - Know Your Neighbour Groups</h3>
+		<h3 class="h3">WHAT ARE KYNGS? - Know Your Neighbour Groups</h3>
 		<p class="my-2">
 			KYNGs are smaller groups within the community and live on adjoining roads. These groups focus
 			on connections and strengthening two-way communication lines. In an emergency, messages to
@@ -45,7 +45,7 @@
 		</p>
 		<!-- </div>
 	<div class="main-list pl-4"> -->
-		<h3>KYNG Co-ordinator Role</h3>
+		<h3 class="h3">KYNG Co-ordinator Role</h3>
 		<ol class="list-disc list-inside mt-0">
 			<li class="m-1">Connect with the people in your area.</li>
 			<li class="m-1">

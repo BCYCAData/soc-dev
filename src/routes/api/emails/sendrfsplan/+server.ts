@@ -8,7 +8,8 @@ const template = BCYCABaseTemplate;
 
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ locals: { getSession }, request }) => {
+export const POST: RequestHandler = async (event) => {
+	const { locals: { getSession }, request } = event
 	const session = await getSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&

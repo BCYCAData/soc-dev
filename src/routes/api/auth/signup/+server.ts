@@ -3,7 +3,8 @@ import { AuthApiError } from '@supabase/supabase-js';
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ locals, request }) => {
+export const POST: RequestHandler = async (event) => {
+	const { locals, request } = event
 	const formData = await request.formData();
 	const user_metadata: AddressPointData = JSON.parse(
 		formData.get('addresspointdatajson')?.toString() || ''
@@ -27,6 +28,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		}
 	});
 	if (errorSignUp) {
+		console.log("SignUpError: ", errorSignUp)
 		if (errorSignUp instanceof AuthApiError && errorSignUp.status === 400) {
 			throw error(400, 'Invalid email or password.');
 		} else {

@@ -1,7 +1,5 @@
 <script lang="ts">
 	import AddressValid from '$components/form/address-challenge/AddressValid.svelte';
-	import AddressEligible from '$components/form/address-challenge/AddressEligible.svelte';
-	import AddressIneligible from '$components/form/address-challenge/AddressIneligible.svelte';
 	import AddressUnchallenged from '$components/form/address-challenge/AddressUnchallenged.svelte';
 	import AddressSystemError from '$components/form/address-challenge/AddressSystemError.svelte';
 
@@ -33,14 +31,8 @@
 			&times
 		</button>
 
-		{#if addressPointData.status === 100 || addressPointData.status === 400 || addressPointData.status === 404}
+		{#if addressPointData.status === 100 || addressPointData.status === 404}
 			<AddressUnchallenged bind:addressPointData />
-		{/if}
-		{#if addressPointData.status === 403}
-			<AddressIneligible bind:addressPointData />
-		{/if}
-		{#if addressPointData.status === 401}
-			<AddressEligible bind:addressPointData />
 		{/if}
 		{#if addressPointData.status >= 500}
 			<AddressSystemError />

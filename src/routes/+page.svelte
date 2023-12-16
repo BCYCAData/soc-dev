@@ -1,18 +1,15 @@
 <script lang="ts">
-	import AddressChallenge from '$components/form/address-challenge/AddressChallenge.svelte';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
+	const modalStore = getModalStore();
 
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: AddressChallenge
-		};
-		const d: ModalSettings = {
+	function triggerAddressChallenge(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent
+			component: 'modalAddressChallenge'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 </script>
 
@@ -42,7 +39,7 @@
 		</p>
 		<button
 			class="cursor-pointer max-w-80 no-underline hover:underline mt-1 p-2 font-semibold text-stone-100 bg-orange-500 rounded-xl"
-			on:click={() => triggerCustomModal()}
+			on:click={() => triggerAddressChallenge()}
 		>
 			Tap here to find out if you qualify
 		</button>

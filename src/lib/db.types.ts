@@ -3,48 +3,87 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
   public: {
     Tables: {
-      address_point_extract_wgs84: {
+      addresspoint_extract: {
         Row: {
           address: string | null
+          addresspointoid: number | null
           addresspointtype: string | null
+          addresssitename: string | null
           addressstringoid: number | null
-          containment: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
           enddate: string | null
           geom: unknown | null
+          gnafprimarysiteid: number | null
           gurasid: number | null
           housenumber: string | null
+          id: number
           lastupdate: string | null
+          lastupdatestring: string | null
+          officialaddressstringoid: number | null
           principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+          startdate: string | null
         }
         Insert: {
           address?: string | null
+          addresspointoid?: number | null
           addresspointtype?: string | null
+          addresssitename?: string | null
           addressstringoid?: number | null
-          containment?: string | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          contributoralignment?: string | null
+          contributororigin?: string | null
+          deliverypointid?: number | null
           enddate?: string | null
           geom?: unknown | null
+          gnafprimarysiteid?: number | null
           gurasid?: number | null
           housenumber?: string | null
+          id?: number
           lastupdate?: string | null
+          lastupdatestring?: string | null
+          officialaddressstringoid?: number | null
           principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          roadside?: string | null
+          startdate?: string | null
         }
         Update: {
           address?: string | null
+          addresspointoid?: number | null
           addresspointtype?: string | null
+          addresssitename?: string | null
           addressstringoid?: number | null
-          containment?: string | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          contributoralignment?: string | null
+          contributororigin?: string | null
+          deliverypointid?: number | null
           enddate?: string | null
           geom?: unknown | null
+          gnafprimarysiteid?: number | null
           gurasid?: number | null
           housenumber?: string | null
+          id?: number
           lastupdate?: string | null
+          lastupdatestring?: string | null
+          officialaddressstringoid?: number | null
           principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          roadside?: string | null
+          startdate?: string | null
         }
         Relationships: []
       }
@@ -77,6 +116,7 @@ export interface Database {
           {
             foreignKeyName: "agent_property_id_fkey"
             columns: ["property_id"]
+            isOneToOne: true
             referencedRelation: "property_profile"
             referencedColumns: ["id"]
           }
@@ -139,21 +179,492 @@ export interface Database {
         }
         Relationships: []
       }
-      kyng_areas: {
+      community_areas: {
         Row: {
+          added_to_project: string | null
+          community: string | null
+          coordinator: string | null
+          email: string | null
           geom: unknown | null
-          kyng: string | null
-          pkuid: number
+          id: string
+          last_updated: string | null
+          phone: string | null
         }
         Insert: {
+          added_to_project?: string | null
+          community?: string | null
+          coordinator?: string | null
+          email?: string | null
           geom?: unknown | null
-          kyng?: string | null
-          pkuid: number
+          id?: string
+          last_updated?: string | null
+          phone?: string | null
         }
         Update: {
+          added_to_project?: string | null
+          community?: string | null
+          coordinator?: string | null
+          email?: string | null
           geom?: unknown | null
+          id?: string
+          last_updated?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      custom_address: {
+        Row: {
+          address: string
+          addresspoint_geom: unknown | null
+          community: string | null
+          createdby: string | null
+          enddate: string | null
+          id: number
+          kyng: string | null
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          suburb: string | null
+        }
+        Insert: {
+          address: string
+          addresspoint_geom?: unknown | null
+          community?: string | null
+          createdby?: string | null
+          enddate?: string | null
+          id?: number
           kyng?: string | null
-          pkuid?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          startdate?: string | null
+          suburb?: string | null
+        }
+        Update: {
+          address?: string
+          addresspoint_geom?: unknown | null
+          community?: string | null
+          createdby?: string | null
+          enddate?: string | null
+          id?: number
+          kyng?: string | null
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          startdate?: string | null
+          suburb?: string | null
+        }
+        Relationships: []
+      }
+      kyng_areas: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+        }
+        Insert: {
+          added_to_project?: string | null
+          coordinator?: string | null
+          geom?: unknown | null
+          id?: string
+          kyng?: string | null
+          last_updated?: string | null
+          phone?: string | null
+        }
+        Update: {
+          added_to_project?: string | null
+          coordinator?: string | null
+          geom?: unknown | null
+          id?: string
+          kyng?: string | null
+          last_updated?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      project_addresspoints: {
+        Row: {
+          address: string | null
+          addressconfidence: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringoid: number | null
+          addressstringtype: string | null
+          addresstype: string | null
+          buildingname: string | null
+          containment: string | null
+          contributoralignment: string | null
+          contributorid: string | null
+          contributororigin: string | null
+          council: string | null
+          deliverypointid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          locationdescription: string | null
+          officialaddressstringoid: number | null
+          postcode: string | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          propid: number | null
+          refresh_date: string | null
+          roadname: string | null
+          roadside: string | null
+          roadsuffix: string | null
+          roadtype: string | null
+          routeoid: number | null
+          ruraladdress: string | null
+          sppropid: number | null
+          startdate: string | null
+          state: string | null
+          suburbname: string | null
+        }
+        Insert: {
+          address?: string | null
+          addressconfidence?: string | null
+          addresspointoid?: number | null
+          addresspointtype?: string | null
+          addresssitename?: string | null
+          addressstringoid?: number | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          buildingname?: string | null
+          containment?: string | null
+          contributoralignment?: string | null
+          contributorid?: string | null
+          contributororigin?: string | null
+          council?: string | null
+          deliverypointid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gnafprimarysiteid?: number | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          locationdescription?: string | null
+          officialaddressstringoid?: number | null
+          postcode?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propid?: number | null
+          refresh_date?: string | null
+          roadname?: string | null
+          roadside?: string | null
+          roadsuffix?: string | null
+          roadtype?: string | null
+          routeoid?: number | null
+          ruraladdress?: string | null
+          sppropid?: number | null
+          startdate?: string | null
+          state?: string | null
+          suburbname?: string | null
+        }
+        Update: {
+          address?: string | null
+          addressconfidence?: string | null
+          addresspointoid?: number | null
+          addresspointtype?: string | null
+          addresssitename?: string | null
+          addressstringoid?: number | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          buildingname?: string | null
+          containment?: string | null
+          contributoralignment?: string | null
+          contributorid?: string | null
+          contributororigin?: string | null
+          council?: string | null
+          deliverypointid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gnafprimarysiteid?: number | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          locationdescription?: string | null
+          officialaddressstringoid?: number | null
+          postcode?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propid?: number | null
+          refresh_date?: string | null
+          roadname?: string | null
+          roadside?: string | null
+          roadsuffix?: string | null
+          roadtype?: string | null
+          routeoid?: number | null
+          ruraladdress?: string | null
+          sppropid?: number | null
+          startdate?: string | null
+          state?: string | null
+          suburbname?: string | null
+        }
+        Relationships: []
+      }
+      project_area: {
+        Row: {
+          last_update: string | null
+          ogc_fid: number
+          wkb_geometry: unknown | null
+        }
+        Insert: {
+          last_update?: string | null
+          ogc_fid?: number
+          wkb_geometry?: unknown | null
+        }
+        Update: {
+          last_update?: string | null
+          ogc_fid?: number
+          wkb_geometry?: unknown | null
+        }
+        Relationships: []
+      }
+      project_properties: {
+        Row: {
+          address: string | null
+          addressstringoid: number | null
+          dissolveparcelcount: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          propertyoid: number | null
+          propertytype: string | null
+          propid: number | null
+          refresh_date: string | null
+          startdate: string | null
+          superlot: string | null
+          valnetlotcount: number | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Insert: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          refresh_date?: string | null
+          startdate?: string | null
+          superlot?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
+        }
+        Update: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          refresh_date?: string | null
+          startdate?: string | null
+          superlot?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
+        }
+        Relationships: []
+      }
+      project_proways: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          refresh_date: string | null
+          roadside: string | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Insert: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          refresh_date?: string | null
+          roadside?: string | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Update: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          refresh_date?: string | null
+          roadside?: string | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Relationships: []
+      }
+      project_waypoints: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addressstringoid: number | null
+          contributorid: string | null
+          contributororigin: string | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          refresh_date: string | null
+          roadnameextentoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Insert: {
+          address?: string | null
+          addresspointoid?: number | null
+          addressstringoid?: number | null
+          contributorid?: string | null
+          contributororigin?: string | null
+          derivedby?: string | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          refresh_date?: string | null
+          roadnameextentoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Update: {
+          address?: string | null
+          addresspointoid?: number | null
+          addressstringoid?: number | null
+          contributorid?: string | null
+          contributororigin?: string | null
+          derivedby?: string | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          refresh_date?: string | null
+          roadnameextentoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Relationships: []
+      }
+      property_extract: {
+        Row: {
+          address: string | null
+          addressstringoid: number | null
+          dissolveparcelcount: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          propertyoid: number | null
+          propertytype: string | null
+          propid: number | null
+          startdate: string | null
+          valnetlotcount: number | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Insert: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          startdate?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
+        }
+        Update: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          startdate?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
         }
         Relationships: []
       }
@@ -189,6 +700,7 @@ export interface Database {
           {
             foreignKeyName: "property_geometry_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "property_profile"
             referencedColumns: ["id"]
           }
@@ -308,6 +820,45 @@ export interface Database {
         }
         Relationships: []
       }
+      proway_extract: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Insert: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Update: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Relationships: []
+      }
       street_list: {
         Row: {
           json_agg: Json | null
@@ -317,6 +868,27 @@ export interface Database {
         }
         Update: {
           json_agg?: Json | null
+        }
+        Relationships: []
+      }
+      street_type_aliases: {
+        Row: {
+          abbreviation: string
+          created_at: string | null
+          id: number
+          street_type: string
+        }
+        Insert: {
+          abbreviation: string
+          created_at?: string | null
+          id?: number
+          street_type: string
+        }
+        Update: {
+          abbreviation?: string
+          created_at?: string | null
+          id?: number
+          street_type?: string
         }
         Relationships: []
       }
@@ -491,24 +1063,6 @@ export interface Database {
         }
         Relationships: []
       }
-      test: {
-        Row: {
-          created_at: string | null
-          id: number
-          willitwork: number[]
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          willitwork?: number[]
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          willitwork?: number[]
-        }
-        Relationships: []
-      }
       user_bcyca_profile: {
         Row: {
           community_meeting_choices: number[] | null
@@ -550,6 +1104,7 @@ export interface Database {
           {
             foreignKeyName: "user_bcyca_profile_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: true
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           }
@@ -584,6 +1139,7 @@ export interface Database {
           {
             foreignKeyName: "user_postal_address_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: true
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           }
@@ -648,6 +1204,7 @@ export interface Database {
           {
             foreignKeyName: "user_profile_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -673,171 +1230,2361 @@ export interface Database {
           {
             foreignKeyName: "user_property_profile_join_property_id_fkey"
             columns: ["property_id"]
+            isOneToOne: false
             referencedRelation: "property_profile"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_property_profile_join_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           }
         ]
       }
-    }
-    Views: {
-      view_survey_as_user_profile: {
+      waypoint_extract: {
         Row: {
-          communityMeeting: string | null
-          communityMeetingChoices: Json | null
-          communityWorkshopChoices: Json | null
-          email_address: string | null
-          explosiveHazards: Json | null
-          fireFightingExperience: number | null
-          fireFightingResources: Json | null
-          fireHazardReduction: Json | null
-          haveStortz: string | null
-          informationSheetChoices: Json | null
-          invited: string | null
-          landAdjacentHazard: string | null
-          liveStockPresent: boolean | null
-          liveStockSafeArea: string | null
-          mobile: string | null
-          mobileReception: number | null
-          numberBirds: string | null
-          numberCats: string | null
-          numberDogs: string | null
-          numberOtherPets: string | null
-          otherComments: string | null
-          otherCommunityWorkshop: string | null
-          otherHazards: string | null
-          otherInformationSheet: string | null
-          otherSiteHazards: string | null
-          phone: string | null
-          planToLeaveBeforeFire: number | null
-          planToLeaveBeforeFlood: number | null
-          property_address: string | null
-          residencyProfile: number | null
-          residents0_18: number | null
-          residents19_50: number | null
-          residents51_70: number | null
-          residents71_: number | null
-          rfsSurvivalPlan: string | null
-          shareLiveStockSafeArea: string | null
-          signPosted: boolean | null
-          staticWaterAvailable: Json | null
-          stayInTouchChoices: Json | null
-          stortzSize: number | null
-          suburb: string | null
-          survey_id: number | null
-          timestamp: string | null
-          truckAccess: number | null
-          truckAccessOther: string | null
-          vulnerableResidents: string | null
-          willRunCommunityWorkshops: string | null
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
         }
         Insert: {
-          communityMeeting?: string | null
-          communityMeetingChoices?: Json | null
-          communityWorkshopChoices?: Json | null
-          email_address?: string | null
-          explosiveHazards?: Json | null
-          fireFightingExperience?: number | null
-          fireFightingResources?: Json | null
-          fireHazardReduction?: Json | null
-          haveStortz?: string | null
-          informationSheetChoices?: Json | null
-          invited?: string | null
-          landAdjacentHazard?: string | null
-          liveStockPresent?: boolean | null
-          liveStockSafeArea?: string | null
-          mobile?: string | null
-          mobileReception?: number | null
-          numberBirds?: string | null
-          numberCats?: string | null
-          numberDogs?: string | null
-          numberOtherPets?: string | null
-          otherComments?: string | null
-          otherCommunityWorkshop?: string | null
-          otherHazards?: string | null
-          otherInformationSheet?: string | null
-          otherSiteHazards?: string | null
-          phone?: string | null
-          planToLeaveBeforeFire?: number | null
-          planToLeaveBeforeFlood?: number | null
-          property_address?: string | null
-          residencyProfile?: number | null
-          residents0_18?: number | null
-          residents19_50?: number | null
-          residents51_70?: number | null
-          residents71_?: number | null
-          rfsSurvivalPlan?: string | null
-          shareLiveStockSafeArea?: string | null
-          signPosted?: boolean | null
-          staticWaterAvailable?: Json | null
-          stayInTouchChoices?: Json | null
-          stortzSize?: number | null
-          suburb?: string | null
-          survey_id?: number | null
-          timestamp?: string | null
-          truckAccess?: number | null
-          truckAccessOther?: string | null
-          vulnerableResidents?: string | null
-          willRunCommunityWorkshops?: string | null
+          addresspointoid?: number | null
+          addressstringoid?: number | null
+          derivedby?: string | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
         }
         Update: {
-          communityMeeting?: string | null
-          communityMeetingChoices?: Json | null
-          communityWorkshopChoices?: Json | null
-          email_address?: string | null
-          explosiveHazards?: Json | null
-          fireFightingExperience?: number | null
-          fireFightingResources?: Json | null
-          fireHazardReduction?: Json | null
-          haveStortz?: string | null
-          informationSheetChoices?: Json | null
-          invited?: string | null
-          landAdjacentHazard?: string | null
-          liveStockPresent?: boolean | null
-          liveStockSafeArea?: string | null
-          mobile?: string | null
-          mobileReception?: number | null
-          numberBirds?: string | null
-          numberCats?: string | null
-          numberDogs?: string | null
-          numberOtherPets?: string | null
-          otherComments?: string | null
-          otherCommunityWorkshop?: string | null
-          otherHazards?: string | null
-          otherInformationSheet?: string | null
-          otherSiteHazards?: string | null
+          addresspointoid?: number | null
+          addressstringoid?: number | null
+          derivedby?: string | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      Abbots_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Abbots_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Abbots_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Abbots_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Abbots_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Beaully_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Beaully_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Beaully_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Beaully_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Beaully_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Dam_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Dam_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Dam_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Dam_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Dam_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_North_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_North_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_North_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_North_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_North_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_South_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_South_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_South_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_South_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bootawa_Road_South_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_East_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_East_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_East_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_East_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_East_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_South_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_South_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_South_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_South_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bucketts_Way_South_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bull_Hill_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Bull_Hill_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Bull_Hill_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Bull_Hill_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Bull_Hill_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_South_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Careys_Road_South_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_South_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Careys_Road_South_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_South_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_Wills_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Careys_Road_Wills_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_Wills_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Careys_Road_Wills_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Careys_Road_Wills_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Clarkes_Road_Bunyarra_Place_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Clarkes_Road_Bunyarra_Place_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Clarkes_Road_Bunyarra_Place_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Clarkes_Road_Bunyarra_Place_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Clarkes_Road_Bunyarra_Place_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_addresspoint_vi: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Marylands_Close_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Marylands_Close_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Marylands_Close_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Marylands_Close_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Marylands_Close_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Sunshine_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Sunshine_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Sunshine_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Sunshine_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Hillville_Road_Sunshine_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Pine_Tree_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Pine_Tree_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Pine_Tree_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Pine_Tree_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Pine_Tree_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Somerset_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Somerset_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Somerset_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Somerset_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Kimbriki_Road_Somerset_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      kyng_areas_info_view: {
+        Row: {
+          added_to_project: string | null
+          address_count: number | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          kyng_ha: number | null
+          last_updated: string | null
+          phone: string | null
+        }
+        Insert: {
+          added_to_project?: string | null
+          address_count?: never
+          coordinator?: string | null
+          geom?: unknown | null
+          id?: string | null
+          kyng?: string | null
+          kyng_ha?: never
+          last_updated?: string | null
           phone?: string | null
-          planToLeaveBeforeFire?: number | null
-          planToLeaveBeforeFlood?: number | null
-          property_address?: string | null
-          residencyProfile?: number | null
-          residents0_18?: number | null
-          residents19_50?: number | null
-          residents51_70?: number | null
-          residents71_?: number | null
-          rfsSurvivalPlan?: string | null
-          shareLiveStockSafeArea?: string | null
-          signPosted?: boolean | null
-          staticWaterAvailable?: Json | null
-          stayInTouchChoices?: Json | null
-          stortzSize?: number | null
-          suburb?: string | null
-          survey_id?: number | null
-          timestamp?: string | null
-          truckAccess?: number | null
-          truckAccessOther?: string | null
-          vulnerableResidents?: string | null
-          willRunCommunityWorkshops?: string | null
+        }
+        Update: {
+          added_to_project?: string | null
+          address_count?: never
+          coordinator?: string | null
+          geom?: unknown | null
+          id?: string | null
+          kyng?: string | null
+          kyng_ha?: never
+          last_updated?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      Mondrook_Lane_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Mondrook_Lane_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Mondrook_Lane_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Mondrook_Lane_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Mondrook_Lane_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Moores_Road_West_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Moores_Road_West_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Moores_Road_West_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Moores_Road_West_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Moores_Road_West_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Mulligans_Lane_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Mulligans_Lane_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Mulligans_Lane_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Mulligans_Lane_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Mulligans_Lane_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Red_Gully_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Red_Gully_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Red_Gully_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Red_Gully_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Red_Gully_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Saxbys_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Saxbys_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Saxbys_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Saxbys_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Saxbys_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Stony_Creek_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Stony_Creek_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Stony_Creek_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Stony_Creek_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Stony_Creek_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      The_Bight_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      The_Bight_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      The_Bight_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      The_Bight_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      The_Bight_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Alpine_Drive_Ridge_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Alpine_Drive_Ridge_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Alpine_Drive_Ridge_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Alpine_Drive_Ridge_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Alpine_Drive_Ridge_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Bishops_Lane_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Bishops_Lane_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Bishops_Lane_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Bishops_Lane_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Tinonee_Road_Bishops_Lane_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Urray_Road_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      Urray_Road_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      Urray_Road_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      Urray_Road_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      Urray_Road_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      View_Place_addresspoint_view: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          housenumber: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+        }
+        Relationships: []
+      }
+      View_Place_area_view: {
+        Row: {
+          added_to_project: string | null
+          coordinator: string | null
+          geom: unknown | null
+          id: string | null
+          kyng: string | null
+          last_updated: string | null
+          phone: string | null
+          pid: number | null
+        }
+        Relationships: []
+      }
+      View_Place_property_view: {
+        Row: {
+          address: string | null
+          address_count: number | null
+          alternate_addresses: Json | null
+          geom: unknown | null
+          gurasid: number | null
+          pid: number | null
+          principaladdresstype: string | null
+          secondary_addresses: Json | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Relationships: []
+      }
+      View_Place_proway_view: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Relationships: []
+      }
+      View_Place_waypoint_view: {
+        Row: {
+          addresspointoid: number | null
+          addressstringoid: number | null
+          derivedby: string | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number | null
+          lastupdate: string | null
+          pid: number | null
+          principaladdresssiteoid: number | null
+          startdate: string | null
+          waypointoid: number | null
         }
         Relationships: []
       }
     }
     Functions: {
+      check_address_match: {
+        Args: {
+          delimited_string: string
+        }
+        Returns: {
+          id: number
+          address: string
+          community: string
+          principaladdresssiteoid: number
+          startdate: string
+          enddate: string
+          lastupdate: string
+          createdby: string
+        }[]
+      }
+      create_kyngs_views: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       delete_claim_for_email_array: {
         Args: {
           emails: string[]
@@ -852,11 +3599,70 @@ export interface Database {
         }
         Returns: string
       }
-      extract_addresspoints_wgs1984: {
+      dev_process_downloads: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
-      get_address_point_extract_wgs84: {
+      dev_process_kyng_areas: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          principaladdresssiteoid: number
+          addressstringoid: number
+          gurasid: number
+          addresspointtype: string
+          containment: string
+          urbanity: string
+          lastupdate: string
+          enddate: string
+          address: string
+          housenumber: string
+          geom: unknown
+        }[]
+      }
+      extract_addresspoints: {
+        Args: {
+          rings_geometry: string
+        }
+        Returns: undefined
+      }
+      extract_properties: {
+        Args: {
+          rings_geometry: string
+        }
+        Returns: undefined
+      }
+      extract_proways: {
+        Args: {
+          rings_geometry: string
+        }
+        Returns: undefined
+      }
+      extract_waypoints: {
+        Args: {
+          rings_geometry: string
+        }
+        Returns: undefined
+      }
+      find_functions_with_string: {
+        Args: {
+          search_string: string
+        }
+        Returns: string[]
+      }
+      first_function: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      generate_custom_geojson_features: {
+        Args: {
+          input_id: string
+          addresspointfeaturestyle: string
+          waypointfeaturestyle: string
+          propertyfeaturestyle: string
+        }
+        Returns: Json
+      }
+      get_address_point_extract: {
         Args: Record<PropertyKey, never>
         Returns: {
           addresspointtype: string
@@ -867,20 +3673,16 @@ export interface Database {
         Args: {
           address_text: string
           given_suburb: string
-          in_srid_value: number
           out_srid_value: number
         }
         Returns: {
           return_status: number
           valid_address: string
+          valid_suburb: string
           principaladdresssiteoid: number
-          gurasid: number
           addresspoint_geom: unknown
           community: string
-          message: string
-          housenumber: string
-          suburb: string
-          postcode: string
+          kyng: string
         }[]
       }
       get_admin_messages_for_user: {
@@ -903,6 +3705,10 @@ export interface Database {
           created_at: string
           revoked: string
         }[]
+      }
+      get_geometry_info_html: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       get_lists: {
         Args: Record<PropertyKey, never>
@@ -1132,13 +3938,17 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      process_kyng_areas: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       revoke_app_messages: {
         Args: {
           revoked_ids: string[]
         }
         Returns: number
       }
-      saveextractedaddresspoints: {
+      save_first_function: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -1178,6 +3988,12 @@ export interface Database {
         }
         Returns: undefined
       }
+      validate_street_address: {
+        Args: {
+          input_address: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       message_context: "users" | "admins" | "both"
@@ -1187,3 +4003,83 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { AppBar, drawerStore } from '@skeletonlabs/skeleton';
+	import { AppBar, getDrawerStore } from '@skeletonlabs/skeleton';
+
+	const drawerStore = getDrawerStore();
 
 	function drawerOpen(): void {
 		drawerStore.open({});

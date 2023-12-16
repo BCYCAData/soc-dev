@@ -1,20 +1,17 @@
 <script lang="ts">
-	import AddressChallenge from '$components/form/address-challenge/AddressChallenge.svelte';
 	import AuthErrorMessage from '$components/form/AuthErrorMessage.svelte';
 
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
-	import { modalStore } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: AddressChallenge
-		};
-		const d: ModalSettings = {
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
+	const modalStore = getModalStore();
+
+	function triggerAddressChallenge(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
+			component: 'modalAddressChallenge'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 
 	let email: string;
@@ -71,7 +68,7 @@
 		Not registered?
 		<button
 			class="text-center py-1 px-5 rounded-full bg-orange-500 text-stone-100 hover:bg-orange-700 focus:outline-none my-1"
-			on:click={() => triggerCustomModal()}
+			on:click={() => triggerAddressChallenge()}
 		>
 			Create an Account
 		</button>

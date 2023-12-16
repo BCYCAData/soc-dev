@@ -1,8 +1,35 @@
-/*place global styles here */
+/*Write your global styles here, in PostCSS syntax */
+@font-face {
+	/* Reference name */
+	font-family: 'Inter';
+	/* For multiple files use commas, ex: url(), url(), ... */
+	src: url('/fonts/Inter-VariableFont_slnt,wght.ttf');
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Poppins';
+	/* For multiple files use commas, ex: url(), url(), ... */
+	src: url('/fonts/Poppins-Regular.ttf', '/fonts/Poppins-Bold.ttf', '/fonts/Poppins-BoldItalic.ttf', '/fonts/Poppins-Italic.ttf','/fonts/Poppins-Medium.ttf');
+}
+@font-face {
+	/* Reference name */
+	font-family: 'Roboto';
+	/* For multiple files use commas, ex: url(), url(), ... */
+	src: url('/fonts/Roboto-Regular.ttf', '/fonts/Roboto-Bold.ttf', '/fonts/Roboto-BoldItalic.ttf', '/fonts/Roboto-Italic.ttf','/fonts/Roboto-Medium.ttf');
+}
+@font-face {
+	/* Reference name */
+	font-family: 'NotoSans';
+	/* For multiple files use commas, ex: url(), url(), ... */
+	src: url('/fonts/NotoSans-Regular.ttf', '/fonts/NotoSans-Bold.ttf', '/fonts/NotoSans-BoldItalic.ttf', '/fonts/NotoSans-Italic.ttf','/fonts/NotoSans-Medium.ttf');
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
 html,
 body {
 	@apply h-full overflow-hidden;
-	/* @apply h-full; */
 }
 .leaflet-control-layers {
 	background-color: --color-primary-100 !important;

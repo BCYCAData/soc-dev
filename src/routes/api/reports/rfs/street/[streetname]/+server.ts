@@ -3,11 +3,12 @@ import generateRfsStreetReport from '$lib/server/pdf/generateRfsStreetReport';
 
 import type { RequestHandler } from './$types';
 
-export const GET: RequestHandler = async ({
-	params,
-	setHeaders,
-	locals: { supabase, getSession }
-}) => {
+export const GET: RequestHandler = async (event) => {
+	const {
+		params,
+		setHeaders,
+		locals: { supabase, getSession }
+	} = event
 	const session = await getSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&

@@ -3,30 +3,27 @@
 	import { communityMeetingOptions } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
-	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
+	import { getModalStore } from '@skeletonlabs/skeleton';
 
-	import { modalStore } from '@skeletonlabs/skeleton';
-	import type { ModalComponent, ModalSettings } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
 	let unsaved = false;
 
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerCustomModal();
+			triggerSaveProfilePrompt();
 		}
 	});
 
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: SaveProfilePrompt
-		};
-		const d: ModalSettings = {
+	const modalStore = getModalStore();
+
+	function triggerSaveProfilePrompt(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
+			component: 'modalSaveProfilePrompt'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 
 	export let data;

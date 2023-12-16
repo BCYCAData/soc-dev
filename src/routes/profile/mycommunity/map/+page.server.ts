@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		throw redirect(307, '/auth/signin');
 	}
 	const { data: allPoints, error: errorAll } = await supabase.rpc(
-		'get_address_point_extract_wgs84'
+		'get_address_point_extract'
 	);
 	if (errorAll) {
 		console.log('error get Addresspoints:', errorAll);

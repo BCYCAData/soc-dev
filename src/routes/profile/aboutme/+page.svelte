@@ -8,23 +8,18 @@
 		fireFightingExperienceOptions,
 		stayGoOptions
 	} from '$lib/profileOptions';
-	import { modalStore } from '@skeletonlabs/skeleton';
-	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
 	export let data;
+	const modalStore = getModalStore();
 
-	import type { ModalSettings, ModalComponent } from '@skeletonlabs/skeleton';
-
-	function triggerCustomModal(): void {
-		const modalComponent: ModalComponent = {
-			ref: SaveProfilePrompt
-		};
-		const d: ModalSettings = {
+	function triggerSaveProfilePrompt(): void {
+		const modal: ModalSettings = {
 			type: 'component',
-			component: modalComponent,
-			modalClasses: '!overflow-y-auto !max-h-full !relative'
+			component: 'modalSaveProfilePrompt'
 		};
-		modalStore.trigger(d);
+		modalStore.trigger(modal);
 	}
 
 	function setTitleCase(e: Event) {
@@ -36,7 +31,7 @@
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerCustomModal();
+			triggerSaveProfilePrompt();
 		}
 	});
 

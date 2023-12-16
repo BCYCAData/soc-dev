@@ -7,8 +7,14 @@
 	import SignUpSuccess from '$components/form/auth/SignUpSuccess.svelte';
 
 	const url = new URLSearchParams($page.url.hash.substring(1));
-	const redirectType = url.get('type');
+	const redirectType = $page.url.searchParams.get('redirectType');
 	const message = url.get('message');
+
+	console.log('redirectType', redirectType);
+	console.log('url', $page.url);
+	console.log('data', $page.data);
+	console.log('params', $page.params);
+	console.log('page', JSON.stringify($page));
 
 	let haveSurvey = false;
 </script>
@@ -22,7 +28,6 @@
 {:else if redirectType === 'signup'}
 	<SignUpSuccess {redirectType} {haveSurvey} />
 {:else if redirectType === 'recovery'}
-	<!-- <PasswordEntry {redirectType} /> -->
 	<div>Password Recovery</div>
 {:else if message && redirectType === null}
 	<section class="flex flex-col items-center text-center mt-5 sm:mt-1 mx-auto h-full max-w-3xl">

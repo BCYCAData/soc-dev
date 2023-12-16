@@ -46,7 +46,7 @@
 		</ol>
 
 		<p class="my-3 font-semibold text-center">
-			This map shows in the <span class="text-orange-600">properties</span>
+			This map shows the <span class="text-orange-600">properties</span>
 			that have participated
 		</p>
 	</div>

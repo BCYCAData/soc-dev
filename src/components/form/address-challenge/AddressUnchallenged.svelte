@@ -10,16 +10,29 @@
 	let suburb = '';
 
 	let canGo = false;
-	$: canGo = checkAddressString(streetaddress);
+	let canGoStreet = false;
+	let canGoSuburb = false;
+	$: canGoStreet = checkStreetAddressString(streetaddress);
+	$: canGoSuburb = checkSuburbString(suburb);
+	$: canGo = canGoStreet && canGoSuburb;
 	$: searchAddress = `${streetaddress.toUpperCase()} ${suburb.toUpperCase()}`;
+
+	const streetPattern =
+		'/^[0-9]+[a-zA-Z]?s+([a-zA-Z]+s+)*(Alley|Ally|Arcade|Arc|Avenue|Ave|Boulevard|Bvd|Bypass|Bypa|Circuit|Cct|Close|Cl|Corner|Crn|Court|Ct|Crescent|Cres|Cul-de-sac|Cds|Drive|Dr|Esplanade|Esp|Green|Grn|Grove|Gr|Highway|Hwy|Junction|Jnc|Lane|Lane|Link|Link|Mews|Mews|Parade|Pde|Place|Pl|Ridge|Rdge|Road|Rd|Square|Sq|Street|St|Terrace|Tce|ALLEY|ALLY|ARCADE|ARC|AVENUE|AVE|BOULEVARD|BVD|BYPASS|BYPA|CIRCUIT|CCT|CLOSE|CL|CORNER|CRN|COURT|CT|CRESCENT|CRES|CUL-DE-SAC|CDS|DRIVE|DR|ESPLANADE|ESP|GREEN|GRN|GROVE|GR|HIGHWAY|HWY|JUNCTION|JNC|LANE|LANE|LINK|LINK|MEWS|MEWS|PARADE|PDE|PLACE|PL|RIDGE|RDGE|ROAD|RD|SQUARE|SQ|STREET|ST|TERRACE|TCE)$/';
 
 	function setUpperCase(e: Event) {
 		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
 	}
 
-	function checkAddressString(streetaddress: string) {
-		let streetRegEx = /^(\d+).*/;
-		return streetRegEx.test(String(streetaddress).toLowerCase());
+	function checkStreetAddressString(streetaddress: string) {
+		let streetRegEx =
+			/^\d+[a-zA-Z]?\s*\w+(\s+\w+)*\s+\w+(\s+\w+)*\s+(ALLEY|ALLY|ARCADE|ARC|AVENUE|AVE|BOULEVARD|BVD|BYPASS|BYPA|CIRCUIT|CCT|CLOSE|CL|CORNER|CRN|COURT|CT|CRESCENT|CRES|CUL-DE-SAC|CDS|DRIVE|DR|ESPLANADE|ESP|GREEN|GRN|GROVE|GR|HIGHWAY|HWY|JUNCTION|JNC|LANE|LANE|LINK|LINK|MEWS|MEWS|PARADE|PDE|PLACE|PL|RIDGE|RDGE|ROAD|RD|SQUARE|SQ|STREET|ST|TERRACE|TCE|WAY|WY)$/;
+		return streetRegEx.test(String(streetaddress).toUpperCase());
+	}
+
+	function checkSuburbString(suburb: string) {
+		let suburbRegex = /^(?:(?!NSW|NEW\sSOUTH\sWALES)[A-Z\s])+$/;
+		return suburbRegex.test(String(suburb).toUpperCase());
 	}
 
 	async function submitForm(e: Event) {
@@ -134,9 +147,14 @@
 					style="text-transform:uppercase"
 					bind:value={suburb}
 				/>
-				{#if !canGo && streetaddress.length > 0}
+				{#if !canGoStreet && streetaddress.length > 0}
 					<div class="bg-red-100 rounded-lg m-1 p-2 text-sm text-red-700" role="alert">
 						The address must have a number.
+					</div>
+				{/if}
+				{#if !canGoSuburb && suburb.length > 0}
+					<div class="bg-red-100 rounded-lg m-1 p-2 text-sm text-red-700" role="alert">
+						The suburb must not have State or Postcode.
 					</div>
 				{/if}
 				<button
