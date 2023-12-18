@@ -4,21 +4,20 @@
 	import AddressSystemError from '$components/form/address-challenge/AddressSystemError.svelte';
 
 	import type { AddressPointData } from '$lib/types';
+	import AddressIneligible from './AddressIneligible.svelte';
 
 	export let parent: any;
 
 	let addressPointData: AddressPointData = {
 		status: 100, // unchallenged
-		validaddress: [],
+		apistatus: 100, // unchallenged
 		searchaddress: [],
-		communityname: 'None identified',
-		principaladdresssiteoid: null,
+		validaddress: '',
+		validsuburb: '',
+		principaladdresssiteoid: -1,
 		addresspoint: null,
-		message: 'Could not check the address.',
-		returnstatus: 100,
-		apistatus: 100,
-		apistatustext: '',
-		error: null
+		community: '',
+		kyng: ''
 	};
 </script>
 
@@ -31,14 +30,14 @@
 			&times
 		</button>
 
-		{#if addressPointData.status === 100 || addressPointData.status === 404}
+		{#if (addressPointData.status === 100 && addressPointData.apistatus === 100) || (addressPointData.status === 403 && addressPointData.apistatus === 200)}
 			<AddressUnchallenged bind:addressPointData />
-		{/if}
-		{#if addressPointData.status >= 500}
-			<AddressSystemError />
-		{/if}
-		{#if addressPointData.status === 200}
+		{:else if addressPointData.status === 200 && addressPointData.apistatus === 200}
 			<AddressValid bind:addressPointData />
+		{:else if addressPointData.status === 404 && addressPointData.apistatus === 200}
+			<AddressIneligible bind:addressPointData />
+		{:else}
+			<AddressSystemError />
 		{/if}
 	</div>
 </div>

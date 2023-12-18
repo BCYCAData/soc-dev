@@ -1,4 +1,4 @@
-import type { Database } from './db.types';
+import type { Database } from './db.types.ts';
 
 //---------Tables-----------------
 export type AgentData = Database['public']['Tables']['agent']['Row'];

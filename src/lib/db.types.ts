@@ -3674,13 +3674,14 @@ export interface Database {
           address_text: string
           given_suburb: string
           out_srid_value: number
+          api_key: string
         }
         Returns: {
-          return_status: number
-          valid_address: string
-          valid_suburb: string
+          status: number
+          validaddress: string
+          validsuburb: string
           principaladdresssiteoid: number
-          addresspoint_geom: unknown
+          addresspoint: unknown
           community: string
           kyng: string
         }[]
@@ -3941,6 +3942,12 @@ export interface Database {
       process_kyng_areas: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      read_secret: {
+        Args: {
+          secret_name: string
+        }
+        Returns: string
       }
       revoke_app_messages: {
         Args: {

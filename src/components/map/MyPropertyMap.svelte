@@ -8,6 +8,10 @@
 		waypointFeatureStyle
 	} from '$lib/map/map';
 
+	import 'leaflet/dist/leaflet.css';
+	import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+	import '$components/map/leaflet/geoman/custom-geoman.css';
+
 	import type { GeoJSONObject, MapDataJSON } from '$lib/types';
 
 	import type { Map } from 'leaflet';
@@ -88,8 +92,8 @@
 	alt="blue circle"
 /> -->
 
-<style>
+<!-- <style lang="css">
 	@import 'leaflet/dist/leaflet.css';
 	@import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 	@import '$components/map/leaflet/geoman/custom-geoman.css';
-</style>
+</style> -->

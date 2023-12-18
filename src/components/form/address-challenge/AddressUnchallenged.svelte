@@ -15,10 +15,6 @@
 	$: canGoStreet = checkStreetAddressString(streetaddress);
 	$: canGoSuburb = checkSuburbString(suburb);
 	$: canGo = canGoStreet && canGoSuburb;
-	$: searchAddress = `${streetaddress.toUpperCase()} ${suburb.toUpperCase()}`;
-
-	const streetPattern =
-		'/^[0-9]+[a-zA-Z]?s+([a-zA-Z]+s+)*(Alley|Ally|Arcade|Arc|Avenue|Ave|Boulevard|Bvd|Bypass|Bypa|Circuit|Cct|Close|Cl|Corner|Crn|Court|Ct|Crescent|Cres|Cul-de-sac|Cds|Drive|Dr|Esplanade|Esp|Green|Grn|Grove|Gr|Highway|Hwy|Junction|Jnc|Lane|Lane|Link|Link|Mews|Mews|Parade|Pde|Place|Pl|Ridge|Rdge|Road|Rd|Square|Sq|Street|St|Terrace|Tce|ALLEY|ALLY|ARCADE|ARC|AVENUE|AVE|BOULEVARD|BVD|BYPASS|BYPA|CIRCUIT|CCT|CLOSE|CL|CORNER|CRN|COURT|CT|CRESCENT|CRES|CUL-DE-SAC|CDS|DRIVE|DR|ESPLANADE|ESP|GREEN|GRN|GROVE|GR|HIGHWAY|HWY|JUNCTION|JNC|LANE|LANE|LINK|LINK|MEWS|MEWS|PARADE|PDE|PLACE|PL|RIDGE|RDGE|ROAD|RD|SQUARE|SQ|STREET|ST|TERRACE|TCE)$/';
 
 	function setUpperCase(e: Event) {
 		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
@@ -26,7 +22,7 @@
 
 	function checkStreetAddressString(streetaddress: string) {
 		let streetRegEx =
-			/^\d+[a-zA-Z]?\s*\w+(\s+\w+)*\s+\w+(\s+\w+)*\s+(ALLEY|ALLY|ARCADE|ARC|AVENUE|AVE|BOULEVARD|BVD|BYPASS|BYPA|CIRCUIT|CCT|CLOSE|CL|CORNER|CRN|COURT|CT|CRESCENT|CRES|CUL-DE-SAC|CDS|DRIVE|DR|ESPLANADE|ESP|GREEN|GRN|GROVE|GR|HIGHWAY|HWY|JUNCTION|JNC|LANE|LANE|LINK|LINK|MEWS|MEWS|PARADE|PDE|PLACE|PL|RIDGE|RDGE|ROAD|RD|SQUARE|SQ|STREET|ST|TERRACE|TCE|WAY|WY)$/;
+			/^\d+[a-zA-Z]?\s*\w+(\s+\w+)*\s+\w+(\s+\w+)*\s+(ALLEY|ARCADE|AVENUE|BOULEVARD|BYPASS|CIRCUIT|CLOSE|CORNER|COURT|CRESCENT|CUL-DE-SAC|DRIVE|ESPLANADE|GREEN|GROVE|HIGHWAY|JUNCTION|LANE|LINK|LMEWS|PARADE|PLACE|RIDGE|ROAD|SQUARE|STREET|TERRACE|WAY|)$/;
 		return streetRegEx.test(String(streetaddress).toUpperCase());
 	}
 
@@ -37,66 +33,32 @@
 
 	async function submitForm(e: Event) {
 		loading = !loading;
-		let data: AddressPointData;
-		searchAddress = `${replaceAbbreviations(streetaddress.toUpperCase())} ${suburb.toUpperCase()}`;
-		try {
-			const response = await fetch('/api/data/validateaddress', {
-				method: 'POST',
-				body: JSON.stringify({
-					streetAddress: streetaddress.toUpperCase(),
-					suburb: suburb.toUpperCase()
-				})
-			});
-			data = await response.json();
-			if (data.apistatus === 200) {
-				addressPointData.status = data.status;
-				addressPointData.communityname = data.communityname ? data.communityname : null;
-				addressPointData.principaladdresssiteoid = data.principaladdresssiteoid
-					? data.principaladdresssiteoid
-					: null;
-				addressPointData.validaddress = data.validaddress;
-				addressPointData.searchaddress = data.searchaddress;
-				addressPointData.addresspoint = data.addresspoint ? data.addresspoint : null;
-				addressPointData.message = data.message ? data.message : null;
-				addressPointData.apistatus = data.apistatus ? data.apistatus : null;
-				addressPointData.apistatustext = data.apistatustext ? data.apistatustext : null;
-				addressPointData.error = data.error;
-			}
-		} catch (error) {
-			console.log(error);
-			addressPointData.status = 418;
-			addressPointData.communityname = 'None identified';
-			addressPointData.principaladdresssiteoid = null;
-			addressPointData.validaddress = [];
-			addressPointData.searchaddress = [];
-			addressPointData.addresspoint = null;
-			addressPointData.message = 'Could not check the address.';
-			addressPointData.apistatus = null;
-			addressPointData.apistatustext = null;
-			addressPointData.error = error;
+		const response = await fetch('/api/data/validateaddress', {
+			method: 'POST',
+			body: JSON.stringify({
+				streetAddress: streetaddress.toUpperCase(),
+				suburb: suburb.toUpperCase()
+			})
+		});
+		let data = await response.json();
+		console.log('data', data);
+		if (data.apistatus === 200) {
+			addressPointData.status = data.addressdata[0].status;
+			addressPointData.apistatus = data.apistatus;
+			addressPointData.searchaddress = [
+				`${streetaddress.toUpperCase()}`,
+				`${suburb.toUpperCase()}`
+			];
+			addressPointData.validaddress = data.addressdata[0].validaddress;
+			addressPointData.validsuburb = data.addressdata[0].validsuburb;
+			addressPointData.principaladdresssiteoid = data.addressdata[0].principaladdresssiteoid;
+			addressPointData.addresspoint = data.addressdata[0].addresspoint;
+			addressPointData.community = data.addressdata[0].community;
+			addressPointData.kyng = data.addressdata[0].kyng;
+		} else {
+			addressPointData.apistatus = data.apistatus;
 		}
 		loading = !loading;
-	}
-	const abbreviations: object = {
-		RD: 'ROAD',
-		L: 'LANE',
-		LN: 'LANE',
-		LNE: 'LANE',
-		AVE: 'AVENUE',
-		PL: 'PLACE',
-		CL: 'CLOSE',
-		ST: 'STREET',
-		WY: 'WAY'
-	};
-
-	function replaceAbbreviations(streetAddress: string) {
-		streetAddress = streetAddress.trim().replace('  ', ' ').replace(/\.$/, '');
-		const address = streetAddress.split(' ');
-		const streetType = address[address.length - 1];
-		if (abbreviations.hasOwnProperty(streetType)) {
-			address[address.length - 1] = abbreviations[streetType];
-		}
-		return address.join(' ');
 	}
 </script>
 
@@ -104,14 +66,14 @@
 	<Spinner />
 {/if}
 
-{#if addressPointData.status === 400 || addressPointData.status === 404}
+{#if addressPointData.status === 403}
 	<div class="bg-red-100 rounded-lg">
 		<h2 class="unstyled text-center mt-5">This address could not be found.</h2>
 		<p class="m-1 mt-2">
 			Please check that your Street Address and Suburb are correctly structured and try again.
 		</p>
-		<p class="m-1">Each address must have a number</p>
-		<p class="m-1">Abbreviations are not allowed.</p>
+		<p class="m-1">Each address must have a number and abbreviations are not allowed.</p>
+		<p class="m-1">Do not include Postcode or State.</p>
 	</div>
 {/if}
 <div class="flex flex-col items-center max-w-container mx-auto justify-center">
@@ -149,7 +111,7 @@
 				/>
 				{#if !canGoStreet && streetaddress.length > 0}
 					<div class="bg-red-100 rounded-lg m-1 p-2 text-sm text-red-700" role="alert">
-						The address must have a number.
+						The address must have a number and not use abbreviations.
 					</div>
 				{/if}
 				{#if !canGoSuburb && suburb.length > 0}

@@ -20,16 +20,16 @@ export interface TabulatorProps {
 	paginationSizeSelector?: any[];
 	movableColumns?: boolean;
 	paginationCounter?:
-		| 'rows'
-		| 'pages'
-		| ((
-				pageSize: number,
-				currentRow: number,
-				currentPage: number,
-				totalRows: number,
-				totalPages: number
-		  ) => string | HTMLElement)
-		| undefined;
+	| 'rows'
+	| 'pages'
+	| ((
+		pageSize: number,
+		currentRow: number,
+		currentPage: number,
+		totalRows: number,
+		totalPages: number
+	) => string | HTMLElement)
+	| undefined;
 	// add other properties as needed
 }
 
@@ -42,18 +42,27 @@ export type MapDataJSON = {
 	jsonLayers: any;
 };
 
+export type PGPoint = {
+	type: 'Point';
+	crs: {
+		type: 'name';
+		properties: {
+			name: string;
+		};
+	};
+	coordinates: [number, number];
+}
+
 export type AddressPointData = {
+	apistatus: number;
 	status: number;
-	communityname: string | null;
-	validaddress: string[];
 	searchaddress: string[];
-	principaladdresssiteoid?: number | null;
-	addresspoint: any | null;
-	message: string | null;
-	returnstatus: number;
-	apistatus: number | null;
-	apistatustext: string | null;
-	error: PostgrestError | null;
+	validaddress: string;
+	validsuburb: string;
+	principaladdresssiteoid?: number;
+	addresspoint: PGPoint | null;
+	community: string;
+	kyng: string;
 };
 
 export type MapObject = {

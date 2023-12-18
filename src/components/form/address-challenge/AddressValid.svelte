@@ -13,8 +13,8 @@
 
 	let errorMessage = '';
 
-	$: searchaddress = `${addressPointData.searchaddress[0]} ${addressPointData.searchaddress[1]}, ${addressPointData.searchaddress[2]}, ${addressPointData.searchaddress[3]}`;
-	$: validaddress = `${addressPointData.validaddress[0]} ${addressPointData.validaddress[1]}, ${addressPointData.validaddress[2]}, ${addressPointData.validaddress[3]}`;
+	$: searchaddress = `${addressPointData.searchaddress.join(' ')}`;
+	$: validaddress = `${addressPointData.validaddress}`;
 	$: addresspoint = JSON.stringify(addressPointData.addresspoint);
 	$: addresspointdatajson = JSON.stringify(addressPointData);
 	$: addressmetadata = addressPointData.validaddress;
@@ -29,7 +29,7 @@
 	{/if}
 	<p class="text-center">
 		is part of the
-		<span class="font-semibold">{addressPointData.communityname}</span>
+		<span class="font-semibold">{addressPointData.community}</span>
 		community.
 	</p>
 </div>
