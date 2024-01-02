@@ -7,8 +7,11 @@
 >
 	Strengthen OUR Community
 </h1>
-<h1 class="unstyled mx-auto mt-2 text-center">Project Survey</h1>
-<h2 class="unstyled mx-auto mt-2 text-center">Prepare Connect Rebound</h2>
+<h2
+	class="unstyled mx-auto mt-2 text-center font-bold hidden sm:block sm:text-2xl sm:mt-4 text-primary-600"
+>
+	Prepare Connect Rebound
+</h2>
 <div class="text-base text-gray-900 sm:text-xl">
 	<p class="unstyled pt-2">
 		The project evolved from feedback provided by the community following the 2019 bushfires and is

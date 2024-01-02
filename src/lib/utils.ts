@@ -175,3 +175,18 @@ export const getTimestamp = () => {
 
 	return `${year}${formattedMonth}${formattedDay}-${formattedHours}${formattedMinutes}`;
 };
+
+declare const PUBLIC_VITE_SITE_URL: string | undefined;
+declare const PUBLIC_VITE_VERCEL_URL: string | undefined;
+
+export const getURL = () => {
+	let url =
+		PUBLIC_VITE_SITE_URL ?? // Set this to your site URL in production env.
+		PUBLIC_VITE_VERCEL_URL ?? // Automatically set by Vercel.
+		'http://127.0.0.1:5173/'
+	// Make sure to include `https://` when not localhost.
+	url = url.includes('http') ? url : `https://${url}`
+	// Make sure to include a trailing `/`.
+	url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
+	return url
+}

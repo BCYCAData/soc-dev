@@ -29,6 +29,7 @@ export const POST: RequestHandler = async (event) => {
 			}
 		});
 	}
+	console.log('data', data)
 	let result: Response = json({
 		addressdata: data,
 		apistatus: status,

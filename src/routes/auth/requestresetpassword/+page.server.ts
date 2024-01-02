@@ -5,7 +5,7 @@ export const actions: Actions = {
 		const body = Object.fromEntries(await request.formData());
 		const email = body.email.toString();
 		const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-			redirectTo: `${supabaseRedirectBase}/auth/resetpassword`
+			redirectTo: `${supabaseRedirectBase}/auth/redirect/resetpassword`
 		});
 		if (err) {
 			return fail(400, { err, incorrect: true });

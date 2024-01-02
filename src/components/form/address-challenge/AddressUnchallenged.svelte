@@ -41,7 +41,6 @@
 			})
 		});
 		let data = await response.json();
-		console.log('data', data);
 		if (data.apistatus === 200) {
 			addressPointData.status = data.addressdata[0].status;
 			addressPointData.apistatus = data.apistatus;

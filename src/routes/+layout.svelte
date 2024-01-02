@@ -3,8 +3,6 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	// import '../soc_theme.postcss';
-	// import '@skeletonlabs/skeleton/styles/skeleton.css';
 	import '../app.postcss';
 
 	import {

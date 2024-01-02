@@ -1,10 +1,13 @@
-import type { AddressPointData } from '$lib/types';
 import { AuthApiError } from '@supabase/supabase-js';
 import { error } from '@sveltejs/kit';
+import { getURL } from '$lib/utils';
+
 import type { RequestHandler } from './$types';
+import type { AddressPointData } from '$lib/types';
 
 export const POST: RequestHandler = async (event) => {
 	const { locals, request } = event
+	// const url = getURL();
 	const formData = await request.formData();
 	const user_metadata: AddressPointData = JSON.parse(
 		formData.get('addresspointdatajson')?.toString() || ''
@@ -20,7 +23,7 @@ export const POST: RequestHandler = async (event) => {
 				kit: 1,
 				kitdate: null,
 				roles: roles,
-				community: user_metadata.communityname,
+				community: '',
 				searchaddress: user_metadata.searchaddress,
 				validaddress: user_metadata.validaddress
 			},
@@ -33,10 +36,10 @@ export const POST: RequestHandler = async (event) => {
 			error(400, 'Invalid email or password.');
 		} else {
 			error(
-            				500,
-            				`Server error. Please try again later.
+				500,
+				`Server error. Please try again later.
 			${errorSignUp.message}`
-            			);
+			);
 		}
 	}
 	if (signUpData?.user?.identities?.length === 0) {
