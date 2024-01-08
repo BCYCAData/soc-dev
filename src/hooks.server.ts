@@ -13,13 +13,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		cookies: {
 			get: (key) => event.cookies.get(key),
 			set: (key, value, options) => {
-				// Ensure 'path' is defined, providing a default value if necessary
-				const path = options?.path || "/default/path";
-				event.cookies.set(key, value, { ...options, path })
+				event.cookies.set(key, value, { ...options, path: '/' })
 			},
 			remove: (key, options) => {
-				const path = options?.path || "/default/path";
-				event.cookies.delete(key, { ...options, path })
+				event.cookies.delete(key, { ...options, path: '/' })
 			},
 		},
 	})

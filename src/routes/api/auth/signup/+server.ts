@@ -13,11 +13,13 @@ export const POST: RequestHandler = async (event) => {
 		formData.get('addresspointdatajson')?.toString() || ''
 	);
 	const roles: string[] = [];
+	console.log('user_metadata', JSON.stringify(user_metadata),)
 	const { data: signUpData, error: errorSignUp } = await locals.supabase.auth.signUp({
 		email: formData.get('email') as string,
 		password: formData.get('password') as string,
 		options: {
 			data: {
+				// user_metadata: JSON.stringify(user_metadata),
 				principaladdresssiteoid: user_metadata.principaladdresssiteoid,
 				addresspoint: JSON.stringify(user_metadata.addresspoint),
 				kit: 1,
@@ -31,7 +33,7 @@ export const POST: RequestHandler = async (event) => {
 		}
 	});
 	if (errorSignUp) {
-		console.log("SignUpError: ", errorSignUp)
+		console.log("SignUpError: ", errorSignUp.message)
 		if (errorSignUp instanceof AuthApiError && errorSignUp.status === 400) {
 			error(400, 'Invalid email or password.');
 		} else {

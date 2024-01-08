@@ -40,23 +40,26 @@
 				suburb: suburb.toUpperCase()
 			})
 		});
-		let data = await response.json();
-		if (data.apistatus === 200) {
-			addressPointData.status = data.addressdata[0].status;
-			addressPointData.apistatus = data.apistatus;
-			addressPointData.searchaddress = [
-				`${streetaddress.toUpperCase()}`,
-				`${suburb.toUpperCase()}`
-			];
-			addressPointData.validaddress = data.addressdata[0].validaddress;
-			addressPointData.validsuburb = data.addressdata[0].validsuburb;
-			addressPointData.principaladdresssiteoid = data.addressdata[0].principaladdresssiteoid;
-			addressPointData.addresspoint = data.addressdata[0].addresspoint;
-			addressPointData.community = data.addressdata[0].community;
-			addressPointData.kyng = data.addressdata[0].kyng;
+
+		const { apistatus, addressdata } = await response.json();
+
+		if (apistatus === 200) {
+			const [data] = addressdata;
+			console.log('data', data);
+			addressPointData.status = data?.status;
+			addressPointData.apistatus = apistatus;
+			addressPointData.searchaddress = `${streetaddress.toUpperCase()}`;
+			addressPointData.searchsuburb = `${suburb.toUpperCase()}`;
+			addressPointData.validaddress = data?.validaddress;
+			addressPointData.validsuburb = data?.validsuburb;
+			addressPointData.principaladdresssiteoid = data?.principaladdresssiteoid;
+			addressPointData.addresspoint = data?.addresspoint;
+			addressPointData.community = data?.community;
+			addressPointData.kyng = data?.kyng;
 		} else {
-			addressPointData.apistatus = data.apistatus;
+			addressPointData.apistatus = apistatus;
 		}
+
 		loading = !loading;
 	}
 </script>

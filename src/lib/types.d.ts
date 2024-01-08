@@ -56,7 +56,8 @@ export type PGPoint = {
 export type AddressPointData = {
 	apistatus: number;
 	status: number;
-	searchaddress: string[];
+	searchaddress: string;
+	searchsuburb: string;
 	validaddress: string;
 	validsuburb: string;
 	principaladdresssiteoid?: number;

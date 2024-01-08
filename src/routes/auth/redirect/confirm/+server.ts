@@ -9,13 +9,6 @@ export const GET = async (event) => {
     const token_hash = url.searchParams.get('token_hash') as string;
     const type = url.searchParams.get('type') as EmailOtpType;
     const next = url.searchParams.get('next') ?? '/';
-
-
-    console.log('url', url);
-    console.log('token_hash', token_hash);
-    console.log('type', type);
-    console.log('next', next);
-
     if (token_hash && type) {
         const { error } = await supabase.auth.verifyOtp({ token_hash, type });
         if (!error) {
@@ -24,7 +17,7 @@ export const GET = async (event) => {
                     console.log('Is email confirmed')
                     return new Response(undefined, {
                         status: 302,
-                        headers: { Location: '/auth/redirect?redirectType=email&haveSurvey=false' }
+                        headers: { Location: '/auth/redirect/signup/survey/' }
                     });
                     break;
                 case 'signup':

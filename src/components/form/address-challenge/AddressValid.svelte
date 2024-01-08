@@ -13,11 +13,11 @@
 
 	let errorMessage = '';
 
-	$: searchaddress = `${addressPointData.searchaddress.join(' ')}`;
-	$: validaddress = `${addressPointData.validaddress}`;
+	$: searchaddress = `${addressPointData.searchaddress} ${addressPointData.searchsuburb}`;
+	$: validaddress = `${addressPointData.validaddress} ${addressPointData.validsuburb}`;
 	$: addresspoint = JSON.stringify(addressPointData.addresspoint);
 	$: addresspointdatajson = JSON.stringify(addressPointData);
-	$: addressmetadata = addressPointData.validaddress;
+	// $: addressmetadata = addressPointData.validaddress;
 </script>
 
 <div class="bg-green-100 rounded-lg">
@@ -39,26 +39,26 @@
 			Please enter your email address and a password to complete the registration process.
 		</h1>
 		<form action="/api/auth/signup" method="POST">
-			<input
+			<!-- <input
 				id="oid"
 				type="hidden"
 				name="principaladdresssiteoid"
 				bind:value={addressPointData.principaladdresssiteoid}
-			/>
+			/> -->
 			<input
 				id="data"
 				type="hidden"
 				name="addresspointdatajson"
 				bind:value={addresspointdatajson}
 			/>
-
+			<!-- 
 			<input id="addresspoint" type="hidden" name="addresspoint" bind:value={addresspoint} />
 			<input
 				id="addressmetadata"
 				type="hidden"
 				name="addressmetadata"
 				bind:value={addressmetadata}
-			/>
+			/> -->
 			<SetEmail bind:validEmail />
 			<SetPassword bind:validPassword />
 			<button

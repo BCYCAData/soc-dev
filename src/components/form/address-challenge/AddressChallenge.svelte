@@ -11,7 +11,8 @@
 	let addressPointData: AddressPointData = {
 		status: 100, // unchallenged
 		apistatus: 100, // unchallenged
-		searchaddress: [],
+		searchaddress: '',
+		searchsuburb: '',
 		validaddress: '',
 		validsuburb: '',
 		principaladdresssiteoid: -1,
