@@ -14,7 +14,7 @@ node_modules
 notes.md
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+/supabase/seed.sql
 *.sql
-
 # Supabase
 .supabase

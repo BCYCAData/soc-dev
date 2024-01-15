@@ -18,6 +18,7 @@ export const POST: RequestHandler = async (event) => {
 		out_srid_value: 7844,
 		api_key: PUBLIC_GEOSCAPE_ADDRESS_API_KEY
 	});
+	console.log('data', JSON.stringify(data))
 	if (status !== 200) {
 		mailOptions.text = JSON.stringify(error, null, 2);
 		mailOptions.subject = 'RPC get_addresspoint_from_address Error ' + new Date().toLocaleString()
