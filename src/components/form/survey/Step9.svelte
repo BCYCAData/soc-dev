@@ -4,7 +4,7 @@
 
 	import type { UserBCYCAProfileData } from '$lib/custom.types';
 
-	export let userBCYCAData: UserBCYCAProfileData;
+	export let communityBCYCAProfileData: UserBCYCAProfileData;
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -21,7 +21,7 @@
 				class="w-6 h-6 ml-8"
 				name="information_sheet_choices"
 				type="checkbox"
-				bind:group={userBCYCAData.information_sheet_choices}
+				bind:group={communityBCYCAProfileData.information_sheet_choices}
 				{value}
 			/>
 			<label
@@ -40,5 +40,5 @@
 	divClass="p-2 rounded-lg bg-orange-300 sm:text-lg"
 	nameText="other_information_sheet"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={userBCYCAData.other_information_sheet}
+	bind:inputValue={communityBCYCAProfileData.other_information_sheet}
 />

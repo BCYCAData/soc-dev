@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Head, Html } from 'svelte-email';
+	import { Head, Html } from 'svelty-email';
 </script>
 
 <Html lang="en">

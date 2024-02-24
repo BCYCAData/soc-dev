@@ -19,9 +19,6 @@
 	{#each yesNoSendOptions as { value, lable }}
 		<div class="flex items-center">
 			<input
-				on:change={() => {
-					userProfileData.send_rfs_survival_plan = false;
-				}}
 				class="w-6 h-6 ml-8"
 				id="rfs_survival_plan"
 				type="radio"
@@ -34,7 +31,7 @@
 			>
 		</div>
 	{/each}
-	<div class="flex items-center">
+	<!-- <div class="flex items-center">
 		<input
 			on:change={() => {
 				if (userProfileData.send_rfs_survival_plan) {
@@ -61,7 +58,7 @@
 				RFS Survival Plan Details were sent on {userProfileData.sent_rfs_survival_plan}
 			</div>
 		{/if}
-	</div>
+	</div> -->
 </div>
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	What is your level of firefighting experience?

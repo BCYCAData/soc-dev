@@ -20,16 +20,16 @@ export interface TabulatorProps {
 	paginationSizeSelector?: any[];
 	movableColumns?: boolean;
 	paginationCounter?:
-	| 'rows'
-	| 'pages'
-	| ((
-		pageSize: number,
-		currentRow: number,
-		currentPage: number,
-		totalRows: number,
-		totalPages: number
-	) => string | HTMLElement)
-	| undefined;
+		| 'rows'
+		| 'pages'
+		| ((
+				pageSize: number,
+				currentRow: number,
+				currentPage: number,
+				totalRows: number,
+				totalPages: number
+		  ) => string | HTMLElement)
+		| undefined;
 	// add other properties as needed
 }
 
@@ -51,17 +51,16 @@ export type PGPoint = {
 		};
 	};
 	coordinates: [number, number];
-}
+};
 
-export type AddressPointData = {
-	apistatus: number;
+export type APIData = {
 	status: number;
-	searchaddress: string;
-	searchsuburb: string;
-	validaddress: string;
-	validsuburb: string;
-	principaladdresssiteoid?: number;
-	addresspoint: PGPoint | null;
+	searchaddressstreet: string;
+	searchaddresssuburb: string;
+	validaddressstreet: string;
+	validaddresssuburb: string;
+	validaddresspostcode: string;
+	principaladdresssiteoid: number;
 	community: string;
 	kyng: string;
 };

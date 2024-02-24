@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Container, Column, Head, Hr, Html, Img, Preview, Section, Text } from 'svelte-email';
+	import { Container, Column, Head, Hr, Html, Img, Preview, Section, Text } from 'svelty-email';
 
 	enum Heading1Type {
 		events = 'Events Information',

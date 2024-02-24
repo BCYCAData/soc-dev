@@ -1,101 +1,196 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getFormData } from '$lib/utils';
+import {
+	sendPostgRestErrorEmail,
+	type PostgRestErrorEmailSubject
+} from '$lib/server/email/nodemailer';
 
 import type {
 	AgentData,
 	PropertyProfileData,
 	UserBCYCAProfileData,
+	UserTinoneeProfileData,
+	UserMondrookProfileData,
+	UserExternalProfileData,
 	UserPostalAddressData,
-	UserProfileData
+	UserProfileData,
+	PropertyGeometryData
 } from '$lib/custom.types';
+
 import type { PageServerLoad } from './$types';
 
-let agentData: AgentData;
-let userPostalAddressData: UserPostalAddressData;
-let userProfileData: UserProfileData;
-let userBCYCAData: UserBCYCAProfileData;
 let propertyProfileData: PropertyProfileData;
+let propertyAgentData: AgentData;
+let propertyGeometryData: PropertyGeometryData;
+let userProfileData: UserProfileData;
+let userPostalAddressData: UserPostalAddressData;
+let communityBCYCAProfileData: UserBCYCAProfileData;
+let communityTinoneeProfileData: UserTinoneeProfileData;
+let communityMondrookProfileData: UserMondrookProfileData;
+let communityExternalProfileData: UserExternalProfileData;
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		redirect(307, '/auth/signin');
 	}
-	const { error: agentError, data: agent } = await supabase
-		.from('agent')
-		.select('*')
-		.eq('property_id', session.user.app_metadata.property_id);
-	if (agentError) {
-		console.log('error get Agent for User:', agentError);
-		error(400, agentError.message);
-	}
-	if (agent?.length === 1) {
-		agentData = agent[0];
-	} else {
-		agentData = {
-			property_id: session.user.app_metadata.property_id,
-			agent_name: null,
-			agent_mobile: null,
-			agent_phone: null,
-			created_at: null,
-			last_updated: null
-		};
-	}
-	const { error: userPostalAddressError, data: userPostalAddressSelectData } = await supabase
-		.from('user_postal_address')
-		.select('*')
-		.eq('user_id', session?.user.id);
-	if (userPostalAddressError) {
-		console.log('error get Postal Address Data for User:', userPostalAddressError);
-		error(400, userPostalAddressError.message);
-	}
-	if (userPostalAddressSelectData?.length === 1) {
-		userPostalAddressData = userPostalAddressSelectData[0];
-	} else {
-		userPostalAddressData = {
-			user_id: session.user.id,
-			postal_address_street: null,
-			postal_address_suburb: null,
-			postal_address_postcode: null,
-			created_at: null,
-			last_updated: null
-		};
-	}
-	const { error: userProfileError, data: getUserProfileData } = await supabase
-		.from('user_profile')
-		.select('*')
-		.eq('id', session.user.id);
-	if (userProfileError) {
-		console.log('error Get Profile Data for User:', userProfileError);
-		error(400, userProfileError.message);
-	}
-	userProfileData = getUserProfileData[0];
-	const { error: userBCYCAError, data: getUserBCYCAData } = await supabase
-		.from('user_bcyca_profile')
-		.select('*')
-		.eq('user_id', session?.user.id);
-	if (userBCYCAError) {
-		console.log('error get BCYCA Data for User:', userBCYCAError);
-		error(400, userBCYCAError.message);
-	}
-	userBCYCAData = getUserBCYCAData[0];
-	const { error: propertyProfileError, data: getPropertyProfileData } = await supabase
+	const { data, error: getSurveyDataError } = await supabase
 		.from('property_profile')
-		.select('*, user_profile(id), temp_user:user_profile!inner(id)')
-		.in('temp_user.id', [session?.user.id]);
-	if (propertyProfileError) {
-		console.log('error get Property Profile Data for User:', propertyProfileError);
-		error(400, propertyProfileError.message);
+		.select(
+			` * , property_geometry(*), user_profile( *, community_bcyca_profile(*), 
+				community_tinonee_profile(*), community_mondrook_profile(*), community_external_profile(*), 
+				user_postal_address(*) ), property_agent(*)`
+		)
+		.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid)
+		.eq('user_profile.id', session.user.id);
+	if (getSurveyDataError) {
+		console.log('GET data error Survey:', getSurveyDataError);
+		let emailSubject: PostgRestErrorEmailSubject = {
+			type: `GET data error :: Survey.`,
+			user: `User:: ${session.user.id}.`,
+			time: `${new Date().toLocaleDateString()}  ${new Date().toLocaleTimeString()}`
+		};
+		sendPostgRestErrorEmail(emailSubject, getSurveyDataError);
+		error(400, `GET data error Survey:  Error ${getSurveyDataError.message}`);
 	}
-	propertyProfileData = getPropertyProfileData[0];
+	if (data && data.length > 0) {
+		const surveyData = data[0];
+		const {
+			user_profile: [_userProfileData],
+			property_geometry,
+			property_agent,
+			...property_profile
+		} = data[0];
+		const {
+			user_postal_address,
+			community_bcyca_profile,
+			community_tinonee_profile,
+			community_mondrook_profile,
+			community_external_profile,
+			...userProfile
+		} = _userProfileData;
+		propertyProfileData = property_profile;
+		if (property_agent) {
+			propertyAgentData = property_agent;
+		} else {
+			propertyAgentData = {
+				agent_mobile: '',
+				agent_name: '',
+				agent_phone: '',
+				created_at: '',
+				last_updated: '',
+				property_id: ''
+			};
+		}
+		if (property_geometry) {
+			propertyGeometryData = property_geometry;
+		} else {
+			propertyGeometryData = {
+				address_point: null,
+				created_at: '',
+				id: '',
+				last_updated: '',
+				principaladdresssiteoid: -1,
+				property: null,
+				way_point: null
+			};
+		}
+		userProfileData = userProfile;
+		if (user_postal_address) {
+			userPostalAddressData = user_postal_address;
+		} else {
+			userPostalAddressData = {
+				created_at: '',
+				last_updated: '',
+				postal_address_postcode: '',
+				postal_address_street: '',
+				postal_address_suburb: '',
+				user_id: ''
+			};
+		}
+		if (community_bcyca_profile) {
+			communityBCYCAProfileData = community_bcyca_profile;
+		} else {
+			communityBCYCAProfileData = {
+				bcyca_profile_id: '',
+				community_meeting_choices: [],
+				community_workshop_choices: [],
+				created_at: '',
+				information_sheet_choices: [],
+				last_updated: '',
+				other_community_meeting: '',
+				other_community_workshop: '',
+				other_information_sheet: '',
+				stay_in_touch_choices: [],
+				will_run_community_workshops: ''
+			};
+		}
+		if (community_tinonee_profile) {
+			communityTinoneeProfileData = community_tinonee_profile;
+		} else {
+			communityTinoneeProfileData = {
+				tinonee_profile_id: '',
+				community_meeting_choices: [],
+				community_workshop_choices: [],
+				created_at: '',
+				information_sheet_choices: [],
+				last_updated: '',
+				other_community_meeting: '',
+				other_community_workshop: '',
+				other_information_sheet: '',
+				stay_in_touch_choices: [],
+				will_run_community_workshops: ''
+			};
+		}
+		if (community_mondrook_profile) {
+			communityMondrookProfileData = community_mondrook_profile;
+		} else {
+			communityMondrookProfileData = {
+				mondrook_profile_id: '',
+				community_meeting_choices: [],
+				community_workshop_choices: [],
+				created_at: '',
+				information_sheet_choices: [],
+				last_updated: '',
+				other_community_meeting: '',
+				other_community_workshop: '',
+				other_information_sheet: '',
+				stay_in_touch_choices: [],
+				will_run_community_workshops: ''
+			};
+		}
+		if (community_external_profile) {
+			communityExternalProfileData = community_external_profile;
+		} else {
+			communityExternalProfileData = {
+				external_profile_id: '',
+				community_meeting_choices: [],
+				community_workshop_choices: [],
+				created_at: '',
+				information_sheet_choices: [],
+				last_updated: '',
+				other_community_meeting: '',
+				other_community_workshop: '',
+				other_information_sheet: '',
+				stay_in_touch_choices: [],
+				will_run_community_workshops: ''
+			};
+		}
+	} else {
+		// Handle the case when data is null or empty
+		console.error('No data found or an error occurred.');
+	}
 
 	return {
-		session,
-		agentData,
+		propertyProfileData,
+		propertyAgentData,
+		propertyGeometryData,
 		userProfileData,
 		userPostalAddressData,
-		userBCYCAData,
-		propertyProfileData
+		communityBCYCAProfileData,
+		communityTinoneeProfileData,
+		communityMondrookProfileData,
+		communityExternalProfileData
 	};
 };
 
@@ -110,7 +205,9 @@ export const actions: Actions = {
 		const bodyObject = getFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			session.user.app_metadata.principaladdresssiteoid,
+			session.user.app_metadata.community,
+			session.user.app_metadata.kyng
 		);
 		const wasRented = formData.get('property_was_rented') as string;
 		if (bodyObject.propertyProfileData?.property_rented?.toString() != wasRented) {
@@ -150,9 +247,9 @@ export const actions: Actions = {
 					userPostalAddressUpsertError
 				);
 				error(
-                					400,
-                					`error Survey upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
-                				);
+					400,
+					`error Survey upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
+				);
 			}
 		}
 		const { error: userProfileUpdateError } = await supabase
@@ -168,8 +265,6 @@ export const actions: Actions = {
 				plan_to_leave_before_flood: bodyObject.userProfileData.plan_to_leave_before_flood,
 				rfs_survival_plan: bodyObject.userProfileData.rfs_survival_plan,
 				residency_profile: bodyObject.userProfileData.residency_profile,
-				send_rfs_survival_plan: bodyObject.userProfileData.send_rfs_survival_plan,
-				sent_rfs_survival_plan: bodyObject.userProfileData.sent_rfs_survival_plan,
 				stay_in_touch_choices: bodyObject.userProfileData.stay_in_touch_choices
 			})
 			.eq('id', session.user.id);
@@ -189,10 +284,7 @@ export const actions: Actions = {
 			})
 			.eq('user_id', session.user.id);
 		if (userBCYCAProfileUpdateError) {
-			error(
-            				400,
-            				`update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`
-            			);
+			error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
 		}
 		const { error: propertyProfileUpdateError } = await supabase
 			.from('property_profile')

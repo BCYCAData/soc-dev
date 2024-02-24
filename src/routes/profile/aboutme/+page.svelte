@@ -145,7 +145,7 @@
 					>
 				</div>
 			{/each}
-			<div class="flex items-center">
+			<!-- <div class="flex items-center">
 				<input
 					on:change={() => {
 						if (userProfileData.send_rfs_survival_plan) {
@@ -172,7 +172,7 @@
 						RFS Survival Plan Details were sent on {userProfileData.sent_rfs_survival_plan}
 					</div>
 				{/if}
-			</div>
+			</div> -->
 		</div>
 		<h2 class="unstyled text-base font-semibold text-gray-900">
 			What is your level of firefighting experience?

@@ -15,7 +15,9 @@ export const actions: Actions = {
 		const body = getFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			session.user.app_metadata.principaladdresssiteoid,
+			session.user.app_metadata.community,
+			session.user.app_metadata.kyng
 		);
 		const { data: userProfile, error: myCommunityUserProfileError } = await supabase
 			.from('user_profile')
@@ -28,9 +30,9 @@ export const actions: Actions = {
 		if (myCommunityUserProfileError) {
 			console.log('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
 			error(
-            				400,
-            				`error profileMyCommunity update user_profile: ${myCommunityUserProfileError.message}`
-            			);
+				400,
+				`error profileMyCommunity update user_profile: ${myCommunityUserProfileError.message}`
+			);
 		}
 		if (userProfile.length === 1) {
 			userProfileData = userProfile[0];

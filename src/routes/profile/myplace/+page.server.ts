@@ -13,7 +13,9 @@ export const actions: Actions = {
 		const body = getFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			session.user.app_metadata.principaladdresssiteoid,
+			session.user.app_metadata.community,
+			session.user.app_metadata.kyng
 		);
 		if (body.propertyProfileData?.property_rented?.toString() != wasRented) {
 			if (wasRented === 'false') {
@@ -62,9 +64,9 @@ export const actions: Actions = {
 		if (profileMyPlaceDataError) {
 			console.log('error profileMyPlace update property_profile: ', profileMyPlaceDataError);
 			error(
-            				400,
-            				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
-            			);
+				400,
+				`error profileMyPlace update property_profile: ${profileMyPlaceDataError.message}`
+			);
 		}
 	}
 };

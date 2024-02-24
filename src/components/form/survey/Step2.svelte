@@ -12,11 +12,11 @@
 		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
 	}
 
-	export let agentData: AgentData;
+	export let propertyAgentData: AgentData;
 	export let userProfileData: UserProfileData;
 	export let propertyProfileData: PropertyProfileData;
 
-	const propertyWasRented = propertyProfileData.property_rented;
+	const propertyWasRented = propertyProfileData.property_rented || false;
 	let otherAccessChecked = propertyProfileData.truck_access === 4 ? true : false;
 	let rentingChecked = propertyProfileData.property_rented === true;
 </script>
@@ -182,7 +182,7 @@
 				name="agent_name"
 				autocomplete="off"
 				hidden={!rentingChecked}
-				bind:value={agentData.agent_name}
+				bind:value={propertyAgentData.agent_name}
 			/>
 			<label
 				class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins"
@@ -198,17 +198,17 @@
 				placeholder="Mobile 0XXX XXX XXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						agentData.agent_mobile = e.currentTarget.value;
+						propertyAgentData.agent_mobile = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						agentData.agent_mobile = e.currentTarget.value;
+						propertyAgentData.agent_mobile = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							agentData.agent_mobile = formatMobile(agentData.agent_mobile, e.key);
+							propertyAgentData.agent_mobile = formatMobile(propertyAgentData.agent_mobile, e.key);
 						}
 					}
 				}}
 				hidden={!rentingChecked}
-				bind:value={agentData.agent_mobile}
+				bind:value={propertyAgentData.agent_mobile}
 			/>
 			<label
 				class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins"
@@ -223,17 +223,17 @@
 				placeholder="Landline XXXX XXXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						agentData.agent_phone = e.currentTarget.value;
+						propertyAgentData.agent_phone = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						agentData.agent_phone = e.currentTarget.value;
+						propertyAgentData.agent_phone = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							agentData.agent_phone = formatPhone(agentData.agent_phone, e.key);
+							propertyAgentData.agent_phone = formatPhone(propertyAgentData.agent_phone, e.key);
 						}
 					}
 				}}
 				hidden={!rentingChecked}
-				bind:value={agentData.agent_phone}
+				bind:value={propertyAgentData.agent_phone}
 			/>
 		</div>
 	</div>

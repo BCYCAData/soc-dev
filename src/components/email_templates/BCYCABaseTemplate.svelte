@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Head, Html, Preview, Section } from 'svelte-email';
+	import { Head, Html, Preview, Section } from 'svelty-email';
 
 	// 	import {
 	// 	Button,
@@ -14,7 +14,7 @@
 	// 	Preview,
 	// 	Section,
 	// 	Text
-	// } from 'svelte-email';
+	// } from 'svelty-email';
 
 	enum Heading1Type {
 		events = 'Events Information',

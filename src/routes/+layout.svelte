@@ -13,7 +13,6 @@
 		type ModalComponent
 	} from '@skeletonlabs/skeleton';
 
-	import AddressChallenge from '$components/form/address-challenge/AddressChallenge.svelte';
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
 	import MobileNavbar from '$components/navbar/MobileNavbar.svelte';
 	import Navbar from '$components/navbar/Navbar.svelte';
@@ -26,10 +25,7 @@
 	initializeStores();
 
 	const modalRegistry: Record<string, ModalComponent> = {
-		// Set a unique modal ID, then pass the component reference
-		modalAddressChallenge: { ref: AddressChallenge },
 		modalSaveProfilePrompt: { ref: SaveProfilePrompt }
-		// ...
 	};
 
 	onMount(() => {
@@ -65,9 +61,6 @@
 	<svelte:fragment slot="header">
 		<Navbar />
 	</svelte:fragment>
-	<svelte:fragment slot="sidebarLeft">
-		<mobilenavbar />
-	</svelte:fragment>
 	<slot />
 	<svelte:fragment slot="pageFooter">
 		<div class="flex items-center justify-between">
@@ -78,7 +71,7 @@
 				width="auto"
 				height="40"
 			/>
-			<p class="text-[0.6rem] md:text-sm">
+			<p class="text-center leading-3 p-0 text-[0.6rem] md:text-sm">
 				This is a Bushfire Community Recovery &amp; Resilience Fund project through the joint
 				Commonwealth/State Disaster Recovery Funding Arrangements
 			</p>

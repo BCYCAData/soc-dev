@@ -1,38 +1,44 @@
 <script lang="ts">
-	// import type { UserProfileData } from '$lib/types';
+	import { informationSheetOptions } from '$lib/profileOptions';
+	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
-	// let userProfileData: UserProfileData
+	import type { UserTinoneeProfileData } from '$lib/custom.types';
+
+	export let communityTinoneeProfileData: UserTinoneeProfileData;
 </script>
 
-<h1
-	class="unstyled title-font mx-auto text-center font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600"
+<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
+	What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
+		(Check all that apply)</span
+	>
+</h2>
+<div
+	class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 >
-	Strengthen OUR Community
-</h1>
-<h1 class="unstyled mx-auto mt-2 text-center">Thank you for completing the questionnaire.</h1>
-<div class="text-base w-3/5 mx-auto sm:text-xl">
-	<p class="unstyled pt-0 text-center">
-		The information you have provided will be used to create a digital "map" of the area providing
-		information which will be useful to emergency responders in time of need. <br />
-		<br />
-		We will keep you up to date with progress on the project through our email mailouts, the Burrell
-		Creek Notes and Facebook posts.
-		<br />
-		<br />
-	</p>
-	<p class="unstyled pt-0 text-center">
-		If you have any suggestions or questions don't hesitate to contact either
-	</p>
-	<p class="unstyled pt-0 text-center">
-		<span class="font-semibold">Helen on 0424 515 963</span>
-		<br />
-		or
-		<br />
-		<span class="font-semibold">Christine on 0488 288 661</span>
-		<br />
-	</p>
-	<p class="unstyled pt-0 text-center">
-		With your help we can build a safer, connected community for us all.
-	</p>
-	<br />
+	{#each informationSheetOptions as { value, lable }}
+		<div class="flex items-center col-span-1">
+			<input
+				class="w-6 h-6 ml-8"
+				name="information_sheet_choices"
+				type="checkbox"
+				bind:group={communityTinoneeProfileData.information_sheet_choices}
+				{value}
+			/>
+			<label
+				class="ml-2 text-xl font-medium text-orange-900 font-Poppins"
+				for="information_sheet_choices">{lable}</label
+			>
+		</div>
+	{/each}
 </div>
+
+<TextAreaInput
+	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
+	headingText="Is there other information which you would find useful?"
+	lableClass={null}
+	lableText={null}
+	divClass="p-2 rounded-lg bg-orange-300 sm:text-lg"
+	nameText="other_information_sheet"
+	textAreaClass="w-full resize-y sm:text-lg"
+	bind:inputValue={communityTinoneeProfileData.other_information_sheet}
+/>

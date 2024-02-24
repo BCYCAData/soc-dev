@@ -16,7 +16,7 @@
 			password.length > 8,
 			password.search(/[A-Z]/) > -1,
 			password.search(/[0-9]/) > -1,
-			password.search(/[$&+,:;=?#^!]/) > -1,
+			password.search(/[?~!@#%^&$&*()_+-=,:;|]/) > -1,
 			password === confirmPassword
 		];
 		strength = validations.reduce((acc, cur) => acc + +cur, 0);

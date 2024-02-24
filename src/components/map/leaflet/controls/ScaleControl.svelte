@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { getContext, onDestroy, onMount } from 'svelte';
-	import { mapContext } from '$lib/map/map'
+	import { mapContext } from '$lib/map/map';
 
 	import type { Map, Control, ControlPosition } from 'leaflet';
 
-	export let leaflet: typeof import ('leaflet')
+	export let leaflet: typeof import('leaflet');
 	export let position: ControlPosition = 'bottomleft';
 	export let options = {};
 

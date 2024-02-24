@@ -2,8 +2,11 @@ import type {
 	AgentData,
 	PropertyProfileData,
 	UserBCYCAProfileData,
+	UserExternalProfileData,
+	UserMondrookProfileData,
 	UserPostalAddressData,
-	UserProfileData
+	UserProfileData,
+	UserTinoneeProfileData
 } from '$lib/custom.types';
 
 export const formatMobile = (mobileNumber: string, digit: string) => {
@@ -37,7 +40,13 @@ export const geometryToGeoJson = (featureType: string, geometryObject: any) => {
 	return geojson;
 };
 
-export const getFormData = (body: FormData, uid: string, principaladdresssiteoid: number) => {
+export const getFormData = (
+	body: FormData,
+	uid: string,
+	principaladdresssiteoid: number,
+	community: string,
+	kyng: string
+) => {
 	const pid = body.get('property_key') as string;
 	const agentData: AgentData = {
 		agent_mobile: (body.get('agent_mobile') as string) || null,
@@ -85,7 +94,9 @@ export const getFormData = (body: FormData, uid: string, principaladdresssiteoid
 		stortz_size: parseInt(body.get('stortz_size') as string) || null,
 		truck_access: parseInt(body.get('truck_access') as string) || null,
 		truck_access_other_information: (body.get('truck_access_other_information') as string) || null,
-		vulnerable_residents: (body.get('vulnerable_residents') as unknown as boolean) || null
+		vulnerable_residents: (body.get('vulnerable_residents') as unknown as boolean) || null,
+		community: community,
+		kyng: kyng
 	};
 	const userBCYCAProfileData: UserBCYCAProfileData = {
 		community_meeting_choices:
@@ -95,11 +106,64 @@ export const getFormData = (body: FormData, uid: string, principaladdresssiteoid
 		created_at: null,
 		information_sheet_choices:
 			body.getAll('information_sheet_choices').toString().split(',').map(Number) || null,
+		stay_in_touch_choices:
+			body.getAll('stay_in_touch_choices').toString().split(',').map(Number) || null,
 		last_updated: null,
 		other_community_meeting: (body.get('other_community_meeting') as string) || null,
 		other_community_workshop: (body.get('other_community_workshop') as string) || null,
 		other_information_sheet: (body.get('other_information_sheet') as string) || null,
-		user_id: uid,
+		bcyca_profile_id: uid,
+		will_run_community_workshops: (body.get('will_run_community_workshops') as string) || null
+	};
+	const userTinoneeProfileData: UserTinoneeProfileData = {
+		community_meeting_choices:
+			body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
+		community_workshop_choices:
+			body.getAll('community_workshop_choices').toString().split(',').map(Number) || null,
+		created_at: null,
+		information_sheet_choices:
+			body.getAll('information_sheet_choices').toString().split(',').map(Number) || null,
+		stay_in_touch_choices:
+			body.getAll('stay_in_touch_choices').toString().split(',').map(Number) || null,
+		last_updated: null,
+		other_community_meeting: (body.get('other_community_meeting') as string) || null,
+		other_community_workshop: (body.get('other_community_workshop') as string) || null,
+		other_information_sheet: (body.get('other_information_sheet') as string) || null,
+		tinonee_profile_id: uid,
+		will_run_community_workshops: (body.get('will_run_community_workshops') as string) || null
+	};
+	const userMondrookProfileData: UserMondrookProfileData = {
+		community_meeting_choices:
+			body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
+		community_workshop_choices:
+			body.getAll('community_workshop_choices').toString().split(',').map(Number) || null,
+		created_at: null,
+		information_sheet_choices:
+			body.getAll('information_sheet_choices').toString().split(',').map(Number) || null,
+		stay_in_touch_choices:
+			body.getAll('stay_in_touch_choices').toString().split(',').map(Number) || null,
+		last_updated: null,
+		other_community_meeting: (body.get('other_community_meeting') as string) || null,
+		other_community_workshop: (body.get('other_community_workshop') as string) || null,
+		other_information_sheet: (body.get('other_information_sheet') as string) || null,
+		mondrook_profile_id: uid,
+		will_run_community_workshops: (body.get('will_run_community_workshops') as string) || null
+	};
+	const userExternalProfileData: UserExternalProfileData = {
+		community_meeting_choices:
+			body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
+		community_workshop_choices:
+			body.getAll('community_workshop_choices').toString().split(',').map(Number) || null,
+		created_at: null,
+		information_sheet_choices:
+			body.getAll('information_sheet_choices').toString().split(',').map(Number) || null,
+		stay_in_touch_choices:
+			body.getAll('stay_in_touch_choices').toString().split(',').map(Number) || null,
+		last_updated: null,
+		other_community_meeting: (body.get('other_community_meeting') as string) || null,
+		other_community_workshop: (body.get('other_community_workshop') as string) || null,
+		other_information_sheet: (body.get('other_information_sheet') as string) || null,
+		external_profile_id: uid,
 		will_run_community_workshops: (body.get('will_run_community_workshops') as string) || null
 	};
 	const userPostalAddressData: UserPostalAddressData = {
@@ -124,8 +188,10 @@ export const getFormData = (body: FormData, uid: string, principaladdresssiteoid
 		plan_to_leave_before_flood: parseInt(body.get('plan_to_leave_before_flood') as string) || null,
 		residency_profile: parseInt(body.get('residency_profile') as string) || null,
 		rfs_survival_plan: (body.get('rfs_survival_plan') as string) || null,
-		send_rfs_survival_plan: (body.get('send_rfs_survival_plan') as unknown as boolean) || null,
-		sent_rfs_survival_plan: null,
+		bcyca_profile_id: null,
+		external_profile_id: null,
+		mondrook_profile_id: null,
+		tinonee_profile_id: null,
 		stay_in_touch_choices:
 			body.getAll('stay_in_touch_choices').toString().split(',').map(Number) || null
 	};
@@ -183,10 +249,10 @@ export const getURL = () => {
 	let url =
 		PUBLIC_VITE_SITE_URL ?? // Set this to your site URL in production env.
 		PUBLIC_VITE_VERCEL_URL ?? // Automatically set by Vercel.
-		'http://127.0.0.1:5173/'
+		'http://127.0.0.1:5173/';
 	// Make sure to include `https://` when not localhost.
-	url = url.includes('http') ? url : `https://${url}`
+	url = url.includes('http') ? url : `https://${url}`;
 	// Make sure to include a trailing `/`.
-	url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
-	return url
-}
+	url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
+	return url;
+};

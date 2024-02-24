@@ -1,19 +1,6 @@
 <script lang="ts">
 	import AuthErrorMessage from '$components/form/AuthErrorMessage.svelte';
 
-	import { getModalStore } from '@skeletonlabs/skeleton';
-
-	import type { ModalSettings } from '@skeletonlabs/skeleton';
-	const modalStore = getModalStore();
-
-	function triggerAddressChallenge(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalAddressChallenge'
-		};
-		modalStore.trigger(modal);
-	}
-
 	let email: string;
 	let password: string;
 	export let form;
@@ -66,11 +53,11 @@
 	</div>
 	<div class="text-gray-900 mt-6">
 		Not registered?
-		<button
+		<a
+			href="/auth/validateaddress"
 			class="text-center py-1 px-5 rounded-full bg-orange-500 text-stone-100 hover:bg-orange-700 focus:outline-none my-1"
-			on:click={() => triggerAddressChallenge()}
 		>
 			Create an Account
-		</button>
+		</a>
 	</div>
 </div>

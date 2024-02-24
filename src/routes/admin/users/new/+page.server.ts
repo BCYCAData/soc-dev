@@ -1,5 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
-// import { render } from 'svelte-email';
+// import { render } from 'svelty-email';
 // import nodemailer from 'nodemailer';
 
 import Tester from '$components/email_templates/Tester.svelte';

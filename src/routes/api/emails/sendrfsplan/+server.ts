@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { render } from 'svelte-email';
+import { render } from 'svelty-email';
 import nodemailer from 'nodemailer';
 
 import BCYCABaseTemplate from '$components/email_templates/BCYCABaseTemplate.svelte';
@@ -9,7 +9,10 @@ const template = BCYCABaseTemplate;
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
-	const { locals: { getSession }, request } = event
+	const {
+		locals: { getSession },
+		request
+	} = event;
 	const session = await getSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&

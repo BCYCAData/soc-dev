@@ -13,13 +13,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		cookies: {
 			get: (key) => event.cookies.get(key),
 			set: (key, value, options) => {
-				event.cookies.set(key, value, { ...options, path: '/' })
+				event.cookies.set(key, value, { ...options, path: '/' });
 			},
 			remove: (key, options) => {
-				event.cookies.delete(key, { ...options, path: '/' })
-			},
-		},
-	})
+				event.cookies.delete(key, { ...options, path: '/' });
+			}
+		}
+	});
 	event.locals.supabaseRedirectBase = PUBLIC_SUPABASE_REDIRECT_URL_BASE;
 	/**
 	 * a little helper that is written for convenience so that instead
@@ -29,11 +29,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.getSession = async () => {
 		const {
 			data: { session }
-		} = await event.locals.supabase.auth.getSession()
-		return session
+		} = await event.locals.supabase.auth.getSession();
+		return session;
 	};
-	console.log('PUBLIC_SUPABASE_URL', PUBLIC_SUPABASE_URL)
-	console.log('PUBLIC_SUPABASE_ANON_KEY', PUBLIC_SUPABASE_ANON_KEY)
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
 			return name === 'content-range';

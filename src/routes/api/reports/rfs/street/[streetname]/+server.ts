@@ -8,7 +8,7 @@ export const GET: RequestHandler = async (event) => {
 		params,
 		setHeaders,
 		locals: { supabase, getSession }
-	} = event
+	} = event;
 	const session = await getSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
@@ -19,8 +19,8 @@ export const GET: RequestHandler = async (event) => {
 	}
 	if (!params.streetname) {
 		error(404, {
-        			message: 'Street not found'
-        		});
+			message: 'Street not found'
+		});
 	}
 	const { data: propertyData, error: propertyError } = await supabase.rpc(
 		'get_rfs_property_data_for_street',

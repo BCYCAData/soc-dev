@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Container, Head, Hr, Html, Img, Preview, Section, Text } from 'svelte-email';
+	import { Button, Container, Head, Hr, Html, Img, Preview, Section, Text } from 'svelty-email';
 
 	const fontFamily =
 		'-apple-system,BlinkMacSystemFont,"Segoe UI","Segoe UI Emoji", "Segoe UI Symbol",Roboto,Oxygen-Sans,' +

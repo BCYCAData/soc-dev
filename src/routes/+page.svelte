@@ -1,23 +1,8 @@
-<script lang="ts">
-	import { getModalStore } from '@skeletonlabs/skeleton';
-
-	import type { ModalSettings } from '@skeletonlabs/skeleton';
-	const modalStore = getModalStore();
-
-	function triggerAddressChallenge(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalAddressChallenge'
-		};
-		modalStore.trigger(modal);
-	}
-</script>
-
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
 
-<section class="flex flex-col items-center text-center mx-auto h-full max-w-5xl">
+<section class="flex flex-col items-center mx-auto h-full max-w-5xl">
 	<div class="text-center">
 		<h1 class="unstyled title-font font-bold hidden sm:block sm:text-4xl sm:mt-4 text-primary-600">
 			Strengthen OUR Community
@@ -37,12 +22,11 @@
 		<p class="unstyled text-base md:text-lg text-red-700 font-semibold mt-1 mb-0">
 			Will you join us?
 		</p>
-		<button
+		<a
+			href="/auth/validateaddress"
 			class="cursor-pointer max-w-80 no-underline hover:underline mt-1 p-2 font-semibold text-stone-100 bg-orange-500 rounded-xl"
-			on:click={() => triggerAddressChallenge()}
+			>Tap here to find out if you qualify</a
 		>
-			Tap here to find out if you qualify
-		</button>
 		<p class="unstyled text-sm md:text-lg mt-1 font-semibold">Want more information?</p>
 		<p class="unstyled text-sm md:text-lg mt-0 font-semibold">Call Helen 0424 515 963</p>
 		<div class="iframe-center mt-4">

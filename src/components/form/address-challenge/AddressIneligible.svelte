@@ -1,30 +1,27 @@
 <script lang="ts">
-	import type { AddressPointData } from '$lib/types';
+	export let streetaddress: string;
+	export let suburb: string;
 
-	export let addressPointData: AddressPointData;
-
-	const searchAddress = addressPointData.searchaddress;
+	const searchAddress = `${streetaddress}, ${suburb}`;
+	const encodedRef = encodeURIComponent(`SOC Address not eligible: '${searchAddress}'`);
+	$: subjectUrl = `mailto:bcyca17@gmail.com?subject=${encodedRef}`;
 </script>
 
-<div class="bg-red-100 mt-1 rounded-lg">
-	<p class="font-semibold text-center text-lg m-1">
-		Unfortunately {searchAddress}
-	</p>
-	<p class="text-center m-1">
-		is not part of any of the communities we are engaging with at the moment.
-	</p>
-</div>
-<div class=" mt-3">
-	<p class="font-semibold text-gray-800">If you would like more information please call</p>
-	<p class="font-semibold text-gray-800">
-		<span class="text-xl text-orange-600">Helen</span>
-		<span>on</span>
-		<span>0424 515 963</span>
-	</p>
-	<h3 class=" text-gray-800">or</h3>
-	<p class="font-semibold text-gray-800">
-		<span class="text-xl text-orange-600">Christine</span>
-		<span>on</span>
-		<span>0488 288 661</span>
-	</p>
+<div class="text-center">
+	<div class="bg-red-100 mt-1 rounded-lg">
+		<p class="font-semibold text-center text-lg m-1">
+			Unfortunately {searchAddress}
+		</p>
+		<p class="text-center m-1">
+			is not part of any of the communities we are engaging with at the moment.
+		</p>
+		<p>If you would like more information:</p>
+	</div>
+
+	<div class="mt-5">
+		<a
+			class="text-l cursor-pointer space-y-3 max-w-80 hover:underline mt-5 p-2 font-medium text-stone-100 bg-orange-500 rounded-xl"
+			href={subjectUrl}>Tap here to send us an email</a
+		>
+	</div>
 </div>

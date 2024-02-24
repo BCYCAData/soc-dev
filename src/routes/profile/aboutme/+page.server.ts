@@ -15,7 +15,9 @@ export const actions: Actions = {
 		const body = getFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			session.user.app_metadata.principaladdresssiteoid,
+			session.user.app_metadata.community,
+			session.user.app_metadata.kyng
 		);
 		const { error: userProfileDataError, data: userProfile } = await supabase
 			.from('user_profile')
@@ -23,8 +25,6 @@ export const actions: Actions = {
 				first_name: body.userProfileData.first_name,
 				family_name: body.userProfileData.family_name,
 				mobile: body.userProfileData.mobile,
-				rfs_survival_plan: body.userProfileData.rfs_survival_plan,
-				send_rfs_survival_plan: body.userProfileData.send_rfs_survival_plan,
 				fire_fighting_experience: body.userProfileData.fire_fighting_experience,
 				fire_trauma: body.userProfileData.fire_trauma,
 				plan_to_leave_before_fire: body.userProfileData.plan_to_leave_before_fire,

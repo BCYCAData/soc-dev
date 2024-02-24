@@ -4,7 +4,7 @@
 
 	import type { UserBCYCAProfileData } from '$lib/custom.types';
 
-	export let userBCYCAData: UserBCYCAProfileData;
+	export let communityBCYCAProfileData: UserBCYCAProfileData;
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -23,7 +23,7 @@
 				class="w-6 h-6 ml-8"
 				name="community_workshop_choices"
 				type="checkbox"
-				bind:group={userBCYCAData.community_workshop_choices}
+				bind:group={communityBCYCAProfileData.community_workshop_choices}
 				{value}
 			/>
 			<label
@@ -42,7 +42,7 @@
 	divClass="p-2 rounded-lg bg-orange-200 sm:text-lg"
 	nameText="other_community_workshop"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={userBCYCAData.other_community_workshop}
+	bind:inputValue={communityBCYCAProfileData.other_community_workshop}
 />
 <TextAreaInput
 	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
@@ -53,5 +53,5 @@
 	divClass="p-2 rounded-lg bg-orange-200 sm:text-lg"
 	nameText="will_run_community_workshops"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={userBCYCAData.will_run_community_workshops}
+	bind:inputValue={communityBCYCAProfileData.will_run_community_workshops}
 />

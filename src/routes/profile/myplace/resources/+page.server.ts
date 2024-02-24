@@ -16,7 +16,9 @@ export const actions: Actions = {
 		const body = getFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			session.user.app_metadata.principaladdresssiteoid,
+			session.user.app_metadata.community,
+			session.user.app_metadata.kyng
 		);
 		const { data: myPlaceResources, error: myPlaceResourcesError } = await supabase
 			.from('property_profile')
@@ -32,9 +34,9 @@ export const actions: Actions = {
 		if (myPlaceResourcesError) {
 			console.log('error profileMyPlaceResources update property_profile: ', myPlaceResourcesError);
 			error(
-            				400,
-            				`error profileMyPlaceResources update property_profile: ${myPlaceResourcesError.message}`
-            			);
+				400,
+				`error profileMyPlaceResources update property_profile: ${myPlaceResourcesError.message}`
+			);
 		}
 		if (myPlaceResources.length === 1) {
 			propertyProfileData = myPlaceResources[0];

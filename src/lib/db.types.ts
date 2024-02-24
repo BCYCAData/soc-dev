@@ -6,122 +6,9 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
-      addresspoint_extract: {
-        Row: {
-          address: string | null
-          addresspointoid: number | null
-          addresspointtype: string | null
-          addresssitename: string | null
-          addressstringoid: number | null
-          addressstringtype: string | null
-          addresstype: string | null
-          contributoralignment: string | null
-          contributororigin: string | null
-          deliverypointid: number | null
-          enddate: string | null
-          geom: unknown | null
-          gnafprimarysiteid: number | null
-          gurasid: number | null
-          housenumber: string | null
-          id: number
-          lastupdate: string | null
-          lastupdatestring: string | null
-          officialaddressstringoid: number | null
-          principaladdresssiteoid: number | null
-          principaladdresstype: string | null
-          roadside: string | null
-          startdate: string | null
-        }
-        Insert: {
-          address?: string | null
-          addresspointoid?: number | null
-          addresspointtype?: string | null
-          addresssitename?: string | null
-          addressstringoid?: number | null
-          addressstringtype?: string | null
-          addresstype?: string | null
-          contributoralignment?: string | null
-          contributororigin?: string | null
-          deliverypointid?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gnafprimarysiteid?: number | null
-          gurasid?: number | null
-          housenumber?: string | null
-          id?: number
-          lastupdate?: string | null
-          lastupdatestring?: string | null
-          officialaddressstringoid?: number | null
-          principaladdresssiteoid?: number | null
-          principaladdresstype?: string | null
-          roadside?: string | null
-          startdate?: string | null
-        }
-        Update: {
-          address?: string | null
-          addresspointoid?: number | null
-          addresspointtype?: string | null
-          addresssitename?: string | null
-          addressstringoid?: number | null
-          addressstringtype?: string | null
-          addresstype?: string | null
-          contributoralignment?: string | null
-          contributororigin?: string | null
-          deliverypointid?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gnafprimarysiteid?: number | null
-          gurasid?: number | null
-          housenumber?: string | null
-          id?: number
-          lastupdate?: string | null
-          lastupdatestring?: string | null
-          officialaddressstringoid?: number | null
-          principaladdresssiteoid?: number | null
-          principaladdresstype?: string | null
-          roadside?: string | null
-          startdate?: string | null
-        }
-        Relationships: []
-      }
-      agent: {
-        Row: {
-          agent_mobile: string | null
-          agent_name: string | null
-          agent_phone: string | null
-          created_at: string | null
-          last_updated: string | null
-          property_id: string
-        }
-        Insert: {
-          agent_mobile?: string | null
-          agent_name?: string | null
-          agent_phone?: string | null
-          created_at?: string | null
-          last_updated?: string | null
-          property_id: string
-        }
-        Update: {
-          agent_mobile?: string | null
-          agent_name?: string | null
-          agent_phone?: string | null
-          created_at?: string | null
-          last_updated?: string | null
-          property_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "agent_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: true
-            referencedRelation: "property_profile"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       app_message: {
         Row: {
           context: Database["public"]["Enums"]["message_context"]
@@ -149,68 +36,241 @@ export interface Database {
         }
         Relationships: []
       }
-      communities: {
-        Row: {
-          added_to_project: string | null
-          community: string
-          created_at: string | null
-          geom: unknown | null
-          id: string
-          streets: string[] | null
-          suburbs: string[] | null
-        }
-        Insert: {
-          added_to_project?: string | null
-          community: string
-          created_at?: string | null
-          geom?: unknown | null
-          id?: string
-          streets?: string[] | null
-          suburbs?: string[] | null
-        }
-        Update: {
-          added_to_project?: string | null
-          community?: string
-          created_at?: string | null
-          geom?: unknown | null
-          id?: string
-          streets?: string[] | null
-          suburbs?: string[] | null
-        }
-        Relationships: []
-      }
       community_areas: {
         Row: {
           added_to_project: string | null
-          community: string | null
+          community: string
+          community_key: string
           coordinator: string | null
           email: string | null
-          geom: unknown | null
+          geom: unknown
           id: string
           last_updated: string | null
           phone: string | null
         }
         Insert: {
           added_to_project?: string | null
-          community?: string | null
+          community: string
+          community_key: string
           coordinator?: string | null
           email?: string | null
-          geom?: unknown | null
+          geom: unknown
           id?: string
           last_updated?: string | null
           phone?: string | null
         }
         Update: {
           added_to_project?: string | null
-          community?: string | null
+          community?: string
+          community_key?: string
           coordinator?: string | null
           email?: string | null
-          geom?: unknown | null
+          geom?: unknown
           id?: string
           last_updated?: string | null
           phone?: string | null
         }
         Relationships: []
+      }
+      community_bcyca_profile: {
+        Row: {
+          bcyca_profile_id: string
+          community_meeting_choices: number[] | null
+          community_workshop_choices: number[] | null
+          created_at: string | null
+          information_sheet_choices: number[] | null
+          last_updated: string | null
+          other_community_meeting: string | null
+          other_community_workshop: string | null
+          other_information_sheet: string | null
+          stay_in_touch_choices: number[] | null
+          will_run_community_workshops: string | null
+        }
+        Insert: {
+          bcyca_profile_id: string
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Update: {
+          bcyca_profile_id?: string
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_bcyca_profile_bcyca_profile_id_fkey"
+            columns: ["bcyca_profile_id"]
+            isOneToOne: true
+            referencedRelation: "user_profile"
+            referencedColumns: ["bcyca_profile_id"]
+          }
+        ]
+      }
+      community_external_profile: {
+        Row: {
+          community_meeting_choices: number[] | null
+          community_workshop_choices: number[] | null
+          created_at: string | null
+          external_profile_id: string
+          information_sheet_choices: number[] | null
+          last_updated: string | null
+          other_community_meeting: string | null
+          other_community_workshop: string | null
+          other_information_sheet: string | null
+          stay_in_touch_choices: number[] | null
+          will_run_community_workshops: string | null
+        }
+        Insert: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          external_profile_id: string
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Update: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          external_profile_id?: string
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_external_profile_external_profile_id_fkey"
+            columns: ["external_profile_id"]
+            isOneToOne: true
+            referencedRelation: "user_profile"
+            referencedColumns: ["external_profile_id"]
+          }
+        ]
+      }
+      community_mondrook_profile: {
+        Row: {
+          community_meeting_choices: number[] | null
+          community_workshop_choices: number[] | null
+          created_at: string | null
+          information_sheet_choices: number[] | null
+          last_updated: string | null
+          mondrook_profile_id: string
+          other_community_meeting: string | null
+          other_community_workshop: string | null
+          other_information_sheet: string | null
+          stay_in_touch_choices: number[] | null
+          will_run_community_workshops: string | null
+        }
+        Insert: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          mondrook_profile_id?: string
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Update: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          mondrook_profile_id?: string
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          will_run_community_workshops?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_mondrook_profile_mondrook_profile_id_fkey"
+            columns: ["mondrook_profile_id"]
+            isOneToOne: true
+            referencedRelation: "user_profile"
+            referencedColumns: ["mondrook_profile_id"]
+          }
+        ]
+      }
+      community_tinonee_profile: {
+        Row: {
+          community_meeting_choices: number[] | null
+          community_workshop_choices: number[] | null
+          created_at: string | null
+          information_sheet_choices: number[] | null
+          last_updated: string | null
+          other_community_meeting: string | null
+          other_community_workshop: string | null
+          other_information_sheet: string | null
+          stay_in_touch_choices: number[] | null
+          tinonee_profile_id: string
+          will_run_community_workshops: string | null
+        }
+        Insert: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          tinonee_profile_id?: string
+          will_run_community_workshops?: string | null
+        }
+        Update: {
+          community_meeting_choices?: number[] | null
+          community_workshop_choices?: number[] | null
+          created_at?: string | null
+          information_sheet_choices?: number[] | null
+          last_updated?: string | null
+          other_community_meeting?: string | null
+          other_community_workshop?: string | null
+          other_information_sheet?: string | null
+          stay_in_touch_choices?: number[] | null
+          tinonee_profile_id?: string
+          will_run_community_workshops?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_tinonee_profile_tinonee_profile_id_fkey"
+            columns: ["tinonee_profile_id"]
+            isOneToOne: true
+            referencedRelation: "user_profile"
+            referencedColumns: ["tinonee_profile_id"]
+          }
+        ]
       }
       custom_address: {
         Row: {
@@ -221,7 +281,8 @@ export interface Database {
           enddate: string | null
           id: number
           kyng: string | null
-          lastupdate: string | null
+          last_updated: string | null
+          postcode: string | null
           principaladdresssiteoid: number | null
           startdate: string | null
           suburb: string | null
@@ -234,7 +295,8 @@ export interface Database {
           enddate?: string | null
           id?: number
           kyng?: string | null
-          lastupdate?: string | null
+          last_updated?: string | null
+          postcode?: string | null
           principaladdresssiteoid?: number | null
           startdate?: string | null
           suburb?: string | null
@@ -247,7 +309,8 @@ export interface Database {
           enddate?: string | null
           id?: number
           kyng?: string | null
-          lastupdate?: string | null
+          last_updated?: string | null
+          postcode?: string | null
           principaladdresssiteoid?: number | null
           startdate?: string | null
           suburb?: string | null
@@ -257,6 +320,7 @@ export interface Database {
       kyng_areas: {
         Row: {
           added_to_project: string | null
+          community: string | null
           coordinator: string | null
           geom: unknown | null
           id: string
@@ -266,6 +330,7 @@ export interface Database {
         }
         Insert: {
           added_to_project?: string | null
+          community?: string | null
           coordinator?: string | null
           geom?: unknown | null
           id?: string
@@ -275,6 +340,7 @@ export interface Database {
         }
         Update: {
           added_to_project?: string | null
+          community?: string | null
           coordinator?: string | null
           geom?: unknown | null
           id?: string
@@ -412,17 +478,17 @@ export interface Database {
       }
       project_area: {
         Row: {
-          last_update: string | null
+          last_updated: string | null
           ogc_fid: number
           wkb_geometry: unknown | null
         }
         Insert: {
-          last_update?: string | null
+          last_updated?: string | null
           ogc_fid?: number
           wkb_geometry?: unknown | null
         }
         Update: {
-          last_update?: string | null
+          last_updated?: string | null
           ogc_fid?: number
           wkb_geometry?: unknown | null
         }
@@ -605,68 +671,40 @@ export interface Database {
         }
         Relationships: []
       }
-      property_extract: {
+      property_agent: {
         Row: {
-          address: string | null
-          addressstringoid: number | null
-          dissolveparcelcount: number | null
-          enddate: string | null
-          geom: unknown | null
-          gurasid: number | null
-          housenumber: string | null
-          id: number
-          lastupdate: string | null
-          principaladdresssiteoid: number | null
-          principaladdresstype: string | null
-          propertyoid: number | null
-          propertytype: string | null
-          propid: number | null
-          startdate: string | null
-          valnetlotcount: number | null
-          valnetpropertystatus: string | null
-          valnetpropertytype: string | null
+          agent_mobile: string | null
+          agent_name: string | null
+          agent_phone: string | null
+          created_at: string | null
+          last_updated: string | null
+          property_id: string
         }
         Insert: {
-          address?: string | null
-          addressstringoid?: number | null
-          dissolveparcelcount?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gurasid?: number | null
-          housenumber?: string | null
-          id?: number
-          lastupdate?: string | null
-          principaladdresssiteoid?: number | null
-          principaladdresstype?: string | null
-          propertyoid?: number | null
-          propertytype?: string | null
-          propid?: number | null
-          startdate?: string | null
-          valnetlotcount?: number | null
-          valnetpropertystatus?: string | null
-          valnetpropertytype?: string | null
+          agent_mobile?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          created_at?: string | null
+          last_updated?: string | null
+          property_id: string
         }
         Update: {
-          address?: string | null
-          addressstringoid?: number | null
-          dissolveparcelcount?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gurasid?: number | null
-          housenumber?: string | null
-          id?: number
-          lastupdate?: string | null
-          principaladdresssiteoid?: number | null
-          principaladdresstype?: string | null
-          propertyoid?: number | null
-          propertytype?: string | null
-          propid?: number | null
-          startdate?: string | null
-          valnetlotcount?: number | null
-          valnetpropertystatus?: string | null
-          valnetpropertytype?: string | null
+          agent_mobile?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          created_at?: string | null
+          last_updated?: string | null
+          property_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "property_agent_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: true
+            referencedRelation: "property_profile"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       property_geometry: {
         Row: {
@@ -708,11 +746,13 @@ export interface Database {
       }
       property_profile: {
         Row: {
+          community: string | null
           created_at: string | null
           fire_fighting_resources: number[] | null
           fire_hazard_reduction: number[] | null
           have_stortz: string | null
           id: string
+          kyng: string | null
           land_adjacent_hazard: string | null
           last_updated: string | null
           live_stock_present: boolean | null
@@ -745,11 +785,13 @@ export interface Database {
           vulnerable_residents: boolean | null
         }
         Insert: {
+          community?: string | null
           created_at?: string | null
           fire_fighting_resources?: number[] | null
           fire_hazard_reduction?: number[] | null
           have_stortz?: string | null
-          id?: string
+          id: string
+          kyng?: string | null
           land_adjacent_hazard?: string | null
           last_updated?: string | null
           live_stock_present?: boolean | null
@@ -782,11 +824,13 @@ export interface Database {
           vulnerable_residents?: boolean | null
         }
         Update: {
+          community?: string | null
           created_at?: string | null
           fire_fighting_resources?: number[] | null
           fire_hazard_reduction?: number[] | null
           have_stortz?: string | null
           id?: string
+          kyng?: string | null
           land_adjacent_hazard?: string | null
           last_updated?: string | null
           live_stock_present?: boolean | null
@@ -818,46 +862,218 @@ export interface Database {
           truck_access_other_information?: string | null
           vulnerable_residents?: boolean | null
         }
-        Relationships: []
-      }
-      proway_extract: {
-        Row: {
-          addresspointoid: number | null
-          enddate: string | null
-          geom: unknown | null
-          gurasid: number | null
-          id: number
-          lastupdate: string | null
-          principaladdresssiteoid: number | null
-          prowayoid: number | null
-          startdate: string | null
-          waypointoid: number | null
-        }
-        Insert: {
-          addresspointoid?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gurasid?: number | null
-          id?: number
-          lastupdate?: string | null
-          principaladdresssiteoid?: number | null
-          prowayoid?: number | null
-          startdate?: string | null
-          waypointoid?: number | null
-        }
-        Update: {
-          addresspointoid?: number | null
-          enddate?: string | null
-          geom?: unknown | null
-          gurasid?: number | null
-          id?: number
-          lastupdate?: string | null
-          principaladdresssiteoid?: number | null
-          prowayoid?: number | null
-          startdate?: string | null
-          waypointoid?: number | null
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "property_profile_community_fkey"
+            columns: ["community"]
+            isOneToOne: false
+            referencedRelation: "community_areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Abbots_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Beaully_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bootawa_Dam_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bootawa_Road_North_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bootawa_Road_South_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bucketts_Way_East_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bucketts_Way_South_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Bull_Hill_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Careys_Road_South_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Careys_Road_Wills_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Clarkes_Road_Bunyarra_Place_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Gloucester_Road_Riverford_Road_Bo_Bo_Creek_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Hillville_Road_Marylands_Close_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Hillville_Road_Sunshine_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Kimbriki_Road_Pine_Tree_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Kimbriki_Road_Somerset_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "kyng_areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "kyng_areas_info_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Mondrook_Lane_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Moores_Road_West_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Mulligans_Lane_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Red_Gully_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Saxbys_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Stony_Creek_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "The_Bight_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Tinonee_Road_Alpine_Drive_Ridge_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Tinonee_Road_Bishops_Lane_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "Urray_Road_area_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_profile_kyng_fkey"
+            columns: ["kyng"]
+            isOneToOne: false
+            referencedRelation: "View_Place_area_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       street_list: {
         Row: {
@@ -1063,53 +1279,6 @@ export interface Database {
         }
         Relationships: []
       }
-      user_bcyca_profile: {
-        Row: {
-          community_meeting_choices: number[] | null
-          community_workshop_choices: number[] | null
-          created_at: string | null
-          information_sheet_choices: number[] | null
-          last_updated: string | null
-          other_community_meeting: string | null
-          other_community_workshop: string | null
-          other_information_sheet: string | null
-          user_id: string
-          will_run_community_workshops: string | null
-        }
-        Insert: {
-          community_meeting_choices?: number[] | null
-          community_workshop_choices?: number[] | null
-          created_at?: string | null
-          information_sheet_choices?: number[] | null
-          last_updated?: string | null
-          other_community_meeting?: string | null
-          other_community_workshop?: string | null
-          other_information_sheet?: string | null
-          user_id: string
-          will_run_community_workshops?: string | null
-        }
-        Update: {
-          community_meeting_choices?: number[] | null
-          community_workshop_choices?: number[] | null
-          created_at?: string | null
-          information_sheet_choices?: number[] | null
-          last_updated?: string | null
-          other_community_meeting?: string | null
-          other_community_workshop?: string | null
-          other_information_sheet?: string | null
-          user_id?: string
-          will_run_community_workshops?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_bcyca_profile_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "user_profile"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       user_postal_address: {
         Row: {
           created_at: string | null
@@ -1147,7 +1316,9 @@ export interface Database {
       }
       user_profile: {
         Row: {
+          bcyca_profile_id: string | null
           created_at: string | null
+          external_profile_id: string | null
           family_name: string | null
           fire_fighting_experience: number | null
           fire_trauma: boolean | null
@@ -1155,17 +1326,19 @@ export interface Database {
           id: string
           last_updated: string | null
           mobile: string | null
+          mondrook_profile_id: string | null
           other_comments: string | null
           plan_to_leave_before_fire: number | null
           plan_to_leave_before_flood: number | null
           residency_profile: number | null
           rfs_survival_plan: string | null
-          send_rfs_survival_plan: boolean | null
-          sent_rfs_survival_plan: string | null
           stay_in_touch_choices: number[] | null
+          tinonee_profile_id: string | null
         }
         Insert: {
+          bcyca_profile_id?: string | null
           created_at?: string | null
+          external_profile_id?: string | null
           family_name?: string | null
           fire_fighting_experience?: number | null
           fire_trauma?: boolean | null
@@ -1173,17 +1346,19 @@ export interface Database {
           id: string
           last_updated?: string | null
           mobile?: string | null
+          mondrook_profile_id?: string | null
           other_comments?: string | null
           plan_to_leave_before_fire?: number | null
           plan_to_leave_before_flood?: number | null
           residency_profile?: number | null
           rfs_survival_plan?: string | null
-          send_rfs_survival_plan?: boolean | null
-          sent_rfs_survival_plan?: string | null
           stay_in_touch_choices?: number[] | null
+          tinonee_profile_id?: string | null
         }
         Update: {
+          bcyca_profile_id?: string | null
           created_at?: string | null
+          external_profile_id?: string | null
           family_name?: string | null
           fire_fighting_experience?: number | null
           fire_trauma?: boolean | null
@@ -1191,14 +1366,14 @@ export interface Database {
           id?: string
           last_updated?: string | null
           mobile?: string | null
+          mondrook_profile_id?: string | null
           other_comments?: string | null
           plan_to_leave_before_fire?: number | null
           plan_to_leave_before_flood?: number | null
           residency_profile?: number | null
           rfs_survival_plan?: string | null
-          send_rfs_survival_plan?: boolean | null
-          sent_rfs_survival_plan?: string | null
           stay_in_touch_choices?: number[] | null
+          tinonee_profile_id?: string | null
         }
         Relationships: [
           {
@@ -1213,17 +1388,29 @@ export interface Database {
       user_property_profile_join: {
         Row: {
           created_at: string | null
+          last_updated: string | null
           property_id: string
+          rel_id: string
+          search_address_street: string | null
+          search_address_suburb: string | null
           user_id: string
         }
         Insert: {
           created_at?: string | null
+          last_updated?: string | null
           property_id: string
+          rel_id?: string
+          search_address_street?: string | null
+          search_address_suburb?: string | null
           user_id: string
         }
         Update: {
           created_at?: string | null
+          last_updated?: string | null
           property_id?: string
+          rel_id?: string
+          search_address_street?: string | null
+          search_address_suburb?: string | null
           user_id?: string
         }
         Relationships: [
@@ -1243,7 +1430,187 @@ export interface Database {
           }
         ]
       }
-      waypoint_extract: {
+      x_addresspoint_extract: {
+        Row: {
+          address: string | null
+          addresspointoid: number | null
+          addresspointtype: string | null
+          addresssitename: string | null
+          addressstringoid: number | null
+          addressstringtype: string | null
+          addresstype: string | null
+          contributoralignment: string | null
+          contributororigin: string | null
+          deliverypointid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gnafprimarysiteid: number | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          lastupdatestring: string | null
+          officialaddressstringoid: number | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          roadside: string | null
+          startdate: string | null
+        }
+        Insert: {
+          address?: string | null
+          addresspointoid?: number | null
+          addresspointtype?: string | null
+          addresssitename?: string | null
+          addressstringoid?: number | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          contributoralignment?: string | null
+          contributororigin?: string | null
+          deliverypointid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gnafprimarysiteid?: number | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          lastupdatestring?: string | null
+          officialaddressstringoid?: number | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          roadside?: string | null
+          startdate?: string | null
+        }
+        Update: {
+          address?: string | null
+          addresspointoid?: number | null
+          addresspointtype?: string | null
+          addresssitename?: string | null
+          addressstringoid?: number | null
+          addressstringtype?: string | null
+          addresstype?: string | null
+          contributoralignment?: string | null
+          contributororigin?: string | null
+          deliverypointid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gnafprimarysiteid?: number | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          lastupdatestring?: string | null
+          officialaddressstringoid?: number | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          roadside?: string | null
+          startdate?: string | null
+        }
+        Relationships: []
+      }
+      x_property_extract: {
+        Row: {
+          address: string | null
+          addressstringoid: number | null
+          dissolveparcelcount: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          housenumber: string | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          principaladdresstype: string | null
+          propertyoid: number | null
+          propertytype: string | null
+          propid: number | null
+          startdate: string | null
+          valnetlotcount: number | null
+          valnetpropertystatus: string | null
+          valnetpropertytype: string | null
+        }
+        Insert: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          startdate?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
+        }
+        Update: {
+          address?: string | null
+          addressstringoid?: number | null
+          dissolveparcelcount?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          housenumber?: string | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          principaladdresstype?: string | null
+          propertyoid?: number | null
+          propertytype?: string | null
+          propid?: number | null
+          startdate?: string | null
+          valnetlotcount?: number | null
+          valnetpropertystatus?: string | null
+          valnetpropertytype?: string | null
+        }
+        Relationships: []
+      }
+      x_proway_extract: {
+        Row: {
+          addresspointoid: number | null
+          enddate: string | null
+          geom: unknown | null
+          gurasid: number | null
+          id: number
+          lastupdate: string | null
+          principaladdresssiteoid: number | null
+          prowayoid: number | null
+          startdate: string | null
+          waypointoid: number | null
+        }
+        Insert: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Update: {
+          addresspointoid?: number | null
+          enddate?: string | null
+          geom?: unknown | null
+          gurasid?: number | null
+          id?: number
+          lastupdate?: string | null
+          principaladdresssiteoid?: number | null
+          prowayoid?: number | null
+          startdate?: string | null
+          waypointoid?: number | null
+        }
+        Relationships: []
+      }
+      x_waypoint_extract: {
         Row: {
           addresspointoid: number | null
           addressstringoid: number | null
@@ -3599,10 +3966,6 @@ export interface Database {
         }
         Returns: string
       }
-      dev_process_downloads: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
       dev_process_kyng_areas: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -3678,10 +4041,12 @@ export interface Database {
         }
         Returns: {
           status: number
-          validaddress: string
-          validsuburb: string
+          searchaddressstreet: string
+          searchaddresssuburb: string
+          validaddressstreet: string
+          validaddresssuburb: string
+          validaddresspostcode: string
           principaladdresssiteoid: number
-          addresspoint: unknown
           community: string
           kyng: string
         }[]
@@ -3939,6 +4304,10 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      process_downloads: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       process_kyng_areas: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -4000,6 +4369,26 @@ export interface Database {
           input_address: string
         }
         Returns: string
+      }
+      x_get_addresspoint_from_address: {
+        Args: {
+          address_text: string
+          given_suburb: string
+          valid_address_postcode: string
+          out_srid_value: number
+          api_key: string
+        }
+        Returns: {
+          status: number
+          searchaddressstreet: string
+          searchaddresssuburb: string
+          validaddressstreet: string
+          validaddresssuburb: string
+          validaddresspostcode: string
+          principaladdresssiteoid: number
+          community: string
+          kyng: string
+        }[]
       }
     }
     Enums: {
