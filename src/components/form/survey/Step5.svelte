@@ -9,10 +9,10 @@
 
 	import type { PropertyProfileData } from '$lib/custom.types';
 
-	export let propertyProfileData: PropertyProfileData;
+	export let propertyProfile: PropertyProfileData;
 
 	let noneChecked = false;
-	let have_stortzChecked = propertyProfileData.have_stortz == 'Y';
+	let have_stortzChecked = propertyProfile.have_stortz == 'Y';
 
 	let selectedStaticSources = new Set<EventTarget & HTMLInputElement>();
 
@@ -50,7 +50,7 @@
 					class="w-6 h-6 ml-8"
 					id="static_water_available"
 					type="checkbox"
-					bind:group={propertyProfileData.static_water_available}
+					bind:group={propertyProfile.static_water_available}
 					name="static_water_available"
 					{value}
 					on:change={(e) => {
@@ -69,7 +69,7 @@
 					id="static_water_available"
 					type="checkbox"
 					name="static_water_available"
-					bind:group={propertyProfileData.static_water_available}
+					bind:group={propertyProfile.static_water_available}
 					{value}
 					on:change={(e) => {
 						unCheckAllStaticWater(e);
@@ -99,7 +99,7 @@
 				on:change={(e) => {
 					have_stortzChecked = e.currentTarget.value == 'Y';
 				}}
-				bind:group={propertyProfileData.have_stortz}
+				bind:group={propertyProfile.have_stortz}
 				{value}
 			/>
 			<label class="ml-2 text-xl font-medium text-orange-900 font-Poppins" for="have_stortz"
@@ -118,21 +118,9 @@
 				lableClass="min-w-fit mr-3 text-xl font-medium text-orange-900 font-Poppins"
 				inputClass="max-w-sm border border-orange-700 w-20 rounded sm:text-lg"
 				divClass="flex items-center"
-				bind:inputValue={propertyProfileData.stortz_size}
+				bind:inputValue={propertyProfile.stortz_size}
 			/>
 		</div>
-		<!-- <div class="flex items-center">
-			<label class="ml-2 text-xl font-medium text-orange-900 font-Poppins" for="stortz_size"
-				>Size (mm)</label
-			>
-			<input
-				type="number"
-				id="stortz_size"
-				name="stortz_size"
-				class="border border-orange-700 w-half rounded sm:text-lg"
-				bind:value={propertyProfileData.stortz_size}
-			/>
-		</div> -->
 	</div>
 {/if}
 
@@ -142,7 +130,6 @@
 	>
 </h2>
 <div class="p-2 flex justify-start rounded-lg bg-orange-200">
-	<!-- <ul class="list-none w-full pl-0 my-0"> -->
 	{#each fireFightingResources as { value, lable }}
 		<div class="flex items-center">
 			<input
@@ -150,7 +137,7 @@
 				id="fire_fighting_resources"
 				type="checkbox"
 				name="fire_fighting_resources"
-				bind:group={propertyProfileData.fire_fighting_resources}
+				bind:group={propertyProfile.fire_fighting_resources}
 				{value}
 			/>
 			<label
@@ -159,5 +146,4 @@
 			>
 		</div>
 	{/each}
-	<!-- </ul> -->
 </div>

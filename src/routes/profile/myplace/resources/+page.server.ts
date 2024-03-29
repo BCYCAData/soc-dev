@@ -1,5 +1,5 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { getFormData } from '$lib/utils';
+import { getMyPlaceResourcesFormData } from '$lib/server/form.utils';
 
 import type { PropertyProfileData } from '$lib/custom.types';
 
@@ -13,21 +13,15 @@ export const actions: Actions = {
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
-		const body = getFormData(
-			formData,
-			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid,
-			session.user.app_metadata.community,
-			session.user.app_metadata.kyng
-		);
+		const body = getMyPlaceResourcesFormData(formData);
 		const { data: myPlaceResources, error: myPlaceResourcesError } = await supabase
 			.from('property_profile')
 			.update({
-				static_water_available: body.propertyProfileData.static_water_available,
-				have_stortz: body.propertyProfileData.have_stortz,
-				stortz_size: body.propertyProfileData.stortz_size,
-				fire_fighting_resources: body.propertyProfileData.fire_fighting_resources,
-				fire_hazard_reduction: body.propertyProfileData.fire_hazard_reduction
+				static_water_available: body.static_water_available,
+				have_stortz: body.have_stortz,
+				stortz_size: body.stortz_size,
+				fire_fighting_resources: body.fire_fighting_resources,
+				fire_hazard_reduction: body.fire_hazard_reduction
 			})
 			.eq('id', pid)
 			.select();

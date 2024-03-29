@@ -3,17 +3,14 @@
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
 
 	import type { UserPostalAddressData, UserProfileData } from '$lib/custom.types';
+	import { setUpperCase } from '$lib/svelte-actions';
 
-	export let userProfileData: UserProfileData;
-	export let userPostalAddressData: UserPostalAddressData;
+	export let userProfile: UserProfileData;
+	export let userPostalAddress: UserPostalAddressData;
 
-	function setUpperCase(e: Event) {
-		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
-	}
-
-	const postalWasChecked = userProfileData?.stay_in_touch_choices?.includes(5);
+	const postalWasChecked = userProfile.stay_in_touch_choices?.includes(5);
 	let postalChecked: boolean | undefined;
-	$: postalChecked = userProfileData?.stay_in_touch_choices?.includes(5);
+	$: postalChecked = userProfile.stay_in_touch_choices?.includes(5);
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -31,9 +28,9 @@
 				name="stay_in_touch_choices"
 				type="checkbox"
 				on:change={() => {
-					postalChecked = userProfileData.stay_in_touch_choices?.includes(5);
+					postalChecked = userProfile.stay_in_touch_choices?.includes(5);
 				}}
-				bind:group={userProfileData.stay_in_touch_choices}
+				bind:group={userProfile.stay_in_touch_choices}
 				{value}
 			/>
 			<label
@@ -44,7 +41,7 @@
 		</div>
 	{/each}
 </div>
-<input type="text" name="postal_was_rented" value={postalWasChecked} hidden />
+<input type="text" name="postal_was_checked" value={postalWasChecked} hidden />
 <h2 hidden={!postalChecked} class="mb-1 text-xl font-semibold text-gray-900">
 	Please enter your postal address:
 </h2>
@@ -66,9 +63,9 @@
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 				placeholder="STREET ADDRESS"
 				autocomplete="street-address"
-				on:input={setUpperCase}
+				use:setUpperCase
 				style="text-transform:uppercase"
-				bind:value={userPostalAddressData.postal_address_street}
+				value={userPostalAddress?.postal_address_street}
 			/>
 		</div>
 	</div>
@@ -91,9 +88,9 @@
 					class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 					placeholder="SUBURB"
 					autocomplete="address-level2"
-					on:input={setUpperCase}
+					use:setUpperCase
 					style="text-transform:uppercase"
-					bind:value={userPostalAddressData.postal_address_suburb}
+					value={userPostalAddress?.postal_address_suburb}
 				/>
 			</div>
 			<div class="flex items-center col-span-2">
@@ -109,11 +106,11 @@
 					type="text"
 					id="postal_address_postcode"
 					name="property_address_postcode"
-					class="bg-gray-50 border pr-20 border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
+					class="bg-gray-50 border p-0.5 border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full"
 					placeholder="POSTCODE"
 					autocomplete="postal-code"
 					style="text-transform:uppercase"
-					bind:value={userPostalAddressData.postal_address_postcode}
+					value={userPostalAddress?.postal_address_postcode}
 				/>
 			</div>
 		</div>
@@ -127,5 +124,5 @@
 	divClass="p-2 rounded-lg bg-orange-200 sm:text-lg"
 	nameText="other_comments"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={userProfileData.other_comments}
+	bind:inputValue={userProfile.other_comments}
 />

@@ -91,7 +91,6 @@ export const actions: Actions = {
 			}
 		});
 		if (errorSignUp) {
-			// console.log("SignUpError: ", errorSignUp.message)
 			console.log('SignUpError: ', JSON.stringify(errorSignUp));
 			if (errorSignUp instanceof AuthApiError && errorSignUp.status === 400) {
 				error(400, 'Invalid email or password.');

@@ -9,25 +9,26 @@
 
 	let unsaved = false;
 
+	const modalStore = getModalStore();
+
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerSaveProfilePrompt();
+			const modal: ModalSettings = {
+				type: 'component',
+				component: 'modalSaveProfilePrompt'
+			};
+			modalStore.trigger(modal);
 		}
 	});
 
-	const modalStore = getModalStore();
-
-	function triggerSaveProfilePrompt(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalSaveProfilePrompt'
-		};
-		modalStore.trigger(modal);
-	}
-
 	export let data;
-	$: ({ userBCYCAData } = data);
+	let informationSheetChoices: number[] | null;
+	let otherInformationSheet: string | null;
+	if (data?.community_bcyca_profile) {
+		informationSheetChoices = data.community_bcyca_profile.information_sheet_choices;
+		otherInformationSheet = data.community_bcyca_profile.other_information_sheet;
+	}
 </script>
 
 <svelte:head>
@@ -56,7 +57,7 @@
 					class="w-4 h-4 ml-8"
 					name="information_sheet_choices"
 					type="checkbox"
-					bind:group={userBCYCAData.information_sheet_choices}
+					bind:group={informationSheetChoices}
 					{value}
 				/>
 				<label
@@ -76,7 +77,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_information_sheet"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={userBCYCAData.other_information_sheet}
+		bind:inputValue={otherInformationSheet}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">

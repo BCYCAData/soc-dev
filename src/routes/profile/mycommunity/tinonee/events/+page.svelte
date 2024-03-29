@@ -9,25 +9,26 @@
 
 	let unsaved = false;
 
+	const modalStore = getModalStore();
+
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerSaveProfilePrompt();
+			const modal: ModalSettings = {
+				type: 'component',
+				component: 'modalSaveProfilePrompt'
+			};
+			modalStore.trigger(modal);
 		}
 	});
 
-	const modalStore = getModalStore();
-
-	function triggerSaveProfilePrompt(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalSaveProfilePrompt'
-		};
-		modalStore.trigger(modal);
-	}
-
 	export let data;
-	$: ({ userBCYCAData } = data);
+	let communityMeetingChoices: number[] | null;
+	let otherCommunityMeeting: string | null;
+	if (data?.community_bcyca_profile) {
+		communityMeetingChoices = data.community_bcyca_profile.community_meeting_choices;
+		otherCommunityMeeting = data.community_bcyca_profile.other_community_meeting;
+	}
 </script>
 
 <svelte:head>
@@ -56,7 +57,7 @@
 					class="w-4 h-4 ml-8"
 					name="community_meeting_choices"
 					type="checkbox"
-					bind:group={userBCYCAData.community_meeting_choices}
+					bind:group={communityMeetingChoices}
 					{value}
 				/>
 				<label
@@ -75,7 +76,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_community_meeting"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={userBCYCAData.other_community_meeting}
+		bind:inputValue={otherCommunityMeeting}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">

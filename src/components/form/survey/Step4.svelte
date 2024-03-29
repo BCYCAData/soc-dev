@@ -5,10 +5,10 @@
 
 	import type { PropertyProfileData } from '$lib/custom.types';
 
-	export let propertyProfileData: PropertyProfileData;
+	export let propertyProfile: PropertyProfileData;
 
-	let live_stock_present = propertyProfileData.live_stock_present;
-	let live_stock_safe_area = propertyProfileData.live_stock_safe_area;
+	let live_stock_present = propertyProfile.live_stock_present;
+	let live_stock_safe_area = propertyProfile.live_stock_safe_area;
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -21,28 +21,28 @@
 			lable="Dogs"
 			lableClass="ml-2 text-xl font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 w-20 rounded sm:text-lg"
-			bind:inputValue={propertyProfileData.number_dogs}
+			bind:inputValue={propertyProfile.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
 			lableClass="ml-2 text-xl font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 w-20 rounded sm:text-lg"
-			bind:inputValue={propertyProfileData.number_cats}
+			bind:inputValue={propertyProfile.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
 			lableClass="ml-2 text-xl font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 w-20 rounded sm:text-lg"
-			bind:inputValue={propertyProfileData.number_birds}
+			bind:inputValue={propertyProfile.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
 			lableClass="ml-2 text-xl font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 w-20 rounded sm:text-lg"
-			bind:inputValue={propertyProfileData.number_other_pets}
+			bind:inputValue={propertyProfile.number_other_pets}
 		/>
 	</ul>
 </div>
@@ -59,7 +59,7 @@
 				on:change={() => {
 					live_stock_present = value;
 				}}
-				bind:group={propertyProfileData.live_stock_present}
+				bind:group={propertyProfile.live_stock_present}
 				{value}
 			/>
 			<label class="ml-2 text-xl font-medium text-orange-900 font-Poppins" for="live_stock_present"
@@ -85,7 +85,7 @@
 					on:change={() => {
 						live_stock_safe_area = value;
 					}}
-					bind:group={propertyProfileData.live_stock_safe_area}
+					bind:group={propertyProfile.live_stock_safe_area}
 					{value}
 				/>
 				<label
@@ -109,7 +109,7 @@
 						id="share_livestock_safe_area"
 						type="radio"
 						name="share_livestock_safe_area"
-						bind:group={propertyProfileData.share_livestock_safe_area}
+						bind:group={propertyProfile.share_livestock_safe_area}
 						{value}
 					/>
 					<label
@@ -130,5 +130,5 @@
 	divClass="p-2 rounded-lg bg-orange-200 sm:text-lg"
 	nameText="other_essential_assets"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={propertyProfileData.other_essential_assets}
+	bind:inputValue={propertyProfile.other_essential_assets}
 />

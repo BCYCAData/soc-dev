@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { setUpperCase } from '$lib/svelte-actions';
+	import { checkStreetAddressString, checkSuburbString } from '$lib/utils';
 	import Spinner from '$components/page/Spinner.svelte';
 
 	let loading = false;
@@ -11,21 +13,6 @@
 	$: canGoStreet = checkStreetAddressString(streetaddress);
 	$: canGoSuburb = checkSuburbString(suburb);
 	$: canGo = canGoStreet && canGoSuburb;
-
-	function setUpperCase(e: Event) {
-		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
-	}
-
-	function checkStreetAddressString(streetaddress: string) {
-		let streetRegEx =
-			/^\d+[a-zA-Z]?\s*\w+(\s+\w+)*\s+\w+(\s+\w+)*\s+(ALLEY|ARCADE|AVENUE|BOULEVARD|BYPASS|CIRCUIT|CLOSE|CORNER|COURT|CRESCENT|CUL-DE-SAC|DRIVE|ESPLANADE|GREEN|GROVE|HIGHWAY|JUNCTION|LANE|LINK|LMEWS|PARADE|PLACE|RIDGE|ROAD|SQUARE|STREET|TERRACE|WAY|)$/;
-		return streetRegEx.test(String(streetaddress).toUpperCase());
-	}
-
-	function checkSuburbString(suburb: string) {
-		let suburbRegex = /^(?:(?!NSW|NEW\sSOUTH\sWALES)[A-Z\s])+$/;
-		return suburbRegex.test(String(suburb).toUpperCase());
-	}
 </script>
 
 {#if loading}
@@ -49,7 +36,7 @@
 			required={true}
 			placeholder="STREET ADDRESS"
 			autocomplete="street-address"
-			on:input={setUpperCase}
+			use:setUpperCase
 			style="text-transform:uppercase"
 			bind:value={streetaddress}
 		/>
@@ -69,7 +56,7 @@
 				required
 				placeholder="SUBURB"
 				autocomplete="address-level2"
-				on:input={setUpperCase}
+				use:setUpperCase
 				style="text-transform:uppercase"
 				bind:value={suburb}
 			/>

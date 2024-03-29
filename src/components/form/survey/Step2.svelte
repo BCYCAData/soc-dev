@@ -1,24 +1,23 @@
 <script lang="ts">
+	import { setUpperCase, setTitleCase } from '$lib/svelte-actions';
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
-	import { formatMobile, formatPhone, toTitleCase } from '$lib/utils';
+	import { formatMobile, formatPhone } from '$lib/utils';
 
-	import type { AgentData, UserProfileData, PropertyProfileData } from '$lib/custom.types';
+	import type {
+		PropertyAddress,
+		PropertyAgentData,
+		UserProfileData,
+		PropertyProfileData
+	} from '$lib/custom.types';
 
-	function setTitleCase(e: Event) {
-		(e.target as HTMLInputElement).value = toTitleCase((e.target as HTMLInputElement).value);
-	}
+	export let propertyAddress: PropertyAddress;
+	export let propertyAgent: PropertyAgentData;
+	export let userProfile: UserProfileData;
+	export let propertyProfile: PropertyProfileData;
 
-	function setUpperCase(e: Event) {
-		(e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.toUpperCase();
-	}
-
-	export let propertyAgentData: AgentData;
-	export let userProfileData: UserProfileData;
-	export let propertyProfileData: PropertyProfileData;
-
-	const propertyWasRented = propertyProfileData.property_rented || false;
-	let otherAccessChecked = propertyProfileData.truck_access === 4 ? true : false;
-	let rentingChecked = propertyProfileData.property_rented === true;
+	const propertyWasRented = propertyProfile.property_rented || false;
+	let otherAccessChecked = propertyProfile.truck_access === 4 ? true : false;
+	let rentingChecked = propertyProfile.property_rented === true;
 </script>
 
 <div class="py-2 mx-auto lg:py-2">
@@ -33,8 +32,8 @@
 				autocomplete="given-name"
 				style="text-transform:capitalize"
 				placeholder="First Name "
-				on:input={setTitleCase}
-				bind:value={userProfileData.first_name}
+				use:setTitleCase
+				bind:value={userProfile.first_name}
 			/>
 		</div>
 		<div class="w-full">
@@ -46,8 +45,8 @@
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 				style="text-transform:capitalize"
 				placeholder="Family Name "
-				on:input={setTitleCase}
-				bind:value={userProfileData.family_name}
+				use:setTitleCase
+				bind:value={userProfile.family_name}
 			/>
 		</div>
 	</div>
@@ -68,9 +67,9 @@
 					class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 					autocomplete="street-address"
 					placeholder="STREET ADDRESS"
-					on:input={setUpperCase}
+					use:setUpperCase
 					style="text-transform:uppercase"
-					bind:value={propertyProfileData.property_address_street}
+					value={propertyAddress.property_address_street}
 					disabled
 				/>
 			</div>
@@ -92,10 +91,10 @@
 						class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-0.5"
 						autocomplete="address-level2"
 						placeholder="SUBURB"
-						on:input={setUpperCase}
+						use:setUpperCase
 						style="text-transform:uppercase"
 						disabled
-						bind:value={propertyProfileData.property_address_suburb}
+						bind:value={propertyAddress.property_address_suburb}
 					/>
 				</div>
 				<div class="flex items-center col-span-2">
@@ -114,7 +113,7 @@
 						autocomplete="postal-code"
 						style="text-transform:uppercase"
 						disabled
-						bind:value={propertyProfileData.property_address_postcode}
+						bind:value={propertyAddress.property_address_postcode}
 					/>
 				</div>
 			</div>
@@ -140,7 +139,7 @@
 							on:change={() => {
 								rentingChecked = true;
 							}}
-							bind:group={propertyProfileData.property_rented}
+							bind:group={propertyProfile.property_rented}
 							{value}
 						/>
 						<label
@@ -158,7 +157,7 @@
 							on:change={() => {
 								rentingChecked = false;
 							}}
-							bind:group={propertyProfileData.property_rented}
+							bind:group={propertyProfile.property_rented}
 							{value}
 						/>
 						<label
@@ -182,7 +181,7 @@
 				name="agent_name"
 				autocomplete="off"
 				hidden={!rentingChecked}
-				bind:value={propertyAgentData.agent_name}
+				bind:value={propertyAgent.agent_name}
 			/>
 			<label
 				class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins"
@@ -198,17 +197,17 @@
 				placeholder="Mobile 0XXX XXX XXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						propertyAgentData.agent_mobile = e.currentTarget.value;
+						propertyAgent.agent_mobile = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						propertyAgentData.agent_mobile = e.currentTarget.value;
+						propertyAgent.agent_mobile = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							propertyAgentData.agent_mobile = formatMobile(propertyAgentData.agent_mobile, e.key);
+							propertyAgent.agent_mobile = formatMobile(propertyAgent.agent_mobile, e.key);
 						}
 					}
 				}}
 				hidden={!rentingChecked}
-				bind:value={propertyAgentData.agent_mobile}
+				bind:value={propertyAgent.agent_mobile}
 			/>
 			<label
 				class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins"
@@ -223,17 +222,17 @@
 				placeholder="Landline XXXX XXXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						propertyAgentData.agent_phone = e.currentTarget.value;
+						propertyAgent.agent_phone = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						propertyAgentData.agent_phone = e.currentTarget.value;
+						propertyAgent.agent_phone = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							propertyAgentData.agent_phone = formatPhone(propertyAgentData.agent_phone, e.key);
+							propertyAgent.agent_phone = formatPhone(propertyAgent.agent_phone, e.key);
 						}
 					}
 				}}
 				hidden={!rentingChecked}
-				bind:value={propertyAgentData.agent_phone}
+				bind:value={propertyAgent.agent_phone}
 			/>
 		</div>
 	</div>
@@ -247,7 +246,7 @@
 					name="sign_posted"
 					class="w-6 h-6 ml-8"
 					type="radio"
-					bind:group={propertyProfileData.sign_posted}
+					bind:group={propertyProfile.sign_posted}
 					{value}
 				/>
 				<label
@@ -272,7 +271,7 @@
 						}}
 						name="truck_access"
 						type="radio"
-						bind:group={propertyProfileData.truck_access}
+						bind:group={propertyProfile.truck_access}
 						{value}
 					/>
 					<label
@@ -285,7 +284,7 @@
 						id="truck_access_other_information"
 						name="truck_access_other_information"
 						hidden={!otherAccessChecked}
-						bind:value={propertyProfileData.truck_access_other_information}
+						bind:value={propertyProfile.truck_access_other_information}
 					/>
 				</div>
 			{:else}
@@ -299,7 +298,7 @@
 						autocomplete="off"
 						placeholder="Other Access Information..."
 						type="radio"
-						bind:group={propertyProfileData.truck_access}
+						bind:group={propertyProfile.truck_access}
 						{value}
 					/>
 					<label
@@ -325,16 +324,16 @@
 				placeholder="Mobile 0XXX XXX XXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						userProfileData.mobile = e.currentTarget.value;
+						userProfile.mobile = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						userProfileData.mobile = e.currentTarget.value;
+						userProfile.mobile = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							userProfileData.mobile = formatMobile(userProfileData.mobile, e.key);
+							userProfile.mobile = formatMobile(userProfile.mobile, e.key);
 						}
 					}
 				}}
-				bind:value={userProfileData.mobile}
+				bind:value={userProfile.mobile}
 				autocomplete="off"
 			/>
 			<label class="unstyled flex-initial px-3 text-lg text-primary-700 font-Poppins" for="phone"
@@ -348,16 +347,16 @@
 				placeholder="Landline XXXX XXXX"
 				on:keydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						propertyProfileData.phone = e.currentTarget.value;
+						propertyProfile.phone = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						propertyProfileData.phone = e.currentTarget.value;
+						propertyProfile.phone = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							propertyProfileData.phone = formatPhone(propertyProfileData.phone, e.key);
+							propertyProfile.phone = formatPhone(propertyProfile.phone, e.key);
 						}
 					}
 				}}
-				bind:value={propertyProfileData.phone}
+				bind:value={propertyProfile.phone}
 				autocomplete="tel-local"
 			/>
 		</div>

@@ -5,6 +5,12 @@ declare global {
 	}
 }
 
+export type Step = {
+	index: number;
+	text: string;
+	page: string;
+};
+
 export type ComparisonOption = {
 	value: string;
 	lable: string;

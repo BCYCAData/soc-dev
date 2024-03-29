@@ -4,42 +4,23 @@
 
 	export let data;
 
-	let steps = [
-		'1',
-		'2',
-		'3',
-		'4',
-		'5',
-		'6',
-		'7',
-		'8',
-		'9',
-		'10',
-		'11',
-		'12',
-		'13',
-		'14',
-		'15',
-		'16',
-		'17',
-		'18',
-		'19',
-		'20',
-		'21'
-	];
 	let currentActive = 1;
 	let progressBar: ProgressBar;
 
 	const {
-		propertyProfileData,
-		propertyAgentData,
-		propertyGeometryData,
-		userProfileData,
-		userPostalAddressData,
-		communityBCYCAProfileData,
-		communityTinoneeProfileData,
-		communityMondrookProfileData,
-		communityExternalProfileData
+		steps,
+		propertyId,
+		communityName,
+		propertyAddress,
+		propertyWasRented,
+		property_profile: propertyProfile,
+		property_agent: propertyAgent,
+		userProfile,
+		user_postal_address: userPostalAddress,
+		community_bcyca_profile: communityBCYCAProfile,
+		community_tinonee_profile: communityTinoneeProfile,
+		community_mondrook_profile: communityMondrookProfile,
+		community_external_profile: communityExternalProfile
 	} = data;
 
 	const handleProgress = (stepIncrement: number) => {
@@ -63,15 +44,19 @@
 <div class="h-full w-full mx-auto flex justify-center text-gray-900 bg-orange-50">
 	<div class="bg-orange-100 mb-5 sm:w-11/12">
 		<SurveyFormContainer
-			active_step={steps[currentActive - 1]}
-			{propertyProfileData}
-			{propertyAgentData}
-			{userProfileData}
-			{userPostalAddressData}
-			{communityBCYCAProfileData}
-			{communityTinoneeProfileData}
-			{communityMondrookProfileData}
-			{communityExternalProfileData}
+			active_step={steps[currentActive - 1].index}
+			{propertyId}
+			{communityName}
+			{propertyAddress}
+			{propertyWasRented}
+			{propertyProfile}
+			{propertyAgent}
+			{userProfile}
+			{userPostalAddress}
+			{communityBCYCAProfile}
+			{communityTinoneeProfile}
+			{communityMondrookProfile}
+			{communityExternalProfile}
 		/>
 		<div class="pt-0 mx-auto sm:w-8/12">
 			<ProgressBar

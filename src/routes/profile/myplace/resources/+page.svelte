@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
+	import type { PropertyProfileData } from '$lib/custom.types.js';
 	import {
 		staticWaterOptions,
 		yesNoMaybeOptions,
@@ -13,22 +14,18 @@
 
 	let unsaved = false;
 
+	const modalStore = getModalStore();
+
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerSaveProfilePrompt();
+			const modal: ModalSettings = {
+				type: 'component',
+				component: 'modalSaveProfilePrompt'
+			};
+			modalStore.trigger(modal);
 		}
 	});
-
-	const modalStore = getModalStore();
-
-	function triggerSaveProfilePrompt(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalSaveProfilePrompt'
-		};
-		modalStore.trigger(modal);
-	}
 
 	let noneChecked = false;
 
@@ -54,7 +51,14 @@
 	};
 
 	export let data;
-	$: ({ propertyProfileData } = data);
+	let propertyProfile: PropertyProfileData;
+	let propertyId: string;
+	if (data?.propertyId) {
+		propertyId = data.propertyId;
+	}
+	if (data?.propertyProfile) {
+		propertyProfile = data.propertyProfile;
+	}
 </script>
 
 <svelte:head>
@@ -81,7 +85,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={propertyProfileData.static_water_available}
+					bind:group={propertyProfile.static_water_available}
 					{value}
 					on:change={(e) => {
 						setStaticWater(e);
@@ -92,7 +96,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={propertyProfileData.static_water_available}
+					bind:group={propertyProfile.static_water_available}
 					{value}
 					on:change={(e) => {
 						unCheckAllStaticWater(e);
@@ -113,12 +117,12 @@
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				on:change={() => {
-					propertyProfileData.have_stortz = value;
+					propertyProfile.have_stortz = value;
 				}}
 				class="w-4 h-4 ml-8"
 				name="have_stortz"
 				type="radio"
-				bind:group={propertyProfileData.have_stortz}
+				bind:group={propertyProfile.have_stortz}
 				{value}
 			/>
 			<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="have_stortz"
@@ -132,7 +136,7 @@
 		id="stortz_size"
 		name="stortz_size"
 		class="border border-orange-700 w-20 rounded ml-4 py-1 sm:text-lg"
-		bind:value={propertyProfileData.stortz_size}
+		bind:value={propertyProfile.stortz_size}
 	/>
 	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
@@ -145,7 +149,7 @@
 				class="w-4 h-4 ml-8"
 				name="fire_fighting_resources"
 				type="checkbox"
-				bind:group={propertyProfileData.fire_fighting_resources}
+				bind:group={propertyProfile.fire_fighting_resources}
 				{value}
 			/>
 			<label
@@ -166,7 +170,7 @@
 					class="w-4 h-4 ml-8"
 					name="fire_hazard_reduction"
 					type="checkbox"
-					bind:group={propertyProfileData.fire_hazard_reduction}
+					bind:group={propertyProfile.fire_hazard_reduction}
 					{value}
 				/>
 				<label
@@ -176,7 +180,7 @@
 			</div>
 		{/each}
 	</div>
-	<input type="text" name="property_key" value={propertyProfileData.id} hidden />
+	<input type="text" name="property_key" value={propertyId} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

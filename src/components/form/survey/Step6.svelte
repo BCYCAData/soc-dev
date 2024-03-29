@@ -8,7 +8,7 @@
 
 	import type { PropertyProfileData } from '$lib/custom.types';
 
-	export let propertyProfileData: PropertyProfileData;
+	export let propertyProfile: PropertyProfileData;
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -34,7 +34,7 @@
 	divClass="p-3 rounded-lg bg-orange-300 sm:text-lg"
 	nameText="other_site_hazards"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={propertyProfileData.other_site_hazards}
+	bind:inputValue={propertyProfile.other_site_hazards}
 />
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
 	Does your property have:<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
@@ -48,7 +48,7 @@
 				class="w-6 h-6 ml-8"
 				name="fire_hazard_reduction"
 				type="checkbox"
-				bind:group={propertyProfileData.fire_hazard_reduction}
+				bind:group={propertyProfile.fire_hazard_reduction}
 				{value}
 			/>
 			<label
@@ -69,7 +69,7 @@
 				id="land_adjacent_hazard"
 				type="radio"
 				name="land_adjacent_hazard"
-				bind:group={propertyProfileData.land_adjacent_hazard}
+				bind:group={propertyProfile.land_adjacent_hazard}
 				{value}
 			/>
 			<label
@@ -87,5 +87,5 @@
 	divClass="p-3 rounded-lg bg-orange-300 sm:text-lg"
 	nameText="other_hazards"
 	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={propertyProfileData.other_hazards}
+	bind:inputValue={propertyProfile.other_hazards}
 />

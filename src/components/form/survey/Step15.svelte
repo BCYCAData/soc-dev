@@ -2,9 +2,9 @@
 	import { informationSheetOptions } from '$lib/profileOptions';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
-	import type { UserMondrookProfileData } from '$lib/custom.types';
+	import type { CommunityMondrookProfileData } from '$lib/custom.types';
 
-	export let communityMondrookProfileData: UserMondrookProfileData;
+	export let communityMondrookProfile: CommunityMondrookProfileData;
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -12,33 +12,35 @@
 		(Check all that apply)</span
 	>
 </h2>
-<div
-	class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
->
-	{#each informationSheetOptions as { value, lable }}
-		<div class="flex items-center col-span-1">
-			<input
-				class="w-6 h-6 ml-8"
-				name="information_sheet_choices"
-				type="checkbox"
-				bind:group={communityMondrookProfileData.information_sheet_choices}
-				{value}
-			/>
-			<label
-				class="ml-2 text-xl font-medium text-orange-900 font-Poppins"
-				for="information_sheet_choices">{lable}</label
-			>
-		</div>
-	{/each}
-</div>
+{#if communityMondrookProfile}
+	<div
+		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+	>
+		{#each informationSheetOptions as { value, lable }}
+			<div class="flex items-center col-span-1">
+				<input
+					class="w-6 h-6 ml-8"
+					name="information_sheet_choices"
+					type="checkbox"
+					bind:group={communityMondrookProfile.information_sheet_choices}
+					{value}
+				/>
+				<label
+					class="ml-2 text-xl font-medium text-orange-900 font-Poppins"
+					for="information_sheet_choices">{lable}</label
+				>
+			</div>
+		{/each}
+	</div>
 
-<TextAreaInput
-	headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
-	headingText="Is there other information which you would find useful?"
-	lableClass={null}
-	lableText={null}
-	divClass="p-2 rounded-lg bg-orange-300 sm:text-lg"
-	nameText="other_information_sheet"
-	textAreaClass="w-full resize-y sm:text-lg"
-	bind:inputValue={communityMondrookProfileData.other_information_sheet}
-/>
+	<TextAreaInput
+		headingClass="unstyled mb-1 text-xl font-semibold text-gray-900"
+		headingText="Is there other information which you would find useful?"
+		lableClass={null}
+		lableText={null}
+		divClass="p-2 rounded-lg bg-orange-300 sm:text-lg"
+		nameText="other_information_sheet"
+		textAreaClass="w-full resize-y sm:text-lg"
+		bind:inputValue={communityMondrookProfile.other_information_sheet}
+	/>
+{/if}

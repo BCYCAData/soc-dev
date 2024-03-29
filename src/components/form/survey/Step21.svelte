@@ -1,7 +1,7 @@
 <script lang="ts">
-	// import type { UserProfileData } from '$lib/types';
+	// import type { UserProfile } from '$lib/types';
 
-	// let userProfileData: UserProfileData
+	// let userProfileData: UserProfile
 </script>
 
 <h1

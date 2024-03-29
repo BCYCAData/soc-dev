@@ -1,48 +1,83 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { getFormData } from '$lib/utils';
+import { getSurveyFormData } from '$lib/server/form.utils';
 import {
 	sendPostgRestErrorEmail,
 	type PostgRestErrorEmailSubject
 } from '$lib/server/email/nodemailer';
 
-import type {
-	AgentData,
-	PropertyProfileData,
-	UserBCYCAProfileData,
-	UserTinoneeProfileData,
-	UserMondrookProfileData,
-	UserExternalProfileData,
-	UserPostalAddressData,
-	UserProfileData,
-	PropertyGeometryData
-} from '$lib/custom.types';
+import type { Step } from '$lib/types';
 
 import type { PageServerLoad } from './$types';
+import type { QueryData } from '@supabase/supabase-js';
 
-let propertyProfileData: PropertyProfileData;
-let propertyAgentData: AgentData;
-let propertyGeometryData: PropertyGeometryData;
-let userProfileData: UserProfileData;
-let userPostalAddressData: UserPostalAddressData;
-let communityBCYCAProfileData: UserBCYCAProfileData;
-let communityTinoneeProfileData: UserTinoneeProfileData;
-let communityMondrookProfileData: UserMondrookProfileData;
-let communityExternalProfileData: UserExternalProfileData;
+let steps: Step[] = [
+	{ index: 1, text: '1', page: 'Step1' },
+	{ index: 2, text: '2', page: 'Step2' },
+	{ index: 3, text: '3', page: 'Step3' },
+	{ index: 4, text: '4', page: 'Step4' },
+	{ index: 5, text: '5', page: 'Step5' },
+	{ index: 6, text: '6', page: 'Step6' },
+	{ index: 7, text: '7', page: 'Step7' },
+	{ index: 11, text: '11', page: 'Step20' },
+	{ index: 12, text: '12', page: 'Step21' }
+];
+
+function insertSteps(steps: Step[], additionalValues: Step[]) {
+	const filteredAdditionalValues = additionalValues.filter(
+		(additionalValue) => !steps.some((step) => step.index === additionalValue.index)
+	);
+	const combinedSteps = [...steps, ...filteredAdditionalValues];
+	const sortedSteps = combinedSteps.sort((a, b) => a.index - b.index);
+	const uniqueSortedSteps = sortedSteps.filter((value, index, array) =>
+		index === 0 ? true : value.index !== array[index - 1].index
+	);
+	return uniqueSortedSteps;
+}
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
 	const session = await getSession();
 	if (!session?.user) {
 		redirect(307, '/auth/signin');
 	}
-	const { data, error: getSurveyDataError } = await supabase
+	console.log('SURVEY LOAD');
+	const surveyQueryData = supabase
 		.from('property_profile')
 		.select(
-			` * , property_geometry(*), user_profile( *, community_bcyca_profile(*), 
-				community_tinonee_profile(*), community_mondrook_profile(*), community_external_profile(*), 
-				user_postal_address(*) ), property_agent(*)`
+			` id, property_address_street, property_address_suburb, property_address_postcode, phone,
+    			mobile_reception, sign_posted, other_essential_assets, residents0_18, residents19_50,
+    			residents51_70, residents71_, vulnerable_residents, number_birds, number_cats, number_dogs,
+    			number_other_pets, live_stock_present, live_stock_safe_area, share_livestock_safe_area, static_water_available,
+    			have_stortz, stortz_size, truck_access, truck_access_other_information, fire_fighting_resources,
+    			fire_hazard_reduction, site_hazards, other_hazards, other_site_hazards, land_adjacent_hazard,
+      			property_rented, 
+				community_areas(community), 
+				user_profile( family_name, fire_fighting_experience, fire_trauma, first_name, mobile, other_comments, 
+					plan_to_leave_before_fire, plan_to_leave_before_flood, residency_profile, rfs_survival_plan, 
+					stay_in_touch_choices, 
+					community_bcyca_profile(community_meeting_choices, community_workshop_choices, 
+						information_sheet_choices, other_community_meeting, other_community_workshop,
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+					), 
+					community_tinonee_profile(community_meeting_choices, community_workshop_choices, 
+						information_sheet_choices, other_community_meeting, other_community_workshop,
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+					), 
+					community_mondrook_profile(community_meeting_choices, community_workshop_choices, 
+						information_sheet_choices, other_community_meeting, other_community_workshop,
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+					), 
+					community_external_profile(community_meeting_choices, community_workshop_choices, 
+						information_sheet_choices, other_community_meeting, other_community_workshop,
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+					), 
+					user_postal_address(postal_address_postcode, postal_address_street, postal_address_suburb) 
+				), 
+				property_agent(agent_mobile, agent_name, agent_phone)`
 		)
 		.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid)
 		.eq('user_profile.id', session.user.id);
+	type SurveyData = QueryData<typeof surveyQueryData>;
+	const { data, error: getSurveyDataError } = await surveyQueryData;
 	if (getSurveyDataError) {
 		console.log('GET data error Survey:', getSurveyDataError);
 		let emailSubject: PostgRestErrorEmailSubject = {
@@ -54,14 +89,29 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 		error(400, `GET data error Survey:  Error ${getSurveyDataError.message}`);
 	}
 	if (data && data.length > 0) {
-		const surveyData = data[0];
-		const {
+		const surveyData: SurveyData = data;
+		let {
 			user_profile: [_userProfileData],
-			property_geometry,
 			property_agent,
+			community_areas,
 			...property_profile
-		} = data[0];
-		const {
+		} = surveyData[0];
+		const communityName = community_areas!.community!;
+		let {
+			id,
+			property_address_street,
+			property_address_suburb,
+			property_address_postcode,
+			...propertyProfile
+		} = property_profile;
+		const propertyId = id;
+		const propertyAddress = {
+			property_address_street: property_address_street,
+			property_address_suburb: property_address_suburb,
+			property_address_postcode: property_address_postcode
+		};
+		const propertyWasRented = propertyProfile.property_rented || false;
+		let {
 			user_postal_address,
 			community_bcyca_profile,
 			community_tinonee_profile,
@@ -69,129 +119,69 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 			community_external_profile,
 			...userProfile
 		} = _userProfileData;
-		propertyProfileData = property_profile;
-		if (property_agent) {
-			propertyAgentData = property_agent;
-		} else {
-			propertyAgentData = {
+		if (!property_agent) {
+			property_agent = {
 				agent_mobile: '',
 				agent_name: '',
-				agent_phone: '',
-				created_at: '',
-				last_updated: '',
-				property_id: ''
+				agent_phone: ''
 			};
 		}
-		if (property_geometry) {
-			propertyGeometryData = property_geometry;
-		} else {
-			propertyGeometryData = {
-				address_point: null,
-				created_at: '',
-				id: '',
-				last_updated: '',
-				principaladdresssiteoid: -1,
-				property: null,
-				way_point: null
-			};
-		}
-		userProfileData = userProfile;
-		if (user_postal_address) {
-			userPostalAddressData = user_postal_address;
-		} else {
-			userPostalAddressData = {
-				created_at: '',
-				last_updated: '',
+		if (!user_postal_address) {
+			user_postal_address = {
 				postal_address_postcode: '',
 				postal_address_street: '',
-				postal_address_suburb: '',
-				user_id: ''
+				postal_address_suburb: ''
 			};
 		}
 		if (community_bcyca_profile) {
-			communityBCYCAProfileData = community_bcyca_profile;
-		} else {
-			communityBCYCAProfileData = {
-				bcyca_profile_id: '',
-				community_meeting_choices: [],
-				community_workshop_choices: [],
-				created_at: '',
-				information_sheet_choices: [],
-				last_updated: '',
-				other_community_meeting: '',
-				other_community_workshop: '',
-				other_information_sheet: '',
-				stay_in_touch_choices: [],
-				will_run_community_workshops: ''
-			};
+			steps = insertSteps(steps, [
+				{ index: 8, text: '8', page: 'Step8' },
+				{ index: 9, text: '9', page: 'Step9' },
+				{ index: 10, text: '10', page: 'Step10' }
+			]);
 		}
 		if (community_tinonee_profile) {
-			communityTinoneeProfileData = community_tinonee_profile;
-		} else {
-			communityTinoneeProfileData = {
-				tinonee_profile_id: '',
-				community_meeting_choices: [],
-				community_workshop_choices: [],
-				created_at: '',
-				information_sheet_choices: [],
-				last_updated: '',
-				other_community_meeting: '',
-				other_community_workshop: '',
-				other_information_sheet: '',
-				stay_in_touch_choices: [],
-				will_run_community_workshops: ''
-			};
+			console.log('community_tinonee_profile', community_tinonee_profile);
+			steps = insertSteps(steps, [
+				{ index: 8, text: '8', page: 'Step11' },
+				{ index: 9, text: '9', page: 'Step12' },
+				{ index: 10, text: '10', page: 'Step13' }
+			]);
 		}
 		if (community_mondrook_profile) {
-			communityMondrookProfileData = community_mondrook_profile;
-		} else {
-			communityMondrookProfileData = {
-				mondrook_profile_id: '',
-				community_meeting_choices: [],
-				community_workshop_choices: [],
-				created_at: '',
-				information_sheet_choices: [],
-				last_updated: '',
-				other_community_meeting: '',
-				other_community_workshop: '',
-				other_information_sheet: '',
-				stay_in_touch_choices: [],
-				will_run_community_workshops: ''
-			};
+			console.log('community_mondrook_profile', community_mondrook_profile);
+			steps = insertSteps(steps, [
+				{ index: 8, text: '8', page: 'Step14' },
+				{ index: 9, text: '9', page: 'Step15' },
+				{ index: 10, text: '10', page: 'Step16' }
+			]);
 		}
 		if (community_external_profile) {
-			communityExternalProfileData = community_external_profile;
-		} else {
-			communityExternalProfileData = {
-				external_profile_id: '',
-				community_meeting_choices: [],
-				community_workshop_choices: [],
-				created_at: '',
-				information_sheet_choices: [],
-				last_updated: '',
-				other_community_meeting: '',
-				other_community_workshop: '',
-				other_information_sheet: '',
-				stay_in_touch_choices: [],
-				will_run_community_workshops: ''
-			};
+			console.log('community_external_profile', community_external_profile);
+			steps = insertSteps(steps, [
+				{ index: 8, text: '8', page: 'Step17' },
+				{ index: 9, text: '9', page: 'Step18' },
+				{ index: 10, text: '10', page: 'Step19' }
+			]);
 		}
-	} else {
-		// Handle the case when data is null or empty
-		console.error('No data found or an error occurred.');
+		return {
+			steps,
+			propertyId,
+			propertyWasRented,
+			communityName,
+			propertyAddress,
+			property_profile,
+			property_agent,
+			userProfile,
+			user_postal_address,
+			community_bcyca_profile,
+			community_tinonee_profile,
+			community_mondrook_profile,
+			community_external_profile
+		};
 	}
 
-	return {
-		propertyProfileData,
-		propertyAgentData,
-		propertyGeometryData,
-		userProfileData,
-		userPostalAddressData,
-		communityBCYCAProfileData,
-		communityTinoneeProfileData,
-		communityMondrookProfileData,
-		communityExternalProfileData
-	};
+	error(400, `GET data error Survey:  'No data found or an error occurred.'`);
 };
 
 export const actions: Actions = {
@@ -201,19 +191,16 @@ export const actions: Actions = {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const pid = formData.get('property_key') as string;
-		const bodyObject = getFormData(
+		const bodyObject = getSurveyFormData(
 			formData,
 			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid,
-			session.user.app_metadata.community,
-			session.user.app_metadata.kyng
+			session.user.app_metadata.principaladdresssiteoid
 		);
-		const wasRented = formData.get('property_was_rented') as string;
-		if (bodyObject.propertyProfileData?.property_rented?.toString() != wasRented) {
-			if (wasRented === 'false') {
-				const { error: agentUpsertError } = await supabase.from('agent').upsert({
-					property_id: session.user.app_metadata.property_id,
+		if (bodyObject.propertyProfileData.property_rented != bodyObject.propertyWasRented) {
+			if (bodyObject.propertyWasRented === false) {
+				console.log('Add Agent');
+				const { error: agentUpsertError } = await supabase.from('property_agent').upsert({
+					property_id: bodyObject.propertyId,
 					agent_mobile: bodyObject.agentData.agent_mobile,
 					agent_name: bodyObject.agentData.agent_name,
 					agent_phone: bodyObject.agentData.agent_phone
@@ -222,13 +209,14 @@ export const actions: Actions = {
 					error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
 				}
 			} else {
+				console.log('Delete Agent');
 				const { error: deleteAgentError } = await supabase
-					.from('agent')
+					.from('property_agent')
 					.delete()
-					.eq('property_id', session.user.app_metadata.property_id);
+					.eq('property_id', bodyObject.propertyId);
 				if (deleteAgentError) {
-					console.log('error profileMyPlace delete agent: ', deleteAgentError);
-					error(400, `error profileMyPlace delete agent: ${deleteAgentError.message}`);
+					console.log('error survey delete agent: ', deleteAgentError);
+					error(400, `error delete delete agent: ${deleteAgentError.message}`);
 				}
 			}
 		}
@@ -269,22 +257,92 @@ export const actions: Actions = {
 			})
 			.eq('id', session.user.id);
 		if (userProfileUpdateError) {
+			console.log('userProfileUpdateError', userProfileUpdateError);
 			error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
 		}
-		const { error: userBCYCAProfileUpdateError } = await supabase
-			.from('user_bcyca_profile')
-			.update({
-				community_meeting_choices: bodyObject.userBCYCAProfileData.community_meeting_choices,
-				community_workshop_choices: bodyObject.userBCYCAProfileData.community_workshop_choices,
-				information_sheet_choices: bodyObject.userBCYCAProfileData.information_sheet_choices,
-				other_community_meeting: bodyObject.userBCYCAProfileData.other_community_meeting,
-				other_community_workshop: bodyObject.userBCYCAProfileData.other_community_workshop,
-				other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
-				will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
-			})
-			.eq('user_id', session.user.id);
-		if (userBCYCAProfileUpdateError) {
-			error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
+		if (bodyObject.userBCYCAProfileData) {
+			const { error: userBCYCAProfileUpdateError } = await supabase
+				.from('community_bcyca_profile')
+				.update({
+					community_meeting_choices: bodyObject.userBCYCAProfileData.community_meeting_choices,
+					community_workshop_choices: bodyObject.userBCYCAProfileData.community_workshop_choices,
+					information_sheet_choices: bodyObject.userBCYCAProfileData.information_sheet_choices,
+					other_community_meeting: bodyObject.userBCYCAProfileData.other_community_meeting,
+					other_community_workshop: bodyObject.userBCYCAProfileData.other_community_workshop,
+					other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
+					will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
+				})
+				.eq('user_id', session.user.id);
+			if (userBCYCAProfileUpdateError) {
+				console.log('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
+				error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
+			}
+		}
+		if (bodyObject.userTinoneeProfileData) {
+			const { error: userTinoneeProfileUpdateError } = await supabase
+				.from('community_tinonee_profile')
+				.update({
+					community_meeting_choices: bodyObject.userTinoneeProfileData.community_meeting_choices,
+					community_workshop_choices: bodyObject.userTinoneeProfileData.community_workshop_choices,
+					information_sheet_choices: bodyObject.userTinoneeProfileData.information_sheet_choices,
+					other_community_meeting: bodyObject.userTinoneeProfileData.other_community_meeting,
+					other_community_workshop: bodyObject.userTinoneeProfileData.other_community_workshop,
+					other_information_sheet: bodyObject.userTinoneeProfileData.other_information_sheet,
+					will_run_community_workshops:
+						bodyObject.userTinoneeProfileData.will_run_community_workshops
+				})
+				.eq('user_id', session.user.id);
+			if (userTinoneeProfileUpdateError) {
+				console.log('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
+				error(
+					400,
+					`update User Tinonee Profile Data Error ${userTinoneeProfileUpdateError.message}`
+				);
+			}
+		}
+		if (bodyObject.userMondrookProfileData) {
+			const { error: userMondrookProfileUpdateError } = await supabase
+				.from('community_mondrook_profile')
+				.update({
+					community_meeting_choices: bodyObject.userMondrookProfileData.community_meeting_choices,
+					community_workshop_choices: bodyObject.userMondrookProfileData.community_workshop_choices,
+					information_sheet_choices: bodyObject.userMondrookProfileData.information_sheet_choices,
+					other_community_meeting: bodyObject.userMondrookProfileData.other_community_meeting,
+					other_community_workshop: bodyObject.userMondrookProfileData.other_community_workshop,
+					other_information_sheet: bodyObject.userMondrookProfileData.other_information_sheet,
+					will_run_community_workshops:
+						bodyObject.userMondrookProfileData.will_run_community_workshops
+				})
+				.eq('user_id', session.user.id);
+			if (userMondrookProfileUpdateError) {
+				console.log('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
+				error(
+					400,
+					`update User Mondrook Profile Data Error ${userMondrookProfileUpdateError.message}`
+				);
+			}
+		}
+		if (bodyObject.userExternalProfileData) {
+			const { error: userExternalProfileUpdateError } = await supabase
+				.from('community_external_profile')
+				.update({
+					community_meeting_choices: bodyObject.userExternalProfileData.community_meeting_choices,
+					community_workshop_choices: bodyObject.userExternalProfileData.community_workshop_choices,
+					information_sheet_choices: bodyObject.userExternalProfileData.information_sheet_choices,
+					other_community_meeting: bodyObject.userExternalProfileData.other_community_meeting,
+					other_community_workshop: bodyObject.userExternalProfileData.other_community_workshop,
+					other_information_sheet: bodyObject.userExternalProfileData.other_information_sheet,
+					will_run_community_workshops:
+						bodyObject.userExternalProfileData.will_run_community_workshops
+				})
+				.eq('user_id', session.user.id);
+			if (userExternalProfileUpdateError) {
+				console.log('userExternalProfileUpdateError', userExternalProfileUpdateError);
+				error(
+					400,
+					`update User External Profile Data Error ${userExternalProfileUpdateError.message}`
+				);
+			}
 		}
 		const { error: propertyProfileUpdateError } = await supabase
 			.from('property_profile')
@@ -319,8 +377,9 @@ export const actions: Actions = {
 					bodyObject.propertyProfileData.truck_access_other_information,
 				vulnerable_residents: bodyObject.propertyProfileData.vulnerable_residents
 			})
-			.eq('id', pid);
+			.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid);
 		if (propertyProfileUpdateError) {
+			console.log('propertyProfileUpdateError', propertyProfileUpdateError);
 			error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
 		}
 		redirect(303, '/profile');

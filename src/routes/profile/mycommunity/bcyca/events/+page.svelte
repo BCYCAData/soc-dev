@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { communityWorkshopOptions } from '$lib/profileOptions';
+	import { communityMeetingOptions } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
@@ -9,32 +9,34 @@
 
 	let unsaved = false;
 
+	const modalStore = getModalStore();
+
 	beforeNavigate(async ({ cancel }) => {
 		if (unsaved) {
 			cancel();
-			triggerSaveProfilePrompt();
+			const modal: ModalSettings = {
+				type: 'component',
+				component: 'modalSaveProfilePrompt'
+			};
+			modalStore.trigger(modal);
 		}
 	});
 
-	const modalStore = getModalStore();
-
-	function triggerSaveProfilePrompt(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'modalSaveProfilePrompt'
-		};
-		modalStore.trigger(modal);
-	}
 	export let data;
-	$: ({ userBCYCAData } = data);
+	let communityMeetingChoices: number[] | null;
+	let otherCommunityMeeting: string | null;
+	if (data?.community_bcyca_profile) {
+		communityMeetingChoices = data.community_bcyca_profile.community_meeting_choices;
+		otherCommunityMeeting = data.community_bcyca_profile.other_community_meeting;
+	}
 </script>
 
 <svelte:head>
-	<title>Profile-Community-Workshops</title>
+	<title>Profile-Community-Events</title>
 </svelte:head>
 
 <form
-	id="profileMyCommunityWorkshopsForm"
+	id="profileMyCommunityEventsForm"
 	on:change={() => {
 		unsaved = true;
 	}}
@@ -42,52 +44,39 @@
 	method="POST"
 >
 	<h2 class="unstyled text-base font-semibold text-gray-900">
-		Which of these community initiated workshops would be useful to you?<span
-			class="ml-2 text-sm text-gray-500"
-		>
+		What Community Events are you interested in?<span class="ml-2 text-sm text-gray-500">
 			(Check all that apply)</span
 		>
 	</h2>
 	<div
-		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
-		{#each communityWorkshopOptions as { value, lable }}
+		{#each communityMeetingOptions as { value, lable }}
 			<div class="flex items-center col-span-1">
 				<input
 					class="w-4 h-4 ml-8"
-					name="community_workshop_choices"
+					name="community_meeting_choices"
 					type="checkbox"
-					bind:group={userBCYCAData.community_workshop_choices}
+					bind:group={communityMeetingChoices}
 					{value}
 				/>
 				<label
 					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="community_workshop_choices">{lable}</label
+					for="community_meeting_choices">{lable}</label
 				>
 			</div>
 		{/each}
 	</div>
 	<TextAreaInput
 		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
-		headingText="If there are other workshops that you would like to see run, please add
-			the details here"
+		headingText="If there are other events you would be interested in, please add them
+			below."
 		lableClass={null}
 		lableText={null}
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
-		nameText="other_community_workshop"
+		nameText="other_community_meeting"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={userBCYCAData.other_community_workshop}
-	/>
-	<TextAreaInput
-		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"
-		headingText="If you would like to help run any of the workshops, please indicate which
-			ones below."
-		lableClass={null}
-		lableText={null}
-		divClass="px-4 pt-2 rounded-lg sm:text-lg"
-		nameText="will_run_community_workshops"
-		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={userBCYCAData.will_run_community_workshops}
+		bind:inputValue={otherCommunityMeeting}
 	/>
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
@@ -99,7 +88,7 @@
 				}}
 				hidden={!unsaved}
 				type="submit"
-				form="profileMyCommunityWorkshopsForm"
+				form="profileMyCommunityEventsForm"
 			>
 				Save My Answers
 			</button>

@@ -1,6 +1,9 @@
 <script lang="ts">
-	export let steps: string[] = [];
+	import type { Step } from '$lib/types';
+
+	export let steps: Step[] = [];
 	export let currentActive = 1;
+
 	let circles:
 		| NodeListOf<Element>
 		| { classList: { add: (arg0: string) => void; remove: (arg0: string) => void } }[];
@@ -58,7 +61,7 @@
 	{#each steps as step, i}
 		<div
 			class="circle {i == 0 ? 'active' : ''}"
-			data-title={step}
+			data-title={step.text}
 			on:click={(e) => {
 				skipTo(e);
 			}}

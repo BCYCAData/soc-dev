@@ -22,118 +22,123 @@
 	import Step21 from '$components/form/survey/Step21.svelte';
 
 	import type {
-		AgentData,
+		PropertyAddress,
+		PropertyAgentData,
 		PropertyProfileData,
-		UserBCYCAProfileData,
-		UserTinoneeProfileData,
-		UserMondrookProfileData,
-		UserExternalProfileData,
+		CommunityBCYCAProfileData,
+		CommunityTinoneeProfileData,
+		CommunityMondrookProfileData,
+		CommunityExternalProfileData,
 		UserPostalAddressData,
-		UserProfileData,
-		PropertyGeometryData
+		UserProfileData
 	} from '$lib/custom.types';
 
-	export let active_step: string;
-
-	export let propertyProfileData: PropertyProfileData;
-	export let propertyAgentData: AgentData;
-	export let userProfileData: UserProfileData;
-	export let userPostalAddressData: UserPostalAddressData;
-	export let communityBCYCAProfileData: UserBCYCAProfileData;
-	export let communityTinoneeProfileData: UserTinoneeProfileData;
-	export let communityMondrookProfileData: UserMondrookProfileData;
-	export let communityExternalProfileData: UserExternalProfileData;
+	export let active_step: number;
+	export let propertyId: string;
+	export let communityName: string;
+	export let propertyAddress: PropertyAddress;
+	export let propertyWasRented: boolean;
+	export let propertyProfile: PropertyProfileData;
+	export let propertyAgent: PropertyAgentData;
+	export let userProfile: UserProfileData;
+	export let userPostalAddress: UserPostalAddressData;
+	export let communityBCYCAProfile: CommunityBCYCAProfileData;
+	export let communityTinoneeProfile: CommunityTinoneeProfileData;
+	export let communityMondrookProfile: CommunityMondrookProfileData;
+	export let communityExternalProfile: CommunityExternalProfileData;
 </script>
 
 <div class="mx-auto sm:w-11/12">
 	<div
 		class="p-1 text-center text-lg text-orange-600"
-		hidden={active_step == '1' || active_step == '12'}
+		hidden={active_step == 1 || active_step == 12}
 	>
 		Please complete all steps and tap <span
 			class="p-1 rounded-lg text-base font-semibold bg-[#0099E8] text-stone-100 border border-purple-700"
 		>
 			Save My Answers
 		</span>
-		at Step 12
+		at Step 21
 	</div>
 	<form method="post" action="/survey" id="surveyForm">
-		<div hidden={active_step != '1'}>
+		<input type="hidden" name="communityName" value={communityName} />
+		<input type="hidden" name="propertyId" value={propertyId} />
+		<input type="hidden" name="propertyWasRented" value={propertyWasRented} />
+		<div hidden={active_step != 1}>
 			<Step1 />
 		</div>
-		<div hidden={active_step != '2'}>
-			<Step2 {userProfileData} {propertyProfileData} {propertyAgentData} />
+		<div hidden={active_step != 2}>
+			<Step2 {userProfile} {propertyProfile} {propertyAddress} {propertyAgent} />
 		</div>
-		<div hidden={active_step != '3'}>
-			<Step3 {userProfileData} {propertyProfileData} />
+		<div hidden={active_step != 3}>
+			<Step3 {userProfile} {propertyProfile} />
 		</div>
-		<div hidden={active_step != '4'}>
-			<Step4 {propertyProfileData} />
+		<div hidden={active_step != 4}>
+			<Step4 {propertyProfile} />
 		</div>
-		<div hidden={active_step != '5'}>
-			<Step5 {propertyProfileData} />
+		<div hidden={active_step != 5}>
+			<Step5 {propertyProfile} />
 		</div>
-		<div hidden={active_step != '6'}>
-			<Step6 {propertyProfileData} />
+		<div hidden={active_step != 6}>
+			<Step6 {propertyProfile} />
 		</div>
-		<div hidden={active_step != '7'}>
-			<Step7 {userProfileData} />
+		<div hidden={active_step != 7}>
+			<Step7 {userProfile} />
 		</div>
-		{#if communityBCYCAProfileData}
-			<div hidden={active_step != '8'}>
-				<Step8 {communityBCYCAProfileData} />
+		{#if communityBCYCAProfile}
+			<div hidden={active_step != 8}>
+				<Step8 {communityBCYCAProfile} />
 			</div>
-			<div hidden={active_step != '9'}>
-				<Step9 {communityBCYCAProfileData} />
+			<div hidden={active_step != 9}>
+				<Step9 {communityBCYCAProfile} />
 			</div>
-			<div hidden={active_step != '10'}>
-				<Step10 {communityBCYCAProfileData} />
+			<div hidden={active_step != 10}>
+				<Step10 {communityBCYCAProfile} />
 			</div>
 		{/if}
-		{#if communityTinoneeProfileData}
-			<div hidden={active_step != '11'}>
-				<Step11 {communityTinoneeProfileData} />
+		{#if communityTinoneeProfile}
+			<div hidden={active_step != 8}>
+				<Step11 {communityTinoneeProfile} />
 			</div>
-			<div hidden={active_step != '12'}>
-				<Step12 {communityTinoneeProfileData} />
+			<div hidden={active_step != 9}>
+				<Step12 {communityTinoneeProfile} />
 			</div>
-			<div hidden={active_step != '13'}>
-				<Step13 {communityTinoneeProfileData} />
-			</div>
-		{/if}
-		{#if communityMondrookProfileData}
-			<div hidden={active_step != '14'}>
-				<Step14 {communityMondrookProfileData} />
-			</div>
-			<div hidden={active_step != '15'}>
-				<Step15 {communityMondrookProfileData} />
-			</div>
-			<div hidden={active_step != '16'}>
-				<Step16 {communityMondrookProfileData} />
+			<div hidden={active_step != 10}>
+				<Step13 {communityTinoneeProfile} />
 			</div>
 		{/if}
-		{#if communityExternalProfileData}
-			<div hidden={active_step != '17'}>
-				<Step17 {communityExternalProfileData} />
+		{#if communityMondrookProfile}
+			<div hidden={active_step != 8}>
+				<Step14 {communityMondrookProfile} />
 			</div>
-			<div hidden={active_step != '18'}>
-				<Step18 {communityExternalProfileData} />
+			<div hidden={active_step != 9}>
+				<Step15 {communityMondrookProfile} />
 			</div>
-			<div hidden={active_step != '19'}>
-				<Step19 {communityExternalProfileData} />
+			<div hidden={active_step != 10}>
+				<Step16 {communityMondrookProfile} />
 			</div>
 		{/if}
-		<div hidden={active_step != '20'}>
-			<Step20 {userProfileData} {userPostalAddressData} />
+		{#if communityExternalProfile}
+			<div hidden={active_step != 8}>
+				<Step17 {communityExternalProfile} />
+			</div>
+			<div hidden={active_step != 9}>
+				<Step18 {communityExternalProfile} />
+			</div>
+			<div hidden={active_step != 10}>
+				<Step19 {communityExternalProfile} />
+			</div>
+		{/if}
+		<div hidden={active_step != 11}>
+			<Step20 {userProfile} {userPostalAddress} />
 		</div>
-		<div hidden={active_step != '21'}>
+		<div hidden={active_step != 12}>
 			<Step21 />
 		</div>
-		<input type="text" name="property_key" value={propertyProfileData.id} hidden />
 		<div class="flex flex-col justify-center items-center sm:text-lg">
 			<button
 				class="w-1/4 mx-3 mb-3 rounded-lg text-base font-semibold bg-[#0099E8] text-stone-100 border border-purple-700"
-				hidden={active_step != '12'}
+				hidden={active_step != 12}
 				type="submit"
 				form="surveyForm"
 			>
