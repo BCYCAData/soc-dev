@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { enhance } from '$app/forms';
-	import { formatMobile, toTitleCase } from '$lib/utils';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+
 	import {
 		residencyOptions,
 		yesNoOptions,
@@ -9,7 +9,8 @@
 		fireFightingExperienceOptions,
 		stayGoOptions
 	} from '$lib/profileOptions';
-	import { getModalStore } from '@skeletonlabs/skeleton';
+
+	import { formatMobile, toTitleCase } from '$lib/utils';
 	import { setTitleCase } from '$lib/svelte-actions.js';
 
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
@@ -33,7 +34,6 @@
 	let unsaved = false;
 
 	let userProfileAboutMe: ProfileAboutMeFormData;
-	console.log('data', data);
 	if (data?.userProfile) {
 		userProfileAboutMe = data.userProfile;
 	}

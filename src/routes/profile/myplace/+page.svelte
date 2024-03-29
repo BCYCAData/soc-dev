@@ -10,7 +10,7 @@
 
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
 	import type {
-		PropertyProfileData,
+		ProfileMyPlaceFormData,
 		PropertyAddress,
 		PropertyAgentData
 	} from '$lib/custom.types.js';
@@ -33,7 +33,7 @@
 
 	let propertyAddress: PropertyAddress;
 	let propertyAgent: PropertyAgentData;
-	let propertyProfile: PropertyProfileData;
+	let propertyProfile: ProfileMyPlaceFormData;
 	let propertyId: string;
 
 	let propertyWasRented = writable(false);

@@ -4,7 +4,7 @@
 	export let inputClass: string;
 	export let divClass = 'flex flex-col justify-center items-center';
 	export let lableClass: string;
-	export let inputValue: number | null;
+	export let inputValue: number | null | undefined;
 </script>
 
 <div class={divClass}>
