@@ -6,8 +6,8 @@ import type { PageServerLoad } from './$types';
 
 let mapLayers: MapDataJSON = { jsonLayers: [] };
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session?.user) {
 		redirect(307, '/auth/signin');
 	}

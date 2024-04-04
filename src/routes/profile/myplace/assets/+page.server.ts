@@ -2,8 +2,8 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyPlaceAssetsFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}

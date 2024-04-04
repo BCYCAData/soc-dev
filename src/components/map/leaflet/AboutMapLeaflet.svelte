@@ -38,8 +38,12 @@
 				let p = g[j].geom.coordinates;
 				let lon = p[0];
 				let lat = p[1];
-				let marker = new leaflet.CircleMarker(new leaflet.LatLng(lat, lon, 0));
-				marker.setStyle({ color: '#a5a5a5', weight: 0, radius: 2, fillOpacity: 0.5 });
+				let marker = new leaflet.CircleMarker(new leaflet.LatLng(lat, lon, 0), {
+					color: '#a5a5a5',
+					weight: 0,
+					radius: 2,
+					fillOpacity: 0.5
+				});
 				features.push(marker);
 			}
 			featureGroup = leaflet.featureGroup(features);
@@ -50,9 +54,12 @@
 				let p = g[j].geom.coordinates;
 				let lon = p[0];
 				let lat = p[1];
-				let markerLocation: LatLngExpression = new leaflet.LatLng(lat, lon, 0);
-				let marker = new leaflet.CircleMarker(markerLocation);
-				marker.setStyle({ color: '#f97316', weight: 0, radius: 3, fillOpacity: 0.9 });
+				let marker = new leaflet.CircleMarker(new leaflet.LatLng(lat, lon, 0), {
+					color: '#f97316',
+					weight: 0,
+					radius: 3,
+					fillOpacity: 0.9
+				});
 				features.push(marker);
 			}
 			registeredGroup = leaflet.featureGroup(features);

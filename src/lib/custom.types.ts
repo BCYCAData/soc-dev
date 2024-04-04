@@ -1,3 +1,4 @@
+import type { B } from 'vitest/dist/reporters-P7C2ytIv.js';
 import type { Database, Tables } from './db.types.ts';
 
 //---------Tables-----------------
@@ -128,24 +129,131 @@ export type ProfileAboutMeFormData = {
 	residency_profile: number | null;
 	rfs_survival_plan: string | null;
 };
-
 export type ProfileMyPlaceFormData = {
 	property_rented: boolean;
-	propertyAgentData: {
-		agent_mobile: string | null;
-		agent_name: string | null;
-		agent_phone: string | null;
-	};
+	// propertyAgentData: {
+	// 	agent_mobile: string | null;
+	// 	agent_name: string | null;
+	// 	agent_phone: string | null;
+	// };
+	propertyAgentData: PropertyAgentData;
 	sign_posted: boolean | null;
 	vulnerable_residents: boolean | null;
 	phone: string | null;
-	mobile_reception?: number | null;
-	truck_access?: number | null;
-	truck_access_other_information?: string | null;
-	residents0_18?: number | null;
-	residents19_50?: number | null;
-	residents51_70?: number | null;
-	residents71_?: number | null;
+	mobile_reception: number | null;
+	truck_access: number | null;
+	truck_access_other_information: string | null;
+	residents0_18: number | null;
+	residents19_50: number | null;
+	residents51_70: number | null;
+	residents71_: number | null;
+};
+
+export type ProfileMyPlaceAssetsFormData = {
+	live_stock_present: boolean | null;
+	live_stock_safe_area: string | null;
+	share_livestock_safe_area: string | null;
+	number_birds: number | null;
+	number_cats: number | null;
+	number_dogs: number | null;
+	number_other_pets: number | null;
+	other_essential_assets: string | null;
+};
+
+export type ProfileMyPlaceHazardsFormData = {
+	site_hazards: number[] | null;
+	land_adjacent_hazard: string | null;
+	other_hazards: string | null;
+	other_site_hazards: string | null;
+};
+export type ProfileMyPlaceResourcesFormData = {
+	fire_fighting_resources: number[] | null;
+	fire_hazard_reduction: number[] | null;
+	have_stortz: string | null;
+	static_water_available: number[] | null;
+	stortz_size: number | null;
+};
+export type ProfileMyCommunityFormData = {
+	stay_in_touch_choices: number[] | null;
+	userPostalAddressData: UserPostalAddressData | null;
+	other_comments: string | null;
+	hadUserPostalAddress: boolean;
+};
+export type ProfileMyCommunityBCYCAFormData = {
+	stay_in_touch_choices: number[] | null;
+	userPostalAddressData: UserPostalAddressData | null;
+	other_comments: string | null;
+	hadUserPostalAddress: boolean;
+};
+export type ProfileMyCommunityBCYCAEventsFormData = {
+	community_meeting_choices: number[] | null;
+	other_community_meeting: string | null;
+};
+export type ProfileMyCommunityBCYCAInformationFormData = {
+	information_sheet_choices: number[] | null;
+	other_information_sheet: string | null;
+};
+export type ProfileMyCommunityBCYCAWorkshopsFormData = {
+	community_workshop_choices: number[] | null;
+	other_community_workshop: string | null;
+	will_run_community_workshops: string | null;
+};
+export type ProfileMyCommunityTinoneeFormData = {
+	stay_in_touch_choices: number[] | null;
+	userPostalAddressData: UserPostalAddressData | null;
+	other_comments: string | null;
+	hadUserPostalAddress: boolean;
+};
+export type ProfileMyCommunityTinoneeEventsFormData = {
+	community_meeting_choices: number[] | null;
+	other_community_meeting: string | null;
+};
+export type ProfileMyCommunityTinoneeInformationFormData = {
+	information_sheet_choices: number[] | null;
+	other_information_sheet: string | null;
+};
+export type ProfileMyCommunityTinoneeWorkshopsFormData = {
+	community_workshop_choices: number[] | null;
+	other_community_workshop: string | null;
+	will_run_community_workshops: string | null;
+};
+export type ProfileMyCommunityMondrookFormData = {
+	stay_in_touch_choices: number[] | null;
+	userPostalAddressData: UserPostalAddressData | null;
+	other_comments: string | null;
+	hadUserPostalAddress: boolean;
+};
+export type ProfileMyCommunityMondrookEventsFormData = {
+	community_meeting_choices: number[] | null;
+	other_community_meeting: string | null;
+};
+export type ProfileMyCommunityMondrookInformationFormData = {
+	information_sheet_choices: number[] | null;
+	other_information_sheet: string | null;
+};
+export type ProfileMyCommunityMondrookWorkshopsFormData = {
+	community_workshop_choices: number[] | null;
+	other_community_workshop: string | null;
+	will_run_community_workshops: string | null;
+};
+export type ProfileMyCommunityExternalFormData = {
+	stay_in_touch_choices: number[] | null;
+	userPostalAddressData: UserPostalAddressData | null;
+	other_comments: string | null;
+	hadUserPostalAddress: boolean;
+};
+export type ProfileMyCommunityExternalEventsFormData = {
+	community_meeting_choices: number[] | null;
+	other_community_meeting: string | null;
+};
+export type ProfileMyCommunityExternalInformationFormData = {
+	information_sheet_choices: number[] | null;
+	other_information_sheet: string | null;
+};
+export type ProfileMyCommunityExternalWorkshopsFormData = {
+	community_workshop_choices: number[] | null;
+	other_community_workshop: string | null;
+	will_run_community_workshops: string | null;
 };
 //---------Functions-----------------
 export type AppMessageFunctionData =

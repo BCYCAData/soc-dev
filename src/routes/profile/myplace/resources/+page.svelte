@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import type { PropertyProfileData } from '$lib/custom.types.js';
+	import type { ProfileMyPlaceResourcesFormData } from '$lib/custom.types.js';
 	import {
 		staticWaterOptions,
 		yesNoMaybeOptions,
@@ -51,13 +51,13 @@
 	};
 
 	export let data;
-	let propertyProfile: PropertyProfileData;
+	let profileMyPlaceResourcesFormData: ProfileMyPlaceResourcesFormData;
 	let propertyId: string;
 	if (data?.propertyId) {
 		propertyId = data.propertyId;
 	}
-	if (data?.propertyProfile) {
-		propertyProfile = data.propertyProfile;
+	if (data?.profileMyPlaceResourcesFormData) {
+		profileMyPlaceResourcesFormData = data.profileMyPlaceResourcesFormData;
 	}
 </script>
 
@@ -85,7 +85,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={propertyProfile.static_water_available}
+					bind:group={profileMyPlaceResourcesFormData.static_water_available}
 					{value}
 					on:change={(e) => {
 						setStaticWater(e);
@@ -96,7 +96,7 @@
 					class="w-4 h-4 ml-8"
 					name="static_water_available"
 					type="checkbox"
-					bind:group={propertyProfile.static_water_available}
+					bind:group={profileMyPlaceResourcesFormData.static_water_available}
 					{value}
 					on:change={(e) => {
 						unCheckAllStaticWater(e);
@@ -117,12 +117,12 @@
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				on:change={() => {
-					propertyProfile.have_stortz = value;
+					profileMyPlaceResourcesFormData.have_stortz = value;
 				}}
 				class="w-4 h-4 ml-8"
 				name="have_stortz"
 				type="radio"
-				bind:group={propertyProfile.have_stortz}
+				bind:group={profileMyPlaceResourcesFormData.have_stortz}
 				{value}
 			/>
 			<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="have_stortz"
@@ -136,7 +136,7 @@
 		id="stortz_size"
 		name="stortz_size"
 		class="border border-orange-700 w-20 rounded ml-4 py-1 sm:text-lg"
-		bind:value={propertyProfile.stortz_size}
+		bind:value={profileMyPlaceResourcesFormData.stortz_size}
 	/>
 	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
@@ -149,7 +149,7 @@
 				class="w-4 h-4 ml-8"
 				name="fire_fighting_resources"
 				type="checkbox"
-				bind:group={propertyProfile.fire_fighting_resources}
+				bind:group={profileMyPlaceResourcesFormData.fire_fighting_resources}
 				{value}
 			/>
 			<label
@@ -170,7 +170,7 @@
 					class="w-4 h-4 ml-8"
 					name="fire_hazard_reduction"
 					type="checkbox"
-					bind:group={propertyProfile.fire_hazard_reduction}
+					bind:group={profileMyPlaceResourcesFormData.fire_hazard_reduction}
 					{value}
 				/>
 				<label

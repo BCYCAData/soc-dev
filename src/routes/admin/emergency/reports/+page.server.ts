@@ -1,8 +1,8 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session) {
 		redirect(307, '/auth/signin');
 	} else if (
@@ -29,8 +29,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 };
 
 export const actions: Actions = {
-	generateStreetReport: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	generateStreetReport: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session) {
 			redirect(307, '/auth/signin');
 		} else if (

@@ -26,15 +26,19 @@
 	let communityWorkshopChoices: number[] | null;
 	let otherCommunityWorkshop: string | null;
 	let willRunCommunityWorkshops: string | null;
-	if (data?.community_bcyca_profile) {
-		communityWorkshopChoices = data.community_bcyca_profile.community_workshop_choices;
-		otherCommunityWorkshop = data.community_bcyca_profile.other_community_workshop;
-		willRunCommunityWorkshops = data.community_bcyca_profile.will_run_community_workshops;
+	let communityBCYCAProfileId: string | null;
+	if (data?.profileMyCommunityBCYCAWorkshopsFormData) {
+		communityWorkshopChoices =
+			data.profileMyCommunityBCYCAWorkshopsFormData.community_workshop_choices;
+		otherCommunityWorkshop = data.profileMyCommunityBCYCAWorkshopsFormData.other_community_workshop;
+		willRunCommunityWorkshops =
+			data.profileMyCommunityBCYCAWorkshopsFormData.will_run_community_workshops;
+		communityBCYCAProfileId = data.communityProfiles.community_bcyca_profile_id;
 	}
 </script>
 
 <svelte:head>
-	<title>Profile-Community-Workshops</title>
+	<title>Profile-Community BCYCA-Workshops</title>
 </svelte:head>
 
 <form
@@ -93,6 +97,7 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={willRunCommunityWorkshops}
 	/>
+	<input type="text" name="community_bcyca_profile_id" value={communityBCYCAProfileId} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

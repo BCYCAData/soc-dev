@@ -25,14 +25,16 @@
 	export let data;
 	let communityMeetingChoices: number[] | null;
 	let otherCommunityMeeting: string | null;
-	if (data?.community_bcyca_profile) {
-		communityMeetingChoices = data.community_bcyca_profile.community_meeting_choices;
-		otherCommunityMeeting = data.community_bcyca_profile.other_community_meeting;
+	let communityBCYCAProfileId: string | null;
+	if (data?.profileMyCommunityBCYCAEventsFormData) {
+		communityMeetingChoices = data.profileMyCommunityBCYCAEventsFormData.community_meeting_choices;
+		otherCommunityMeeting = data.profileMyCommunityBCYCAEventsFormData.other_community_meeting;
+		communityBCYCAProfileId = data.communityProfiles.community_bcyca_profile_id;
 	}
 </script>
 
 <svelte:head>
-	<title>Profile-Community-Events</title>
+	<title>Profile-Community BCYCA-Events</title>
 </svelte:head>
 
 <form
@@ -78,6 +80,7 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={otherCommunityMeeting}
 	/>
+	<input type="text" name="community_bcyca_profile_id" value={communityBCYCAProfileId} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

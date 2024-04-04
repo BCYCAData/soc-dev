@@ -7,8 +7,8 @@ import Tester from '$components/email_templates/Tester.svelte';
 import type { PageServerLoad } from './$types.js';
 import type { Actions } from './$types.js';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session) {
 		redirect(307, '/auth/signin');
 	} else if (
@@ -34,9 +34,9 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 	};
 };
 export const actions: Actions = {
-	newusersemail: async ({ locals: { getSession } }) => {
+	newusersemail: async ({ locals: { safeGetSession } }) => {
 		console.log('Yay');
-		const session = await getSession();
+		const session = await safeGetSession();
 		if (
 			!(
 				session?.user?.app_metadata.roles.includes('tester') |

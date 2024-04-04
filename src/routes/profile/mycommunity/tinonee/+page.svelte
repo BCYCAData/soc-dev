@@ -28,9 +28,13 @@
 	let otherComments: string | null;
 	let stayInTouchChoices: number[] | null;
 	let userPostalAddress: UserPostalAddressData;
-	if (data?.userProfile) {
-		stayInTouchChoices = data.userProfile.stay_in_touch_choices;
-		otherComments = data.userProfile.other_comments;
+	let hadUserPostalAddress: boolean;
+	let communityTinoneeProfileId: string | null;
+	if (data?.profileMyCommunityTinoneeFormData) {
+		stayInTouchChoices = data.profileMyCommunityTinoneeFormData.stay_in_touch_choices;
+		otherComments = data.profileMyCommunityTinoneeFormData.other_comments;
+		hadUserPostalAddress = data.profileMyCommunityTinoneeFormData.hadUserPostalAddress;
+		communityTinoneeProfileId = data.communityProfiles.community_tinonee_profile_id;
 	}
 	if (data?.user_postal_address) {
 		userPostalAddress = data.user_postal_address;
@@ -38,7 +42,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile-Community</title>
+	<title>Profile-Community Tinonee</title>
 </svelte:head>
 
 <form
@@ -50,7 +54,9 @@
 	method="POST"
 >
 	<h2 class="unstyled text-base font-semibold text-gray-900">
-		How would you prefer to stay in touch?<span class="ml-2 text-sm text-gray-500">
+		How would you prefer to stay in touch with the Tinonee Community team? <br /><span
+			class="ml-2 text-sm text-gray-500"
+		>
 			(Check all that apply)</span
 		>
 	</h2>
@@ -130,6 +136,8 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={otherComments}
 	/>
+	<input type="text" name="had_user_postal_address" value={hadUserPostalAddress} hidden />
+	<input type="text" name="community_tinonee_profile_id" value={communityTinoneeProfileId} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />

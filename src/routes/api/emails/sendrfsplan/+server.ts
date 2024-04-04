@@ -10,10 +10,10 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const {
-		locals: { getSession },
+		locals: { safeGetSession },
 		request
 	} = event;
-	const session = await getSession();
+	const session = await safeGetSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
 		!session?.user?.app_metadata?.roles?.includes('admin')

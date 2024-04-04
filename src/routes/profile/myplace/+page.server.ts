@@ -2,8 +2,8 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyPlaceFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
@@ -36,15 +36,12 @@ export const actions: Actions = {
 				wasRented !== undefined
 			) {
 				if (wasRented === 'false') {
-					const { error: agentUpsertError } = await supabase
-						.from('property_agent')
-						.upsert({
-							property_id: pid,
-							agent_mobile: profileMyPlaceFormData.propertyAgentData.agent_mobile,
-							agent_name: profileMyPlaceFormData.propertyAgentData.agent_name,
-							agent_phone: profileMyPlaceFormData.propertyAgentData.agent_phone
-						})
-						.eq('id', session?.user.id);
+					const { error: agentUpsertError } = await supabase.from('property_agent').upsert({
+						property_id: pid,
+						agent_mobile: profileMyPlaceFormData.propertyAgentData.agent_mobile,
+						agent_name: profileMyPlaceFormData.propertyAgentData.agent_name,
+						agent_phone: profileMyPlaceFormData.propertyAgentData.agent_phone
+					});
 					if (agentUpsertError) {
 						console.log('error profileMyPlace upsertAgent:', agentUpsertError);
 						error(400, `error profileMyPlace upsertAgent ${agentUpsertError.message}`);

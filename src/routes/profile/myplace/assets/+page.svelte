@@ -8,7 +8,7 @@
 	import { getModalStore } from '@skeletonlabs/skeleton';
 
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
-	import type { PropertyProfileData } from '$lib/custom.types.js';
+	import type { ProfileMyPlaceAssetsFormData } from '$lib/custom.types.js';
 
 	let unsaved = false;
 
@@ -26,13 +26,13 @@
 	});
 
 	export let data;
-	let propertyProfile: PropertyProfileData;
+	let profileMyPlaceAssetsFormData: ProfileMyPlaceAssetsFormData;
 	let propertyId: string;
 	if (data?.propertyId) {
 		propertyId = data.propertyId;
 	}
-	if (data?.propertyProfile) {
-		propertyProfile = data.propertyProfile;
+	if (data?.profileMyPlaceAssetsFormData) {
+		profileMyPlaceAssetsFormData = data.profileMyPlaceAssetsFormData;
 	}
 </script>
 
@@ -57,28 +57,28 @@
 			lable="Dogs"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={propertyProfile.number_dogs}
+			bind:inputValue={profileMyPlaceAssetsFormData.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={propertyProfile.number_cats}
+			bind:inputValue={profileMyPlaceAssetsFormData.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={propertyProfile.number_birds}
+			bind:inputValue={profileMyPlaceAssetsFormData.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
 			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 			inputClass="border border-orange-700 rounded py-1 sm:text-base"
-			bind:inputValue={propertyProfile.number_other_pets}
+			bind:inputValue={profileMyPlaceAssetsFormData.number_other_pets}
 		/>
 	</div>
 	<h2 class="unstyled text-base font-semibold text-gray-900">Do you have livestock?</h2>
@@ -88,7 +88,7 @@
 				class="w-4 h-4 ml-8"
 				name="live_stock_present"
 				type="radio"
-				bind:group={propertyProfile.live_stock_present}
+				bind:group={profileMyPlaceAssetsFormData.live_stock_present}
 				{value}
 			/>
 			<label
@@ -106,7 +106,7 @@
 				class="w-4 h-4 ml-8"
 				name="live_stock_safe_area"
 				type="radio"
-				bind:group={propertyProfile.live_stock_safe_area}
+				bind:group={profileMyPlaceAssetsFormData.live_stock_safe_area}
 				{value}
 			/>
 			<label
@@ -124,7 +124,7 @@
 				class="w-4 h-4 ml-8"
 				name="share_livestock_safe_area"
 				type="radio"
-				bind:group={propertyProfile.share_livestock_safe_area}
+				bind:group={profileMyPlaceAssetsFormData.share_livestock_safe_area}
 				{value}
 			/>
 			<label
@@ -141,7 +141,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_essential_assets"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={propertyProfile.other_essential_assets}
+		bind:inputValue={profileMyPlaceAssetsFormData.other_essential_assets}
 	/>
 	<input type="text" name="property_key" value={propertyId} hidden />
 	<div class="sticky mt-5 bottom-2">

@@ -14,8 +14,8 @@ interface ListsData {
 	suburbList: ListItem[];
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session) {
 		redirect(307, '/auth/signin');
 	} else if (
@@ -49,8 +49,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 };
 
 export const actions: Actions = {
-	sendToAllUsers: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	sendToAllUsers: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
@@ -74,8 +74,8 @@ export const actions: Actions = {
 		}
 		error(400, 'Could not send message to all Users');
 	},
-	sendToEmailList: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	sendToEmailList: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
@@ -102,8 +102,8 @@ export const actions: Actions = {
 		}
 		error(400, `Could not send message to Users with ids: (${targetData}).`);
 	},
-	revokeMessages: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	revokeMessages: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}

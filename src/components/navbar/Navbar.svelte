@@ -158,21 +158,6 @@
 			<Logo />
 		</svelte:fragment>
 		<strong class="text-sm text-center">Strengthen Our Community</strong>
-		<!-- <a
-			class:active={$page.url.pathname.endsWith('/')}
-			href="/"
-			class="btn bg-tertiary-400 btn-base mr-2 font-semibold rounded-xl">Home</a
-		>
-		<a
-			class:active={$page.url.pathname.endsWith('/about')}
-			href="/about"
-			class="btn bg-tertiary-400 btn-base mr-2 font-semibold rounded-xl">About</a
-		>
-		<a
-			class:active={$page.url.pathname.endsWith('/contact')}
-			href="/contact"
-			class="btn bg-tertiary-400 btn-base font-semibold rounded-xl sm:">Contact Us</a
-		> -->
 		<svelte:fragment slot="trail"
 			>{#if $page?.data?.session?.user?.id}
 				{#if $page?.data?.session?.user?.app_metadata?.roles?.includes('tester') | $page?.data?.session?.user?.app_metadata?.roles?.includes('admin')}

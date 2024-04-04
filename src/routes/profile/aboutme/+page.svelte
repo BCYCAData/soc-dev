@@ -33,9 +33,9 @@
 
 	let unsaved = false;
 
-	let userProfileAboutMe: ProfileAboutMeFormData;
-	if (data?.userProfile) {
-		userProfileAboutMe = data.userProfile;
+	let profileAboutMeFormData: ProfileAboutMeFormData;
+	if (data?.profileAboutMeFormData) {
+		profileAboutMeFormData = data.profileAboutMeFormData;
 	}
 </script>
 
@@ -63,7 +63,7 @@
 				style="text-transform:capitalize"
 				placeholder="First Name "
 				use:setTitleCase
-				bind:value={userProfileAboutMe.first_name}
+				bind:value={profileAboutMeFormData.first_name}
 			/>
 			<input
 				type="text"
@@ -74,7 +74,7 @@
 				style="text-transform:capitalize"
 				placeholder="Family Name"
 				use:setTitleCase
-				bind:value={userProfileAboutMe.family_name}
+				bind:value={profileAboutMeFormData.family_name}
 			/>
 		</div>
 		<h2 class="unstyled text-base font-semibold text-gray-900">Are you:</h2>
@@ -88,7 +88,7 @@
 						id="residency_profile"
 						type="radio"
 						name="residency_profile"
-						bind:group={userProfileAboutMe.residency_profile}
+						bind:group={profileAboutMeFormData.residency_profile}
 						{value}
 					/>
 					<label
@@ -113,16 +113,16 @@
 					placeholder="Mobile 0XXX XXX XXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
-							userProfileAboutMe.mobile = e.currentTarget.value;
+							profileAboutMeFormData.mobile = e.currentTarget.value;
 						} else {
 							e.preventDefault();
-							userProfileAboutMe.mobile = e.currentTarget.value;
+							profileAboutMeFormData.mobile = e.currentTarget.value;
 							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								userProfileAboutMe.mobile = formatMobile(userProfileAboutMe.mobile, e.key);
+								profileAboutMeFormData.mobile = formatMobile(profileAboutMeFormData.mobile, e.key);
 							}
 						}
 					}}
-					bind:value={userProfileAboutMe.mobile}
+					bind:value={profileAboutMeFormData.mobile}
 				/>
 			</div>
 		</div>
@@ -137,7 +137,7 @@
 						id="rfs_survival_plan"
 						type="radio"
 						name="rfs_survival_plan"
-						bind:group={userProfileAboutMe.rfs_survival_plan}
+						bind:group={profileAboutMeFormData.rfs_survival_plan}
 						{value}
 					/>
 					<label
@@ -146,34 +146,6 @@
 					>
 				</div>
 			{/each}
-			<!-- <div class="flex items-center">
-				<input
-					on:change={() => {
-						if ( userProfileAboutMe.send_rfs_survival_plan) {
-							 userProfileAboutMe.rfs_survival_plan = 'N';
-						} else {
-							 userProfileAboutMe.rfs_survival_plan = null;
-						}
-					}}
-					on:click={() => {
-						 userProfileAboutMe.send_rfs_survival_plan = ! userProfileAboutMe.send_rfs_survival_plan;
-					}}
-					class="w-4 h-4 ml-8"
-					id="send_rfs_survival_plan"
-					type="checkbox"
-					name="send_rfs_survival_plan"
-					bind:checked={ userProfileAboutMe.send_rfs_survival_plan}
-				/>
-				<label
-					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="send_rfs_survival_plan">Please send one</label
-				>
-				{#if  userProfileAboutMe.sent_rfs_survival_plan}
-					<div class="ml-4 text-base font-semibold text-orange-900 font-Poppins">
-						RFS Survival Plan Details were sent on { userProfileAboutMe.sent_rfs_survival_plan}
-					</div>
-				{/if}
-			</div> -->
 		</div>
 		<h2 class="unstyled text-base font-semibold text-gray-900">
 			What is your level of firefighting experience?
@@ -188,7 +160,7 @@
 						id="fire_fighting_experience"
 						type="radio"
 						name="fire_fighting_experience"
-						bind:group={userProfileAboutMe.fire_fighting_experience}
+						bind:group={profileAboutMeFormData.fire_fighting_experience}
 						{value}
 					/>
 					<label
@@ -209,7 +181,7 @@
 						id="fire_trauma"
 						type="radio"
 						name="fire_trauma"
-						bind:group={userProfileAboutMe.fire_trauma}
+						bind:group={profileAboutMeFormData.fire_trauma}
 						{value}
 					/>
 					<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="fire_trauma"
@@ -231,7 +203,7 @@
 						id="plan_to_leave_before_fire"
 						type="radio"
 						name="plan_to_leave_before_fire"
-						bind:group={userProfileAboutMe.plan_to_leave_before_fire}
+						bind:group={profileAboutMeFormData.plan_to_leave_before_fire}
 						{value}
 					/>
 					<label
@@ -254,7 +226,7 @@
 						id="plan_to_leave_before_flood"
 						type="radio"
 						name="plan_to_leave_before_flood"
-						bind:group={userProfileAboutMe.plan_to_leave_before_flood}
+						bind:group={profileAboutMeFormData.plan_to_leave_before_flood}
 						{value}
 					/>
 					<label

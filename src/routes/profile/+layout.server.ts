@@ -1,4 +1,29 @@
-import type { ProfileMessageData } from '$lib/custom.types';
+import type {
+	ProfileMessageData,
+	ProfileAboutMeFormData,
+	ProfileMyPlaceAssetsFormData,
+	ProfileMyPlaceFormData,
+	ProfileMyPlaceHazardsFormData,
+	ProfileMyPlaceResourcesFormData,
+	ProfileMyCommunityFormData,
+	ProfileMyCommunityBCYCAFormData,
+	ProfileMyCommunityBCYCAEventsFormData,
+	ProfileMyCommunityBCYCAInformationFormData,
+	ProfileMyCommunityBCYCAWorkshopsFormData,
+	ProfileMyCommunityTinoneeFormData,
+	ProfileMyCommunityTinoneeEventsFormData,
+	ProfileMyCommunityTinoneeInformationFormData,
+	ProfileMyCommunityTinoneeWorkshopsFormData,
+	ProfileMyCommunityMondrookFormData,
+	ProfileMyCommunityMondrookEventsFormData,
+	ProfileMyCommunityMondrookInformationFormData,
+	ProfileMyCommunityMondrookWorkshopsFormData,
+	ProfileMyCommunityExternalFormData,
+	ProfileMyCommunityExternalEventsFormData,
+	ProfileMyCommunityExternalInformationFormData,
+	ProfileMyCommunityExternalWorkshopsFormData,
+	PropertyAgentData
+} from '$lib/custom.types';
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from '../admin/$types';
 import type { QueryData } from '@supabase/supabase-js';
@@ -8,146 +33,8 @@ import {
 } from '$lib/server/email/nodemailer';
 
 let profileMessagesData: ProfileMessageData;
-
-// ++++++++++++ DATA MODEL +++++++++++++
-// {
-//     profileMessagesData: [
-//         {
-//             id: 14,
-//             message: Should be in both panels,
-//             created_at: 09/02/2023 22:48
-//         }
-//     ],
-//     propertyId: 3a9a9e38-b64f-42e9-912f-fe175d322e0c,
-//     propertyWasRented: true,
-//     communityName: BCYCA,
-//     propertyAddress: {
-//         property_address_street: 5348 THE BUCKETTS WAY,
-//         property_address_suburb: BURRELL CREEK,
-//         property_address_postcode: 2429
-//     },
-//     profileAboutMe: {
-//         family_name: Keown,
-//         fire_fighting_experience: 4,
-//         fire_trauma: null,
-//         first_name: Alan,
-//         mobile: 0497022623,
-//         plan_to_leave_before_fire: 3,
-//         plan_to_leave_before_flood: null,
-//         residency_profile: 6,
-//         rfs_survival_plan: Y
-//     },
-//     profileMyPlace: {
-//         search_address_street: 5348 THE BUCKETTS WAY,
-//         search_address_suburb: BURRELL CREEK,
-//         search_address_postcode: 2429,
-//         property_rented: true,
-//             property_agent: {
-//                 agent_mobile: ,
-//                 agent_name: ,
-//                 agent_phone:
-//             },
-//         residents0_18: null,
-//         residents19_50: null,
-//         residents51_70: null,
-//         residents71_: null,
-//         vulnerable_residents: null,
-//         sign_posted: null,
-//         truck_access: null,
-//         truck_access_other_information: null,
-//         phone: null,
-//         mobile_reception: null
-//     },
-//     profileMyPlaceAssets: {
-//         number_birds: null,
-//         number_cats: null,
-//         number_dogs: null,
-//         number_other_pets: null,
-//         live_stock_present: null,
-//         live_stock_safe_area: null,
-//         share_livestock_safe_area: null,
-//         other_essential_assets: null
-//     },
-//     profileMyPlaceFireFightingResources: {
-//         static_water_available: [
-//             0
-//         ],
-//         have_stortz: null,
-//         stortz_size: null,
-//         fire_fighting_resources: [],
-//         fire_hazard_reduction: []
-//     },
-//     profileMyPlaceFireFightingHazards: {
-//         site_hazards: [],
-//         other_hazards: null,
-//         other_site_hazards: null,
-//         land_adjacent_hazard: null,
-//     },
-//     profileMyCommunity: {
-//         stay_in_touch_choices: ,
-//             user_postal_address: {
-//                 postal_address_postcode: ,
-//                 postal_address_street: ,
-//                 postal_address_suburb:
-//             },
-//         other_comments:
-//     },
-//     profileMyCommunityBCYCAInformation: {
-//         information_sheet_choices: [],
-//         other_information_sheet: null
-//     },
-//     profileMyCommunityBCYCAWorkshops: {
-//         community_workshop_choices: [],
-//         other_community_workshop: null,
-//         will_run_community_workshops: null
-//     },
-//     profileMyCommunityBCYCAEvents: {
-//         community_meeting_choices: [],
-//         other_community_meeting: null
-//     },
-//     profileMyCommunityTinoneeInformation: {
-//         information_sheet_choices: [],
-//         other_information_sheet: null
-//     },
-//     profileMyCommunityTinoneeWorkshops: {
-//         community_workshop_choices: [],
-//         other_community_workshop: null,
-//         will_run_community_workshops: null
-//     },
-//     profileMyCommunityTinoneeEvents: {
-//         community_meeting_choices: [],
-//         other_community_meeting: null
-//     },
-//     profileMyCommunityMondrookInformation: {
-//         information_sheet_choices: [],
-//         other_information_sheet: null
-//     },
-//     profileMyCommunityMondrookWorkshops: {
-//         community_workshop_choices: [],
-//         other_community_workshop: null,
-//         will_run_community_workshops: null
-//     },
-//     profileMyCommunityMondrookEvents: {
-//         community_meeting_choices: [],
-//         other_community_meeting: null
-//     },
-//     profileMyCommunityExternalInformation: {
-//         information_sheet_choices: [],
-//         other_information_sheet: null
-//     },
-//     profileMyCommunityExternalWorkshops: {
-//         community_workshop_choices: [],
-//         other_community_workshop: null,
-//         will_run_community_workshops: null
-//     },
-//     profileMyCommunityExternalEvents: {
-//         community_meeting_choices: [],
-//         other_community_meeting: null
-//     },
-// }
-
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session?.user) {
 		redirect(307, '/auth/signin');
 	}
@@ -173,24 +60,29 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
     			fire_hazard_reduction, site_hazards, other_hazards, other_site_hazards, land_adjacent_hazard,
       			property_rented, 
 				community_areas(community), 
+				kyng_areas(kyng),
 				user_profile( family_name, fire_fighting_experience, fire_trauma, first_name, mobile, other_comments, 
 					plan_to_leave_before_fire, plan_to_leave_before_flood, residency_profile, rfs_survival_plan, 
 					stay_in_touch_choices, 
-					community_bcyca_profile(community_meeting_choices, community_workshop_choices, 
+					community_bcyca_profile(bcyca_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
-						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops,
+						other_comments
 					), 
-					community_tinonee_profile(community_meeting_choices, community_workshop_choices, 
+					community_tinonee_profile(tinonee_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
-						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops,
+						other_comments
 					), 
-					community_mondrook_profile(community_meeting_choices, community_workshop_choices, 
+					community_mondrook_profile(mondrook_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
-						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops,
+						other_comments
 					), 
-					community_external_profile(community_meeting_choices, community_workshop_choices, 
+					community_external_profile(external_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
-						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
+						other_information_sheet, stay_in_touch_choices, will_run_community_workshops,
+						other_comments
 					), 
 					user_postal_address(postal_address_postcode, postal_address_street, postal_address_suburb) 
 				), 
@@ -211,14 +103,16 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		error(400, `GET data error Survey:  Error ${getProfileDataError.message}`);
 	}
 	if (data && data.length > 0) {
-		const surveyData: ProfileData = data;
+		const profileData: ProfileData = data;
 		let {
 			user_profile: [_userProfileData],
 			property_agent,
 			community_areas,
+			kyng_areas,
 			...property_profile
-		} = surveyData[0];
+		} = profileData[0];
 		const communityName = community_areas!.community!;
+		const kyngName = kyng_areas!.kyng!;
 		let {
 			id,
 			property_address_street,
@@ -226,13 +120,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 			property_address_postcode,
 			...propertyProfile
 		} = property_profile;
-		const propertyId = id;
-		const propertyAddress = {
-			property_address_street: property_address_street,
-			property_address_suburb: property_address_suburb,
-			property_address_postcode: property_address_postcode
-		};
-		const propertyWasRented = propertyProfile.property_rented || false;
 		let {
 			user_postal_address,
 			community_bcyca_profile,
@@ -241,6 +128,33 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 			community_external_profile,
 			...userProfile
 		} = _userProfileData;
+		let hadUserPostalAddress = true;
+		if (!user_postal_address) {
+			user_postal_address = {
+				postal_address_postcode: '',
+				postal_address_street: '',
+				postal_address_suburb: ''
+			};
+			hadUserPostalAddress = false;
+		}
+		const profileAboutMeFormData: ProfileAboutMeFormData = {
+			family_name: userProfile.family_name || null,
+			fire_fighting_experience: userProfile.fire_fighting_experience || null,
+			fire_trauma: userProfile.fire_trauma || null,
+			first_name: userProfile.first_name || null,
+			mobile: userProfile.mobile || null,
+			plan_to_leave_before_fire: userProfile.plan_to_leave_before_fire || null,
+			plan_to_leave_before_flood: userProfile.plan_to_leave_before_flood || null,
+			residency_profile: userProfile.residency_profile || null,
+			rfs_survival_plan: userProfile.rfs_survival_plan || null
+		};
+		const propertyId = id;
+		const propertyAddress = {
+			property_address_street: property_address_street,
+			property_address_suburb: property_address_suburb,
+			property_address_postcode: property_address_postcode
+		};
+		const propertyWasRented = propertyProfile.property_rented || false;
 		if (!property_agent) {
 			property_agent = {
 				agent_mobile: '',
@@ -248,147 +162,252 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 				agent_phone: ''
 			};
 		}
-		if (!user_postal_address) {
-			user_postal_address = {
-				postal_address_postcode: '',
-				postal_address_street: '',
-				postal_address_suburb: ''
-			};
-		}
-		if (community_bcyca_profile) {
-			// steps = insertSteps(steps, [
-			// 	{ index: 8, text: '8', page: 'Step8' },
-			// 	{ index: 9, text: '9', page: 'Step9' },
-			// 	{ index: 10, text: '10', page: 'Step10' }
-			// ]);
-		}
-		if (community_tinonee_profile) {
-			// console.log('community_tinonee_profile', community_tinonee_profile);
-			// steps = insertSteps(steps, [
-			// 	{ index: 8, text: '8', page: 'Step11' },
-			// 	{ index: 9, text: '9', page: 'Step12' },
-			// 	{ index: 10, text: '10', page: 'Step13' }
-			// ]);
-		}
-		if (community_mondrook_profile) {
-			// console.log('community_mondrook_profile', community_mondrook_profile);
-			// steps = insertSteps(steps, [
-			// 	{ index: 8, text: '8', page: 'Step14' },
-			// 	{ index: 9, text: '9', page: 'Step15' },
-			// 	{ index: 10, text: '10', page: 'Step16' }
-			// ]);
-		}
-		if (community_external_profile) {
-			// console.log('community_external_profile', community_external_profile);
-			// steps = insertSteps(steps, [
-			// 	{ index: 8, text: '8', page: 'Step17' },
-			// 	{ index: 9, text: '9', page: 'Step18' },
-			// 	{ index: 10, text: '10', page: 'Step19' }
-			// ]);
-		}
+		const propertyAgentData: PropertyAgentData = {
+			agent_mobile: property_agent.agent_mobile || null,
+			agent_name: property_agent.agent_name || null,
+			agent_phone: property_agent.agent_phone || null
+		};
+		const profileMyPlaceFormData: ProfileMyPlaceFormData = {
+			property_rented: propertyProfile.property_rented || false,
+			propertyAgentData,
+			sign_posted: propertyProfile.sign_posted || null,
+			vulnerable_residents: propertyProfile.vulnerable_residents || null,
+			phone: propertyProfile.phone || null,
+			mobile_reception: propertyProfile.mobile_reception || null,
+			truck_access: propertyProfile.truck_access || null,
+			truck_access_other_information: propertyProfile.truck_access_other_information || null,
+			residents0_18: propertyProfile.residents0_18 || null,
+			residents19_50: propertyProfile.residents19_50 || null,
+			residents51_70: propertyProfile.residents51_70 || null,
+			residents71_: propertyProfile.residents71_ || null
+		};
+		const profileMyPlaceAssetsFormData: ProfileMyPlaceAssetsFormData = {
+			live_stock_present: propertyProfile.live_stock_present || null,
+			live_stock_safe_area: propertyProfile.live_stock_safe_area || null,
+			share_livestock_safe_area: propertyProfile.share_livestock_safe_area || null,
+			number_birds: propertyProfile.number_birds || null,
+			number_cats: propertyProfile.number_cats || null,
+			number_dogs: propertyProfile.number_dogs || null,
+			number_other_pets: propertyProfile.number_other_pets || null,
+			other_essential_assets: propertyProfile.other_essential_assets || null
+		};
+		const profileMyPlaceHazardsFormData: ProfileMyPlaceHazardsFormData = {
+			other_hazards: propertyProfile.other_hazards || null,
+			other_site_hazards: propertyProfile.other_site_hazards || null,
+			site_hazards: propertyProfile.site_hazards || null,
+			land_adjacent_hazard: propertyProfile.land_adjacent_hazard || null
+		};
+		const profileMyPlaceResourcesFormData: ProfileMyPlaceResourcesFormData = {
+			fire_fighting_resources: propertyProfile.fire_fighting_resources || null,
+			fire_hazard_reduction: propertyProfile.fire_hazard_reduction || null,
+			have_stortz: propertyProfile.have_stortz || null,
+			stortz_size: propertyProfile.stortz_size || null,
+			static_water_available: propertyProfile.static_water_available || null
+		};
+		const profileMyCommunityFormData: ProfileMyCommunityFormData = {
+			stay_in_touch_choices: userProfile.stay_in_touch_choices || null,
+			userPostalAddressData:
+				{
+					postal_address_postcode: user_postal_address.postal_address_postcode || null,
+					postal_address_street: user_postal_address.postal_address_street || null,
+					postal_address_suburb: user_postal_address.postal_address_suburb || null
+				} || null,
+			hadUserPostalAddress: hadUserPostalAddress,
+			other_comments: userProfile.other_comments || null
+		};
+		// if (community_bcyca_profile) {
+		const profileMyCommunityBCYCAFormData: ProfileMyCommunityBCYCAFormData | null =
+			community_bcyca_profile
+				? {
+						stay_in_touch_choices: community_bcyca_profile.stay_in_touch_choices || null,
+						userPostalAddressData:
+							{
+								postal_address_postcode: user_postal_address?.postal_address_postcode || null,
+								postal_address_street: user_postal_address?.postal_address_street || null,
+								postal_address_suburb: user_postal_address?.postal_address_suburb || null
+							} || null,
+						hadUserPostalAddress: hadUserPostalAddress,
+						other_comments: community_bcyca_profile.other_comments || null
+					}
+				: null;
+		const profileMyCommunityBCYCAEventsFormData: ProfileMyCommunityBCYCAEventsFormData | null =
+			community_bcyca_profile
+				? {
+						community_meeting_choices: community_bcyca_profile.community_meeting_choices || null,
+						other_community_meeting: community_bcyca_profile.other_community_meeting || null
+					}
+				: null;
+		const profileMyCommunityBCYCAInformationFormData: ProfileMyCommunityBCYCAInformationFormData | null =
+			community_bcyca_profile
+				? {
+						information_sheet_choices: community_bcyca_profile.information_sheet_choices || null,
+						other_information_sheet: community_bcyca_profile.other_information_sheet || null
+					}
+				: null;
+		const profileMyCommunityBCYCAWorkshopsFormData: ProfileMyCommunityBCYCAWorkshopsFormData | null =
+			community_bcyca_profile
+				? {
+						community_workshop_choices: community_bcyca_profile.community_workshop_choices || null,
+						other_community_workshop: community_bcyca_profile.other_community_workshop || null,
+						will_run_community_workshops:
+							community_bcyca_profile.will_run_community_workshops || null
+					}
+				: null;
+		// if (community_tinonee_profile) {
+		const profileMyCommunityTinoneeFormData: ProfileMyCommunityTinoneeFormData | null =
+			community_tinonee_profile
+				? {
+						stay_in_touch_choices: community_tinonee_profile.stay_in_touch_choices || null,
+						userPostalAddressData:
+							{
+								postal_address_postcode: user_postal_address?.postal_address_postcode || null,
+								postal_address_street: user_postal_address?.postal_address_street || null,
+								postal_address_suburb: user_postal_address?.postal_address_suburb || null
+							} || null,
+						hadUserPostalAddress: hadUserPostalAddress,
+						other_comments: community_tinonee_profile.other_comments || null
+					}
+				: null;
+		const profileMyCommunityTinoneeEventsFormData: ProfileMyCommunityTinoneeEventsFormData | null =
+			community_tinonee_profile
+				? {
+						community_meeting_choices: community_tinonee_profile.community_meeting_choices || null,
+						other_community_meeting: community_tinonee_profile.other_community_meeting || null
+					}
+				: null;
+		const profileMyCommunityTinoneeInformationFormData: ProfileMyCommunityTinoneeInformationFormData | null =
+			community_tinonee_profile
+				? {
+						information_sheet_choices: community_tinonee_profile.information_sheet_choices || null,
+						other_information_sheet: community_tinonee_profile.other_information_sheet || null
+					}
+				: null;
+		const profileMyCommunityTinoneeWorkshopsFormData: ProfileMyCommunityTinoneeWorkshopsFormData | null =
+			community_tinonee_profile
+				? {
+						community_workshop_choices:
+							community_tinonee_profile.community_workshop_choices || null,
+						other_community_workshop: community_tinonee_profile.other_community_workshop || null,
+						will_run_community_workshops:
+							community_tinonee_profile.will_run_community_workshops || null
+					}
+				: null;
+		// if (community_mondrook_profile) {
+		const profileMyCommunityMondrookFormData: ProfileMyCommunityMondrookFormData | null =
+			community_mondrook_profile
+				? {
+						stay_in_touch_choices: community_mondrook_profile.stay_in_touch_choices || null,
+						userPostalAddressData:
+							{
+								postal_address_postcode: user_postal_address?.postal_address_postcode || null,
+								postal_address_street: user_postal_address?.postal_address_street || null,
+								postal_address_suburb: user_postal_address?.postal_address_suburb || null
+							} || null,
+						hadUserPostalAddress: hadUserPostalAddress,
+						other_comments: community_mondrook_profile.other_comments || null
+					}
+				: null;
+		const profileMyCommunityMondrookEventsFormData: ProfileMyCommunityMondrookEventsFormData | null =
+			community_mondrook_profile
+				? {
+						community_meeting_choices: community_mondrook_profile.community_meeting_choices || null,
+						other_community_meeting: community_mondrook_profile.other_community_meeting || null
+					}
+				: null;
+		const profileMyCommunityMondrookInformationFormData: ProfileMyCommunityMondrookInformationFormData | null =
+			community_mondrook_profile
+				? {
+						information_sheet_choices: community_mondrook_profile.information_sheet_choices || null,
+						other_information_sheet: community_mondrook_profile.other_information_sheet || null
+					}
+				: null;
+		const profileMyCommunityMondrookWorkshopsFormData: ProfileMyCommunityMondrookWorkshopsFormData | null =
+			community_mondrook_profile
+				? {
+						community_workshop_choices:
+							community_mondrook_profile.community_workshop_choices || null,
+						other_community_workshop: community_mondrook_profile.other_community_workshop || null,
+						will_run_community_workshops:
+							community_mondrook_profile.will_run_community_workshops || null
+					}
+				: null;
+		// if (community_external_profile) {
+		const profileMyCommunityExternalFormData: ProfileMyCommunityExternalFormData | null =
+			community_external_profile
+				? {
+						stay_in_touch_choices: community_external_profile.stay_in_touch_choices || null,
+						userPostalAddressData:
+							{
+								postal_address_postcode: user_postal_address?.postal_address_postcode || null,
+								postal_address_street: user_postal_address?.postal_address_street || null,
+								postal_address_suburb: user_postal_address?.postal_address_suburb || null
+							} || null,
+						hadUserPostalAddress: hadUserPostalAddress,
+						other_comments: community_external_profile.other_comments || null
+					}
+				: null;
+		const profileMyCommunityExternalEventsFormData: ProfileMyCommunityExternalEventsFormData | null =
+			community_external_profile
+				? {
+						community_meeting_choices: community_external_profile.community_meeting_choices || null,
+						other_community_meeting: community_external_profile.other_community_meeting || null
+					}
+				: null;
+		const profileMyCommunityExternalInformationFormData: ProfileMyCommunityExternalInformationFormData | null =
+			community_external_profile
+				? {
+						information_sheet_choices: community_external_profile.information_sheet_choices || null,
+						other_information_sheet: community_external_profile.other_information_sheet || null
+					}
+				: null;
+		const profileMyCommunityExternalWorkshopsFormData: ProfileMyCommunityExternalWorkshopsFormData | null =
+			community_external_profile
+				? {
+						community_workshop_choices:
+							community_external_profile.community_workshop_choices || null,
+						other_community_workshop: community_external_profile.other_community_workshop || null,
+						will_run_community_workshops:
+							community_external_profile.will_run_community_workshops || null
+					}
+				: null;
+		const communityProfiles: Record<string, string | null> = {
+			community_bcyca_profile_id: community_bcyca_profile?.bcyca_profile_id || null,
+			community_tinonee_profile_id: community_tinonee_profile?.tinonee_profile_id || null,
+			community_mondrook_profile_id: community_mondrook_profile?.mondrook_profile_id || null,
+			community_external_profile_id: community_external_profile?.external_profile_id || null
+		};
 		return {
 			profileMessagesData,
 			propertyId,
 			propertyWasRented,
 			communityName,
+			kyngName,
 			propertyAddress,
 			propertyProfile,
-			property_agent,
-			userProfile,
+			profileAboutMeFormData,
+			profileMyPlaceFormData,
+			profileMyPlaceAssetsFormData,
+			profileMyPlaceHazardsFormData,
+			profileMyPlaceResourcesFormData,
+			profileMyCommunityFormData,
+			profileMyCommunityBCYCAFormData,
+			profileMyCommunityBCYCAEventsFormData,
+			profileMyCommunityBCYCAInformationFormData,
+			profileMyCommunityBCYCAWorkshopsFormData,
+			profileMyCommunityTinoneeFormData,
+			profileMyCommunityTinoneeEventsFormData,
+			profileMyCommunityTinoneeInformationFormData,
+			profileMyCommunityTinoneeWorkshopsFormData,
+			profileMyCommunityMondrookFormData,
+			profileMyCommunityMondrookEventsFormData,
+			profileMyCommunityMondrookInformationFormData,
+			profileMyCommunityMondrookWorkshopsFormData,
+			profileMyCommunityExternalFormData,
+			profileMyCommunityExternalEventsFormData,
+			profileMyCommunityExternalInformationFormData,
+			profileMyCommunityExternalWorkshopsFormData,
 			user_postal_address,
-			community_bcyca_profile,
-			community_tinonee_profile,
-			community_mondrook_profile,
-			community_external_profile
+			communityProfiles
 		};
-		// const { data: profileMessages, error: profileMessagesError } = await supabase.rpc(
-		// 	'get_profile_messages_for_user',
-		// 	{
-		// 		id_input: session?.user.id
-		// 	}
-		// );
-		// if (profileMessagesError) {
-		// 	console.log('error get Profile Messages for User:', profileMessagesError);
-		// 	error(400, profileMessagesError.message);
-		// }
-		// profileMessagesData = profileMessages;
-		// const { error: agentError, data: agent } = await supabase
-		// 	.from('property_agent')
-		// 	.select('*')
-		// 	.eq('property_id', session.user.app_metadata.property_id);
-		// if (agentError) {
-		// 	console.log('error get Agent for User:', agentError);
-		// 	error(400, agentError.message);
-		// }
-		// if (agent?.length === 1) {
-		// 	agentData = agent[0];
-		// } else {
-		// 	agentData = {
-		// 		property_id: session.user.app_metadata.property_id,
-		// 		agent_name: null,
-		// 		agent_mobile: null,
-		// 		agent_phone: null,
-		// 		created_at: null,
-		// 		last_updated: null
-		// 	};
-		// }
-		// const { error: userPostalAddressError, data: userPostalAddressSelectData } = await supabase
-		// 	.from('user_postal_address')
-		// 	.select('*')
-		// 	.eq('user_id', session?.user.id);
-		// if (userPostalAddressError) {
-		// 	console.log('error get Postal Address Data for User:', userPostalAddressError);
-		// 	error(400, userPostalAddressError.message);
-		// }
-		// if (userPostalAddressSelectData?.length === 1) {
-		// 	userPostalAddressData = userPostalAddressSelectData[0];
-		// } else {
-		// 	userPostalAddressData = {
-		// 		user_id: session.user.id,
-		// 		postal_address_street: null,
-		// 		postal_address_suburb: null,
-		// 		postal_address_postcode: null,
-		// 		created_at: null,
-		// 		last_updated: null
-		// 	};
-		// }
-		// const { error: userProfileError, data: getUserProfileData } = await supabase
-		// 	.from('user_profile')
-		// 	.select('*')
-		// 	.eq('id', session.user.id);
-		// if (userProfileError) {
-		// 	console.log('error Get Profile Data for User:', userProfileError);
-		// 	error(400, userProfileError.message);
-		// }
-		// userProfileData = getUserProfileData[0];
-		// const { error: userBCYCAError, data: getUserBCYCAData } = await supabase
-		// 	.from('community_bcyca_profile')
-		// 	.select('*')
-		// 	.eq('user_id', session?.user.id);
-		// if (userBCYCAError) {
-		// 	console.log('error get BCYCA Data for User:', userBCYCAError);
-		// 	error(400, userBCYCAError.message);
-		// }
-		// userBCYCAData = getUserBCYCAData[0];
-		// const { error: propertyProfileError, data: getPropertyProfileData } = await supabase
-		// 	.from('property_profile')
-		// 	.select('*, user_profile(id), temp_user:user_profile!inner(id)')
-		// 	.in('temp_user.id', [session?.user.id]);
-		// if (propertyProfileError) {
-		// 	console.log('error get Property Profile Data for User:', propertyProfileError);
-		// 	error(400, propertyProfileError.message);
-		// }
-		// propertyProfileData = getPropertyProfileData[0];
-		// return {
-		// 	session,
-		// 	profileMessagesData,
-		// 	agentData,
-		// 	userProfileData,
-		// 	userPostalAddressData,
-		// 	userBCYCAData,
-		// 	propertyProfileData,
-		// 	property_was_rented: propertyProfileData.property_rented,
-		// 	post_was_ticked: userProfileData.stay_in_touch_choices?.includes(5)
-		// };
 	}
 };

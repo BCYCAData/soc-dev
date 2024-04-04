@@ -13,10 +13,11 @@
 	$: postalChecked = userProfile.stay_in_touch_choices?.includes(5);
 </script>
 
-<h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
-	How would you prefer to stay in touch?<span class="ml-2 text-sm text-gray-500">
-		(Check all that apply)</span
+<h2 class="unstyled text-base font-semibold text-gray-900">
+	How would you prefer to stay in touch with the <span class="text-orange-600"
+		>Strengthen OUR Community</span
 	>
+	project team? <br /> <span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
 </h2>
 <div
 	class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"

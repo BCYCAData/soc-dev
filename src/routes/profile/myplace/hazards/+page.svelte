@@ -7,7 +7,7 @@
 	import { getModalStore } from '@skeletonlabs/skeleton';
 
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
-	import type { PropertyProfileData } from '$lib/custom.types.js';
+	import type { ProfileMyPlaceHazardsFormData } from '$lib/custom.types.js';
 
 	let unsaved = false;
 
@@ -25,13 +25,13 @@
 	});
 
 	export let data;
-	let propertyProfile: PropertyProfileData;
+	let profileMyPlaceHazardsFormData: ProfileMyPlaceHazardsFormData;
 	let propertyId: string;
 	if (data?.propertyId) {
 		propertyId = data.propertyId;
 	}
-	if (data?.propertyProfile) {
-		propertyProfile = data.propertyProfile;
+	if (data?.profileMyPlaceHazardsFormData) {
+		profileMyPlaceHazardsFormData = data.profileMyPlaceHazardsFormData;
 	}
 </script>
 
@@ -58,7 +58,7 @@
 					class="w-4 h-4 ml-8"
 					name="site_hazards"
 					type="checkbox"
-					bind:group={propertyProfile.site_hazards}
+					bind:group={profileMyPlaceHazardsFormData.site_hazards}
 					{value}
 				/>
 				<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="site_hazards"
@@ -75,7 +75,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_site_hazards"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={propertyProfile.other_site_hazards}
+		bind:inputValue={profileMyPlaceHazardsFormData.other_site_hazards}
 	/>
 	<h2 class="unstyled text-base font-semibold text-gray-900">
 		Does any adjoining land represent a hazard?
@@ -86,7 +86,7 @@
 				class="w-4 h-4 ml-8"
 				name="land_adjacent_hazard"
 				type="radio"
-				bind:group={propertyProfile.land_adjacent_hazard}
+				bind:group={profileMyPlaceHazardsFormData.land_adjacent_hazard}
 				{value}
 			/>
 			<label
@@ -103,7 +103,7 @@
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
 		nameText="other_hazards"
 		textAreaClass="w-full resize-y sm:text-lg"
-		bind:inputValue={propertyProfile.other_hazards}
+		bind:inputValue={profileMyPlaceHazardsFormData.other_hazards}
 	/>
 	<input type="text" name="property_key" value={propertyId} hidden />
 	<div class="sticky mt-5 bottom-2">

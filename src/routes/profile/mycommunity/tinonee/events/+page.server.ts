@@ -1,42 +1,38 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { getBCYCACommunityEventsFormData } from '$lib/server/form.utils';
+import { getMyCommunityTinoneeEventsFormData } from '$lib/server/form.utils';
 
 import type { CommunityBCYCAProfileData } from '$lib/custom.types';
 
 let communityBCYCAProfile: CommunityBCYCAProfileData;
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const body = getBCYCACommunityEventsFormData(formData);
-		const { data: myCommunityEvents, error: myCommunityEventsError } = await supabase
-			.from('community_bcyca_profile')
-			.update({
-				community_meeting_choices: body.community_meeting_choices,
-				other_community_meeting: body.other_community_meeting
-			})
-			.eq('user_id', session.user.id)
-			.select();
-		if (myCommunityEventsError) {
-			console.log(
-				'error profileMyCommunityEvents update community_bcyca_profile: ',
-				myCommunityEventsError
-			);
-			error(
-				400,
-				`error profileMyCommunityEvents update community_bcyca_profile:  ${myCommunityEventsError.message}`
-			);
+		const myCommunityTinoneeEventsFormData = getMyCommunityTinoneeEventsFormData(formData);
+		const tinoneeId = formData.get('community_tinonee_profile_id');
+		if (tinoneeId) {
+			const { error: myCommunityTinoneeEventsError } = await supabase
+				.from('community_tinonee_profile')
+				.update({
+					community_meeting_choices: myCommunityTinoneeEventsFormData.community_meeting_choices,
+					other_community_meeting: myCommunityTinoneeEventsFormData.other_community_meeting
+				})
+				.eq('tinonee_profile_id', tinoneeId);
+			if (myCommunityTinoneeEventsError) {
+				console.log(
+					'error profileMyCommunityTinonee update community_tinonee_profile: ',
+					myCommunityTinoneeEventsError
+				);
+				error(
+					400,
+					`error profileMyCommunity update user_profile: ${myCommunityTinoneeEventsError.message}`
+				);
+			}
 		}
-		if (myCommunityEvents.length === 1) {
-			communityBCYCAProfile = myCommunityEvents[0];
-			return {
-				communityBCYCAProfile
-			};
-		}
-		error(400, 'Could not POST Profile MyCommunity Events data');
+		return { myCommunityTinoneeEventsFormData };
 	}
 };

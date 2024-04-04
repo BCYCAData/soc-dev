@@ -1,29 +1,24 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyPlaceHazardsFormData } from '$lib/server/form.utils';
 
-import type { PropertyProfileData } from '$lib/custom.types';
-
-let propertyProfileData: PropertyProfileData;
-
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
-		const body = getMyPlaceHazardsFormData(formData);
-		const { data: myPlaceHazards, error: myPlaceHazardsError } = await supabase
+		const profileMyPlaceHazardsFormData = getMyPlaceHazardsFormData(formData);
+		const { error: myPlaceHazardsError } = await supabase
 			.from('property_profile')
 			.update({
-				site_hazards: body.site_hazards,
-				other_site_hazards: body.other_site_hazards,
-				land_adjacent_hazard: body.land_adjacent_hazard,
-				other_hazards: body.other_hazards
+				site_hazards: profileMyPlaceHazardsFormData.site_hazards,
+				other_site_hazards: profileMyPlaceHazardsFormData.other_site_hazards,
+				land_adjacent_hazard: profileMyPlaceHazardsFormData.land_adjacent_hazard,
+				other_hazards: profileMyPlaceHazardsFormData.other_hazards
 			})
-			.eq('id', pid)
-			.select();
+			.eq('id', pid);
 		if (myPlaceHazardsError) {
 			console.log('error profileMyPlaceHazards update property_profile: ', myPlaceHazardsError);
 			error(
@@ -31,12 +26,8 @@ export const actions: Actions = {
 				`error profileMyPlaceHazards update property_profile: ${myPlaceHazardsError.message}`
 			);
 		}
-		if (myPlaceHazards.length === 1) {
-			propertyProfileData = myPlaceHazards[0];
-			return {
-				propertyProfileData
-			};
-		}
-		error(400, 'Could not POST Profile MyPlace Hazards data');
+		return {
+			profileMyPlaceHazardsFormData
+		};
 	}
 };

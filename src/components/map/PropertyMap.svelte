@@ -100,16 +100,25 @@
 		features = [];
 		let g = mapLayers.jsonLayers[1];
 		let p = g.geometry.coordinates;
-		let marker = new CircleMarker(new LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#f97316', weight: 0, radius: 3, fillOpacity: 0.75 });
+		let marker = new CircleMarker(new LatLng(p[1], p[0], 0), {
+			color: '#f97316',
+			weight: 0,
+			radius: 3,
+			fillOpacity: 0.75
+		});
 		features.push(marker);
 		addresspointGroup = featureGroup(features);
 		propertyMap.addLayer(addresspointGroup);
 		features = [];
 		g = mapLayers.jsonLayers[2];
 		p = g.geometry.coordinates;
-		marker = new CircleMarker(new LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#a5a5a5', weight: 0, radius: 3, fillOpacity: 0.75 });
+		marker = new CircleMarker(new LatLng(p[1], p[0], 0), {
+			color: '#a5a5a5',
+			weight: 0,
+			radius: 3,
+			fillOpacity: 0.75
+		});
+
 		features.push(marker);
 		waypointGroup = featureGroup(features);
 		propertyMap.addLayer(waypointGroup);

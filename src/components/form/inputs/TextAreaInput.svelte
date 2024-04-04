@@ -6,7 +6,7 @@
 	export let nameText: string;
 	export let divClass: string;
 	export let textAreaClass: string;
-	export let inputValue: string | null;
+	export let inputValue: string | null | undefined;
 </script>
 
 {#if headingClass && headingText}

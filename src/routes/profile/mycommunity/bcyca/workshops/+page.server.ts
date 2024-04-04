@@ -1,43 +1,36 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { getBCYCACommunityWorkshopsFormData } from '$lib/server/form.utils';
-
-import type { CommunityBCYCAProfileData } from '$lib/custom.types';
-
-let userBCYCAData: CommunityBCYCAProfileData;
+import { getMyCommunityBCYCAWorkshopsFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
-		const session = await getSession();
+	default: async ({ request, locals: { supabase, safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session?.user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const body = getBCYCACommunityWorkshopsFormData(formData);
-		const { data: myCommunityWorkshops, error: myCommunityWorkshopsError } = await supabase
-			.from('community_bcyca_profile')
-			.update({
-				community_workshop_choices: body.community_workshop_choices,
-				other_community_workshop: body.other_community_workshop,
-				will_run_community_workshops: body.will_run_community_workshops
-			})
-			.eq('user_id', session.user.id)
-			.select();
-		if (myCommunityWorkshopsError) {
-			console.log(
-				'error profileMyCommunityWorkshops update community_bcyca_profile: ',
-				myCommunityWorkshopsError
-			);
-			error(
-				400,
-				`error profileMyCommunityWorkshops update community_bcyca_profile: ${myCommunityWorkshopsError.message}`
-			);
+		const myCommunityBCYCAWorkshopsFormData = getMyCommunityBCYCAWorkshopsFormData(formData);
+		const bcycaId = formData.get('community_bcyca_profile_id');
+		if (bcycaId) {
+			const { error: myCommunityBCYCAWorkshopsError } = await supabase
+				.from('community_bcyca_profile')
+				.update({
+					community_workshop_choices: myCommunityBCYCAWorkshopsFormData.community_workshop_choices,
+					other_community_workshop: myCommunityBCYCAWorkshopsFormData.other_community_workshop,
+					will_run_community_workshops:
+						myCommunityBCYCAWorkshopsFormData.will_run_community_workshops
+				})
+				.eq('bcyca_profile_id', bcycaId);
+			if (myCommunityBCYCAWorkshopsError) {
+				console.log(
+					'error profileMyCommunityBCYCAWorkshops update community_bcyca_profile: ',
+					myCommunityBCYCAWorkshopsError
+				);
+				error(
+					400,
+					`error profileMyCommunityBCYCAWorkshops update community_bcyca_profile: ${myCommunityBCYCAWorkshopsError.message}`
+				);
+			}
 		}
-		if (myCommunityWorkshops.length === 1) {
-			userBCYCAData = myCommunityWorkshops[0];
-			return {
-				userBCYCAData
-			};
-		}
-		error(400, 'Could not POST Profile MyCommunity Workshops data');
+		return { myCommunityBCYCAWorkshopsFormData };
 	}
 };

@@ -4,6 +4,7 @@
 
 	import { formatMobile, formatPhone } from '$lib/utils';
 	import { noYesOptions, yesNoOptions, accessOptions } from '$lib/profileOptions';
+	import { setUpperCase } from '$lib/svelte-actions.js';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 
 	import { getModalStore } from '@skeletonlabs/skeleton';
@@ -14,7 +15,6 @@
 		PropertyAddress,
 		PropertyAgentData
 	} from '$lib/custom.types.js';
-	import { setUpperCase } from '$lib/svelte-actions.js';
 
 	const modalStore = getModalStore();
 
@@ -33,7 +33,7 @@
 
 	let propertyAddress: PropertyAddress;
 	let propertyAgent: PropertyAgentData;
-	let propertyProfile: ProfileMyPlaceFormData;
+	let profileMyPlaceFormData: ProfileMyPlaceFormData;
 	let propertyId: string;
 
 	let propertyWasRented = writable(false);
@@ -44,11 +44,9 @@
 	if (data?.propertyId) {
 		propertyId = data.propertyId;
 	}
-	if (data?.property_agent) {
-		propertyAgent = data.property_agent;
-	}
-	if (data?.propertyProfile) {
-		propertyProfile = data.propertyProfile;
+	if (data?.profileMyPlaceFormData) {
+		profileMyPlaceFormData = data.profileMyPlaceFormData;
+		propertyAgent = data.profileMyPlaceFormData.propertyAgentData;
 	}
 	if (data?.propertyWasRented) {
 		propertyWasRented.set(data.propertyWasRented);
@@ -113,7 +111,7 @@
 								id="property_rented"
 								type="radio"
 								name="property_rented"
-								bind:group={propertyProfile.property_rented}
+								bind:group={profileMyPlaceFormData.property_rented}
 								{value}
 							/>
 							<label
@@ -128,7 +126,7 @@
 								id="property_rented"
 								name="property_rented"
 								type="radio"
-								bind:group={propertyProfile.property_rented}
+								bind:group={profileMyPlaceFormData.property_rented}
 								{value}
 							/>
 							<label
@@ -144,7 +142,7 @@
 					<label
 						class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 						for="agent_name"
-						hidden={!propertyProfile.property_rented}>Agent</label
+						hidden={!profileMyPlaceFormData.property_rented}>Agent</label
 					>
 					<input
 						type="text"
@@ -152,7 +150,7 @@
 						id="agent_name"
 						name="agent_name"
 						autocomplete="off"
-						hidden={!propertyProfile.property_rented}
+						hidden={!profileMyPlaceFormData.property_rented}
 						bind:value={propertyAgent.agent_name}
 					/>
 				</div>
@@ -160,14 +158,14 @@
 					<label
 						class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 						for="agent_mobile"
-						hidden={!propertyProfile.property_rented}>Mobile</label
+						hidden={!profileMyPlaceFormData.property_rented}>Mobile</label
 					>
 					<input
 						type="text"
 						class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 						id="agent_mobile"
 						name="agent_mobile"
-						hidden={!propertyProfile.property_rented}
+						hidden={!profileMyPlaceFormData.property_rented}
 						autocomplete="off"
 						placeholder="Mobile 0XXX XXX XXX"
 						on:keydown={(e) => {
@@ -188,14 +186,14 @@
 					<label
 						class="unstyled flex-initial px-3 text-base text-primary-900 font-Poppins"
 						for="agent_phone"
-						hidden={!propertyProfile.property_rented}>Landline</label
+						hidden={!profileMyPlaceFormData.property_rented}>Landline</label
 					>
 					<input
 						type="text"
 						class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-primary-600 focus:border-primary-600 p-0.5"
 						id="agent_phone"
 						name="agent_phone"
-						hidden={!propertyProfile.property_rented}
+						hidden={!profileMyPlaceFormData.property_rented}
 						autocomplete="off"
 						placeholder="Landline XXXX XXXX"
 						on:keydown={(e) => {
@@ -223,7 +221,7 @@
 					class="w-4 h-4 ml-8"
 					name="sign_posted"
 					type="radio"
-					bind:group={propertyProfile.sign_posted}
+					bind:group={profileMyPlaceFormData.sign_posted}
 					{value}
 				/>
 				<label class="ml-2 text-base font-medium text-orange-900 font-Poppins" for="sign_posted"
@@ -244,7 +242,7 @@
 							class="w-4 h-4 ml-8"
 							name="truck_access"
 							type="radio"
-							bind:group={propertyProfile.truck_access}
+							bind:group={profileMyPlaceFormData.truck_access}
 							{value}
 						/>
 					{:else}
@@ -252,7 +250,7 @@
 							class="w-4 h-4 ml-8"
 							name="truck_access"
 							type="radio"
-							bind:group={propertyProfile.truck_access}
+							bind:group={profileMyPlaceFormData.truck_access}
 							{value}
 						/>
 					{/if}
@@ -264,22 +262,22 @@
 		</div>
 		<h2
 			class="unstyled text-base font-semibold text-gray-900"
-			hidden={propertyProfile.truck_access !== 4}
+			hidden={profileMyPlaceFormData.truck_access !== 4}
 		>
 			Other Access Information:
 		</h2>
 		<div
 			class="p-2 rounded-lg bg-orange-300 sm:text-lg"
-			hidden={propertyProfile.truck_access !== 4}
+			hidden={profileMyPlaceFormData.truck_access !== 4}
 		>
 			<input
 				type="text"
 				class="border w-full border-orange-700 rounded bg-orange-50 py-1 sm:text-base"
-				hidden={propertyProfile.truck_access !== 4}
+				hidden={profileMyPlaceFormData.truck_access !== 4}
 				id="truck_access_other_information"
 				name="truck_access_other_information"
 				autocomplete="off"
-				bind:value={propertyProfile.truck_access_other_information}
+				bind:value={profileMyPlaceFormData.truck_access_other_information}
 			/>
 		</div>
 		<h2 class="unstyled text-base font-semibold text-gray-900">
@@ -291,28 +289,28 @@
 				lable="0-18 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={propertyProfile.residents0_18}
+				bind:inputValue={profileMyPlaceFormData.residents0_18}
 			/>
 			<NumberInput
 				name="residents19_50"
 				lable="19-50 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={propertyProfile.residents19_50}
+				bind:inputValue={profileMyPlaceFormData.residents19_50}
 			/>
 			<NumberInput
 				name="residents51_70"
 				lable="51-70 yrs "
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={propertyProfile.residents51_70}
+				bind:inputValue={profileMyPlaceFormData.residents51_70}
 			/>
 			<NumberInput
 				name="residents71_"
 				lable="71+ yrs"
 				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
 				inputClass="border border-orange-700 rounded py-1 sm:text-base"
-				bind:inputValue={propertyProfile.residents71_}
+				bind:inputValue={profileMyPlaceFormData.residents71_}
 			/>
 		</div>
 		<h2 class="unstyled text-base font-semibold text-gray-900">
@@ -324,7 +322,7 @@
 					class="w-4 h-4 ml-8"
 					name="vulnerable_residents"
 					type="radio"
-					bind:group={propertyProfile.vulnerable_residents}
+					bind:group={profileMyPlaceFormData.vulnerable_residents}
 					{value}
 				/>
 				<label
@@ -348,16 +346,16 @@
 					placeholder="Landline XXXX XXXX"
 					on:keydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
-							propertyProfile.phone = e.currentTarget.value;
+							profileMyPlaceFormData.phone = e.currentTarget.value;
 						} else {
 							e.preventDefault();
-							propertyProfile.phone = e.currentTarget.value;
+							profileMyPlaceFormData.phone = e.currentTarget.value;
 							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								propertyProfile.phone = formatPhone(propertyProfile.phone, e.key);
+								profileMyPlaceFormData.phone = formatPhone(profileMyPlaceFormData.phone, e.key);
 							}
 						}
 					}}
-					bind:value={propertyProfile.phone}
+					bind:value={profileMyPlaceFormData.phone}
 				/>
 			</div>
 		</div>
@@ -374,7 +372,7 @@
 								name="mobile_reception"
 								type="radio"
 								class="w-4 h-4 text-orange-700 bg-gray-100 border-gray-300 focus:ring-orange-700 checked:ring-orange-700"
-								bind:group={propertyProfile.mobile_reception}
+								bind:group={profileMyPlaceFormData.mobile_reception}
 								value={i + 1}
 							/>
 							<label class="inline-block ml-1 text-primary-900 font-Poppins" for="mobile_reception">

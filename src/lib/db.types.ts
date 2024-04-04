@@ -80,6 +80,7 @@ export type Database = {
           created_at: string | null
           information_sheet_choices: number[] | null
           last_updated: string | null
+          other_comments: string | null
           other_community_meeting: string | null
           other_community_workshop: string | null
           other_information_sheet: string | null
@@ -93,6 +94,7 @@ export type Database = {
           created_at?: string | null
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -106,6 +108,7 @@ export type Database = {
           created_at?: string | null
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -130,6 +133,7 @@ export type Database = {
           external_profile_id: string
           information_sheet_choices: number[] | null
           last_updated: string | null
+          other_comments: string | null
           other_community_meeting: string | null
           other_community_workshop: string | null
           other_information_sheet: string | null
@@ -143,6 +147,7 @@ export type Database = {
           external_profile_id: string
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -156,6 +161,7 @@ export type Database = {
           external_profile_id?: string
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -180,6 +186,7 @@ export type Database = {
           information_sheet_choices: number[] | null
           last_updated: string | null
           mondrook_profile_id: string
+          other_comments: string | null
           other_community_meeting: string | null
           other_community_workshop: string | null
           other_information_sheet: string | null
@@ -193,6 +200,7 @@ export type Database = {
           information_sheet_choices?: number[] | null
           last_updated?: string | null
           mondrook_profile_id?: string
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -206,6 +214,7 @@ export type Database = {
           information_sheet_choices?: number[] | null
           last_updated?: string | null
           mondrook_profile_id?: string
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -229,6 +238,7 @@ export type Database = {
           created_at: string | null
           information_sheet_choices: number[] | null
           last_updated: string | null
+          other_comments: string | null
           other_community_meeting: string | null
           other_community_workshop: string | null
           other_information_sheet: string | null
@@ -242,6 +252,7 @@ export type Database = {
           created_at?: string | null
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null
@@ -255,6 +266,7 @@ export type Database = {
           created_at?: string | null
           information_sheet_choices?: number[] | null
           last_updated?: string | null
+          other_comments?: string | null
           other_community_meeting?: string | null
           other_community_workshop?: string | null
           other_information_sheet?: string | null

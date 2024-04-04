@@ -7,9 +7,9 @@ export const GET: RequestHandler = async (event) => {
 	const {
 		params,
 		setHeaders,
-		locals: { supabase, getSession }
+		locals: { supabase, safeGetSession }
 	} = event;
-	const session = await getSession();
+	const session = await safeGetSession();
 	if (
 		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
 		!session?.user?.app_metadata?.roles?.includes('admin')

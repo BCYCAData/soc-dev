@@ -8,8 +8,8 @@ import type { PageServerLoad } from './$types.js';
 
 const template = Tester;
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const session = await getSession();
+export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
+	const session = await safeGetSession();
 	if (!session) {
 		redirect(307, '/auth/signin');
 	} else if (
@@ -35,8 +35,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 };
 
 export const actions: Actions = {
-	testemail: async ({ locals: { getSession } }) => {
-		const session = await getSession();
+	testemail: async ({ locals: { safeGetSession } }) => {
+		const session = await safeGetSession();
 		if (!session) {
 			redirect(307, '/auth/signin');
 		} else if (
@@ -77,9 +77,9 @@ export const actions: Actions = {
 			}
 		});
 	},
-	newusersemail: async ({ locals: { getSession } }) => {
+	newusersemail: async ({ locals: { safeGetSession } }) => {
 		console.log('Yay');
-		const session = await getSession();
+		const session = await safeGetSession();
 		if (
 			!(
 				session?.user?.app_metadata.roles.includes('tester') |

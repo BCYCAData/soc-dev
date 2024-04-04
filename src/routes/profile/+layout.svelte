@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AppShell } from '@skeletonlabs/skeleton';
+	import { AppShell, Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
 	import MessageContainer from '$components/message/MessageContainer.svelte';
@@ -16,15 +16,16 @@
 		mymap: ['My Map', 'Map'],
 		mycommunity: ['My Community', 'Users'],
 		bcyca: ['BCYCA', 'emojione-monotone:letter-b'],
-		tinonee: ['BCYCA', 'emojione-monotone:letter-t'],
+		tinonee: ['Tinonee', 'emojione-monotone:letter-t'],
+		mondrook: ['Mondrook', 'emojione-monotone:letter-m'],
+		external: ['External', 'emojione-monotone:letter-e'],
 		information: ['Information', 'InfoSquareRounded'],
 		events: ['Events', 'CalendarEvent'],
 		workshops: ['Workshops', 'School'],
 		map: ['Community Map', 'Map2'],
 		settings: ['Settings', 'Settings'],
 		password: ['Change Password', 'Password'],
-		email: ['Change Email', 'Mailbox'],
-		connect_community: ['Connect With A Community', 'vaadin:connect-o']
+		email: ['Change Email', 'Mailbox']
 	};
 
 	$: classesHeader = 'w-full';
@@ -40,51 +41,16 @@
 	}
 
 	const profiles = {
-		community_bcyca_profile: data.community_bcyca_profile,
-		community_tinonee_profile: data.community_tinonee_profile,
-		community_mondrook_profile: data.community_mondrook_profile,
-		community_external_profile: data.community_external_profile
+		community_bcyca_profile: data.communityProfiles?.community_bcyca_profile_id,
+		community_tinonee_profile: data.communityProfiles?.community_tinonee_profile_id,
+		community_mondrook_profile: data.communityProfiles?.community_mondrook_profile_id,
+		community_external_profile: data.communityProfiles?.community_external_profile_id
 	};
-
-	let isNotCollapsed: string | null = null;
-	let isCollapsed: string[] = [];
-
-	for (const profileKey in profiles) {
-		if (profiles.hasOwnProperty(profileKey) && profiles[profileKey] !== null) {
-			if (isNotCollapsed === '') {
-				isNotCollapsed = profileKey.replace('_profile', '');
-			} else {
-				isCollapsed.push(profileKey.replace('_profile', ''));
-			}
-		}
-	}
 
 	const nonNullProfilesCount = Object.values(profiles).filter((profile) => profile !== null).length;
 	let communityText = 'Community';
 	if (nonNullProfilesCount > 1) {
 		communityText = 'Communities';
-	}
-
-	function toggleCollapse(id: string) {
-		const element = document.getElementById(id);
-		if (element) {
-			const isHidden = element.classList.contains('hidden');
-			if (id === isNotCollapsed) {
-				if (isNotCollapsed === '') {
-					isNotCollapsed = id;
-				}
-				element.classList.toggle('hidden');
-				if (element.classList.contains('hidden') && !isHidden) {
-					isNotCollapsed = '';
-				}
-			} else if (isCollapsed.includes(id)) {
-				element.classList.remove('hidden');
-				isCollapsed = isCollapsed.filter((item) => item !== id);
-			} else {
-				element.classList.add('hidden');
-				isCollapsed.push(id);
-			}
-		}
 	}
 </script>
 
@@ -98,9 +64,7 @@
 >
 	<svelte:fragment slot="header"
 		><div class="flex max-h-[45px] min-h-[45px] mx-auto items-center bg-orange-100">
-			<h3 class="font-bold mx-auto text-orange-900">
-				Burrell Creek Youth & Community Association Inc.
-			</h3>
+			<h3 class="font-bold mx-auto text-orange-900">Strengthen OUR Community</h3>
 		</div></svelte:fragment
 	>
 	<svelte:fragment slot="pageHeader"><Breadcrumbs {pathLables} /></svelte:fragment>
@@ -154,123 +118,281 @@
 					<iconify-icon icon="gis:map-user" class="text-stone-50" style="font-size: 18px" />
 					<span class="px-2 text-stone-50">My Map</span></a
 				>
-				<a
-					class="flex items-center pl-1 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
-					href="/profile/mycommunity"
-				>
-					<iconify-icon icon="la:users" class="text-stone-50" style="font-size: 18px" />
-					<span class="px-2 text-stone-50">My {communityText}</span>
-				</a>
-				<a
-					class="flex items-center pl-8 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
-					href="/profile/mycommunity/bcyca"
-					on:click|preventDefault={() => toggleCollapse('community_bcyca')}
-				>
-					<iconify-icon
-						icon="emojione-monotone:letter-b"
-						class="text-stone-50"
-						style="font-size: 18px"
-					/>
-					<span class="px-2 text-stone-50">BCYCA</span>
-					{#if isNotCollapsed === 'community_bcyca'}
-						<iconify-icon icon="bi:chevron-up" class="text-stone-50 ml-auto" />
-					{:else}
-						<iconify-icon icon="bi:chevron-down" class="text-stone-50 ml-auto" />
-					{/if}
-				</a>
-				<div id="community_bcyca" class={isNotCollapsed !== 'community_bcyca' ? 'hidden' : ''}>
+				{#if nonNullProfilesCount > 0 && data.communityProfiles}
 					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/bcyca/information"
+						class="flex items-center pl-1 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
+						href="/profile/mycommunity"
 					>
-						<iconify-icon
-							icon="tabler:info-square-rounded"
-							class="text-stone-50"
-							style="font-size: 18px"
-						/>
-						<span class="px-2 text-stone-50">BCYCA Information</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/bcyca/workshops"
-					>
-						<iconify-icon icon="tabler:school" class="text-stone-50" style="font-size: 18px" />
-						<span class="px-2 text-stone-50">BCYCA Workshops</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/bcyca/events"
-					>
-						<iconify-icon
-							icon="tabler:calendar-event"
-							class="text-stone-50"
-							style="font-size: 18px"
-						/>
-						<span class="px-2 text-stone-50">BCYCA Events</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/bcyca/map"
-					>
-						<iconify-icon icon="gis:map-users" class="text-stone-50" style="font-size: 18px" />
-						<span class="px-2 text-stone-50">Community Map</span></a
-					>
-				</div>
-				<a
-					class="flex items-center pl-8 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
-					href="/profile/mycommunity/tinonee"
-					on:click|preventDefault={() => toggleCollapse('community_tinonee')}
-				>
-					<iconify-icon
-						icon="emojione-monotone:letter-t"
-						class="text-stone-50"
-						style="font-size: 18px"
-					/>
-					<span class="px-2 text-stone-50">Tinonee</span>
-					{#if isNotCollapsed === 'community_tinonee'}
-						<iconify-icon icon="bi:chevron-up" class="text-stone-50 ml-auto" />
-					{:else}
-						<iconify-icon icon="bi:chevron-down" class="text-stone-50 ml-auto" />
-					{/if}
-				</a>
-				<div id="community_tinonee" class={isNotCollapsed !== 'community_tinonee' ? 'hidden' : ''}>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/tinonee/information"
-					>
-						<iconify-icon
-							icon="tabler:info-square-rounded"
-							class="text-stone-50"
-							style="font-size: 18px"
-						/>
-						<span class="px-2 text-stone-50">Tinonee Information</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/tinonee/workshops"
-					>
-						<iconify-icon icon="tabler:school" class="text-stone-50" style="font-size: 18px" />
-						<span class="px-2 text-stone-50">Tinonee Workshops</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/tinonee/events"
-					>
-						<iconify-icon
-							icon="tabler:calendar-event"
-							class="text-stone-50"
-							style="font-size: 18px"
-						/>
-						<span class="px-2 text-stone-50">Tinonee Events</span></a
-					>
-					<a
-						class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-						href="/profile/mycommunity/tinonee/map"
-					>
-						<iconify-icon icon="gis:map-users" class="text-stone-50" style="font-size: 18px" />
-						<span class="px-2 text-stone-50">Community Map</span></a
-					>
-				</div>
+						<iconify-icon icon="la:users" class="text-stone-50" style="font-size: 18px" />
+						<span class="px-2 text-stone-50">My {communityText}</span>
+					</a>
+					<Accordion autocollapse>
+						{#if data.communityProfiles.community_bcyca_profile_id !== null}
+							<AccordionItem regionControl="bg-orange-500" regionCaret="text-stone-50">
+								<svelte:fragment slot="lead">
+									<a href="/profile/mycommunity/bcyca">
+										<span
+											><iconify-icon
+												icon="emojione-monotone:letter-b"
+												class="text-stone-50"
+												style="font-size: 18px"
+											/></span
+										>
+									</a>
+								</svelte:fragment>
+								<svelte:fragment slot="summary">
+									<a href="/profile/mycommunity/bcyca">
+										<span class="px-2 text-stone-50">BCYCA</span>
+									</a></svelte:fragment
+								>
+								<svelte:fragment slot="content">
+									<a
+										class="flex items-center pl-2 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/bcyca/information"
+									>
+										<iconify-icon
+											icon="tabler:info-square-rounded"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">BCYCA Information</span></a
+									>
+									<a
+										class="flex items-center pl-2 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/bcyca/workshops"
+									>
+										<iconify-icon
+											icon="tabler:school"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">BCYCA Workshops</span></a
+									>
+									<a
+										class="flex items-center pl-2 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/bcyca/events"
+									>
+										<iconify-icon
+											icon="tabler:calendar-event"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">BCYCA Events</span></a
+									>
+									<a
+										class="flex items-center pl-2 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/bcyca/map"
+									>
+										<iconify-icon
+											icon="gis:map-users"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">BCYCA Community Map</span></a
+									></svelte:fragment
+								>
+							</AccordionItem>
+						{/if}
+						{#if data.communityProfiles.community_tinonee_profile_id !== null}
+							<AccordionItem regionControl="bg-orange-500" regionCaret="text-stone-50">
+								<svelte:fragment slot="lead">
+									<a href="/profile/mycommunity/tinonee">
+										<span
+											><iconify-icon
+												icon="emojione-monotone:letter-t"
+												class="text-stone-50"
+												style="font-size: 18px"
+											/></span
+										>
+									</a>
+								</svelte:fragment>
+								<svelte:fragment slot="summary"
+									><a href="/profile/mycommunity/tinonee">
+										<span class="px-2 text-stone-50">Tinonee</span>
+									</a></svelte:fragment
+								>
+								<svelte:fragment slot="content"
+									><a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/tinonee/information"
+									>
+										<iconify-icon
+											icon="tabler:info-square-rounded"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Tinonee Information</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/tinonee/workshops"
+									>
+										<iconify-icon
+											icon="tabler:school"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Tinonee Workshops</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/tinonee/events"
+									>
+										<iconify-icon
+											icon="tabler:calendar-event"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Tinonee Events</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/tinonee/map"
+									>
+										<iconify-icon
+											icon="gis:map-users"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Tinonee Community Map</span></a
+									></svelte:fragment
+								>
+							</AccordionItem>
+						{/if}
+						{#if data.communityProfiles.community_mondrook_profile_id !== null}
+							<AccordionItem regionControl="bg-orange-500" regionCaret="text-stone-50">
+								<svelte:fragment slot="lead">
+									<a href="/profile/mycommunity/mondrook">
+										<span
+											><iconify-icon
+												icon="emojione-monotone:letter-m"
+												class="text-stone-50"
+												style="font-size: 18px"
+											/></span
+										>
+									</a>
+								</svelte:fragment>
+								<svelte:fragment slot="summary"
+									><a href="/profile/mycommunity/mondrook">
+										<span class="px-2 text-stone-50">Mondrook</span>
+									</a></svelte:fragment
+								>
+								<svelte:fragment slot="content"
+									><a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/mondrook/information"
+									>
+										<iconify-icon
+											icon="tabler:info-square-rounded"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Mondrook Information</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/mondrook/workshops"
+									>
+										<iconify-icon
+											icon="tabler:school"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Mondrook Workshops</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/mondrook/events"
+									>
+										<iconify-icon
+											icon="tabler:calendar-event"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Mondrook Events</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/mondrook/map"
+									>
+										<iconify-icon
+											icon="gis:map-users"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">Mondrook Community Map</span></a
+									></svelte:fragment
+								>
+							</AccordionItem>
+						{/if}
+						{#if data.communityProfiles.community_external_profile_id !== null}
+							<AccordionItem regionControl="bg-orange-500" regionCaret="text-stone-50">
+								<svelte:fragment slot="lead">
+									<a href="/profile/mycommunity/external">
+										<span
+											><iconify-icon
+												icon="emojione-monotone:letter-e"
+												class="text-stone-50"
+												style="font-size: 18px"
+											/></span
+										>
+									</a>
+								</svelte:fragment>
+								<svelte:fragment slot="summary"
+									><a href="/profile/mycommunity/external">
+										<span class="px-2 text-stone-50">External</span>
+									</a></svelte:fragment
+								>
+								<svelte:fragment slot="content"
+									><a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/external/information"
+									>
+										<iconify-icon
+											icon="tabler:info-square-rounded"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">External Information</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/external/workshops"
+									>
+										<iconify-icon
+											icon="tabler:school"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">External Workshops</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/external/events"
+									>
+										<iconify-icon
+											icon="tabler:calendar-event"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">External Events</span></a
+									>
+									<a
+										class="flex items-center pl-12 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
+										href="/profile/mycommunity/external/map"
+									>
+										<iconify-icon
+											icon="gis:map-users"
+											class="text-stone-50"
+											style="font-size: 18px"
+										/>
+										<span class="px-2 text-stone-50">External Community Map</span></a
+									></svelte:fragment
+								>
+							</AccordionItem>
+						{/if}
+					</Accordion>
+				{/if}
 				<a
 					class="flex items-center pl-1 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
 					href="/profile/settings"
@@ -291,13 +413,6 @@
 				>
 					<iconify-icon icon="tabler:mailbox" class="text-stone-50" style="font-size: 18px" />
 					<span class="px-2 text-stone-50">Change Email</span></a
-				>
-				<a
-					class="flex items-center pl-8 pt-1 hover:bg-orange-300 hover:rounded !no-underline"
-					href="/profile/settings/connect_community"
-				>
-					<iconify-icon icon="vaadin:connect-o" class="text-stone-50" style="font-size: 18px" />
-					<span class="px-2 text-stone-50">Connect With A Community</span></a
 				>
 			</div>
 			<p class="ml-2">
@@ -321,9 +436,3 @@
 	<!-- ---- / ---- -->
 	<!-- <svelte:fragment slot="pageFooter">Page Footer</svelte:fragment> -->
 </AppShell>
-
-<style>
-	.hidden {
-		display: none;
-	}
-</style>

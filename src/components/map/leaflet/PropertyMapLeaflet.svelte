@@ -69,16 +69,24 @@
 		let features = [];
 		let g = mapLayers.jsonLayers[1];
 		let p = g.geometry.coordinates;
-		let marker = new leaflet.CircleMarker(new leaflet.LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#f97316', weight: 0, radius: 3, fillOpacity: 0.75 });
+		let marker = new leaflet.CircleMarker(new leaflet.LatLng(p[1], p[0], 0), {
+			color: '#f97316',
+			weight: 0,
+			radius: 3,
+			fillOpacity: 0.75
+		});
 		features.push(marker);
 		addresspointGroup = leaflet.featureGroup(features);
 		map.addLayer(addresspointGroup);
 		features = [];
 		g = mapLayers.jsonLayers[2];
 		p = g.geometry.coordinates;
-		marker = new leaflet.CircleMarker(new leaflet.LatLng(p[1], p[0], 0));
-		marker.setStyle({ color: '#a5a5a5', weight: 0, radius: 3, fillOpacity: 0.75 });
+		marker = new leaflet.CircleMarker(new leaflet.LatLng(p[1], p[0], 0), {
+			color: '#a5a5a5',
+			weight: 0,
+			radius: 3,
+			fillOpacity: 0.75
+		});
 		features.push(marker);
 		waypointGroup = leaflet.featureGroup(features);
 		map.addLayer(waypointGroup);

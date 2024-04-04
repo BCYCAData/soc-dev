@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile-Community-Map</title>
+	<title>Profile-Community BCYCA-Map</title>
 </svelte:head>
 
 <div class="flex mx-auto flex-col w-full h-full">

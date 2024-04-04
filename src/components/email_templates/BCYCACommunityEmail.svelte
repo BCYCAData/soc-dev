@@ -117,7 +117,6 @@
 				<Column style={{ ...tableCell, align: 'center' }}>
 					<Text style={{ ...heading1, 'text-align': 'center' }}>Your {heading1Type}</Text>
 				</Column>
-				<!-- <Column style={{ ...tableCell, align: 'center' }}> -->
 				<Column style={{ ...tableCell, align: 'center' }}>
 					<Text style={{ ...heading2, 'text-align': 'center' }}
 						>From Burrell Creek Youth & Community Association Inc.</Text

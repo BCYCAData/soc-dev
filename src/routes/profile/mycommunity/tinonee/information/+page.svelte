@@ -25,14 +25,18 @@
 	export let data;
 	let informationSheetChoices: number[] | null;
 	let otherInformationSheet: string | null;
-	if (data?.community_bcyca_profile) {
-		informationSheetChoices = data.community_bcyca_profile.information_sheet_choices;
-		otherInformationSheet = data.community_bcyca_profile.other_information_sheet;
+	let communityTinoneeProfileId: string | null;
+	if (data?.profileMyCommunityTinoneeInformationFormData) {
+		informationSheetChoices =
+			data.profileMyCommunityTinoneeInformationFormData.information_sheet_choices;
+		otherInformationSheet =
+			data.profileMyCommunityTinoneeInformationFormData.other_information_sheet;
+		communityTinoneeProfileId = data.communityProfiles.community_tinonee_profile_id;
 	}
 </script>
 
 <svelte:head>
-	<title>Profile-Community-Information</title>
+	<title>Profile-Community Tinonee-Information</title>
 </svelte:head>
 
 <form
@@ -79,6 +83,7 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={otherInformationSheet}
 	/>
+	<input type="text" name="community_tinonee_profile_id" value={communityTinoneeProfileId} hidden />
 	<div class="sticky mt-5 bottom-2">
 		<div class="flex flex-row">
 			<div class="w-1/2" />
