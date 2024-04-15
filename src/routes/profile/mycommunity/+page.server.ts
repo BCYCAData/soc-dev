@@ -2,9 +2,9 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyCommunityFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	default: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
@@ -17,7 +17,7 @@ export const actions: Actions = {
 				stay_in_touch_choices: profileMyCommunityFormData.stay_in_touch_choices,
 				other_comments: profileMyCommunityFormData.other_comments
 			})
-			.eq('id', session.user.id);
+			.eq('id', user.id);
 		if (myCommunityUserProfileError) {
 			console.log('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
 			error(
@@ -36,7 +36,7 @@ export const actions: Actions = {
 						postal_address_postcode:
 							profileMyCommunityFormData.userPostalAddressData?.postal_address_postcode
 					})
-					.eq('user_id', session?.user.id);
+					.eq('user_id', user.id);
 				if (userPostalAddressUpdateError) {
 					console.log(
 						'error profileMyCommunity updateUserPostalAddress: ',
@@ -51,7 +51,7 @@ export const actions: Actions = {
 				const { error: userPostalAddressDeleteError } = await supabase
 					.from('user_postal_address')
 					.delete()
-					.eq('user_id', session?.user.id);
+					.eq('user_id', user.id);
 				if (userPostalAddressDeleteError) {
 					console.log(
 						'error profileMyCommunity delete UserPostalAddress: ',
@@ -66,7 +66,7 @@ export const actions: Actions = {
 				const { error: userPostalAddressUpsertError } = await supabase
 					.from('user_postal_address')
 					.upsert({
-						user_id: session?.user.id,
+						user_id: user.id,
 						postal_address_street:
 							profileMyCommunityFormData.userPostalAddressData?.postal_address_street,
 						postal_address_suburb:

@@ -2,9 +2,9 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyCommunityMondrookEventsFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	default: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();

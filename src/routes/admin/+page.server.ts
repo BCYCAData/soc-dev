@@ -1,32 +1,24 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (
-		!(
-			session?.user?.app_metadata.roles.includes('tester') |
-			session?.user?.app_metadata.roles.includes('admin')
-		)
-	) {
-		redirect(307, '/auth/signin');
-	}
-	return {
-		session,
-		adminData: 'It works'
-	};
-};
+// export const load: PageServerLoad = async ({ locals: { getUser } }) => {
+// 	const { user } = await getUser();
+// 	if (!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))) {
+// 		redirect(307, '/auth/signin');
+// 	}
+// 	return {
+// 		user,
+// 		adminData: 'It works'
+// 	};
+// };
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session) {
+	default: async ({ request, locals: { getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		} else if (
-			!(
-				session?.user?.app_metadata.roles.includes('tester') |
-				session?.user?.app_metadata.roles.includes('admin')
-			)
+			!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 		) {
 			error(401, { message: 'Unauthorized' });
 		}

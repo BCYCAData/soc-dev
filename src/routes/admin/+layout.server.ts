@@ -1,15 +1,12 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from '../$types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session) {
+export const load: LayoutServerLoad = async ({ locals: { supabase, getUser, accessToken } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	} else if (
-		!(
-			session?.user?.app_metadata.roles.includes('tester') |
-			session?.user?.app_metadata.roles.includes('admin')
-		)
+		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 	) {
 		error(401, { message: 'Unauthorized' });
 	}
@@ -17,7 +14,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSessio
 	const { data: adminMessagesData, error: adminMessagesError } = await supabase.rpc(
 		'get_admin_messages_for_user',
 		{
-			id_input: session?.user.id as string
+			id_input: user.id as string
 		}
 	);
 	if (adminMessagesError) {

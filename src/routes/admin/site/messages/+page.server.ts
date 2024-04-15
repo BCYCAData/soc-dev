@@ -14,15 +14,12 @@ interface ListsData {
 	suburbList: ListItem[];
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session) {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	} else if (
-		!(
-			session?.user?.app_metadata.roles.includes('tester') |
-			session?.user?.app_metadata.roles.includes('admin')
-		)
+		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 	) {
 		error(401, { message: 'Unauthorized' });
 	}
@@ -37,7 +34,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 		error(400, appMessagesError.message);
 	}
 	return {
-		session,
 		siteAdminMessagesData: {},
 		emailList: (listsData as unknown as ListsData)?.emailList,
 		addressList: (listsData as unknown as ListsData)?.addressList,
@@ -49,9 +45,9 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 };
 
 export const actions: Actions = {
-	sendToAllUsers: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	sendToAllUsers: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
@@ -74,9 +70,9 @@ export const actions: Actions = {
 		}
 		error(400, 'Could not send message to all Users');
 	},
-	sendToEmailList: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	sendToEmailList: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
@@ -102,9 +98,9 @@ export const actions: Actions = {
 		}
 		error(400, `Could not send message to Users with ids: (${targetData}).`);
 	},
-	revokeMessages: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	revokeMessages: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();

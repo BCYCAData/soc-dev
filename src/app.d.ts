@@ -11,11 +11,13 @@ declare global {
 			supabase: SupabaseClient<Database>;
 			getSupabaseUser(): Promise<UserResponse | null>;
 			getSession(): Promise<Session | null>;
+			getUser(): Promise<{ user: UserResponse | null }>;
 			safeGetSession(): Promise<{ session: Session | null; user: UserResponse | null }>;
 			supabaseRedirectBase: string | null;
+			accessToken: string | null;
 		}
 		interface PageData {
-			session: Session | null;
+			user: UserResponse | null;
 		}
 		// interface Platform {}
 	}

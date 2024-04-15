@@ -1,6 +1,8 @@
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
-import type { LayoutLoad } from './$types';
 import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
+
+import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	depends('supabase:auth');
@@ -12,9 +14,8 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 		cookies: {
 			get(key) {
 				if (!isBrowser()) {
-					return JSON.stringify(data.session);
+					return JSON.stringify(data.user);
 				}
-
 				const cookie = parse(document.cookie);
 				return cookie[key];
 			}
@@ -29,6 +30,11 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	const {
 		data: { session }
 	} = await supabase.auth.getSession();
-
-	return { supabase, session };
+	return {
+		supabase,
+		session,
+		user: session?.user,
+		role: data.role,
+		permissions: data.permissionsData
+	};
 };

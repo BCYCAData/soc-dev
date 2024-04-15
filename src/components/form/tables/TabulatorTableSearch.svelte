@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { Tabulator } from 'tabulator-tables';
+	import type { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import type { ComparisonOption } from '$lib/types';
 
 	export let table: Tabulator;

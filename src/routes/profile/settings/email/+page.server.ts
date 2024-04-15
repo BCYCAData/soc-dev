@@ -1,9 +1,9 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
-	changeEmail: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	changeEmail: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();

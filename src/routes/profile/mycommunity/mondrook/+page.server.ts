@@ -2,9 +2,9 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyCommunityMondrookFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	default: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
@@ -41,7 +41,7 @@ export const actions: Actions = {
 							postal_address_postcode:
 								profileMyCommunityMondrookFormData.userPostalAddressData?.postal_address_postcode
 						})
-						.eq('user_id', session?.user.id);
+						.eq('user_id', user.id);
 					if (userPostalAddressUpdateError) {
 						console.log(
 							'error profileMyCommunityMondrookupdateUserPostalAddress: ',
@@ -56,7 +56,7 @@ export const actions: Actions = {
 					const { error: userPostalAddressDeleteError } = await supabase
 						.from('user_postal_address')
 						.delete()
-						.eq('user_id', session?.user.id);
+						.eq('user_id', user.id);
 					if (userPostalAddressDeleteError) {
 						console.log(
 							'error profileMyCommunityMondrookdelete UserPostalAddress: ',
@@ -71,7 +71,7 @@ export const actions: Actions = {
 					const { error: userPostalAddressUpsertError } = await supabase
 						.from('user_postal_address')
 						.upsert({
-							user_id: session?.user.id,
+							user_id: user.id,
 							postal_address_street:
 								profileMyCommunityMondrookFormData.userPostalAddressData?.postal_address_street,
 							postal_address_suburb:

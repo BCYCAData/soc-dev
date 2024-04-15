@@ -1,15 +1,12 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session) {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	} else if (
-		!(
-			session?.user?.app_metadata.roles.includes('tester') |
-			session?.user?.app_metadata.roles.includes('admin')
-		)
+		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 	) {
 		error(401, { message: 'Unauthorized' });
 	}
@@ -21,7 +18,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 	if (streetsData.length > 0) {
 		const streetList = streetsData.map(({ streets }) => streets);
 		return {
-			session,
 			streetList
 		};
 	}
@@ -29,15 +25,12 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 };
 
 export const actions: Actions = {
-	generateStreetReport: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session) {
+	generateStreetReport: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		} else if (
-			!(
-				session?.user?.app_metadata.roles.includes('tester') |
-				session?.user?.app_metadata.roles.includes('admin')
-			)
+			!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 		) {
 			error(401, { message: 'Unauthorized' });
 		}

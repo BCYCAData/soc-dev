@@ -10,13 +10,13 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const {
-		locals: { safeGetSession },
+		locals: { getUser },
 		request
 	} = event;
-	const session = await safeGetSession();
+	const { user } = await getUser();
 	if (
-		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
-		!session?.user?.app_metadata?.roles?.includes('admin')
+		!user?.app_metadata.app_metadata?.roles?.includes('tester') &&
+		!user?.app_metadata?.roles?.includes('admin')
 	) {
 		redirect(307, '/auth/signin');
 	}

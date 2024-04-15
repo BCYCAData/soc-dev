@@ -7,12 +7,12 @@ export const GET: RequestHandler = async (event) => {
 	const {
 		params,
 		setHeaders,
-		locals: { supabase, safeGetSession }
+		locals: { supabase, getUser }
 	} = event;
-	const session = await safeGetSession();
+	const { user } = await getUser();
 	if (
-		!session?.user.app_metadata.app_metadata?.roles?.includes('tester') &&
-		!session?.user?.app_metadata?.roles?.includes('admin')
+		!user.app_metadata.app_metadata?.roles?.includes('tester') &&
+		!user?.app_metadata?.roles?.includes('admin')
 	) {
 		// the user is not authorised
 		error(401, { message: 'Unauthorised' });

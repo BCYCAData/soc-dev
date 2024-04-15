@@ -14,8 +14,8 @@
 	} from '@skeletonlabs/skeleton';
 
 	import SaveProfilePrompt from '$components/form/SaveProfilePrompt.svelte';
-	import MobileNavbar from '$components/navbar/MobileNavbar.svelte';
-	import Navbar from '$components/navbar/Navbar.svelte';
+	import MobileNavbar from '$components/navigation/MobileNavbar.svelte';
+	import Navbar from '$components/navigation/Navbar.svelte';
 	import Footer from '$components/page/Footer.svelte';
 
 	import type { LayoutData } from './$types';

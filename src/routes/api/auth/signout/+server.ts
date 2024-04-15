@@ -3,10 +3,10 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const {
-		locals: { supabase, safeGetSession }
+		locals: { supabase, getUser }
 	} = event;
-	const session = await safeGetSession();
-	if (!session) {
+	const { user } = await getUser();
+	if (!user) {
 		error(401, { message: 'Unauthorized' });
 	}
 	const { error: err } = await supabase.auth.signOut();

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { AppBar, getDrawerStore } from '@skeletonlabs/skeleton';
-	import Logo from '$components/navbar/logo/Logo.svelte';
+	import Logo from '$components/navigation/logo/Logo.svelte';
 
 	const drawerStore = getDrawerStore();
 	function drawerOpen(): void {

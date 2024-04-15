@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-	import BCYCARequestsTable from '$components/form/tables/BCYCARequestsTable.svelte';
+	import CommunityRequestsTable from '$components/form/tables/CommunityRequestsTable.svelte';
 
 	import type { CellComponent } from 'tabulator-tables';
 
 	export let data;
 
-	let bcycaInformationColumns = [
+	let externalInformationColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -30,7 +30,7 @@
 			headerSort: false
 		}
 	];
-	let bcycaOtherInformationColumns = [
+	let externalOtherInformationColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -55,11 +55,11 @@
 			headerSort: false
 		}
 	];
-	$: ({ bcycaInformationData } = data);
+	$: ({ externalInformationData } = data);
 </script>
 
 <svelte:head>
-	<title>BCYCA Admin-Events</title>
+	<title>ExternalCommunity Admin-Events</title>
 </svelte:head>
 
 <Accordion autocollapse />
@@ -70,10 +70,10 @@
 		<svelte:fragment slot="summary">Pre fire season checklist</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="PreFireSeasonChecklist">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(1)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter(
+						(item) => item.informatiion_choices?.includes(1) || false
 					)}
 				/>
 			</div>
@@ -84,10 +84,10 @@
 		<svelte:fragment slot="summary">Lighting fires - facts and responsibilities</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="LightingFires_FactsResponsibilities">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(2)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(2)
 					)}
 				/>
 			</div></svelte:fragment
@@ -97,10 +97,10 @@
 		<svelte:fragment slot="summary">Fire ready - pets and animals</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_PetsAnimals">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(3)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(3)
 					)}
 				/>
 			</div></svelte:fragment
@@ -110,23 +110,23 @@
 		<svelte:fragment slot="summary">Fire ready - livestock & large animals</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_LivestockLargeAnimals">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(4)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(4)
 					)}
 				/>
 			</div></svelte:fragment
 		>
 	</AccordionItem>
 	<AccordionItem class="bg-orange-100 font-medium">
-		<svelte:fragment slot="summary">BCYCA leaflet</svelte:fragment>
+		<svelte:fragment slot="summary">ExternalCommunity leaflet</svelte:fragment>
 		<svelte:fragment slot="content">
-			<div class="table-container" id="BCYCALeaflet">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(5)
+			<div class="table-container" id="ExternalCommunityLeaflet">
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(5)
 					)}
 				/>
 			</div></svelte:fragment
@@ -136,10 +136,10 @@
 		<svelte:fragment slot="summary">How to be more active locally</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BeMoreActiveLocally">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(6)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(6)
 					)}
 				/>
 			</div></svelte:fragment
@@ -149,10 +149,10 @@
 		<svelte:fragment slot="summary">Strengthen Our Community Project Report</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SOCProjectReport">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter((item) =>
-						item.informatiion_choices.includes(7)
+				<CommunityRequestsTable
+					communityRequestsColumns={externalInformationColumns}
+					communityRequestsData={externalInformationData.filter((item) =>
+						item.informatiion_choices?.includes(7)
 					)}
 				/>
 			</div></svelte:fragment
@@ -162,9 +162,9 @@
 		<svelte:fragment slot="summary">Other Information Requests</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherInformationRequests">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaOtherInformationColumns}
-					bcycaRequestsData={bcycaInformationData.filter(
+				<CommunityRequestsTable
+					communityRequestsColumns={externalOtherInformationColumns}
+					communityRequestsData={externalInformationData.filter(
 						(item) => item.other_information?.length > 0
 					)}
 				/>

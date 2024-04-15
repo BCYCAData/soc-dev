@@ -34,9 +34,9 @@ function insertSteps(steps: Step[], additionalValues: Step[]) {
 	return uniqueSortedSteps;
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session?.user) {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	}
 	console.log('SURVEY LOAD');
@@ -74,15 +74,15 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 				), 
 				property_agent(agent_mobile, agent_name, agent_phone)`
 		)
-		.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid)
-		.eq('user_profile.id', session.user.id);
+		.eq('principaladdresssiteoid', user.app_metadata.principaladdresssiteoid)
+		.eq('user_profile.id', user.id);
 	type SurveyData = QueryData<typeof surveyQueryData>;
 	const { data, error: getSurveyDataError } = await surveyQueryData;
 	if (getSurveyDataError) {
 		console.log('GET data error Survey:', getSurveyDataError);
 		let emailSubject: PostgRestErrorEmailSubject = {
 			type: `GET data error :: Survey.`,
-			user: `User:: ${session.user.id}.`,
+			user: `User:: ${user.id}.`,
 			time: `${new Date().toLocaleDateString()}  ${new Date().toLocaleTimeString()}`
 		};
 		sendPostgRestErrorEmail(emailSubject, getSurveyDataError);
@@ -185,16 +185,16 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, safeGetSession } }) => {
-		const session = await safeGetSession();
-		if (!session?.user) {
+	default: async ({ request, locals: { supabase, getUser } }) => {
+		const { user } = await getUser();
+		if (!user) {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const bodyObject = getSurveyFormData(
 			formData,
-			session.user.id,
-			session.user.app_metadata.principaladdresssiteoid
+			user.id,
+			user.app_metadata.principaladdresssiteoid
 		);
 		if (bodyObject.propertyProfileData.property_rented != bodyObject.propertyWasRented) {
 			if (bodyObject.propertyWasRented === false) {
@@ -224,7 +224,7 @@ export const actions: Actions = {
 			const { error: userPostalAddressUpsertError } = await supabase
 				.from('user_postal_address')
 				.upsert({
-					user_id: session.user.id,
+					user_id: user.id,
 					postal_address_street: bodyObject.userPostalAddressData.postal_address_street,
 					postal_address_suburb: bodyObject.userPostalAddressData.postal_address_suburb,
 					postal_address_postcode: bodyObject.userPostalAddressData.postal_address_postcode
@@ -255,7 +255,7 @@ export const actions: Actions = {
 				residency_profile: bodyObject.userProfileData.residency_profile,
 				stay_in_touch_choices: bodyObject.userProfileData.stay_in_touch_choices
 			})
-			.eq('id', session.user.id);
+			.eq('id', user.id);
 		if (userProfileUpdateError) {
 			console.log('userProfileUpdateError', userProfileUpdateError);
 			error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
@@ -272,7 +272,7 @@ export const actions: Actions = {
 					other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
 					will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
 				})
-				.eq('user_id', session.user.id);
+				.eq('user_id', user.id);
 			if (userBCYCAProfileUpdateError) {
 				console.log('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
 				error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
@@ -291,7 +291,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userTinoneeProfileData.will_run_community_workshops
 				})
-				.eq('user_id', session.user.id);
+				.eq('user_id', user.id);
 			if (userTinoneeProfileUpdateError) {
 				console.log('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
 				error(
@@ -313,7 +313,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userMondrookProfileData.will_run_community_workshops
 				})
-				.eq('user_id', session.user.id);
+				.eq('user_id', user.id);
 			if (userMondrookProfileUpdateError) {
 				console.log('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
 				error(
@@ -335,7 +335,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userExternalProfileData.will_run_community_workshops
 				})
-				.eq('user_id', session.user.id);
+				.eq('user_id', user.id);
 			if (userExternalProfileUpdateError) {
 				console.log('userExternalProfileUpdateError', userExternalProfileUpdateError);
 				error(
@@ -377,7 +377,7 @@ export const actions: Actions = {
 					bodyObject.propertyProfileData.truck_access_other_information,
 				vulnerable_residents: bodyObject.propertyProfileData.vulnerable_residents
 			})
-			.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid);
+			.eq('principaladdresssiteoid', user.app_metadata.principaladdresssiteoid);
 		if (propertyProfileUpdateError) {
 			console.log('propertyProfileUpdateError', propertyProfileUpdateError);
 			error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);

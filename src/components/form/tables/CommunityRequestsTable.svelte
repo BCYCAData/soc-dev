@@ -2,14 +2,13 @@
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 
 	import 'tabulator-tables/dist/css/tabulator.css';
 	import '$components/form/tables/custom_tabulator.css';
 
 	import type { ComparisonOption, TabulatorProps } from '$lib/types';
 
-	export let bcycaRequestsColumns: any[], bcycaRequestsData: any[];
+	export let communityRequestsColumns: any[], communityRequestsData: any[];
 
 	let tableComponent: HTMLElement;
 	let table: Tabulator;
@@ -22,12 +21,9 @@
 	];
 
 	function makeTable() {
-		if (!browser || table) {
-			return;
-		}
 		const props: TabulatorProps = {
-			columns: bcycaRequestsColumns,
-			data: bcycaRequestsData,
+			columns: communityRequestsColumns,
+			data: communityRequestsData,
 			layout: 'fitDataStretch',
 			responsiveLayout: 'collapse',
 			pagination: true,

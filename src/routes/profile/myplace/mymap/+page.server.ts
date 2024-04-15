@@ -6,15 +6,15 @@ import type { PageServerLoad } from './$types';
 
 let mapLayers: MapDataJSON = { jsonLayers: [] };
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session?.user) {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	}
 
 	const { data: propertyGeometryData, error: propertyGeometryError } = await supabase.rpc(
 		'get_property_geometry_for_user',
-		{ id_input: session?.user.id }
+		{ id_input: user.id }
 	);
 	if (propertyGeometryError) {
 		console.log('error get Property Geometry:', propertyGeometryError);

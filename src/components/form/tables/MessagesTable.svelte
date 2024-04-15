@@ -29,9 +29,6 @@
 	];
 
 	function makeTable() {
-		if (!browser || table) {
-			return;
-		}
 		const props: TabulatorProps = {
 			columns: appMessagesColumns,
 			data: appMessagesData,

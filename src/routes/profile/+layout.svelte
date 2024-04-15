@@ -3,30 +3,33 @@
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
 	import MessageContainer from '$components/message/MessageContainer.svelte';
+	import SidebarMenu from '$components/navigation/sidemenu/SidebarMenu.svelte';
 
 	import 'iconify-icon';
 
-	let pathLables = {
-		profile: ['Profile', 'carbon:home'],
-		aboutme: ['About Me', 'User'],
-		myplace: ['My Place', 'Home'],
-		assets: ['Assets', 'BuildingEstate'],
-		resources: ['Firefighting Resources', 'FireHydrant'],
-		hazards: ['Firefighting Hazards', 'Flame'],
-		mymap: ['My Map', 'Map'],
-		mycommunity: ['My Community', 'Users'],
-		bcyca: ['BCYCA', 'emojione-monotone:letter-b'],
-		tinonee: ['Tinonee', 'emojione-monotone:letter-t'],
-		mondrook: ['Mondrook', 'emojione-monotone:letter-m'],
-		external: ['External', 'emojione-monotone:letter-e'],
-		information: ['Information', 'InfoSquareRounded'],
-		events: ['Events', 'CalendarEvent'],
-		workshops: ['Workshops', 'School'],
-		map: ['Community Map', 'Map2'],
-		settings: ['Settings', 'Settings'],
-		password: ['Change Password', 'Password'],
-		email: ['Change Email', 'Mailbox']
-	};
+	import { profileSidebarPathLables, profileSidebarMenuItems } from '$lib/menu-items.js';
+
+	// let pathLables = {
+	// 	profile: ['Profile', 'carbon:home'],
+	// 	aboutme: ['About Me', 'User'],
+	// 	myplace: ['My Place', 'Home'],
+	// 	assets: ['Assets', 'BuildingEstate'],
+	// 	resources: ['Firefighting Resources', 'FireHydrant'],
+	// 	hazards: ['Firefighting Hazards', 'Flame'],
+	// 	mymap: ['My Map', 'Map'],
+	// 	mycommunity: ['My Community', 'Users'],
+	// 	bcyca: ['BCYCA', 'emojione-monotone:letter-b'],
+	// 	tinonee: ['Tinonee', 'emojione-monotone:letter-t'],
+	// 	mondrook: ['Mondrook', 'emojione-monotone:letter-m'],
+	// 	external: ['External', 'emojione-monotone:letter-e'],
+	// 	information: ['Information', 'InfoSquareRounded'],
+	// 	events: ['Events', 'CalendarEvent'],
+	// 	workshops: ['Workshops', 'School'],
+	// 	map: ['Community Map', 'Map2'],
+	// 	settings: ['Settings', 'Settings'],
+	// 	password: ['Change Password', 'Password'],
+	// 	email: ['Change Email', 'Mailbox']
+	// };
 
 	$: classesHeader = 'w-full';
 	$: classesPageHeader = 'w-full';
@@ -35,6 +38,7 @@
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
 
 	export let data;
+
 	let profileMessagesData: { id: number; message: string; created_at: string }[];
 	if (data?.profileMessagesData) {
 		profileMessagesData = data.profileMessagesData;
@@ -67,12 +71,15 @@
 			<h3 class="font-bold mx-auto text-orange-900">Strengthen OUR Community</h3>
 		</div></svelte:fragment
 	>
-	<svelte:fragment slot="pageHeader"><Breadcrumbs {pathLables} /></svelte:fragment>
+	<svelte:fragment slot="pageHeader"
+		><Breadcrumbs pathLables={profileSidebarPathLables} /></svelte:fragment
+	>
 	<svelte:fragment slot="sidebarLeft">
 		<div class="p-1 flex flex-col w-full">
 			<div class="flex flex-row justify-around pt-2 text-xl">Profile Menu</div>
 			<div class="flex flex-col rounded-lg bg-orange-600">
-				<a
+				<SidebarMenu siderbarMenuItems={profileSidebarMenuItems(communityText)} />
+				<!-- <a
 					class="flex items-center pl-1 pt-3 hover:bg-orange-300 hover:rounded !no-underline"
 					href="/profile/aboutme"
 				>
@@ -413,7 +420,7 @@
 				>
 					<iconify-icon icon="tabler:mailbox" class="text-stone-50" style="font-size: 18px" />
 					<span class="px-2 text-stone-50">Change Email</span></a
-				>
+				> -->
 			</div>
 			<p class="ml-2">
 				Please make sure you click every heading in the menu on the left <br />

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
-	import BCYCARequestsTable from '$components/form/tables/BCYCARequestsTable.svelte';
+	import CommunityRequestsTable from '$components/form/tables/CommunityRequestsTable.svelte';
 
 	import type { CellComponent } from 'tabulator-tables';
 
 	export let data;
 
-	let bcycaWorkshopsColumns = [
+	let externalWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -30,7 +30,7 @@
 			headerSort: false
 		}
 	];
-	let bcycaOtherWorkshopsColumns = [
+	let externalOtherWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -55,7 +55,7 @@
 			headerSort: false
 		}
 	];
-	let bcycaWillRunWorkshopsColumns = [
+	let externalWillRunWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -81,11 +81,11 @@
 		}
 	];
 
-	$: ({ bcycaWorkshopsData } = data);
+	$: ({ externalWorkshopsData } = data);
 </script>
 
 <svelte:head>
-	<title>BCYCA Admin-Workshops</title>
+	<title>ExternalCommunity Admin-Workshops</title>
 </svelte:head>
 
 <Accordion autocollapse spacing="space-y-1">
@@ -94,9 +94,11 @@
 		<svelte:fragment slot="summary">Completing your fire plan</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="CompletingFirePlan">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.workshop_choices.includes(1))}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter((item) =>
+						item.workshop_choices?.includes(1)
+					)}
 				/>
 			</div>
 		</svelte:fragment>
@@ -107,10 +109,10 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OnlineVideoCalls">
 				<table class="table table-hover">
-					<BCYCARequestsTable
-						bcycaRequestsColumns={bcycaWorkshopsColumns}
-						bcycaRequestsData={bcycaWorkshopsData.filter((item) =>
-							item.workshop_choices.includes(2)
+					<CommunityRequestsTable
+						communityRequestsColumns={externalWorkshopsColumns}
+						communityRequestsData={externalWorkshopsData.filter((item) =>
+							item.workshop_choices?.includes(2)
 						)}
 					/>
 				</table>
@@ -121,9 +123,11 @@
 		<svelte:fragment slot="summary">How to develop a good emergency pack and plan</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="EmergencyPackAndPlan">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.workshop_choices.includes(3))}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter((item) =>
+						item.workshop_choices?.includes(3)
+					)}
 				/>
 			</div></svelte:fragment
 		>
@@ -132,9 +136,11 @@
 		<svelte:fragment slot="summary">Making a fire trailer</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="MakingFireTrailer">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.workshop_choices.includes(4))}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter((item) =>
+						item.workshop_choices?.includes(4)
+					)}
 				/>
 			</div></svelte:fragment
 		>
@@ -143,9 +149,11 @@
 		<svelte:fragment slot="summary">Bushfire safety training</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BushfireSafetyTraining">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.workshop_choices.includes(5))}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter((item) =>
+						item.workshop_choices?.includes(5)
+					)}
 				/>
 			</div></svelte:fragment
 		>
@@ -154,9 +162,11 @@
 		<svelte:fragment slot="summary">How to do a small pile burn safely</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SmallPileBurn">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.workshop_choices.includes(6))}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter((item) =>
+						item.workshop_choices?.includes(6)
+					)}
 				/>
 			</div></svelte:fragment
 		>
@@ -165,9 +175,11 @@
 		<svelte:fragment slot="summary">Other Workshop Suggestions</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherWorkshopSuggestions">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaOtherWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.other_wokshop?.length > 0)}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalOtherWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter(
+						(item) => item.other_wokshop?.length > 0
+					)}
 				/>
 			</div></svelte:fragment
 		>
@@ -176,9 +188,11 @@
 		<svelte:fragment slot="summary">Will Run Workshops</svelte:fragment>
 		<svelte:fragment slot="content">
 			<div class="table-container" id="WillRunWorkshops">
-				<BCYCARequestsTable
-					bcycaRequestsColumns={bcycaWillRunWorkshopsColumns}
-					bcycaRequestsData={bcycaWorkshopsData.filter((item) => item.will_run_wokshop?.length > 0)}
+				<CommunityRequestsTable
+					communityRequestsColumns={externalWillRunWorkshopsColumns}
+					communityRequestsData={externalWorkshopsData.filter(
+						(item) => item.will_run_wokshop?.length > 0
+					)}
 				/>
 			</div></svelte:fragment
 		>

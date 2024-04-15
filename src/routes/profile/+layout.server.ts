@@ -33,15 +33,15 @@ import {
 } from '$lib/server/email/nodemailer';
 
 let profileMessagesData: ProfileMessageData;
-export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session?.user) {
+export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	}
 	const { data: profileMessages, error: profileMessagesError } = await supabase.rpc(
 		'get_profile_messages_for_user',
 		{
-			id_input: session?.user.id
+			id_input: user.id
 		}
 	);
 	if (profileMessagesError) {
@@ -88,15 +88,15 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, safeGetSessio
 				), 
 				property_agent(agent_mobile, agent_name, agent_phone)`
 		)
-		.eq('principaladdresssiteoid', session.user.app_metadata.principaladdresssiteoid)
-		.eq('user_profile.id', session.user.id);
+		.eq('principaladdresssiteoid', user.app_metadata.principaladdresssiteoid)
+		.eq('user_profile.id', user.id);
 	type ProfileData = QueryData<typeof profileQueryData>;
 	const { data, error: getProfileDataError } = await profileQueryData;
 	if (getProfileDataError) {
 		console.log('GET data error Profile:', getProfileDataError);
 		let emailSubject: PostgRestErrorEmailSubject = {
 			type: `GET data error :: Profile.`,
-			user: `User:: ${session.user.id}.`,
+			user: `User:: $user.id}.`,
 			time: `${new Date().toLocaleDateString()}  ${new Date().toLocaleTimeString()}`
 		};
 		sendPostgRestErrorEmail(emailSubject, getProfileDataError);

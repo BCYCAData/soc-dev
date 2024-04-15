@@ -5,6 +5,15 @@ declare global {
 	}
 }
 
+export type MenuItem = {
+	id: string;
+	name: string;
+	link: string | null;
+	icon: string | null;
+	initialOpen?: boolean;
+	subItems?: MenuItem[];
+};
+
 export type Step = {
 	index: number;
 	text: string;

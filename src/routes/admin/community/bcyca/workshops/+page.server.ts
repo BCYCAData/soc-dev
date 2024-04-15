@@ -1,15 +1,12 @@
 import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession } }) => {
-	const session = await safeGetSession();
-	if (!session) {
+export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
+	const { user } = await getUser();
+	if (!user) {
 		redirect(307, '/auth/signin');
 	} else if (
-		!(
-			session?.user?.app_metadata.roles.includes('tester') |
-			session?.user?.app_metadata.roles.includes('admin')
-		)
+		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
 	) {
 		error(401, { message: 'Unauthorized' });
 	}
@@ -21,8 +18,5 @@ export const load: PageServerLoad = async ({ locals: { supabase, safeGetSession 
 		console.log('error get BCYCA Workshop Choices Data:', bcycaWorkshopsError);
 		error(400, bcycaWorkshopsError.message);
 	}
-	return {
-		session: session,
-		bcycaWorkshopsData: bcycaWorkshopsData
-	};
+	return { bcycaWorkshopsData: bcycaWorkshopsData };
 };

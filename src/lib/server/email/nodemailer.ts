@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import nodemailer from 'nodemailer';
 import { render } from 'svelty-email';
 
@@ -28,6 +29,7 @@ export function sendPostgRestErrorEmail(
 	subject: PostgRestErrorEmailSubject,
 	postgrestError: PostgrestError
 ) {
+	if (dev) return;
 	const emailHtml = render({
 		template: SOCDataBaseTemplate,
 		props: {
