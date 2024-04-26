@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { TabulatorFull as Tabulator } from 'tabulator-tables';
+	import { getContext, onMount } from 'svelte';
+	import type { Tabulator } from 'tabulator-tables';
 	import type { ComparisonOption } from '$lib/types';
 
-	export let table: Tabulator;
 	export let searchField = '';
 	export let comparisonType = 'like';
 	export let searchValue = '';
 	export let fieldOptions: ComparisonOption[];
+
+	const table: Tabulator = getContext('tabulatorTable');
 
 	const comparisonOptions: ComparisonOption[] = [
 		{ value: '=', lable: '=' },
@@ -142,10 +143,10 @@
 	}
 
 	#filter-value {
-		margin-inline-end: 8px; /* Add spacing between the input and the button */
+		margin-inline-end: 8px;
 	}
 
 	#filter-clear {
-		margin-left: 8px; /* Add spacing between the input and the button */
+		margin-left: 8px;
 	}
 </style>

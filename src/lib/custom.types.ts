@@ -1,18 +1,6 @@
-import type { B } from 'vitest/dist/reporters-P7C2ytIv.js';
 import type { Database, Tables } from './db.types.ts';
 
 //---------Tables-----------------
-// export type CommunityAreas = Tables<'community_areas'> | null;
-// export type KyngAreas = Tables<'kyng_areas'> | null;
-// export type PropertyAgent = Tables<'property_agent'> | null;
-// export type PropertyProfile = Tables<'property_profile'>;
-// export type CommunityBCYCAProfile = Tables<'community_bcyca_profile'> | null;
-// export type CommunityTinoneeProfile = Tables<'community_tinonee_profile'> | null;
-// export type CommunityMondrookProfile = Tables<'community_mondrook_profile'> | null;
-// export type CommunityExternalProfile = Tables<'community_external_profile'> | null;
-// export type UserPostalAddress = Tables<'user_postal_address'>;
-// export type UserProfile = Tables<'user_profile'>;
-// export type PropertyGeometry = Tables<'property_geometry'>;
 export type UserProfile = Tables<'user_profile'>;
 
 //---------CRUD Forms-----------------
@@ -59,6 +47,7 @@ export type PropertyAgentData = {
 	agent_phone: string | null;
 };
 export type CommunityBCYCAProfileData = {
+	bcyca_profile_id: any;
 	community_meeting_choices: number[] | null;
 	community_workshop_choices: number[] | null;
 	information_sheet_choices: number[] | null;
@@ -69,6 +58,7 @@ export type CommunityBCYCAProfileData = {
 	will_run_community_workshops: string | null;
 } | null;
 export type CommunityTinoneeProfileData = {
+	tinonee_profile_id: any;
 	community_meeting_choices: number[] | null;
 	community_workshop_choices: number[] | null;
 	information_sheet_choices: number[] | null;
@@ -79,6 +69,7 @@ export type CommunityTinoneeProfileData = {
 	will_run_community_workshops: string | null;
 } | null;
 export type CommunityMondrookProfileData = {
+	mondrook_profile_id: any;
 	community_meeting_choices: number[] | null;
 	community_workshop_choices: number[] | null;
 	information_sheet_choices: number[] | null;
@@ -89,6 +80,7 @@ export type CommunityMondrookProfileData = {
 	will_run_community_workshops: string | null;
 } | null;
 export type CommunityExternalProfileData = {
+	external_profile_id: any;
 	community_meeting_choices: number[] | null;
 	community_workshop_choices: number[] | null;
 	information_sheet_choices: number[] | null;
@@ -131,11 +123,6 @@ export type ProfileAboutMeFormData = {
 };
 export type ProfileMyPlaceFormData = {
 	property_rented: boolean;
-	// propertyAgentData: {
-	// 	agent_mobile: string | null;
-	// 	agent_name: string | null;
-	// 	agent_phone: string | null;
-	// };
 	propertyAgentData: PropertyAgentData;
 	sign_posted: boolean | null;
 	vulnerable_residents: boolean | null;

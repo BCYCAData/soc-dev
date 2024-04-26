@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { communityMeetingOptions } from '$lib/profileOptions';
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
 
 	import type { CommunityExternalProfileData } from '$lib/custom.types';
 
 	export let communityExternalProfile: CommunityExternalProfileData;
+	export let communityExternalMeetingOptions: { value: string; lable: string }[] = [];
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
@@ -16,7 +16,7 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
-		{#each communityMeetingOptions as { value, lable }}
+		{#each communityExternalMeetingOptions as { value, lable }}
 			<div class="flex items-center col-span-1">
 				<input
 					class="w-6 h-6 ml-8"

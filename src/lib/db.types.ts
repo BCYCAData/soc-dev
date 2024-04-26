@@ -36,6 +36,48 @@ export type Database = {
         }
         Relationships: []
       }
+      community_access_requests: {
+        Row: {
+          created_at: string
+          id: number
+          last_updated: string
+          requested_community_id: string
+          status: Database["public"]["Enums"]["community_request_status"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          last_updated?: string
+          requested_community_id: string
+          status?: Database["public"]["Enums"]["community_request_status"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          last_updated?: string
+          requested_community_id?: string
+          status?: Database["public"]["Enums"]["community_request_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_requests_requested_community_id_fkey"
+            columns: ["requested_community_id"]
+            isOneToOne: false
+            referencedRelation: "community_areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_areas: {
         Row: {
           added_to_project: string | null
@@ -228,6 +270,68 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "user_profile"
             referencedColumns: ["mondrook_profile_id"]
+          },
+        ]
+      }
+      community_request_options_concordance: {
+        Row: {
+          created_at: string
+          field_name: string
+          id: number
+          last_updated: string
+          object_name: string
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          field_name: string
+          id?: number
+          last_updated?: string
+          object_name: string
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          field_name?: string
+          id?: number
+          last_updated?: string
+          object_name?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
+      community_request_options_lut: {
+        Row: {
+          concordance: number
+          created_at: string
+          id: number
+          index_value: number
+          lable: string
+          last_updated: string
+        }
+        Insert: {
+          concordance: number
+          created_at?: string
+          id?: number
+          index_value: number
+          lable: string
+          last_updated?: string
+        }
+        Update: {
+          concordance?: number
+          created_at?: string
+          id?: number
+          index_value?: number
+          lable?: string
+          last_updated?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_community_request_options_lut_concordance_fkey"
+            columns: ["concordance"]
+            isOneToOne: false
+            referencedRelation: "community_request_options_concordance"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -4598,6 +4702,7 @@ export type Database = {
         | "community_external"
         | "community_mondrook"
         | "community_tinonee"
+      community_request_status: "pending" | "approved" | "rejected"
       message_context: "users" | "admins" | "both"
     }
     CompositeTypes: {

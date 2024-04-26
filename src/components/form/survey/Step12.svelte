@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { informationSheetOptions } from '$lib/profileOptions';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
 	import type { CommunityTinoneeProfileData } from '$lib/custom.types';
 
 	export let communityTinoneeProfile: CommunityTinoneeProfileData;
+	export let communityTinoneeInformationOptions: { value: string; lable: string }[] = [];
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
-	What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
+	What Tinonee Community information would be useful to you?<span
+		class="ml-2 text-sm text-gray-500"
+	>
 		(Check all that apply)</span
 	>
 </h2>
@@ -16,7 +18,7 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
-		{#each informationSheetOptions as { value, lable }}
+		{#each communityTinoneeInformationOptions as { value, lable }}
 			<div class="flex items-center col-span-1">
 				<input
 					class="w-6 h-6 ml-8"

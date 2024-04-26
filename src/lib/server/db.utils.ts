@@ -26,3 +26,70 @@ export function getPermissionsData(permissions: any[]): {
 	);
 	return result;
 }
+// Define the structure of the original data item
+type CommunityRequestOption = {
+	index_value: number;
+	lable: string;
+	community_request_options_concordance: {
+		table_name: string;
+		object_name: string;
+		field_name: string;
+	} | null;
+};
+
+// Define the structure of the grouped data by table_name
+type GroupedDataByTable = {
+	[tableName: string]: {
+		[objectName: string]: CommunityRequestOption[];
+	};
+};
+
+// Define the structure of the output
+export type OptionsByTableAndObjectName = {
+	tableName: string;
+	objectNames: {
+		objectName: string;
+		options: {
+			value: number;
+			lable: string;
+		}[];
+	}[];
+};
+
+// Function to group the data by table_name
+function groupByTable(data: CommunityRequestOption[]): GroupedDataByTable {
+	return data.reduce((acc, item) => {
+		const tableName = item.community_request_options_concordance?.table_name;
+		const objectName = item.community_request_options_concordance?.object_name;
+		if (tableName && objectName) {
+			if (!acc[tableName]) {
+				acc[tableName] = {};
+			}
+			if (!acc[tableName][objectName]) {
+				acc[tableName][objectName] = [];
+			}
+			acc[tableName][objectName].push(item);
+		}
+		return acc;
+	}, {} as GroupedDataByTable);
+}
+
+// Function to extract options definition array for each table
+function extractOptionsByTable(groupedData: GroupedDataByTable): OptionsByTableAndObjectName[] {
+	return Object.entries(groupedData).map(([tableName, objectGroups]) => ({
+		tableName,
+		objectNames: Object.entries(objectGroups).map(([objectName, items]) => ({
+			objectName,
+			options: items.map((item) => ({
+				value: item.index_value,
+				lable: item.lable
+			}))
+		}))
+	}));
+}
+
+export function getOptionsDataByTable(communityRequestOptionsData: CommunityRequestOption[]) {
+	const groupedData = groupByTable(communityRequestOptionsData);
+	const optionsByTable: OptionsByTableAndObjectName[] = extractOptionsByTable(groupedData);
+	return optionsByTable;
+}

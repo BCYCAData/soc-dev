@@ -20,7 +20,8 @@
 		community_bcyca_profile: communityBCYCAProfile,
 		community_tinonee_profile: communityTinoneeProfile,
 		community_mondrook_profile: communityMondrookProfile,
-		community_external_profile: communityExternalProfile
+		community_external_profile: communityExternalProfile,
+		optionsData
 	} = data;
 
 	const handleProgress = (stepIncrement: number) => {
@@ -57,6 +58,7 @@
 			{communityTinoneeProfile}
 			{communityMondrookProfile}
 			{communityExternalProfile}
+			{optionsData}
 		/>
 		<div class="pt-0 mx-auto sm:w-8/12">
 			<ProgressBar

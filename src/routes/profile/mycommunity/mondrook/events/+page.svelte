@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { communityMeetingOptions } from '$lib/profileOptions';
+	import { getCommunityOptions, type CommunityRequestOption } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
@@ -26,11 +26,14 @@
 	let communityMeetingChoices: number[] | null;
 	let otherCommunityMeeting: string | null;
 	let communityMondrookProfileId: string | null;
+	const communityMeetingOptions = data.optionsData.communityMondrookOptionsData?.object_names.find(
+		(item) => item.object_name === 'communityMeetingOptions'
+	)?.options;
 	if (data?.profileMyCommunityMondrookEventsFormData) {
 		communityMeetingChoices =
 			data.profileMyCommunityMondrookEventsFormData.community_meeting_choices;
 		otherCommunityMeeting = data.profileMyCommunityMondrookEventsFormData.other_community_meeting;
-		communityMondrookProfileId = data.communityProfiles.community_mondrook_profile_id;
+		communityMondrookProfileId = data.communityProfiles?.community_mondrook_profile_id || null;
 	}
 </script>
 
@@ -54,21 +57,23 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
-		{#each communityMeetingOptions as { value, lable }}
-			<div class="flex items-center col-span-1">
-				<input
-					class="w-4 h-4 ml-8"
-					name="community_meeting_choices"
-					type="checkbox"
-					bind:group={communityMeetingChoices}
-					{value}
-				/>
-				<label
-					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="community_meeting_choices">{lable}</label
-				>
-			</div>
-		{/each}
+		{#if communityMeetingOptions}
+			{#each communityMeetingOptions as { value, lable }}
+				<div class="flex items-center col-span-1">
+					<input
+						class="w-4 h-4 ml-8"
+						name="community_meeting_choices"
+						type="checkbox"
+						bind:group={communityMeetingChoices}
+						{value}
+					/>
+					<label
+						class="ml-2 text-base font-medium text-orange-900 font-Poppins"
+						for="community_meeting_choices">{lable}</label
+					>
+				</div>
+			{/each}
+		{/if}
 	</div>
 	<TextAreaInput
 		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"

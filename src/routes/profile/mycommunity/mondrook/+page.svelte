@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { stayInTouchOptions } from '$lib/profileOptions';
+	import { getCommunityOptions, type CommunityRequestOption } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
@@ -30,11 +30,14 @@
 	let userPostalAddress: UserPostalAddressData;
 	let hadUserPostalAddress: boolean;
 	let communityMondrookProfileId: string | null;
+	const stayInTouchOptions = data.optionsData.communityMondrookOptionsData?.object_names.find(
+		(item) => item.object_name === 'stayInTouchOptions'
+	)?.options;
 	if (data?.profileMyCommunityMondrookFormData) {
 		stayInTouchChoices = data.profileMyCommunityMondrookFormData.stay_in_touch_choices;
 		otherComments = data.profileMyCommunityMondrookFormData.other_comments;
 		hadUserPostalAddress = data.profileMyCommunityMondrookFormData.hadUserPostalAddress;
-		communityMondrookProfileId = data.communityProfiles.community_mondrook_profile_id;
+		communityMondrookProfileId = data.communityProfiles?.community_mondrook_profile_id || null;
 	}
 	if (data?.user_postal_address) {
 		userPostalAddress = data.user_postal_address;
@@ -46,7 +49,7 @@
 </svelte:head>
 
 <form
-	id="profileMyCommunityForm"
+	id="profileMondrookCommunityForm"
 	on:change={() => {
 		unsaved = true;
 	}}
@@ -61,21 +64,23 @@
 		>
 	</h2>
 	<div class="flex justify-start rounded-lg p-1 bg-orange-300">
-		{#each stayInTouchOptions as { value, lable }}
-			<div class="flex items-center">
-				<input
-					class="w-4 h-4 ml-8"
-					name="stay_in_touch_choices"
-					type="checkbox"
-					bind:group={stayInTouchChoices}
-					{value}
-				/>
-				<label
-					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="stay_in_touch_choices">{lable}</label
-				>
-			</div>
-		{/each}
+		{#if stayInTouchOptions}
+			{#each stayInTouchOptions as { value, lable }}
+				<div class="flex items-center">
+					<input
+						class="w-4 h-4 ml-8"
+						name="stay_in_touch_choices"
+						type="checkbox"
+						bind:group={stayInTouchChoices}
+						{value}
+					/>
+					<label
+						class="ml-2 text-base font-medium text-orange-900 font-Poppins"
+						for="stay_in_touch_choices">{lable}</label
+					>
+				</div>
+			{/each}
+		{/if}
 	</div>
 
 	<!-- Postal address -->

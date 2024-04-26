@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { communityWorkshopOptions } from '$lib/profileOptions';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
 	import type { CommunityBCYCAProfileData } from '$lib/custom.types';
 
 	export let communityBCYCAProfile: CommunityBCYCAProfileData;
+	export let communityBCYCAWorkshopOptions: { value: string; lable: string }[] = [];
 </script>
 
 <h2 class="unstyled mb-1 text-xl font-semibold text-gray-900">
-	Which of these community initiated workshops would be useful to you?<span
+	Which of these BCYCA Community initiated workshops would be useful to you?<span
 		class="text-sm text-gray-700"
 	>
 		(Check all that apply)</span
@@ -18,7 +18,7 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
-		{#each communityWorkshopOptions as { value, lable }}
+		{#each communityBCYCAWorkshopOptions as { value, lable }}
 			<div class="flex items-center col-span-1">
 				<input
 					class="w-6 h-6 ml-8"

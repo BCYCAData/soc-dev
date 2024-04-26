@@ -70,10 +70,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="FireSeasonPreparation">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(1)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(1))}
 					/>
 					<div class="flex items-center justify-end">
 						<p class="mr-2">Do something with selected Users</p>
@@ -94,10 +92,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="BandsLiveMusic">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(2)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(2))}
 					/>
 				</div></svelte:fragment
 			>
@@ -107,10 +103,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="MonthlySocialEvents">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(3)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(3))}
 					/>
 				</div></svelte:fragment
 			>
@@ -120,23 +114,23 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="IndoorBowls">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(4)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(4))}
 					/>
 				</div></svelte:fragment
 			>
 		</AccordionItem>
 		<AccordionItem class="bg-orange-100 font-medium">
-			<svelte:fragment slot="summary">Christmas end of year wrap</svelte:fragment>
+			<svelte:fragment slot="summary"
+				>Christmas end of year wrap ({bcycaEventsData.filter((item) =>
+					item.event_choices?.includes(5)
+				).length})</svelte:fragment
+			>
 			<svelte:fragment slot="content">
 				<div class="table-container" id="ChristmasEndOfYearWrap">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(5)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(5))}
 					/>
 				</div></svelte:fragment
 			>
@@ -146,10 +140,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="YouthEvents">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(6)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(6))}
 					/>
 				</div></svelte:fragment
 			>
@@ -159,10 +151,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="TableTennis">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(7)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(7))}
 					/>
 				</div></svelte:fragment
 			>
@@ -172,10 +162,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="Bingo">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(8)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(8))}
 					/>
 				</div></svelte:fragment
 			>
@@ -185,10 +173,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="CanastaCardMeet">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(9)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(9))}
 					/>
 				</div></svelte:fragment
 			>
@@ -198,10 +184,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="CommunityDinners">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(10)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(10))}
 					/>
 				</div></svelte:fragment
 			>
@@ -211,10 +195,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="BookClub">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) =>
-							item.event_choices?.includes(11)
-						)}
+						columns={bcycaEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.event_choices?.includes(11))}
 					/>
 				</div></svelte:fragment
 			>
@@ -224,8 +206,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="OtherEventSuggestions">
 					<CommunityRequestsTable
-						communityRequestsColumns={bcycaOtherEventsColumns}
-						communityRequestsData={bcycaEventsData.filter((item) => item.other_event?.length > 0)}
+						columns={bcycaOtherEventsColumns}
+						tableData={bcycaEventsData.filter((item) => item.other_event?.length > 0)}
 					/>
 				</div></svelte:fragment
 			>

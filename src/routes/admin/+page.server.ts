@@ -1,16 +1,4 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-
-// export const load: PageServerLoad = async ({ locals: { getUser } }) => {
-// 	const { user } = await getUser();
-// 	if (!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))) {
-// 		redirect(307, '/auth/signin');
-// 	}
-// 	return {
-// 		user,
-// 		adminData: 'It works'
-// 	};
-// };
 
 export const actions: Actions = {
 	default: async ({ request, locals: { getUser } }) => {

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { TabulatorFull as Tabulator } from 'tabulator-tables';
+	// import { Tabulator } from 'tabulator-tables';
+	import { Tabulator } from 'tabulator-tables';
 	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
@@ -50,13 +51,7 @@
 	}
 </script>
 
-<TabulatorTableSearch
-	{table}
-	searchField="email"
-	comparisonType="like"
-	searchValue=""
-	{fieldOptions}
-/>
+<TabulatorTableSearch searchField="email" comparisonType="like" searchValue="" {fieldOptions} />
 <div id="table_element" bind:this={tableComponent} />
 
 <button

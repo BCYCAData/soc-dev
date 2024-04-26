@@ -70,10 +70,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="FireSeasonPreparation">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(1)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(1))}
 					/>
 					<div class="flex items-center justify-end">
 						<p class="mr-2">Do something with selected Users</p>
@@ -94,10 +92,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="BandsLiveMusic">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(2)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(2))}
 					/>
 				</div></svelte:fragment
 			>
@@ -107,10 +103,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="MonthlySocialEvents">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(3)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(3))}
 					/>
 				</div></svelte:fragment
 			>
@@ -120,10 +114,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="IndoorBowls">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(4)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(4))}
 					/>
 				</div></svelte:fragment
 			>
@@ -133,10 +125,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="ChristmasEndOfYearWrap">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(5)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(5))}
 					/>
 				</div></svelte:fragment
 			>
@@ -146,10 +136,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="YouthEvents">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(6)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(6))}
 					/>
 				</div></svelte:fragment
 			>
@@ -159,10 +147,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="TableTennis">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(7)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(7))}
 					/>
 				</div></svelte:fragment
 			>
@@ -172,10 +158,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="Bingo">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(8)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(8))}
 					/>
 				</div></svelte:fragment
 			>
@@ -185,10 +169,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="CanastaCardMeet">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(9)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(9))}
 					/>
 				</div></svelte:fragment
 			>
@@ -198,10 +180,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="CommunityDinners">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(10)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(10))}
 					/>
 				</div></svelte:fragment
 			>
@@ -211,10 +191,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="BookClub">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) =>
-							item.event_choices?.includes(11)
-						)}
+						columns={tinoneeEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.event_choices?.includes(11))}
 					/>
 				</div></svelte:fragment
 			>
@@ -224,8 +202,8 @@
 			<svelte:fragment slot="content">
 				<div class="table-container" id="OtherEventSuggestions">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeOtherEventsColumns}
-						communityRequestsData={tinoneeEventsData.filter((item) => item.other_event?.length > 0)}
+						columns={tinoneeOtherEventsColumns}
+						tableData={tinoneeEventsData.filter((item) => item.other_event?.length > 0)}
 					/>
 				</div></svelte:fragment
 			>

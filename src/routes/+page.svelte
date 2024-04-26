@@ -1,3 +1,10 @@
+<script lang="ts">
+	export let data;
+	let { supabase } = data;
+	$: ({ supabase } = data);
+	console.log('supabase', supabase);
+</script>
+
 <svelte:head>
 	<title>Home</title>
 </svelte:head>

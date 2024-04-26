@@ -215,7 +215,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 			hadUserPostalAddress: hadUserPostalAddress,
 			other_comments: userProfile.other_comments || null
 		};
-		// if (community_bcyca_profile) {
 		const profileMyCommunityBCYCAFormData: ProfileMyCommunityBCYCAFormData | null =
 			community_bcyca_profile
 				? {
@@ -253,7 +252,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 							community_bcyca_profile.will_run_community_workshops || null
 					}
 				: null;
-		// if (community_tinonee_profile) {
 		const profileMyCommunityTinoneeFormData: ProfileMyCommunityTinoneeFormData | null =
 			community_tinonee_profile
 				? {
@@ -292,7 +290,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 							community_tinonee_profile.will_run_community_workshops || null
 					}
 				: null;
-		// if (community_mondrook_profile) {
 		const profileMyCommunityMondrookFormData: ProfileMyCommunityMondrookFormData | null =
 			community_mondrook_profile
 				? {
@@ -331,7 +328,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 							community_mondrook_profile.will_run_community_workshops || null
 					}
 				: null;
-		// if (community_external_profile) {
 		const profileMyCommunityExternalFormData: ProfileMyCommunityExternalFormData | null =
 			community_external_profile
 				? {

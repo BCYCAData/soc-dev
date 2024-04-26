@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { stayInTouchOptions } from '$lib/profileOptions';
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
 
 	import type { UserPostalAddressData, UserProfileData } from '$lib/custom.types';
@@ -7,22 +6,29 @@
 
 	export let userProfile: UserProfileData;
 	export let userPostalAddress: UserPostalAddressData;
+	export let communityName = '';
+	export let userProfileStayInTouchOptions: { value: string; lable: string }[] = [];
 
 	const postalWasChecked = userProfile.stay_in_touch_choices?.includes(5);
 	let postalChecked: boolean | undefined;
 	$: postalChecked = userProfile.stay_in_touch_choices?.includes(5);
 </script>
 
-<h2 class="unstyled text-base font-semibold text-gray-900">
+<h2 class="unstyled mt-2 mb-1 text-xl font-semibold text-gray-900">
 	How would you prefer to stay in touch with the <span class="text-orange-600"
 		>Strengthen OUR Community</span
 	>
-	project team? <br /> <span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
+	project team? <br />
+	<span class="ml-2 text-sm text-gray-500"> (Check all that apply) </span>
+	<span class="ml-2 text-sm text-gray-500 italic"
+		>(These options will also be used in your {communityName} Community profile. You can change them
+		later if needed.)</span
+	>
 </h2>
 <div
 	class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-200 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
-	{#each stayInTouchOptions as { value, lable }}
+	{#each userProfileStayInTouchOptions as { value, lable }}
 		<div class="flex items-center col-span-1">
 			<input
 				class="w-6 h-6 ml-8"

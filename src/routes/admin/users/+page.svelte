@@ -49,4 +49,4 @@
 	</button>
 </form> -->
 
-<!-- <TabulatorTable {columns} {tableData} /> -->
+<TabulatorTable {columns} {tableData} />

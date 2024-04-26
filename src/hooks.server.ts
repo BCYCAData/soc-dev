@@ -1,11 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 // import { jwtDecode } from 'jwt-decode';
 
-import {
-	PUBLIC_SUPABASE_URL,
-	PUBLIC_SUPABASE_ANON_KEY,
-	PUBLIC_SUPABASE_REDIRECT_URL_BASE
-} from '$env/static/public';
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
 import type { Handle } from '@sveltejs/kit';
 
@@ -27,9 +23,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 	});
-	event.locals.supabaseRedirectBase = PUBLIC_SUPABASE_REDIRECT_URL_BASE;
+	// if (event.cookies.getAll().length > 0) {
+	// 	event.locals.accessToken = JSON.parse(event.cookies.getAll()[0].value).access_token;
+	// }
+	const accessTokenCookie = event.cookies.get('access_token');
 
-	event.locals.accessToken = JSON.parse(event.cookies.getAll()[0].value).access_token;
+	if (accessTokenCookie) {
+		const accessTokenValue = JSON.parse(accessTokenCookie).access_token;
+		if (accessTokenValue) {
+			event.locals.accessToken = accessTokenValue;
+		}
+	}
 	event.locals.getUser = async () => {
 		const {
 			data: { user }

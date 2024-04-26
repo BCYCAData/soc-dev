@@ -3,12 +3,22 @@
 	import CommunityRequestsTable from '$components/form/tables/CommunityRequestsTable.svelte';
 
 	export let summary: string;
-	export let choice: number;
+	export let choice: number = 0;
 	export let columns: any[];
 	export let data: any[];
+	export let dataFilter: (item: any) => boolean = () => true; // Default to no filtering
 
 	function getFilteredData(): any[] {
-		return data?.filter((item) => item.informatiion_choices?.includes(choice)) ?? [];
+		// Apply the standard filtering based on the choice value
+		let standardFilteredData =
+			data?.filter((item) => item.informatiion_choices?.includes(choice)) ?? [];
+
+		// If a custom filter function is provided, apply it to the already filtered data
+		if (dataFilter) {
+			console.log('dataFilter', dataFilter);
+			standardFilteredData = data.filter(dataFilter);
+		}
+		return standardFilteredData;
 	}
 </script>
 

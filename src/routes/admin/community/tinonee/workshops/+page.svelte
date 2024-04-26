@@ -95,10 +95,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="CompletingFirePlan">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-						item.workshop_choices?.includes(1)
-					)}
+					columns={tinoneeWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(1))}
 				/>
 			</div>
 		</svelte:fragment>
@@ -110,10 +108,8 @@
 			<div class="table-container" id="OnlineVideoCalls">
 				<table class="table table-hover">
 					<CommunityRequestsTable
-						communityRequestsColumns={tinoneeWorkshopsColumns}
-						communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-							item.workshop_choices?.includes(2)
-						)}
+						columns={tinoneeWorkshopsColumns}
+						tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(2))}
 					/>
 				</table>
 			</div></svelte:fragment
@@ -124,10 +120,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="EmergencyPackAndPlan">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-						item.workshop_choices?.includes(3)
-					)}
+					columns={tinoneeWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(3))}
 				/>
 			</div></svelte:fragment
 		>
@@ -137,10 +131,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="MakingFireTrailer">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-						item.workshop_choices?.includes(4)
-					)}
+					columns={tinoneeWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(4))}
 				/>
 			</div></svelte:fragment
 		>
@@ -150,10 +142,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BushfireSafetyTraining">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-						item.workshop_choices?.includes(5)
-					)}
+					columns={tinoneeWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(5))}
 				/>
 			</div></svelte:fragment
 		>
@@ -163,10 +153,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SmallPileBurn">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter((item) =>
-						item.workshop_choices?.includes(6)
-					)}
+					columns={tinoneeWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.workshop_choices?.includes(6))}
 				/>
 			</div></svelte:fragment
 		>
@@ -176,10 +164,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherWorkshopSuggestions">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeOtherWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter(
-						(item) => item.other_wokshop?.length > 0
-					)}
+					columns={tinoneeOtherWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.other_wokshop?.length > 0)}
 				/>
 			</div></svelte:fragment
 		>
@@ -189,10 +175,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="WillRunWorkshops">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeWillRunWorkshopsColumns}
-					communityRequestsData={tinoneeWorkshopsData.filter(
-						(item) => item.will_run_wokshop?.length > 0
-					)}
+					columns={tinoneeWillRunWorkshopsColumns}
+					tableData={tinoneeWorkshopsData.filter((item) => item.will_run_wokshop?.length > 0)}
 				/>
 			</div></svelte:fragment
 		>

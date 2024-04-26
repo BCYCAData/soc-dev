@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { informationSheetOptions } from '$lib/profileOptions';
+	import { getCommunityOptions, type CommunityRequestOption } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
@@ -26,12 +26,15 @@
 	let informationSheetChoices: number[] | null;
 	let otherInformationSheet: string | null;
 	let communityTinoneeProfileId: string | null;
+	const informationSheetOptions = data.optionsData.communityTinoneeOptionsData?.object_names.find(
+		(item) => item.object_name === 'informationSheetOptions'
+	)?.options;
 	if (data?.profileMyCommunityTinoneeInformationFormData) {
 		informationSheetChoices =
 			data.profileMyCommunityTinoneeInformationFormData.information_sheet_choices;
 		otherInformationSheet =
 			data.profileMyCommunityTinoneeInformationFormData.other_information_sheet;
-		communityTinoneeProfileId = data.communityProfiles.community_tinonee_profile_id;
+		communityTinoneeProfileId = data.communityProfiles?.community_tinonee_profile_id || null;
 	}
 </script>
 
@@ -55,21 +58,23 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
-		{#each informationSheetOptions as { value, lable }}
-			<div class="flex items-center col-span-1">
-				<input
-					class="w-4 h-4 ml-8"
-					name="information_sheet_choices"
-					type="checkbox"
-					bind:group={informationSheetChoices}
-					{value}
-				/>
-				<label
-					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="information_sheet_choices">{lable}</label
-				>
-			</div>
-		{/each}
+		{#if informationSheetOptions}
+			{#each informationSheetOptions as { value, lable }}
+				<div class="flex items-center col-span-1">
+					<input
+						class="w-4 h-4 ml-8"
+						name="information_sheet_choices"
+						type="checkbox"
+						bind:group={informationSheetChoices}
+						{value}
+					/>
+					<label
+						class="ml-2 text-base font-medium text-orange-900 font-Poppins"
+						for="information_sheet_choices">{lable}</label
+					>
+				</div>
+			{/each}
+		{/if}
 	</div>
 
 	<!-- other_information_sheet -->

@@ -45,7 +45,6 @@ export interface TabulatorProps {
 				totalPages: number
 		  ) => string | HTMLElement)
 		| undefined;
-	// add other properties as needed
 }
 
 export type Crumb = {

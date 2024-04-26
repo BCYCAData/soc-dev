@@ -40,7 +40,6 @@
 		return () => subscription.unsubscribe();
 	});
 
-	// Reactive Properties
 	$: classesSidebarLeft = $page.url.pathname.startsWith('/') ? 'w-0' : 'w-0 lg:w-64';
 	$: ({ supabase, session } = data);
 </script>

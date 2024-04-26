@@ -4,6 +4,8 @@
 
 	export let siderbarMenuItems: MenuItem[];
 
+	console.log('sidebar menu items', siderbarMenuItems);
+
 	let activeSubmenus: string[] = siderbarMenuItems
 		.filter((item) => item.initialOpen)
 		.map((item) => item.id);

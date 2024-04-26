@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 	if (!user) {
 		redirect(307, '/auth/signin');
 	}
-	console.log('SURVEY LOAD');
+
 	const surveyQueryData = supabase
 		.from('property_profile')
 		.select(
@@ -54,19 +54,19 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 				user_profile( family_name, fire_fighting_experience, fire_trauma, first_name, mobile, other_comments, 
 					plan_to_leave_before_fire, plan_to_leave_before_flood, residency_profile, rfs_survival_plan, 
 					stay_in_touch_choices, 
-					community_bcyca_profile(community_meeting_choices, community_workshop_choices, 
+					community_bcyca_profile(bcyca_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
 						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
 					), 
-					community_tinonee_profile(community_meeting_choices, community_workshop_choices, 
+					community_tinonee_profile(tinonee_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
 						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
 					), 
-					community_mondrook_profile(community_meeting_choices, community_workshop_choices, 
+					community_mondrook_profile(mondrook_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
 						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
 					), 
-					community_external_profile(community_meeting_choices, community_workshop_choices, 
+					community_external_profile(external_profile_id, community_meeting_choices, community_workshop_choices, 
 						information_sheet_choices, other_community_meeting, other_community_workshop,
 						other_information_sheet, stay_in_touch_choices, will_run_community_workshops
 					), 
@@ -141,7 +141,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 			]);
 		}
 		if (community_tinonee_profile) {
-			console.log('community_tinonee_profile', community_tinonee_profile);
 			steps = insertSteps(steps, [
 				{ index: 8, text: '8', page: 'Step11' },
 				{ index: 9, text: '9', page: 'Step12' },
@@ -149,7 +148,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 			]);
 		}
 		if (community_mondrook_profile) {
-			console.log('community_mondrook_profile', community_mondrook_profile);
 			steps = insertSteps(steps, [
 				{ index: 8, text: '8', page: 'Step14' },
 				{ index: 9, text: '9', page: 'Step15' },
@@ -191,11 +189,8 @@ export const actions: Actions = {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const bodyObject = getSurveyFormData(
-			formData,
-			user.id,
-			user.app_metadata.principaladdresssiteoid
-		);
+		const bodyObject = getSurveyFormData(formData);
+		console.log('bodyObject:', bodyObject.communityProfileId);
 		if (bodyObject.propertyProfileData.property_rented != bodyObject.propertyWasRented) {
 			if (bodyObject.propertyWasRented === false) {
 				console.log('Add Agent');
@@ -272,7 +267,7 @@ export const actions: Actions = {
 					other_information_sheet: bodyObject.userBCYCAProfileData.other_information_sheet,
 					will_run_community_workshops: bodyObject.userBCYCAProfileData.will_run_community_workshops
 				})
-				.eq('user_id', user.id);
+				.eq('bcyca_profile_id', bodyObject.communityProfileId);
 			if (userBCYCAProfileUpdateError) {
 				console.log('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
 				error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
@@ -291,7 +286,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userTinoneeProfileData.will_run_community_workshops
 				})
-				.eq('user_id', user.id);
+				.eq('tinonee_profile_id', bodyObject.communityProfileId);
 			if (userTinoneeProfileUpdateError) {
 				console.log('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
 				error(
@@ -313,7 +308,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userMondrookProfileData.will_run_community_workshops
 				})
-				.eq('user_id', user.id);
+				.eq('mondrook_profile_id', bodyObject.communityProfileId);
 			if (userMondrookProfileUpdateError) {
 				console.log('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
 				error(
@@ -335,7 +330,7 @@ export const actions: Actions = {
 					will_run_community_workshops:
 						bodyObject.userExternalProfileData.will_run_community_workshops
 				})
-				.eq('user_id', user.id);
+				.eq('external_profile_id', bodyObject.communityProfileId);
 			if (userExternalProfileUpdateError) {
 				console.log('userExternalProfileUpdateError', userExternalProfileUpdateError);
 				error(

@@ -64,44 +64,75 @@ export const stayGoOptions = [
 	{ value: 2, lable: 'Leaving as early as possible' },
 	{ value: 3, lable: 'Unsure depending on severity' }
 ];
-export const communityWorkshopOptions = [
-	{ value: 1, lable: 'Completing your fire plan' },
-	{ value: 2, lable: 'Using online video calls' },
-	{ value: 3, lable: 'How to develop a good emergency pack and plan' },
-	{ value: 4, lable: 'Making a fire trailer' },
-	{ value: 5, lable: 'Bushfire safety training' },
-	{ value: 6, lable: 'How to do a small pile burn safely' }
-];
-export const informationSheetOptions = [
-	{ value: 1, lable: 'Pre fire season checklist' },
-	{ value: 2, lable: 'Lighting fires - facts and responsibilities' },
-	{ value: 3, lable: 'Fire ready - pets and animals' },
-	{ value: 4, lable: 'Fire ready - livestock & large animals' },
-	{ value: 5, lable: 'BCYCA leaflet' },
-	{ value: 6, lable: 'How to be more active locally' },
-	{ value: 7, lable: 'Strengthen Our Community Project Report' }
-];
-export const communityMeetingOptions = [
-	{ value: 1, lable: 'Fire season preparation' },
-	{ value: 2, lable: 'Bands - live music' },
-	{ value: 3, lable: 'Monthly social events - tea and chat' },
-	{ value: 4, lable: 'Indoor bowls' },
-	{ value: 5, lable: 'Christmas end of year wrap' },
-	{ value: 6, lable: 'Youth events' },
-	{ value: 7, lable: 'Table tennis' },
-	{ value: 8, lable: 'Bingo' },
-	{ value: 9, lable: 'Canasta card meet' },
-	{ value: 10, lable: 'Community dinners' },
-	{ value: 11, lable: 'Book Club' }
-];
 
-export const stayInTouchOptions = [
-	{ value: 1, lable: 'Landline' },
-	{ value: 2, lable: 'Mobile' },
-	{ value: 3, lable: 'E-mail' },
-	{ value: 4, lable: 'In person' },
-	{ value: 5, lable: 'Via post' }
-];
+export type CommunityRequestOption = {
+	index_value: number;
+	lable: string;
+	community_request_options_concordance: {
+		table_name: string;
+		object_name: string;
+		field_name: string;
+	};
+};
+
+type TransformedData = {
+	table_name: string;
+	object_names: {
+		object_name: string;
+		options: {
+			value: string; // Assuming this is the index_value
+			lable: string;
+		}[];
+	}[];
+}[];
+
+export function getCommunityOptions(data: CommunityRequestOption[]): TransformedData {
+	const result: TransformedData = [];
+
+	// Group by table_name
+	const groupedByTable = data.reduce(
+		(acc, item) => {
+			const { table_name, object_name } = item.community_request_options_concordance;
+			if (!acc[table_name]) {
+				acc[table_name] = [];
+			}
+			acc[table_name].push({
+				object_name,
+				options: {
+					value: item.index_value.toString(), // Using index_value as value
+					lable: item.lable
+				}
+			});
+			return acc;
+		},
+		{} as Record<string, { object_name: string; options: { value: string; lable: string } }[]>
+	);
+
+	// Transform into the desired structure
+	Object.entries(groupedByTable).forEach(([table_name, object_names]) => {
+		const groupedObjectNames: {
+			object_name: string;
+			options: { value: string; lable: string }[];
+		}[] = [];
+		object_names.forEach(({ object_name, options }) => {
+			const existing = groupedObjectNames.find((o) => o.object_name === object_name);
+			if (existing) {
+				existing.options.push(options);
+			} else {
+				groupedObjectNames.push({
+					object_name,
+					options: [options]
+				});
+			}
+		});
+		result.push({
+			table_name,
+			object_names: groupedObjectNames
+		});
+	});
+
+	return result;
+}
 
 export const accessOptions = [
 	{ value: 1, lable: 'All gates are more than 2.5 metres wide' },

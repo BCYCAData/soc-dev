@@ -1,6 +1,5 @@
 <script lang="ts">
-	// import { page } from '$app/stores';
-	import { Accordion, AccordionItem, AppShell, Drawer, Modal } from '@skeletonlabs/skeleton';
+	import { AppShell } from '@skeletonlabs/skeleton';
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
 	import MessageContainer from '$components/message/MessageContainer.svelte';
@@ -15,8 +14,8 @@
 	$: classesMain = 'mx-4';
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
 
-	// adminMessages
 	export let data;
+	console.log('data', data.permissions);
 
 	$: ({ adminMessages } = data);
 </script>

@@ -1,37 +1,34 @@
 <script lang="ts">
+	import { setContext } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 
-	// import 'tabulator-tables/dist/css/tabulator.css';
-	// import './custom_tabulator.css';
-
-	// tabulator-header
-	// tabulator-col-title
-	// tabulator-col-title
-	// tabulator-row tabulator-selectable tabulator-row-even tabulator-selected
+	import 'tabulator-tables/dist/css/tabulator.css';
+	import './custom_tabulator.css';
 
 	export let columns: any[], tableData: any[];
+	export let layout = 'fitDataFill';
+	export let responsiveLayout = 'collapse';
+	export let pagination = true;
+	export let paginationSize = 20;
+	export let initialSort: { column: string; dir: 'asc' | 'desc' }[] = [];
 
-	let tableComponent: HTMLElement;
-	let table: Tabulator;
-
-	function makeTable() {
-		if (browser) {
-			table = new Tabulator(tableComponent, {
-				data: tableData,
-				columns: columns,
-				layout: 'fitDataFill',
-				responsiveLayout: 'collapse',
-				pagination: true,
-				paginationSize: 20
-			});
-		}
+	function createTabulatorTable(node: HTMLElement) {
+		let table = new Tabulator(node, {
+			data: tableData,
+			columns: columns,
+			layout: layout as
+				| 'fitDataFill'
+				| 'fitData'
+				| 'fitColumns'
+				| 'fitDataStretch'
+				| 'fitDataTable',
+			responsiveLayout: responsiveLayout as 'collapse' | 'hide',
+			pagination: pagination,
+			paginationSize: paginationSize,
+			initialSort: initialSort
+		});
+		setContext('tabulatorTable', table);
 	}
-
-	onMount(() => {
-		makeTable();
-	});
 </script>
 
-<div bind:this={tableComponent} />
+<div use:createTabulatorTable />

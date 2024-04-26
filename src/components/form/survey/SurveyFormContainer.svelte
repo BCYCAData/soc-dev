@@ -46,6 +46,106 @@
 	export let communityTinoneeProfile: CommunityTinoneeProfileData;
 	export let communityMondrookProfile: CommunityMondrookProfileData;
 	export let communityExternalProfile: CommunityExternalProfileData;
+	export let optionsData;
+
+	const communityProfileId = communityBCYCAProfile
+		? communityBCYCAProfile.bcyca_profile_id
+		: communityTinoneeProfile
+			? communityTinoneeProfile.tinonee_profile_id
+			: communityMondrookProfile
+				? communityMondrookProfile.mondrook_profile_id
+				: communityExternalProfile
+					? communityExternalProfile.external_profile_id
+					: '';
+	console.log('communityProfileId', communityProfileId);
+
+	const communityBCYCAWorkshopOptionsData =
+		optionsData.communityBCYCAOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityWorkshopOptions'
+		);
+	const communityBCYCAWorkshopOptions = communityBCYCAWorkshopOptionsData?.options;
+
+	const communityBCYCAInformationSheetOptionsData =
+		optionsData.communityBCYCAOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'informationSheetOptions'
+		);
+	const communityBCYCAInformationOptions = communityBCYCAInformationSheetOptionsData?.options;
+	const communityBCYCAMeetingOptionsData = optionsData.communityBCYCAOptionsData?.object_names.find(
+		(item: { object_name: string }) => item.object_name === 'communityMeetingOptions'
+	);
+	const communityBCYCAMeetingOptions = communityBCYCAMeetingOptionsData?.options;
+	const stayInTouchOptionsData = optionsData.communityBCYCAOptionsData?.object_names.find(
+		(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+	);
+	const communityBCYCAStayInTouchOptions = stayInTouchOptionsData?.options;
+
+	const communityExternalWorkshopOptionsData =
+		optionsData.communityExternalOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityWorkshopOptions'
+		);
+	const communityExternalWorkshopOptions = communityExternalWorkshopOptionsData?.options;
+	const communityExternalInformationSheetOptionsData =
+		optionsData.communityExternalOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'informationSheetOptions'
+		);
+	const communityExternalInformationOptions = communityExternalInformationSheetOptionsData?.options;
+	const communityExternalMeetingOptionsData =
+		optionsData.communityExternalOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityMeetingOptions'
+		);
+	const communityExternalMeetingOptions = communityExternalMeetingOptionsData?.options;
+	const communityExternalStayInTouchOptionsData =
+		optionsData.communityExternalOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+		);
+	const communityExternalStayInTouchOptions = communityExternalStayInTouchOptionsData?.options;
+
+	const communityMondrookWorkshopOptionsData =
+		optionsData.communityMondrookOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityWorkshopOptions'
+		);
+	const communityMondrookWorkshopOptions = communityMondrookWorkshopOptionsData?.options;
+	const communityMondrookInformationSheetOptionsData =
+		optionsData.communityMondrookOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'informationSheetOptions'
+		);
+	const communityMondrookInformationOptions = communityMondrookInformationSheetOptionsData?.options;
+	const communityMondrookMeetingOptionsData =
+		optionsData.communityMondrookOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityMeetingOptions'
+		);
+	const communityMondrookMeetingOptions = communityMondrookMeetingOptionsData?.options;
+	const communityMondrookStayInTouchOptionsData =
+		optionsData.communityMondrookOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+		);
+	const communityMondrookStayInTouchOptions = communityMondrookStayInTouchOptionsData?.options;
+
+	const communityTinoneeWorkshopOptionsData =
+		optionsData.communityTinoneeOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityWorkshopOptions'
+		);
+	const communityTinoneeWorkshopOptions = communityTinoneeWorkshopOptionsData?.options;
+	const communityTinoneeInformationSheetOptionsData =
+		optionsData.communityTinoneeOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'informationSheetOptions'
+		);
+	const communityTinoneeInformationOptions = communityTinoneeInformationSheetOptionsData?.options;
+	const communityTinoneeMeetingOptionsData =
+		optionsData.communityTinoneeOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'communityMeetingOptions'
+		);
+	const communityTinoneeMeetingOptions = communityTinoneeMeetingOptionsData?.options;
+	const communityTinoneeStayInTouchOptionsData =
+		optionsData.communityTinoneeOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+		);
+	const communityTinoneeStayInTouchOptions = communityTinoneeStayInTouchOptionsData?.options;
+
+	const cuserProfileStayInTouchOptionsData = optionsData.userOptionsData?.object_names.find(
+		(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+	);
+	const userProfileStayInTouchOptions = cuserProfileStayInTouchOptionsData?.options;
 </script>
 
 <div class="mx-auto sm:w-11/12">
@@ -58,12 +158,13 @@
 		>
 			Save My Answers
 		</span>
-		at Step 21
+		at Step 12
 	</div>
 	<form method="post" action="/survey" id="surveyForm">
 		<input type="hidden" name="communityName" value={communityName} />
 		<input type="hidden" name="propertyId" value={propertyId} />
 		<input type="hidden" name="propertyWasRented" value={propertyWasRented} />
+		<input type="hidden" name="communityProfileId" value={communityProfileId} />
 		<div hidden={active_step != 1}>
 			<Step1 />
 		</div>
@@ -87,50 +188,50 @@
 		</div>
 		{#if communityBCYCAProfile}
 			<div hidden={active_step != 8}>
-				<Step8 {communityBCYCAProfile} />
+				<Step8 {communityBCYCAProfile} {communityBCYCAWorkshopOptions} />
 			</div>
 			<div hidden={active_step != 9}>
-				<Step9 {communityBCYCAProfile} />
+				<Step9 {communityBCYCAProfile} {communityBCYCAInformationOptions} />
 			</div>
 			<div hidden={active_step != 10}>
-				<Step10 {communityBCYCAProfile} />
+				<Step10 {communityBCYCAProfile} {communityBCYCAMeetingOptions} />
 			</div>
 		{/if}
 		{#if communityTinoneeProfile}
 			<div hidden={active_step != 8}>
-				<Step11 {communityTinoneeProfile} />
+				<Step11 {communityTinoneeProfile} {communityTinoneeWorkshopOptions} />
 			</div>
 			<div hidden={active_step != 9}>
-				<Step12 {communityTinoneeProfile} />
+				<Step12 {communityTinoneeProfile} {communityTinoneeInformationOptions} />
 			</div>
 			<div hidden={active_step != 10}>
-				<Step13 {communityTinoneeProfile} />
+				<Step13 {communityTinoneeProfile} {communityTinoneeMeetingOptions} />
 			</div>
 		{/if}
 		{#if communityMondrookProfile}
 			<div hidden={active_step != 8}>
-				<Step14 {communityMondrookProfile} />
+				<Step14 {communityMondrookProfile} {communityMondrookWorkshopOptions} />
 			</div>
 			<div hidden={active_step != 9}>
-				<Step15 {communityMondrookProfile} />
+				<Step15 {communityMondrookProfile} {communityMondrookInformationOptions} />
 			</div>
 			<div hidden={active_step != 10}>
-				<Step16 {communityMondrookProfile} />
+				<Step16 {communityMondrookProfile} {communityMondrookMeetingOptions} />
 			</div>
 		{/if}
 		{#if communityExternalProfile}
 			<div hidden={active_step != 8}>
-				<Step17 {communityExternalProfile} />
+				<Step17 {communityExternalProfile} {communityExternalWorkshopOptions} />
 			</div>
 			<div hidden={active_step != 9}>
-				<Step18 {communityExternalProfile} />
+				<Step18 {communityExternalProfile} {communityExternalInformationOptions} />
 			</div>
 			<div hidden={active_step != 10}>
-				<Step19 {communityExternalProfile} />
+				<Step19 {communityExternalProfile} {communityExternalMeetingOptions} />
 			</div>
 		{/if}
 		<div hidden={active_step != 11}>
-			<Step20 {userProfile} {userPostalAddress} />
+			<Step20 {userProfile} {userPostalAddress} {userProfileStayInTouchOptions} {communityName} />
 		</div>
 		<div hidden={active_step != 12}>
 			<Step21 />

@@ -6,7 +6,6 @@ export const GET = async (event) => {
 		url,
 		locals: { supabase }
 	} = event;
-	console.log('searchParams', url.searchParams);
 	const token_hash = url.searchParams.get('token_hash') as string;
 	const type = url.searchParams.get('type') as EmailOtpType;
 	const next = url.searchParams.get('next') ?? '/';
@@ -26,6 +25,10 @@ export const GET = async (event) => {
 				case 'invite':
 					break;
 				case 'recovery':
+					return new Response(undefined, {
+						status: 302,
+						headers: { Location: '/auth/redirect/resetpassword/' }
+					});
 					break;
 				case 'email_change':
 					break;

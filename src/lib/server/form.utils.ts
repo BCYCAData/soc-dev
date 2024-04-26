@@ -279,9 +279,10 @@ export const getMyCommunityExternalWorkshopsFormData = (body: FormData) => {
 	return formData;
 };
 
-export const getSurveyFormData = (body: FormData, uid: string, principaladdresssiteoid: number) => {
+export const getSurveyFormData = (body: FormData) => {
 	const propertyId = body.get('propertyId') as string;
 	const communityName = body.get('communityName') as string;
+	const communityProfileId = body.get('communityProfileId') as string;
 	let propertyWasRented: boolean;
 	if ((body.get('propertyWasRented') as string) == 'false') {
 		propertyWasRented = false;
@@ -333,6 +334,7 @@ export const getSurveyFormData = (body: FormData, uid: string, principaladdresss
 	switch (communityName) {
 		case 'BCYCA':
 			userBCYCAProfileData = {
+				bcyca_profile_id: communityProfileId || null,
 				community_meeting_choices:
 					body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
 				community_workshop_choices:
@@ -349,6 +351,7 @@ export const getSurveyFormData = (body: FormData, uid: string, principaladdresss
 			break;
 		case 'Tinonee':
 			userTinoneeProfileData = {
+				tinonee_profile_id: communityProfileId || null,
 				community_meeting_choices:
 					body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
 				community_workshop_choices:
@@ -366,6 +369,7 @@ export const getSurveyFormData = (body: FormData, uid: string, principaladdresss
 			break;
 		case 'Mondrook':
 			userMondrookProfileData = {
+				mondrook_profile_id: communityProfileId || null,
 				community_meeting_choices:
 					body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
 				community_workshop_choices:
@@ -382,6 +386,7 @@ export const getSurveyFormData = (body: FormData, uid: string, principaladdresss
 			break;
 		case 'External':
 			userExternalProfileData = {
+				external_profile_id: communityProfileId || null,
 				community_meeting_choices:
 					body.getAll('community_meeting_choices').toString().split(',').map(Number) || null,
 				community_workshop_choices:
@@ -421,6 +426,7 @@ export const getSurveyFormData = (body: FormData, uid: string, principaladdresss
 	return {
 		propertyId,
 		communityName,
+		communityProfileId,
 		propertyWasRented,
 		agentData,
 		propertyProfileData,

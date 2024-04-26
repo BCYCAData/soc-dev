@@ -71,7 +71,7 @@ export const actions: Actions = {
 			success: apiData.status === 200
 		};
 	},
-	signup: async ({ request, locals: { supabase, supabaseRedirectBase } }) => {
+	signup: async ({ url, request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const user_metadata: APIData = JSON.parse(formData.get('apiDatajson')?.toString() || '');
 		const { data: signUpData, error: errorSignUp } = await supabase.auth.signUp({
@@ -87,7 +87,7 @@ export const actions: Actions = {
 					searchaddresssuburb: user_metadata.searchaddresssuburb,
 					community: user_metadata.community
 				},
-				emailRedirectTo: `${supabaseRedirectBase}/auth/redirect/signup/survey/`
+				emailRedirectTo: `${url.origin}/auth/redirect/signup/survey/`
 			}
 		});
 		if (errorSignUp) {

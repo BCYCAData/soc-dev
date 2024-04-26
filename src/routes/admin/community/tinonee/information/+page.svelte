@@ -73,8 +73,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="PreFireSeasonChecklist">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(1)
 					)}
 				/>
@@ -87,8 +87,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="LightingFires_FactsResponsibilities">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(2)
 					)}
 				/>
@@ -100,8 +100,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_PetsAnimals">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(3)
 					)}
 				/>
@@ -113,8 +113,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_LivestockLargeAnimals">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(4)
 					)}
 				/>
@@ -126,8 +126,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="TinoneeLeaflet">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(5)
 					)}
 				/>
@@ -139,8 +139,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BeMoreActiveLocally">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(6)
 					)}
 				/>
@@ -152,8 +152,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SOCProjectReport">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter((item) =>
+					columns={tinoneeInformationColumns}
+					tableData={tinoneeInformationData.filter((item) =>
 						item.informatiion_choices?.includes(7)
 					)}
 				/>
@@ -165,10 +165,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherInformationRequests">
 				<CommunityRequestsTable
-					communityRequestsColumns={tinoneeOtherInformationColumns}
-					communityRequestsData={tinoneeInformationData.filter(
-						(item) => item.other_information?.length > 0
-					)}
+					columns={tinoneeOtherInformationColumns}
+					tableData={tinoneeInformationData.filter((item) => item.other_information?.length > 0)}
 				/>
 			</div></svelte:fragment
 		>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { communityWorkshopOptions } from '$lib/profileOptions';
+	import { getCommunityOptions, type CommunityRequestOption } from '$lib/profileOptions';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import { getModalStore } from '@skeletonlabs/skeleton';
@@ -23,10 +23,14 @@
 	});
 
 	export let data;
+
 	let communityWorkshopChoices: number[] | null;
 	let otherCommunityWorkshop: string | null;
 	let willRunCommunityWorkshops: string | null;
 	let communityTinoneeProfileId: string | null;
+	const communityWorkshopOptions = data.optionsData.communityTinoneeOptionsData?.object_names.find(
+		(item) => item.object_name === 'communityWorkshopOptions'
+	)?.options;
 	if (data?.profileMyCommunityTinoneeWorkshopsFormData) {
 		communityWorkshopChoices =
 			data.profileMyCommunityTinoneeWorkshopsFormData.community_workshop_choices;
@@ -34,7 +38,7 @@
 			data.profileMyCommunityTinoneeWorkshopsFormData.other_community_workshop;
 		willRunCommunityWorkshops =
 			data.profileMyCommunityTinoneeWorkshopsFormData.will_run_community_workshops;
-		communityTinoneeProfileId = data.communityProfiles.community_tinonee_profile_id;
+		communityTinoneeProfileId = data.communityProfiles?.community_tinonee_profile_id || null;
 	}
 </script>
 
@@ -60,21 +64,23 @@
 	<div
 		class="grid grid-flow-col gap-2 p-2 rounded-lg bg-orange-300 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
-		{#each communityWorkshopOptions as { value, lable }}
-			<div class="flex items-center col-span-1">
-				<input
-					class="w-4 h-4 ml-8"
-					name="community_workshop_choices"
-					type="checkbox"
-					bind:group={communityWorkshopChoices}
-					{value}
-				/>
-				<label
-					class="ml-2 text-base font-medium text-orange-900 font-Poppins"
-					for="community_workshop_choices">{lable}</label
-				>
-			</div>
-		{/each}
+		{#if communityWorkshopOptions}
+			{#each communityWorkshopOptions as { value, lable }}
+				<div class="flex items-center col-span-1">
+					<input
+						class="w-4 h-4 ml-8"
+						name="community_workshop_choices"
+						type="checkbox"
+						bind:group={communityWorkshopChoices}
+						{value}
+					/>
+					<label
+						class="ml-2 text-base font-medium text-orange-900 font-Poppins"
+						for="community_workshop_choices">{lable}</label
+					>
+				</div>
+			{/each}
+		{/if}
 	</div>
 	<TextAreaInput
 		headingClass="unstyled pt-2 text-base font-semibold text-gray-900"

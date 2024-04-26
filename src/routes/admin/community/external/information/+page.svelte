@@ -71,8 +71,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="PreFireSeasonChecklist">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter(
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter(
 						(item) => item.informatiion_choices?.includes(1) || false
 					)}
 				/>
@@ -85,8 +85,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="LightingFires_FactsResponsibilities">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(2)
 					)}
 				/>
@@ -98,8 +98,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_PetsAnimals">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(3)
 					)}
 				/>
@@ -111,8 +111,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="FireReady_LivestockLargeAnimals">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(4)
 					)}
 				/>
@@ -124,8 +124,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="ExternalCommunityLeaflet">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(5)
 					)}
 				/>
@@ -137,8 +137,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="BeMoreActiveLocally">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(6)
 					)}
 				/>
@@ -150,8 +150,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="SOCProjectReport">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalInformationColumns}
-					communityRequestsData={externalInformationData.filter((item) =>
+					columns={externalInformationColumns}
+					tableData={externalInformationData.filter((item) =>
 						item.informatiion_choices?.includes(7)
 					)}
 				/>
@@ -163,10 +163,8 @@
 		<svelte:fragment slot="content">
 			<div class="table-container" id="OtherInformationRequests">
 				<CommunityRequestsTable
-					communityRequestsColumns={externalOtherInformationColumns}
-					communityRequestsData={externalInformationData.filter(
-						(item) => item.other_information?.length > 0
-					)}
+					columns={externalOtherInformationColumns}
+					tableData={externalInformationData.filter((item) => item.other_information?.length > 0)}
 				/>
 			</div></svelte:fragment
 		>
