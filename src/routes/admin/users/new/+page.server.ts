@@ -1,4 +1,5 @@
 import { error, redirect } from '@sveltejs/kit';
+import { jwtDecode } from 'jwt-decode';
 // import { render } from 'svelty-email';
 // import nodemailer from 'nodemailer';
 
@@ -6,15 +7,23 @@ import Tester from '$components/email_templates/Tester.svelte';
 
 import type { PageServerLoad } from './$types.js';
 import type { Actions } from './$types.js';
+import type { CustomJwtPayload } from '$lib/types.js';
 
 export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
 	const { user } = await getUser();
 	if (!user) {
 		redirect(307, '/auth/signin');
-	} else if (
-		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
-	) {
-		error(401, { message: 'Unauthorized' });
+	} else {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+			if (session) {
+				const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+				const userRole = jwt.user_role;
+				if (userRole?.split('_')[0] !== 'admin') {
+					error(403, { message: 'Forbidden' });
+				}
+			}
+			data.subscription.unsubscribe();
+		});
 	}
 	const { data: usersAdminNewUsersData, error: usersAdminNewUsersError } = await supabase.rpc(
 		'get_user_vetting_data',
@@ -30,13 +39,20 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 	};
 };
 export const actions: Actions = {
-	newusersemail: async ({ locals: { getUser } }) => {
+	newusersemail: async ({ locals: { supabase, getUser } }) => {
 		const { user } = await getUser();
-		if (
-			!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
-		) {
-			redirect(307, '/auth/signin');
-		}
+		// else {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+			if (session) {
+				const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+				const userRole = jwt.user_role;
+				if (userRole?.split('_')[0] !== 'admin') {
+					error(403, { message: 'Forbidden' });
+				}
+			}
+			data.subscription.unsubscribe();
+		});
+		// }
 		// const transporter = nodemailer.createTransport({
 		// 	service: 'hotmail',
 		// 	auth: {

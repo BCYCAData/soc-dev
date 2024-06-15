@@ -3,7 +3,6 @@
 	import { Tabulator } from 'tabulator-tables';
 	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
 
 	import 'tabulator-tables/dist/css/tabulator.css';
 	import '$components/form/tables/custom_tabulator.css';

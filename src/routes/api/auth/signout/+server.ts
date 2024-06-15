@@ -7,7 +7,7 @@ export const POST: RequestHandler = async (event) => {
 	} = event;
 	const { user } = await getUser();
 	if (!user) {
-		error(401, { message: 'Unauthorized' });
+		error(403, { message: 'Forbidden' });
 	}
 	const { error: err } = await supabase.auth.signOut();
 

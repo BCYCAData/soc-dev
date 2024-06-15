@@ -16,13 +16,14 @@
 	import { onMount } from 'svelte';
 
 	import Map from 'ol/Map';
-	import { VectorTile } from 'ol/layer.js';
+	import { VectorTile, Tile } from 'ol/layer.js';
 	import View from 'ol/View';
 	import { fromLonLat } from 'ol/proj';
 
 	import { applyStyle } from 'ol-mapbox-style';
 
 	import 'ol/ol.css';
+	import XYZ from 'ol/source/XYZ';
 
 	export let divId = 'map-container';
 	export let centre = [152.2985, -31.9514];
@@ -39,6 +40,12 @@
 				zoom
 			})
 		});
+		const tile = new Tile({
+			source: new XYZ({
+				url: 'http://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Base_Map/MapServer/tile/{z}/{y}/{x}'
+			})
+		});
+		map.addLayer(tile);
 		const layer = new VectorTile({ declutter: true });
 		applyStyle(
 			layer,
@@ -55,41 +62,29 @@
 		};
 	};
 
-	onMount(() => {
-		const map = new Map({
-			view: new View({
-				center: fromLonLat([152.2985, -31.9514]),
-				zoom: 6
-			}),
-			layers: [],
-			target: 'map-container'
-		});
-		const layer = new VectorTile({ declutter: true });
-		applyStyle(
-			layer,
-			'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_Terrain/VectorTileServer/resources/styles/root.json'
-		);
-		map.addLayer(layer);
-	});
+	// onMount(() => {
+	// 	const map = new Map({
+	// 		view: new View({
+	// 			center: fromLonLat([152.2985, -31.9514]),
+	// 			zoom: 6
+	// 		}),
+	// 		layers: [],
+	// 		target: 'map-container'
+	// 	});
+	// 	const layer = new VectorTile({ declutter: true });
+	// 	applyStyle(
+	// 		layer,
+	// 		'https://portal.spatial.nsw.gov.au/vectortileservices/rest/services/Hosted/NSW_BaseMap_VectorTile_Terrain/VectorTileServer/resources/styles/root.json'
+	// 	);
+	// 	map.addLayer(layer);
+	// });
 </script>
 
-<div class="flex flex-col">
-	<div id="map-container" />
-	<div>
-		<h1>Hmm</h1>
-	</div>
-	<div>
-		<div id={divId} class="map-container" use:setupMap={divId} />
-	</div>
-</div>
+<div id={divId} use:setupMap={divId} />
 
 <style>
 	#map-container {
-		width: 80%;
-		height: 300px; /* Set your desired map height */
-	}
-	.map-container {
-		width: 80%;
-		height: 300px; /* Set your desired map height */
+		width: 100%;
+		height: 100%; /* Set your desired map height */
 	}
 </style>

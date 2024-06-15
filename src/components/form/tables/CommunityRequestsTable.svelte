@@ -3,8 +3,6 @@
 	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';
 
 	import type { ComparisonOption, TabulatorProps } from '$lib/types';
-	// import { getContext } from 'svelte';
-	// import type { Tabulator } from 'tabulator-tables';
 
 	export let columns: any[], tableData: any[];
 

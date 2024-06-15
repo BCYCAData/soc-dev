@@ -3,7 +3,7 @@
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
 	import MessageContainer from '$components/message/MessageContainer.svelte';
-	import SidebarMenu from '$components/navigation/sidemenu/SidebarMenu.svelte';
+	import SidebarAdminMenu from '$components/navigation/sidemenu/SidebarAdminMenu.svelte';
 
 	import 'iconify-icon';
 	import { adminSidebarPathLables, adminSidebarMenuItems } from '$lib/menu-items.js';
@@ -15,7 +15,6 @@
 	$: classesSidebarRight = 'w-1/6  bg-stone-200';
 
 	export let data;
-	console.log('data', data.permissions);
 
 	$: ({ adminMessages } = data);
 </script>
@@ -42,27 +41,14 @@
 		<div class="p-1 flex flex-col w-full">
 			<div class="flex flex-row justify-around pt-2 text-xl">Administrator Menu</div>
 			<div class="flex flex-col rounded-lg bg-orange-600">
-				<SidebarMenu siderbarMenuItems={adminSidebarMenuItems} />
+				<SidebarAdminMenu
+					siderbarMenuItems={adminSidebarMenuItems}
+					adminPermissions={data.permissions}
+				/>
 			</div>
-			<p class="ml-2">
-				Please make sure you click every heading in the menu on the left <br />
-				<b>and</b>
-				check your answers to all the questions.
-			</p>
-			<p class="ml-2">
-				Remember this is <b>your</b>
-				data. To help keep
-				<b>you</b>
-				prepared.
-			</p>
 		</div></svelte:fragment
 	>
 	<svelte:fragment slot="sidebarRight">
-		<!-- <div class="flex flex-row justify-around pt-2 text-xl">Messages</div>
-		<div class="flex flex-col my-4 mx-4">
-			<p class="m-2">Congratulations you are now eligible for your FREE Emergency Starter Kit.</p>
-			<p class="m-2">We will be in touch soon.</p>
-		</div> -->
 		<MessageContainer messagesData={adminMessages} />
 	</svelte:fragment>
 	<slot />

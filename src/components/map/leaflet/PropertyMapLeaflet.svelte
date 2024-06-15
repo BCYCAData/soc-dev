@@ -28,27 +28,12 @@
 			doubleClickZoom: mapObject.doubleClickZoom,
 			scrollWheelZoom: mapObject.scrollWheelZoom
 		});
-		// if (!mapObject.dragging) {
-		// 	map.dragging.disable();
-		// }
-		// leaflet.tileLayer.wms(mapTileLayer.url, mapTileLayer.layerOptions).addTo(map);
 
 		let x = tiledMapLayer({
 			url: 'http://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Imagery/MapServer',
 			useCors: false
 		});
 		x.addTo(map);
-
-		// tiledMapLayer({
-		// 	url: 'https://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/stops/FeatureServer/0/',
-		// 	useCors: false
-		// }).addTo(map);
-
-		// let wmsTileLayer = leaflet.tileLayer
-		// 	.wms('https://maps.six.nsw.gov.au/arcgis/services/public/NSW_Base_Map/MapServer/WmsServer', {
-		// 		layers: 'LPIMap_PlacePoint'
-		// 	})
-		// 	.addTo(map);
 
 		let propertyFeature: GeoJSON.Feature = {
 			type: 'Feature',

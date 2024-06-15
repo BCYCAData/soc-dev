@@ -433,36 +433,69 @@ export type Database = {
         }
         Relationships: []
       }
+      kyng_area_users_join: {
+        Row: {
+          id: string
+          kyng_area_id: string
+          phone_number: string | null
+          user_id: string
+          user_name: string | null
+        }
+        Insert: {
+          id?: string
+          kyng_area_id: string
+          phone_number?: string | null
+          user_id: string
+          user_name?: string | null
+        }
+        Update: {
+          id?: string
+          kyng_area_id?: string
+          phone_number?: string | null
+          user_id?: string
+          user_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_kyng_area_users_kyng_area_id"
+            columns: ["kyng_area_id"]
+            isOneToOne: false
+            referencedRelation: "kyng_areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_kyng_area_users_user_id"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kyng_areas: {
         Row: {
           added_to_project: string | null
           community: string | null
-          coordinator: string | null
           geom: unknown | null
           id: string
-          kyng: string | null
+          kyng: string
           last_updated: string | null
-          phone: string | null
         }
         Insert: {
           added_to_project?: string | null
           community?: string | null
-          coordinator?: string | null
           geom?: unknown | null
           id?: string
-          kyng?: string | null
+          kyng: string
           last_updated?: string | null
-          phone?: string | null
         }
         Update: {
           added_to_project?: string | null
           community?: string | null
-          coordinator?: string | null
           geom?: unknown | null
           id?: string
-          kyng?: string | null
+          kyng?: string
           last_updated?: string | null
-          phone?: string | null
         }
         Relationships: []
       }
@@ -990,214 +1023,37 @@ export type Database = {
             foreignKeyName: "property_profile_kyng_fkey"
             columns: ["kyng"]
             isOneToOne: false
-            referencedRelation: "abbots_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "beaully_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bootawa_dam_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bootawa_road_north_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bootawa_road_south_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bucketts_way_east_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bucketts_way_south_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "bull_hill_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "careys_road_south_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "careys_road_wills_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "clarkes_road_bunyarra_place_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "gloucester_road_riverford_road_bo_bo_creek_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "hillville_road_marylands_close_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "hillville_road_sunshine_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "kimbriki_road_pine_tree_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "kimbriki_road_somerset_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
             referencedRelation: "kyng_areas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "mondrook_lane_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "moores_road_west_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "mulligans_lane_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "red_gully_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "saxbys_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "stony_creek_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "the_bight_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "tinonee_road_alpine_drive_ridge_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "tinonee_road_bishops_lane_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "urray_road_area_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "property_profile_kyng_fkey"
-            columns: ["kyng"]
-            isOneToOne: false
-            referencedRelation: "view_place_area_view"
             referencedColumns: ["id"]
           },
         ]
       }
+      property_result: {
+        Row: {
+          jsonb_agg: Json | null
+        }
+        Insert: {
+          jsonb_agg?: Json | null
+        }
+        Update: {
+          jsonb_agg?: Json | null
+        }
+        Relationships: []
+      }
       role_permissions: {
         Row: {
           id: number
-          permission: Database["public"]["Enums"]["app_permission"]
+          permission: string | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Insert: {
           id?: number
-          permission: Database["public"]["Enums"]["app_permission"]
+          permission?: string | null
           role: Database["public"]["Enums"]["app_role"]
         }
         Update: {
           id?: number
-          permission?: Database["public"]["Enums"]["app_permission"]
+          permission?: string | null
           role?: Database["public"]["Enums"]["app_role"]
         }
         Relationships: []
@@ -1585,7 +1441,7 @@ export type Database = {
       }
     }
     Views: {
-      abbots_road_addresspoint_view: {
+      kyng_abbots_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1599,43 +1455,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      abbots_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      abbots_road_property_view: {
+      kyng_abbots_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      abbots_road_proway_view: {
+      kyng_abbots_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -1643,17 +1485,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      abbots_road_waypoint_view: {
+      kyng_abbots_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1667,17 +1509,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      beaully_road_addresspoint_view: {
+      kyng_beaully_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1691,43 +1533,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      beaully_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      beaully_road_property_view: {
+      kyng_beaully_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      beaully_road_proway_view: {
+      kyng_beaully_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -1735,17 +1563,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      beaully_road_waypoint_view: {
+      kyng_beaully_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1759,17 +1587,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_dam_road_addresspoint_view: {
+      kyng_bootawa_dam_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1783,43 +1611,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bootawa_dam_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bootawa_dam_road_property_view: {
+      kyng_bootawa_dam_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bootawa_dam_road_proway_view: {
+      kyng_bootawa_dam_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -1827,17 +1641,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_dam_road_waypoint_view: {
+      kyng_bootawa_dam_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1851,17 +1665,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_road_north_addresspoint_view: {
+      kyng_bootawa_road_north_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1875,43 +1689,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bootawa_road_north_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bootawa_road_north_property_view: {
+      kyng_bootawa_road_north_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bootawa_road_north_proway_view: {
+      kyng_bootawa_road_north_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -1919,17 +1719,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_road_north_waypoint_view: {
+      kyng_bootawa_road_north_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1943,17 +1743,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_road_south_addresspoint_view: {
+      kyng_bootawa_road_south_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -1967,43 +1767,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bootawa_road_south_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bootawa_road_south_property_view: {
+      kyng_bootawa_road_south_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bootawa_road_south_proway_view: {
+      kyng_bootawa_road_south_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2011,17 +1797,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bootawa_road_south_waypoint_view: {
+      kyng_bootawa_road_south_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2035,17 +1821,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bucketts_way_east_addresspoint_view: {
+      kyng_bucketts_way_east_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2059,43 +1845,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bucketts_way_east_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bucketts_way_east_property_view: {
+      kyng_bucketts_way_east_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bucketts_way_east_proway_view: {
+      kyng_bucketts_way_east_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2103,17 +1875,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bucketts_way_east_waypoint_view: {
+      kyng_bucketts_way_east_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2127,17 +1899,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bucketts_way_south_addresspoint_view: {
+      kyng_bucketts_way_south_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2151,43 +1923,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bucketts_way_south_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bucketts_way_south_property_view: {
+      kyng_bucketts_way_south_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bucketts_way_south_proway_view: {
+      kyng_bucketts_way_south_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2195,17 +1953,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bucketts_way_south_waypoint_view: {
+      kyng_bucketts_way_south_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2219,17 +1977,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bull_hill_road_addresspoint_view: {
+      kyng_bull_hill_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2243,43 +2001,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      bull_hill_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      bull_hill_road_property_view: {
+      kyng_bull_hill_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      bull_hill_road_proway_view: {
+      kyng_bull_hill_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2287,17 +2031,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      bull_hill_road_waypoint_view: {
+      kyng_bull_hill_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2311,17 +2055,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      careys_road_south_addresspoint_view: {
+      kyng_careys_road_south_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2335,43 +2079,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      careys_road_south_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      careys_road_south_property_view: {
+      kyng_careys_road_south_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      careys_road_south_proway_view: {
+      kyng_careys_road_south_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2379,17 +2109,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      careys_road_south_waypoint_view: {
+      kyng_careys_road_south_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2403,17 +2133,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      careys_road_wills_road_addresspoint_view: {
+      kyng_careys_road_wills_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2427,43 +2157,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      careys_road_wills_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      careys_road_wills_road_property_view: {
+      kyng_careys_road_wills_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      careys_road_wills_road_proway_view: {
+      kyng_careys_road_wills_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2471,17 +2187,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      careys_road_wills_road_waypoint_view: {
+      kyng_careys_road_wills_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2495,17 +2211,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      clarkes_road_bunyarra_place_addresspoint_view: {
+      kyng_clarkes_road_bunyarra_place_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2519,43 +2235,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      clarkes_road_bunyarra_place_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      clarkes_road_bunyarra_place_property_view: {
+      kyng_clarkes_road_bunyarra_place_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      clarkes_road_bunyarra_place_proway_view: {
+      kyng_clarkes_road_bunyarra_place_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2563,17 +2265,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      clarkes_road_bunyarra_place_waypoint_view: {
+      kyng_clarkes_road_bunyarra_place_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2587,17 +2289,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      gloucester_road_riverford_road_bo_bo_creek_road_addresspoint_vi: {
+      kyng_gloucester_road_riverford_road_bo_bo_creek_road_addresspoi: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2611,43 +2313,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      gloucester_road_riverford_road_bo_bo_creek_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      gloucester_road_riverford_road_bo_bo_creek_road_property_view: {
+      kyng_gloucester_road_riverford_road_bo_bo_creek_road_property_v: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      gloucester_road_riverford_road_bo_bo_creek_road_proway_view: {
+      kyng_gloucester_road_riverford_road_bo_bo_creek_road_proway_vie: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2655,17 +2343,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      gloucester_road_riverford_road_bo_bo_creek_road_waypoint_view: {
+      kyng_gloucester_road_riverford_road_bo_bo_creek_road_waypoint_v: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2679,17 +2367,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      hillville_road_marylands_close_addresspoint_view: {
+      kyng_hillville_road_marylands_close_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2703,43 +2391,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      hillville_road_marylands_close_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      hillville_road_marylands_close_property_view: {
+      kyng_hillville_road_marylands_close_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      hillville_road_marylands_close_proway_view: {
+      kyng_hillville_road_marylands_close_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2747,17 +2421,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      hillville_road_marylands_close_waypoint_view: {
+      kyng_hillville_road_marylands_close_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2771,17 +2445,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      hillville_road_sunshine_road_addresspoint_view: {
+      kyng_hillville_road_sunshine_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2795,43 +2469,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      hillville_road_sunshine_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      hillville_road_sunshine_road_property_view: {
+      kyng_hillville_road_sunshine_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      hillville_road_sunshine_road_proway_view: {
+      kyng_hillville_road_sunshine_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2839,17 +2499,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      hillville_road_sunshine_road_waypoint_view: {
+      kyng_hillville_road_sunshine_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2863,17 +2523,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_pine_tree_road_addresspoint_view: {
+      kyng_kimbriki_road_pine_tree_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2887,43 +2547,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_pine_tree_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      kimbriki_road_pine_tree_road_property_view: {
+      kyng_kimbriki_road_pine_tree_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      kimbriki_road_pine_tree_road_proway_view: {
+      kyng_kimbriki_road_pine_tree_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -2931,17 +2577,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_pine_tree_road_waypoint_view: {
+      kyng_kimbriki_road_pine_tree_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2955,17 +2601,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_somerset_road_addresspoint_view: {
+      kyng_kimbriki_road_somerset_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -2979,43 +2625,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_somerset_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      kimbriki_road_somerset_road_property_view: {
+      kyng_kimbriki_road_somerset_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      kimbriki_road_somerset_road_proway_view: {
+      kyng_kimbriki_road_somerset_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3023,17 +2655,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      kimbriki_road_somerset_road_waypoint_view: {
+      kyng_kimbriki_road_somerset_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3047,17 +2679,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      mondrook_lane_addresspoint_view: {
+      kyng_mondrook_lane_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3071,43 +2703,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      mondrook_lane_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      mondrook_lane_property_view: {
+      kyng_mondrook_lane_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      mondrook_lane_proway_view: {
+      kyng_mondrook_lane_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3115,17 +2733,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      mondrook_lane_waypoint_view: {
+      kyng_mondrook_lane_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3139,17 +2757,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      moores_road_west_addresspoint_view: {
+      kyng_moores_road_west_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3163,43 +2781,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      moores_road_west_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      moores_road_west_property_view: {
+      kyng_moores_road_west_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      moores_road_west_proway_view: {
+      kyng_moores_road_west_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3207,17 +2811,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      moores_road_west_waypoint_view: {
+      kyng_moores_road_west_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3231,17 +2835,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      mulligans_lane_addresspoint_view: {
+      kyng_mulligans_lane_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3255,43 +2859,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      mulligans_lane_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      mulligans_lane_property_view: {
+      kyng_mulligans_lane_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      mulligans_lane_proway_view: {
+      kyng_mulligans_lane_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3299,17 +2889,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      mulligans_lane_waypoint_view: {
+      kyng_mulligans_lane_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3323,17 +2913,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      red_gully_road_addresspoint_view: {
+      kyng_red_gully_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3347,43 +2937,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      red_gully_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      red_gully_road_property_view: {
+      kyng_red_gully_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      red_gully_road_proway_view: {
+      kyng_red_gully_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3391,17 +2967,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      red_gully_road_waypoint_view: {
+      kyng_red_gully_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3415,17 +2991,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      saxbys_road_addresspoint_view: {
+      kyng_saxbys_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3439,43 +3015,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      saxbys_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      saxbys_road_property_view: {
+      kyng_saxbys_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      saxbys_road_proway_view: {
+      kyng_saxbys_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3483,17 +3045,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      saxbys_road_waypoint_view: {
+      kyng_saxbys_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3507,17 +3069,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      stony_creek_road_addresspoint_view: {
+      kyng_stony_creek_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3531,43 +3093,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      stony_creek_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      stony_creek_road_property_view: {
+      kyng_stony_creek_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      stony_creek_road_proway_view: {
+      kyng_stony_creek_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3575,17 +3123,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      stony_creek_road_waypoint_view: {
+      kyng_stony_creek_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3599,17 +3147,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      the_bight_addresspoint_view: {
+      kyng_the_bight_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3623,43 +3171,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      the_bight_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      the_bight_property_view: {
+      kyng_the_bight_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      the_bight_proway_view: {
+      kyng_the_bight_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3667,17 +3201,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      the_bight_waypoint_view: {
+      kyng_the_bight_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3691,17 +3225,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      tinonee_road_alpine_drive_ridge_road_addresspoint_view: {
+      kyng_tinonee_road_alpine_drive_ridge_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3715,43 +3249,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      tinonee_road_alpine_drive_ridge_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      tinonee_road_alpine_drive_ridge_road_property_view: {
+      kyng_tinonee_road_alpine_drive_ridge_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      tinonee_road_alpine_drive_ridge_road_proway_view: {
+      kyng_tinonee_road_alpine_drive_ridge_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3759,17 +3279,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      tinonee_road_alpine_drive_ridge_road_waypoint_view: {
+      kyng_tinonee_road_alpine_drive_ridge_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3783,17 +3303,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      tinonee_road_bishops_lane_addresspoint_view: {
+      kyng_tinonee_road_bishops_lane_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3807,43 +3327,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      tinonee_road_bishops_lane_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      tinonee_road_bishops_lane_property_view: {
+      kyng_tinonee_road_bishops_lane_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      tinonee_road_bishops_lane_proway_view: {
+      kyng_tinonee_road_bishops_lane_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3851,17 +3357,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      tinonee_road_bishops_lane_waypoint_view: {
+      kyng_tinonee_road_bishops_lane_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3875,17 +3381,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      urray_road_addresspoint_view: {
+      kyng_urray_road_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3899,43 +3405,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      urray_road_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      urray_road_property_view: {
+      kyng_urray_road_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      urray_road_proway_view: {
+      kyng_urray_road_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -3943,17 +3435,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      urray_road_waypoint_view: {
+      kyng_urray_road_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -3967,32 +3459,17 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      user_permissions_view: {
-        Row: {
-          permission: Database["public"]["Enums"]["app_permission"] | null
-          user_id: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_roles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      view_place_addresspoint_view: {
+      kyng_view_place_addresspoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -4006,43 +3483,29 @@ export type Database = {
           geom: unknown | null
           gnafprimarysiteid: number | null
           housenumber: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           roadside: string | null
+          rowid: number | null
         }
         Relationships: []
       }
-      view_place_area_view: {
-        Row: {
-          added_to_project: string | null
-          community: string | null
-          coordinator: string | null
-          geom: unknown | null
-          id: string | null
-          kyng: string | null
-          last_updated: string | null
-          phone: string | null
-          pid: number | null
-        }
-        Relationships: []
-      }
-      view_place_property_view: {
+      kyng_view_place_property_view: {
         Row: {
           address: string | null
           address_count: number | null
-          alternate_addresses: Json | null
+          alternate_addresses: string | null
           geom: unknown | null
           gurasid: number | null
-          pid: number | null
           principaladdresstype: string | null
-          secondary_addresses: Json | null
+          rowid: number | null
+          secondary_addresses: string | null
           valnetpropertystatus: string | null
           valnetpropertytype: string | null
         }
         Relationships: []
       }
-      view_place_proway_view: {
+      kyng_view_place_proway_view: {
         Row: {
           addresspointoid: number | null
           enddate: string | null
@@ -4050,17 +3513,17 @@ export type Database = {
           gurasid: number | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           prowayoid: number | null
           refresh_date: string | null
           roadside: string | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
         Relationships: []
       }
-      view_place_waypoint_view: {
+      kyng_view_place_waypoint_view: {
         Row: {
           address: string | null
           addresspointoid: number | null
@@ -4074,11 +3537,11 @@ export type Database = {
           housenumber: string | null
           id: number | null
           lastupdate: string | null
-          pid: number | null
           principaladdresssiteoid: number | null
           principaladdresstype: string | null
           refresh_date: string | null
           roadnameextentoid: number | null
+          rowid: number | null
           startdate: string | null
           waypointoid: number | null
         }
@@ -4109,12 +3572,6 @@ export type Database = {
           user_id_param: string
         }
         Returns: undefined
-      }
-      authorize: {
-        Args: {
-          requested_permission: Database["public"]["Enums"]["app_permission"]
-        }
-        Returns: boolean
       }
       check_address_match: {
         Args: {
@@ -4240,6 +3697,23 @@ export type Database = {
           kyng: string
         }[]
       }
+      get_addresspoints_by_area:
+        | {
+            Args: {
+              kyng_area_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              kyng_area_id: string
+            }
+            Returns: Json
+          }
+      get_addresspoints_geojson: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_admin_messages_for_user: {
         Args: {
           id_input: string
@@ -4261,9 +3735,31 @@ export type Database = {
           revoked: string
         }[]
       }
+      get_geojson: {
+        Args: {
+          uuid: string
+        }
+        Returns: Json
+      }
       get_geometry_info_html: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_kyng_coordinator_messages_for_user: {
+        Args: {
+          id_input: string
+        }
+        Returns: {
+          id: number
+          message: string
+          created_at: string
+        }[]
+      }
+      get_kyngs_geojson: {
+        Args: {
+          uuid: string
+        }
+        Returns: Json
       }
       get_lists: {
         Args: Record<PropertyKey, never>
@@ -4275,6 +3771,39 @@ export type Database = {
           list_id: string
         }
         Returns: Json[]
+      }
+      get_new_users_confirmed_without_address: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          email: string
+          email_confirmed_at: string
+          last_sign_in_at: string
+          principaladdresssiteoid: number
+          address: string
+        }[]
+      }
+      get_new_users_confirmed_without_kits: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          first_name: string
+          family_name: string
+          property_address_street: string
+          property_address_suburb: string
+          email_confirmed_at: string
+          landline: string
+          mobile: string
+          unanswered: string
+        }[]
+      }
+      get_new_users_unconfirmed: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          email: string
+          applied_at: string
+          address: string
+        }[]
       }
       get_points_geometry: {
         Args: Record<PropertyKey, never>
@@ -4595,6 +4124,12 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      new_custom_access_token_hook: {
+        Args: {
+          event: Json
+        }
+        Returns: Json
+      }
       process_downloads: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -4683,27 +4218,37 @@ export type Database = {
       }
     }
     Enums: {
-      app_permission:
-        | "bcyca.add"
-        | "bcyca.delete"
-        | "tinonee.add"
-        | "external.delete"
-        | "external.add"
-        | "mondrook.delete"
-        | "mondrook.add"
-        | "tinonee.delete"
       app_role:
         | "admin"
         | "admin_site"
+        | "admin_site_messages"
+        | "admin_site_roles"
         | "admin_users"
-        | "admin_reports"
-        | "admin_community"
-        | "community_bcyca"
-        | "community_external"
-        | "community_mondrook"
-        | "community_tinonee"
+        | "admin_users_newusers"
+        | "admin_users_kits"
+        | "admin_emergency"
+        | "admin_emergency_reports"
+        | "admin_emergency_ servicemap"
+        | "admin_communities"
+        | "admin_bcyca"
+        | "admin_bcyca_events"
+        | "admin_bcyca_information"
+        | "admin_bcyca_workshops"
+        | "admin_mondrook"
+        | "admin_mondrook_events"
+        | "admin_mondrook_information"
+        | "admin_mondrook_workshops"
+        | "admin_tinonee"
+        | "admin_tinonee_events"
+        | "admin_tinonee_information"
+        | "admin_tinonee_workshops"
+        | "admin_external"
+        | "admin_external_events"
+        | "admin_external_information"
+        | "admin_external_workshops"
+        | "kyng"
       community_request_status: "pending" | "approved" | "rejected"
-      message_context: "users" | "admins" | "both"
+      message_context: "users" | "admins" | "both" | "kyngs"
     }
     CompositeTypes: {
       [_ in never]: never

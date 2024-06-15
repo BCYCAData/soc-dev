@@ -1,14 +1,10 @@
 <script lang="ts">
-	import { Tabulator } from 'tabulator-tables';
-	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import { setContext } from 'svelte';
+	import { TabulatorFull as Tabulator } from 'tabulator-tables';
+	import { getTimestamp } from '$lib/utils';
 
 	import 'tabulator-tables/dist/css/tabulator.css';
 	import '$components/form/tables/custom_tabulator.css';
-
-	import type { ComparisonOption, TabulatorProps } from '$lib/types';
-	import { getTimestamp } from '$lib/utils';
 
 	export let appMessagesColumns: any[], appMessagesData: any[];
 	export let selectedIDs: string[] = [];
@@ -16,20 +12,10 @@
 	export let selectedRows: any[];
 	export let downloadFileName: string;
 
-	let tableComponent: HTMLElement;
 	let table: Tabulator;
 
-	const fieldOptions: ComparisonOption[] = [
-		{ value: 'id', lable: 'ID' },
-		{ value: 'context', lable: 'Context' },
-		{ value: 'scope', lable: 'Scope' },
-		{ value: 'message', lable: 'Message' },
-		{ value: 'created_at', lable: 'Created' },
-		{ value: 'revoked', lable: 'Revoked' }
-	];
-
-	function makeTable() {
-		const props: TabulatorProps = {
+	function createMessageTable(node: HTMLElement) {
+		table = new Tabulator(node, {
 			columns: appMessagesColumns,
 			data: appMessagesData,
 			layout: 'fitColumns',
@@ -39,27 +25,24 @@
 			paginationSizeSelector: [10, 20, 50],
 			movableColumns: true,
 			paginationCounter: 'pages'
-		};
-		table = new Tabulator(tableComponent, props);
-		table.on('rowSelectionChanged', function (data, rows) {
-			isSelectionEmpty = table.getSelectedData().length === 0;
-			selectedRows = table.getSelectedData();
-			selectedIDs = selectedRows.map((row) => row.id.toString());
 		});
+		table.setFilter('message', 'like', '');
+		table.on('rowSelectionChanged', () => {
+			const selectedData = table.getSelectedData();
+			isSelectionEmpty = selectedData.length === 0;
+			selectedRows = selectedData;
+			selectedIDs = selectedData.map((row) => row.id.toString());
+		});
+		setContext('messageTable', table);
 	}
 
 	export function downloadSelected() {
 		table.download('csv', `${downloadFileName}_${getTimestamp()}.csv`);
 	}
-
-	onMount(() => {
-		makeTable();
-	});
 </script>
 
-<TabulatorTableSearch searchField="message" comparisonType="like" searchValue="" {fieldOptions} />
-<div id="table_element" bind:this={tableComponent} />
-<!-- <div class="flex justify-end">
+<div use:createMessageTable />
+<div class="flex justify-end">
 	<button
 		type="button"
 		class="w-1/4 text-center text-base rounded-full mt-4 py-2 bg-tertiary-400 hover:bg-orange-700 focus:outline-none"
@@ -68,4 +51,4 @@
 	>
 		Download Selected
 	</button>
-</div> -->
+</div>

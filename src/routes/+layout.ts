@@ -1,4 +1,4 @@
-import { createBrowserClient, isBrowser, parse } from '@supabase/ssr';
+import { createBrowserClient, createServerClient, isBrowser, parse } from '@supabase/ssr';
 import { getCommunityOptions, type CommunityRequestOption } from '$lib/profileOptions';
 
 import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
@@ -33,7 +33,7 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	} = await supabase.auth.getSession();
 
 	const communityRequestOptions = getCommunityOptions(
-		data.communityRequestOptionsData?.filter(
+		(data.communityRequestOptionsData as CommunityRequestOption[] | undefined)?.filter(
 			(item) => item.community_request_options_concordance !== null
 		) as CommunityRequestOption[]
 	);
@@ -52,12 +52,14 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 			(item) => item.table_name === 'community_tinonee_profile'
 		)
 	};
+
 	return {
 		supabase,
 		session,
 		user: session?.user,
 		role: data.role,
 		permissions: data.permissionsData,
+		coordinatorKyngs: data.coordinatorData,
 		optionsData
 	};
 };

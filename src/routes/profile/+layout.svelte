@@ -3,10 +3,9 @@
 
 	import Breadcrumbs from '$components/page/Breadcrumbs.svelte';
 	import MessageContainer from '$components/message/MessageContainer.svelte';
-	import SidebarMenu from '$components/navigation/sidemenu/SidebarMenu.svelte';
+	import SidebarProfileMenu from '$components/navigation/sidemenu/SidebarProfileMenu.svelte';
 
 	import 'iconify-icon';
-	import type { MenuItem } from '$lib/types';
 
 	import { profileSidebarPathLables, profileSidebarMenuItems } from '$lib/menu-items.js';
 
@@ -19,6 +18,7 @@
 	export let data;
 
 	let profileMessagesData: { id: number; message: string; created_at: string }[];
+
 	if (data?.profileMessagesData) {
 		profileMessagesData = data.profileMessagesData;
 	}
@@ -83,7 +83,7 @@
 			<div class="flex flex-row justify-around pt-2 text-xl">Profile Menu</div>
 			<div class="flex flex-col rounded-lg bg-orange-600">
 				<!-- <SidebarMenu siderbarMenuItems={profileSidebarMenuItems(communityText)} /> -->
-				<SidebarMenu siderbarMenuItems={filteredProfileSidebarMenuItems} />
+				<SidebarProfileMenu siderbarMenuItems={filteredProfileSidebarMenuItems} />
 			</div>
 			<p class="ml-2">
 				Please make sure you click every heading in the menu on the left <br />

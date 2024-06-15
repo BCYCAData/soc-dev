@@ -7,11 +7,11 @@ export const actions: Actions = {
 			redirect(307, '/auth/signin');
 		}
 		const formData = await request.formData();
-		const { error } = await supabase.auth.updateUser({
+		const { error: changeEmailError } = await supabase.auth.updateUser({
 			email: formData.get('email') as string
 		});
-		if (error) {
-			console.log('change email settings error:', error.message);
+		if (changeEmailError) {
+			console.log('change email settings error:', changeEmailError.message);
 			return {
 				error: true,
 				success: false

@@ -1,5 +1,5 @@
 import { createServerClient } from '@supabase/ssr';
-// import { jwtDecode } from 'jwt-decode';
+import type { User } from '@supabase/supabase-js';
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
@@ -23,18 +23,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 	});
-	// if (event.cookies.getAll().length > 0) {
-	// 	event.locals.accessToken = JSON.parse(event.cookies.getAll()[0].value).access_token;
-	// }
-	const accessTokenCookie = event.cookies.get('access_token');
-
-	if (accessTokenCookie) {
-		const accessTokenValue = JSON.parse(accessTokenCookie).access_token;
-		if (accessTokenValue) {
-			event.locals.accessToken = accessTokenValue;
-		}
-	}
-	event.locals.getUser = async () => {
+	/**
+	 * Retrieves the user data asynchronously.
+	 *
+	 * @return {Promise<{ user: UserResponse }>} The user data
+	 */
+	event.locals.getUser = async (): Promise<{ user: User | null }> => {
 		const {
 			data: { user }
 		} = await event.locals.supabase.auth.getUser();
@@ -42,7 +36,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 	};
 
 	return resolve(event, {
-		filterSerializedResponseHeaders(name) {
+		/**
+		 * Filters the serialized response headers based on the given name.
+		 *
+		 * @param {string} name - The name of the header to filter.
+		 * @returns {boolean} Returns true if the header name matches 'content-range', otherwise false.
+		 */
+		filterSerializedResponseHeaders(name: string): name is 'content-range' {
 			return name === 'content-range';
 		}
 	});

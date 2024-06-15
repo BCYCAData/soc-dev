@@ -1,3 +1,5 @@
+import type { JwtPayload } from 'jwt-decode';
+
 declare global {
 	// need this declaration if in a module
 	interface Object {
@@ -5,13 +7,40 @@ declare global {
 	}
 }
 
-export type MenuItem = {
+export type CustomJwtPayload = JwtPayload & {
+	user_role: string;
+	coordinates_kyng: string[];
+};
+
+export type kyngArea = {
+	id: string;
+	kyng: string | null;
+};
+// export type KyngCoordinatorMenuItem = {
+// 	id: string;
+// 	name: string;
+// 	link: string;
+// 	icon: string | null;
+// 	permission: string;
+// 	initialOpen?: boolean;
+// 	subItems?: AdminMenuItem[];
+// };
+export type AdminMenuItem = {
 	id: string;
 	name: string;
-	link: string | null;
+	link: string;
+	icon: string | null;
+	permission: string;
+	initialOpen?: boolean;
+	subItems?: AdminMenuItem[];
+};
+export type ProfileMenuItem = {
+	id: string;
+	name: string;
+	link: string;
 	icon: string | null;
 	initialOpen?: boolean;
-	subItems?: MenuItem[];
+	subItems?: ProfileMenuItem[];
 };
 
 export type Step = {

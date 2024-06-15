@@ -111,11 +111,11 @@
 	<div
 		class="modal-container bg-white w-11/12 md:w-1/2 mx-auto rounded shadow-lg z-50 overflow-y-auto"
 	>
-		<div class="modal-content py-4 text-left px-6">
-			<ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+		<div class="modal-content py-1 text-left px-1">
+			<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
 				{#each modalList as item}
 					<button
-						class="cursor-pointer hover:bg-gray-100 py-2 px-4"
+						class="cursor-pointer hover:bg-gray-100"
 						on:click={() => selectValue(item)}
 						on:keydown={(event) => {
 							if (event.key === 'Enter' || event.key === ' ') {

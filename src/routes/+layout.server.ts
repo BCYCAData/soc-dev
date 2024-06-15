@@ -1,5 +1,4 @@
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
-import { getPermissionsData } from '$lib/server/db.utils';
+import { jwtDecode } from 'jwt-decode';
 import { error } from '@sveltejs/kit';
 import {
 	sendPostgRestErrorEmail,
@@ -8,20 +7,21 @@ import {
 
 import type { LayoutServerLoad } from './$types';
 
-type UserJwtPayload = JwtPayload & {
-	user_role: string;
-};
+import type { CustomJwtPayload } from '$lib/types';
+
 export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) => {
-	let role: string | undefined;
+	let role: string | null = null;
+	let coordinatorData: string[] = [];
+	let permissionsData: string[] = [];
 	supabase.auth.onAuthStateChange(async (event, session) => {
 		if (session && session.access_token) {
-			const jwt: UserJwtPayload = jwtDecode(session.access_token);
+			const jwt: CustomJwtPayload = jwtDecode(session.access_token);
 			role = jwt.user_role;
+			coordinatorData = jwt.coordinates_kyng;
 		}
 	});
 	const { user } = await getUser();
-	// const { session, user } = await safeGetSession();
-	let permissionsData, communityRequestOptionsData;
+	let communityRequestOptionsData;
 	const communityRequestOptionsQuery = await supabase
 		.from('community_request_options_lut')
 		.select(
@@ -46,11 +46,11 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 		communityRequestOptionsData = communityRequestOptionsQueryData;
 	}
 
-	if (user) {
+	if (role) {
 		const permissionsQueryData = supabase
-			.from('user_permissions_view')
+			.from('role_permissions')
 			.select('permission')
-			.eq('user_id', user.id);
+			.eq('role', role);
 		const { data, error: getPermissionsDataError } = await permissionsQueryData;
 		if (getPermissionsDataError) {
 			console.log('GET data error User Permissions:', getPermissionsDataError);
@@ -63,8 +63,8 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 			error(400, `GET data error Permissions:  Error ${getPermissionsDataError.message}`);
 		}
 		if (data && data.length > 0) {
-			permissionsData = getPermissionsData(data);
+			permissionsData = data[0].permission?.split(',') || [];
 		}
 	}
-	return { user, role, permissionsData, communityRequestOptionsData };
+	return { user, role, permissionsData, coordinatorData, communityRequestOptionsData };
 };

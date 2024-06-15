@@ -6,10 +6,7 @@
 
 	let crumbs: Crumb[];
 	$: {
-		// Remove zero-length tokens.
 		const tokens = $page.url.pathname.split('/').filter((t) => t !== '');
-
-		// Create { label, href } pairs for each token.
 		let tokenPath = '';
 		crumbs = tokens.map((t) => {
 			tokenPath += '/' + t;

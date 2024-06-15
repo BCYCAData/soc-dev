@@ -4,10 +4,8 @@
 
 	import AutoCompleteSelect from '$components/form/inputs/AutoCompleteSelect.svelte';
 	import EnumOptionSelect from '$components/form/inputs/EnumOptionSelect.svelte';
-	import MessagesTable from '$components/form/tables/MessagesTable.svelte';
 
 	import type { PageData } from './$types';
-	import type { CellComponent } from 'tabulator-tables';
 
 	let tabSet: number = 0;
 
@@ -20,7 +18,7 @@
 	let selectedValues: string[] = [];
 	let selectedIDs: string[] = [];
 	let selectedRows: any[] = [];
-	let buttonDisabled = true;
+	// let buttonDisabled = true;
 
 	let activeTabValue = 'add_messages';
 
@@ -39,46 +37,25 @@
 			messageContext = 'the Administrator & Profile pages';
 		}
 	}
-	$: {
-		if (selectedValues.length === 0) {
-			buttonDisabled = true;
-		} else {
-			buttonDisabled = !haveMessage;
-		}
-	}
+	// $: {
+	// 	if (selectedValues.length === 0) {
+	// 		buttonDisabled = true;
+	// 	} else {
+	// 		buttonDisabled = !haveMessage;
+	// 	}
+	// }
 
-	const handleTabClick = (tabValue: string) => () => {
-		activeTabValue = tabValue;
-	};
+	// const handleTabClick = (tabValue: string) => () => {
+	// 	activeTabValue = tabValue;
+	// };
 
-	$: ({ appMessages } = data);
+	// $: ({ appMessages } = data);
 
 	$: {
 		if (activeTabValue !== 'add_messages') {
 			isSelectionEmpty = true;
 		}
 	}
-	let currentMessages: MessagesTable;
-	let revokedMessages: MessagesTable;
-
-	let appMessagesColumns = [
-		{
-			formatter: 'rowSelection',
-			titleFormatter: 'rowSelection',
-			hozAlign: 'center',
-			headerSort: false,
-			width: 20,
-			cellClick: function (e: UIEvent, cell: CellComponent) {
-				cell.getRow().toggleSelect();
-			}
-		},
-		{ title: 'ID', field: 'id', hozAlign: 'center', width: 80 },
-		{ title: 'Context', field: 'context', hozAlign: 'center', width: 100 },
-		{ title: 'Scope', field: 'scope', formatter: 'textarea' },
-		{ title: 'Message', field: 'message', formatter: 'textarea' },
-		{ title: 'Created', field: 'created_at', width: 150 },
-		{ title: 'Revoked', field: 'revoked', width: 150 }
-	];
 </script>
 
 <svelte:head>
@@ -101,39 +78,54 @@
 	<Tab bind:group={tabSet} name="revoked_messages" value={2}>Revoked Messages</Tab>
 	<svelte:fragment slot="panel">
 		{#if tabSet === 0}
-			<form method="POST" class="card p-4 bg-orange-50" action="">
-				<div class="flex items-center">
-					<label class="flex flex-col items-start flex-grow">
-						<p>Enter the message here:</p>
-						<input
-							class="border border-gray-300 rounded-md px-3 py-1 mr-2 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-							name="inputMessage"
-							type="text"
-							placeholder="Message"
-							bind:value={message}
-						/>
-					</label>
-					<EnumOptionSelect bind:enumValue header="Pick a context:" />
-				</div>
-				<p class="mt-2">Choose the recipients here:</p>
-				<Accordion autocollapse spacing="space-y-1">
+			<Accordion autocollapse spacing="space-y-1">
+				<form method="POST" class="card p-4 bg-orange-50" action="?/sendToAllUsers">
+					<div class="flex items-center">
+						<label class="flex flex-col items-start flex-grow">
+							<p>Enter the message here:</p>
+							<input
+								class="border border-gray-300 rounded-md px-3 py-1 mr-2 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+								name="inputMessage"
+								type="text"
+								placeholder="Message"
+								bind:value={message}
+							/>
+						</label>
+						<EnumOptionSelect bind:enumValue header="Pick a context:" />
+					</div>
+					<p class="mt-2">Choose the recipients here:</p>
 					<AccordionItem open class="bg-orange-100 font-medium">
 						<svelte:fragment slot="summary">All Users</svelte:fragment>
 						<svelte:fragment slot="content">
+							<!-- <form method="POST" class="card p-4 bg-orange-50" action="?/sendToAllUsers"> -->
+							<!-- <div class="flex items-center">
+								<label class="flex flex-col items-start flex-grow">
+									<p>Enter the message here:</p>
+									<input
+										class="border border-gray-300 rounded-md px-3 py-1 mr-2 w-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+										name="inputMessage"
+										type="text"
+										placeholder="Message"
+										bind:value={message}
+									/>
+								</label>
+								<EnumOptionSelect bind:enumValue header="Pick a context:" />
+							</div> -->
+							<!-- <p class="mt-2">Choose the recipients here:</p> -->
 							<div class="flex items-center justify-end">
 								<p class="mr-2">Send this message to {messageContext} of all users</p>
 								<button
-									type="submit"
-									formaction="?/sendToAllUsers"
 									class="px-4 py-2 bg-tertiary-500 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary-500 sm:text-sm"
 									disabled={!haveMessage}>Send Message</button
 								>
 							</div>
+							<!-- </form> -->
 						</svelte:fragment>
 					</AccordionItem>
 					<AccordionItem class="bg-orange-100 font-medium">
 						<svelte:fragment slot="summary">Individual Users - (email address)</svelte:fragment>
 						<svelte:fragment slot="content">
+							<!-- <form method="POST" class="card p-4 bg-orange-50" action="?/sendToEmailList"> -->
 							<AutoCompleteSelect
 								listData={data.emailList}
 								placeholder="Select one or more Email Addresses"
@@ -142,12 +134,13 @@
 							<div class="flex items-center justify-end">
 								<p class="mr-2">Send this message to {messageContext} of the selected users</p>
 								<button
-									type="submit"
 									formaction="?/sendToEmailList"
 									class="px-4 py-2 bg-tertiary-600 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary-500 sm:text-sm"
-									disabled={buttonDisabled}>Send Message</button
+									disabled={selectedValues.length === 0}>Send Message</button
 								>
 							</div>
+							<p>{selectedValues.length === 0}</p>
+							<!-- </form> -->
 						</svelte:fragment>
 					</AccordionItem>
 					<AccordionItem class="bg-orange-100 font-medium">
@@ -190,31 +183,19 @@
 							/>
 						</svelte:fragment>
 					</AccordionItem>
-				</Accordion>
-			</form>
+				</form>
+			</Accordion>
 		{:else if tabSet === 1}
-			<form method="POST" class="card p-4 bg-orange-50" action="">
-				<div class="table-container">
-					<MessagesTable
-						{appMessagesColumns}
-						appMessagesData={appMessages.filter((item) => !item.revoked)}
-						bind:selectedIDs
-						bind:selectedRows
-						bind:isSelectionEmpty
-						downloadFileName="current_messages_report"
-						bind:this={currentMessages}
-					/>
-				</div>
-				<input name="revoke_ids" type="hidden" bind:value={selectedIDs} />
-				<button
+			<!-- <form method="POST" class="card p-4 bg-orange-50" action=""> -->
+			<!-- <button
 					type="submit"
 					formaction="?/revokeMessages"
 					class="w-1/4 text-center text-base rounded-full mt-4 py-2 bg-tertiary-400 hover:bg-orange-700 focus:outline-none"
 					disabled={isSelectionEmpty}
 				>
 					Revoke Selected
-				</button>
-				<button
+				</button> -->
+			<!-- <button
 					name="download_selected"
 					type="button"
 					class="w-1/4 text-center text-base rounded-full mt-4 py-2 bg-tertiary-400 hover:bg-orange-700 focus:outline-none"
@@ -222,11 +203,11 @@
 					on:click={() => currentMessages.downloadSelected()}
 				>
 					Download Selected
-				</button>
-			</form>
+				</button> -->
+			<!-- </form> -->
 		{:else if tabSet === 2}
 			<div class="card p-4 bg-orange-50">
-				<div class="table-container">
+				<!-- <div class="table-container">
 					<MessagesTable
 						{appMessagesColumns}
 						appMessagesData={appMessages.filter((item) => item.revoked)}
@@ -244,7 +225,7 @@
 					on:click={() => revokedMessages.downloadSelected()}
 				>
 					Download Selected
-				</button>
+				</button> -->
 			</div>
 		{/if}
 	</svelte:fragment>

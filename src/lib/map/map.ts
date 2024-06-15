@@ -1,40 +1,53 @@
+import { get } from 'svelte/store';
+import { geoJSONLayersStore } from '$stores/leaflet';
+
+import { circleMarker, marker, divIcon, type LeafletMouseEvent, Layer } from 'leaflet';
+import type { GeoJsonObject } from 'geojson';
+
 // ---------context---------------
+export const leafletContext = Symbol();
 export const mapContext = Symbol();
 export const layerControlContext = Symbol();
 export const esriLeafletContext = Symbol();
 
-// ---------styles---------------
-export const propertyFeatureStyle = {
-	color: '#ff7800',
-	fillColor: '#ff7800',
-	weight: 2,
-	opacity: 1,
-	fillOpacity: 0.05
+// ---------types---------------
+export type KyngGeoJsonData = {
+	kyngArea: GeoJsonObject;
+	addressPoints: GeoJsonObject;
+	propertyAreas: GeoJsonObject;
+	prowayLines: GeoJsonObject;
+	wayPoints: GeoJsonObject;
 };
-export const waypointFeatureStyle = {
-	radius: 6,
-	fillColor: 'blue',
-	color: 'white',
-	weight: 1,
-	opacity: 1,
-	fillOpacity: 0.7
+export type AboutGeoJsonData = {
+	allAddresspoints: GeoJsonObject;
+	registeredAddresspoints: GeoJsonObject;
 };
-export const addresspointFeatureStyle = {
-	radius: 6,
-	fillColor: 'blue',
-	color: 'white',
-	weight: 1,
-	opacity: 1,
-	fillOpacity: 0.7
+export type LeafletBaseMapLayer = {
+	lable: string;
+	url: string;
+	options: L.TileLayerOptions;
+};
+export type LeafletOverlayMapLayer = {
+	name: string;
+	lable: string;
+	data: any;
+	options: L.LayerOptions;
 };
 
-export interface Geometry {
+export type CRS = {
 	type: string;
-	crs: object;
-	coordinates: number[];
-}
+	properties: {
+		name: string;
+	};
+};
 
-export interface LeafletGeoJSON {
+export type Geometry = {
+	crs: CRS;
+	type: string;
+	coordinates: number[];
+};
+
+export type LeafletGeoJSON = {
 	type: string;
 	properties: {
 		id: string;
@@ -44,68 +57,255 @@ export interface LeafletGeoJSON {
 		featureType: string;
 	};
 	geometry: Geometry;
+};
+
+// ---------styles---------------
+export const propertyFeatureStyle = {
+	color: '#ff7800',
+	fillColor: '#ff7800',
+	weight: 2,
+	opacity: 1,
+	fillOpacity: 0.05
+};
+
+export const waypointFeatureStyle = {
+	radius: 6,
+	fillColor: 'blue',
+	color: 'white',
+	weight: 1,
+	opacity: 1,
+	fillOpacity: 0.7
+};
+
+export const addresspointFeatureStyle = {
+	radius: 6,
+	fillColor: 'blue',
+	color: 'white',
+	weight: 1,
+	opacity: 1,
+	fillOpacity: 0.7
+};
+
+export const wayFeatureStyle = {
+	color: '#33cc33',
+	fillColor: '#33cc33',
+	weight: 2,
+	opacity: 1,
+	fillOpacity: 0.05
+};
+
+// ---------GeoJsonOptions---------------
+
+export let aboutAddresspointsGeoJsonOptions: L.GeoJSONOptions = {
+	pointToLayer: function (feature, latlng) {
+		const circleSymbol = circleMarker(latlng, {
+			color: '#a5a5a5',
+			weight: 0,
+			radius: 2,
+			fillOpacity: 0.5
+		});
+		return circleSymbol;
+	}
+};
+export let registeredAddresspointsGeoJsonOptions: L.GeoJSONOptions = {
+	pointToLayer: function (feature, latlng) {
+		const circleSymbol = circleMarker(latlng, {
+			color: '#f97316',
+			weight: 0,
+			radius: 3,
+			fillOpacity: 0.9
+		});
+		return circleSymbol;
+	}
+};
+
+export let kyngAddresspointsGeoJsonOptions: L.GeoJSONOptions = {
+	pointToLayer: function (feature, latlng) {
+		const addressPointType = feature.properties['Address Point Type'];
+		const housenumber = feature.properties['House Number'];
+		const htmlContent = getAddressPointDivSymbol(addressPointType, housenumber, 8);
+
+		// Check if this location has been marked before
+		let tooltipDirectionCounter: { [key: string]: number } = {};
+		if (!tooltipDirectionCounter[latlng.toString()]) {
+			tooltipDirectionCounter[latlng.toString()] = 0;
+		}
+		let directionIndex = tooltipDirectionCounter[latlng.toString()]++;
+		let direction = ['right', 'left', 'top', 'bottom', 'center'][directionIndex % 5];
+		const label = feature.properties['House Number'];
+
+		const diamondMarker = marker(latlng, {
+			icon: divIcon({
+				className: 'diamond-marker',
+				iconAnchor: [3, 6],
+				html: htmlContent
+			})
+		});
+
+		diamondMarker.bindTooltip(label, {
+			permanent: true,
+			direction: direction as 'right' | 'left' | 'top' | 'bottom' | 'center' | undefined,
+			className: 'custom-lable',
+			offset: [-7, -10]
+		});
+
+		return diamondMarker;
+	}
+};
+
+export let kyngWayPointsGeoJsonOptions: L.GeoJSONOptions = {
+	pointToLayer: function (feature, latlng): L.Layer {
+		// Check if this location has been marked before
+		let tooltipDirectionCounter: { [key: string]: number } = {};
+		if (!tooltipDirectionCounter[latlng.toString()]) {
+			tooltipDirectionCounter[latlng.toString()] = 0;
+		}
+		let directionIndex = tooltipDirectionCounter[latlng.toString()]++;
+		let direction = ['right', 'left', 'top', 'bottom', 'center'][directionIndex % 5];
+		const label = feature.properties['House Number'];
+		const circleSymbol = circleMarker(latlng, {
+			radius: 3,
+			fillColor: 'red',
+			color: 'black',
+			weight: 1,
+			fillOpacity: 1
+		});
+		circleSymbol.bindTooltip(label, {
+			permanent: true,
+			direction: direction as 'right' | 'left' | 'top' | 'bottom' | 'center' | undefined,
+			className: 'custom-lable',
+			offset: [-7, -10]
+		});
+		return circleSymbol;
+	}
+};
+
+export let kyngProwayGeoJsonOptions: L.GeoJSONOptions = {
+	style: function (feature) {
+		return {
+			weight: 1,
+			color: 'steelblue'
+		};
+	}
+};
+
+export let kyngPropertyAreasGeoJsonOptions: L.GeoJSONOptions = {
+	style: function (feature) {
+		return {
+			fillColor: getRandomPastelColour(),
+			fillOpacity: 0.5,
+			weight: 1,
+			color: 'black'
+		};
+	},
+	onEachFeature: function (feature, layer: L.GeoJSON) {
+		layer.on({
+			mouseover: (e) => highlightFeature(e, feature.properties['Principal Address Site OID']),
+			mouseout: (e: L.LeafletMouseEvent) => resetHighlight('Property Areas')
+		});
+	}
+};
+
+export let kyngAreaGeoJsonOptions: L.GeoJSONOptions = {
+	style: function (feature) {
+		return {
+			fillColor: 'transparent',
+			fillOpacity: 0,
+			weight: 5,
+			color: 'magenta'
+		};
+	}
+};
+
+// ---------Functions---------------
+
+function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
+	const layer = e.target;
+	layer.setStyle({
+		weight: 5,
+		color: '#666',
+		dashArray: '',
+		fillOpacity: 0.7
+	});
+
+	layer.bringToFront();
+	// waypoint.eachLayer(function (waypointLayer) {
+	// 	if (waypointLayer.feature.properties.principalsiteoid === principalsiteoid) {
+	// 		waypointLayer.setStyle({
+	// 			fillColor: 'yellow',
+	// 			fillOpacity: 1
+	// 		});
+	// 	}
+	// });
 }
 
-export function convertToLeafletGeoJSON(inputJSON: any[]): LeafletGeoJSON[] {
-	return inputJSON.flatMap((item) => {
-		const { id, principaladdresssiteoid, created_at, last_updated } = item;
+function resetHighlight(layerName: string) {
+	const layers = get(geoJSONLayersStore) as Record<string, L.GeoJSON>;
+	console.log('layers', layers);
+	const layer = layers[layerName];
+	console.log('layer', layer);
+	if (layer) {
+		layer.resetStyle();
+	}
+}
+// function resetHighlight(e: LeafletMouseEvent, layer: any) {
+// 	layer.resetStyle(e.target);
+// }
+function getMarkerColour(addressPointType: string, housenumber: string | null) {
+	let markerColor;
 
-		const addressPoint: Geometry = {
-			type: item.address_point.type,
-			crs: item.address_point.crs,
-			coordinates: item.address_point.coordinates
-		};
+	switch (addressPointType) {
+		case 'Property':
+			markerColor = 'blue';
+			break;
+		case 'Building':
+			markerColor = 'green';
+			break;
+		default:
+			markerColor = 'black';
+	}
 
-		const wayPoint: Geometry = {
-			type: item.way_point.type,
-			crs: item.way_point.crs,
-			coordinates: item.way_point.coordinates
-		};
+	// Check if housenumber is null or not null
+	if (housenumber === null) {
+		// If housenumber is null, add a pattern to the marker color
+		markerColor =
+			markerColor +
+			' repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.2) 5px, rgba(0,0,0,0.2) 10px)';
+	} else {
+		// If housenumber is not null, use a solid color
+		markerColor = markerColor;
+	}
 
-		const property: Geometry = {
-			type: item.property.type,
-			crs: item.property.crs,
-			coordinates: item.property.coordinates
-		};
-
-		const leafletGeoJSON: LeafletGeoJSON[] = [
-			{
-				type: 'Feature',
-				properties: {
-					id,
-					principaladdresssiteoid,
-					created_at,
-					last_updated,
-					featureType: 'AddressPoint'
-				},
-				geometry: addressPoint
-			},
-			{
-				type: 'Feature',
-				properties: {
-					id,
-					principaladdresssiteoid,
-					created_at,
-					last_updated,
-					featureType: 'WayPoint'
-				},
-				geometry: wayPoint
-			},
-			{
-				type: 'Feature',
-				properties: {
-					id,
-					principaladdresssiteoid,
-					created_at,
-					last_updated,
-					featureType: 'Property'
-				},
-				geometry: property
-			}
-		];
-
-		return leafletGeoJSON;
-	});
+	return markerColor;
+}
+function getAddressPointDivSymbol(addressPointType: string, housenumber: string | null, size = 6) {
+	let markerColor;
+	switch (addressPointType) {
+		case 'Property':
+			markerColor = 'blue';
+			break;
+		case 'Building':
+			markerColor = 'green';
+			break;
+		default:
+			markerColor = 'black';
+	}
+	let htmlContent;
+	if (housenumber === null) {
+		// If housenumber is null, use a diamond
+		htmlContent = `<div style="border: solid 1px black; width: ${size}px; height: ${size}px; 
+					transform: rotate(45deg); background: ${markerColor};"></div>`;
+	} else {
+		// If housenumber is not null, use a square
+		htmlContent = `<div style="border: solid 1px black; width: ${size}px; height: ${size}px; background: ${markerColor};"></div>`;
+	}
+	return htmlContent;
+}
+function getRandomPastelColour() {
+	const hue = Math.floor(Math.random() * 360);
+	const saturation = Math.floor(Math.random() * 50) + 50; // Between 50% and 100%
+	const lightness = Math.floor(Math.random() * 20) + 70; // Between 70% and 90%
+	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
 // ----Path Options-----

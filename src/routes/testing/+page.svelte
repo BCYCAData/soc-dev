@@ -1,26 +1,45 @@
 <script lang="ts">
-	import { AccordionItem } from '@skeletonlabs/skeleton';
-	import CommunityRequestsTable from '$components/form/tables/CommunityRequestsTable.svelte';
+	import { io } from 'socket.io-client';
+	const socket = io();
 
-	export let summary: string;
-	export let choice: number;
-	export let columns: any[];
-	export let data: any[];
+	let username: string;
+	let message = '';
+	let messages: any[] = [];
 
-	function getFilteredData(): any[] {
-		return data?.filter((item) => item.informatiion_choices?.includes(choice)) ?? [];
+	socket.on('name', (name) => {
+		username = name;
+	});
+
+	socket.on('message', (msg) => {
+		messages = [...messages, msg];
+	});
+
+	function sendMessage() {
+		socket.emit('message', message);
+		message = '';
 	}
 </script>
 
-<AccordionItem class="bg-orange-100 font-medium">
-	<svelte:fragment slot="summary">{summary}</svelte:fragment>
-	<svelte:fragment slot="content">
-		{#if getFilteredData().length > 0}
-			<div class="table-container">
-				<CommunityRequestsTable {columns} tableData={getFilteredData()} />
+<main>
+	<h1>Chat App</h1>
+	<p>Your username is: {username}</p>
+
+	<div class="messages">
+		{#each messages as msg}
+			<div class="message">
+				<strong>{msg.from}:</strong>
+				{msg.message}
+				<span class="time">{msg.time}</span>
 			</div>
-		{:else}
-			<p>No outstanding requests</p>
-		{/if}
-	</svelte:fragment>
-</AccordionItem>
+		{/each}
+	</div>
+
+	<form on:submit|preventDefault={sendMessage}>
+		<input type="text" bind:value={message} placeholder="Type your message..." />
+		<button type="submit">Send</button>
+	</form>
+</main>
+
+<style>
+	/* Add your CSS styles here */
+</style>

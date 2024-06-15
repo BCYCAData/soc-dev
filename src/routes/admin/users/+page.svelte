@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TabulatorTable from '$components/form/tables/TabulatorTable.svelte';
 
-	import type { CellComponent, ColumnComponent } from 'tabulator-tables';
+	import type { CellComponent } from 'tabulator-tables';
 
 	let columns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
@@ -40,13 +40,5 @@
 <div>
 	<h1>This will probably contain information about how to use the contained pages</h1>
 </div>
-<!-- <form action="?/testemail" method="POST">
-	<button
-		type="submit"
-		class="w-full text-center text-xl rounded-full py-2 bg-orange-500 text-stone-100 hover:bg-orange-700 focus:outline-none"
-	>
-		Sign In
-	</button>
-</form> -->
 
 <TabulatorTable {columns} {tableData} />

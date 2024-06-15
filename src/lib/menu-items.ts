@@ -1,4 +1,54 @@
-import type { MenuItem } from './types';
+import type { AdminMenuItem, ProfileMenuItem } from './types';
+
+export const kyngSidebarPathLables: Record<string, string[]> = {
+	kyngcoordinator: ['KYNG Coordinator', ''],
+	messages: ['KYNG Area Messages', 'Messages'],
+	user_admin: ['User Administration', 'Users'],
+	registered: ['Registered', 'Users'],
+	map: ['KYNG Map', 'Map2']
+};
+
+export const kyngSidebarMenuItems: AdminMenuItem[] = [
+	{
+		id: 'area-name',
+		name: 'Area Name',
+		link: '/kyngcoordinator/{kyng_area}',
+		icon: 'la:users',
+		permission: 'kyng',
+		subItems: [
+			{
+				id: 'area-messages',
+				name: 'KYNG Messages',
+				link: '/kyngcoordinator/{kyng_area}/messages',
+				icon: 'tabler:messages',
+				permission: 'kyng'
+			},
+			{
+				id: 'area-users-admin',
+				name: 'Area User Administration',
+				link: '/kyngcoordinator/{kyng_area}/user_admin',
+				icon: 'la:users',
+				permission: 'kyng',
+				subItems: [
+					{
+						id: 'area-users-registered',
+						name: 'Registered Users',
+						link: '/kyngcoordinator/{kyng_area}/user_admin/registered',
+						icon: 'tabler:report-analytics',
+						permission: 'kyng'
+					}
+				]
+			},
+			{
+				id: 'area-map',
+				name: 'Area Map',
+				link: '/kyngcoordinator/{kyng_area}/map',
+				icon: 'gis:map-users',
+				permission: 'kyng'
+			}
+		]
+	}
+];
 
 export const adminSidebarPathLables = {
 	admin: ['Administration', ''],
@@ -21,24 +71,27 @@ export const adminSidebarPathLables = {
 	reports: ['Reports', 'Report']
 };
 
-export const adminSidebarMenuItems: MenuItem[] = [
+export const adminSidebarMenuItems: AdminMenuItem[] = [
 	{
 		id: 'site-admin',
 		name: 'Site Administration',
 		link: '/admin/site',
 		icon: 'tabler:stack-2',
+		permission: 'admin.site',
 		subItems: [
 			{
 				id: 'site-messages',
 				name: 'Site Messages',
 				link: '/admin/site/messages',
-				icon: 'tabler:messages'
+				icon: 'tabler:messages',
+				permission: 'admin.site.messages'
 			},
 			{
 				id: 'site-roles',
 				name: 'Role Management',
 				link: '/admin/site/roles',
-				icon: 'tabler:analyze'
+				icon: 'tabler:analyze',
+				permission: 'admin.site.roles'
 			}
 		]
 	},
@@ -47,18 +100,21 @@ export const adminSidebarMenuItems: MenuItem[] = [
 		name: 'User Administration',
 		link: '/admin/users',
 		icon: 'la:users',
+		permission: 'admin.users',
 		subItems: [
 			{
 				id: 'users-admin-new',
 				name: 'New Users',
 				link: '/admin/users/new',
-				icon: 'tabler:report-analytics'
+				icon: 'tabler:report-analytics',
+				permission: 'admin.users.newusers'
 			},
 			{
 				id: 'users-admin-kits',
 				name: 'Kits Delivered',
 				link: '/admin/users/kits',
-				icon: 'tabler:report-money'
+				icon: 'tabler:report-money',
+				permission: 'admin.users.kits'
 			}
 		]
 	},
@@ -67,18 +123,21 @@ export const adminSidebarMenuItems: MenuItem[] = [
 		name: 'Emergency Administration',
 		link: '/admin/emergency',
 		icon: 'tabler:ambulance',
+		permission: 'admin.emergency',
 		subItems: [
 			{
 				id: 'emergency-admin-reports',
 				name: 'Reports',
 				link: '/admin/emergency/reports',
-				icon: 'tabler:report'
+				icon: 'tabler:report',
+				permission: 'admin.emergency.reports'
 			},
 			{
 				id: 'emergency-admin-service-map',
 				name: 'Service Map',
 				link: '/admin/emergency/service_map',
-				icon: 'gis:map-users'
+				icon: 'gis:map-users',
+				permission: 'admin.emergency.servicemap'
 			}
 		]
 	},
@@ -87,36 +146,42 @@ export const adminSidebarMenuItems: MenuItem[] = [
 		name: 'Communities Administration',
 		link: '/admin/community',
 		icon: 'tabler:settings',
+		permission: 'admin.communities',
 		subItems: [
 			{
 				id: 'community-admin-bcyca',
 				name: 'BCYCA',
 				link: '/admin/community/bcyca',
 				icon: 'emojione-monotone:letter-b',
+				permission: 'admin.bcyca',
 				subItems: [
 					{
 						id: 'community-admin-bcyca-information',
 						name: 'BCYCA Information',
 						link: '/admin/community/bcyca/information',
-						icon: 'tabler:info-square-rounded'
+						icon: 'tabler:info-square-rounded',
+						permission: 'admin.bcyca.information'
 					},
 					{
 						id: 'community-admin-bcyca-workshops',
 						name: 'BCYCA Workshops',
 						link: '/admin/community/bcyca/workshops',
-						icon: 'tabler:school'
+						icon: 'tabler:school',
+						permission: 'admin.bcyca.workshops'
 					},
 					{
 						id: 'community-admin-bcyca-events',
 						name: 'BCYCA Events',
 						link: '/admin/community/bcyca/events',
-						icon: 'tabler:calendar-event'
+						icon: 'tabler:calendar-event',
+						permission: 'admin.bcyca.events'
 					},
 					{
 						id: 'community-admin-bcyca-map',
 						name: 'BCYCA Community Map',
 						link: '/admin/community/bcyca/map',
-						icon: 'gis:map-users'
+						icon: 'gis:map-users',
+						permission: 'admin.bcyca'
 					}
 				]
 			},
@@ -125,30 +190,35 @@ export const adminSidebarMenuItems: MenuItem[] = [
 				name: 'Tinonee',
 				link: '/admin/community/tinonee',
 				icon: 'emojione-monotone:letter-t',
+				permission: 'admin.tinonee',
 				subItems: [
 					{
 						id: 'community-admin-tinonee-information',
 						name: 'Tinonee Information',
 						link: '/admin/community/tinonee/information',
-						icon: 'tabler:info-square-rounded'
+						icon: 'tabler:info-square-rounded',
+						permission: 'admin.tinonee.information'
 					},
 					{
 						id: 'community-admin-tinonee-workshops',
 						name: 'Tinonee Workshops',
 						link: '/admin/community/tinonee/workshops',
-						icon: 'tabler:school'
+						icon: 'tabler:school',
+						permission: 'admin.tinonee.workshops'
 					},
 					{
 						id: 'community-admin-tinonee-events',
 						name: 'Tinonee Events',
 						link: '/admin/community/tinonee/events',
-						icon: 'tabler:calendar-event'
+						icon: 'tabler:calendar-event',
+						permission: 'admin.tinonee.events'
 					},
 					{
 						id: 'community-admin-tinonee-map',
 						name: 'Tinonee Community Map',
 						link: '/admin/community/tinonee/map',
-						icon: 'gis:map-users'
+						icon: 'gis:map-users',
+						permission: 'admin.tinonee'
 					}
 				]
 			},
@@ -157,30 +227,35 @@ export const adminSidebarMenuItems: MenuItem[] = [
 				name: 'Mondrook',
 				link: '/admin/community/mondrook',
 				icon: 'emojione-monotone:letter-m',
+				permission: 'admin.mondrook',
 				subItems: [
 					{
 						id: 'community-admin-mondrook-information',
 						name: 'Mondrook Information',
 						link: '/admin/community/mondrook/information',
-						icon: 'tabler:info-square-rounded'
+						icon: 'tabler:info-square-rounded',
+						permission: 'admin.mondrook.information'
 					},
 					{
 						id: 'community-admin-mondrook-workshops',
 						name: 'Mondrook Workshops',
 						link: '/admin/community/mondrook/workshops',
-						icon: 'tabler:school'
+						icon: 'tabler:school',
+						permission: 'admin.mondrook.workshops'
 					},
 					{
 						id: 'community-admin-mondrook-events',
 						name: 'Mondrook Events',
 						link: '/admin/community/mondrook/events',
-						icon: 'tabler:calendar-event'
+						icon: 'tabler:calendar-event',
+						permission: 'admin.mondrook.events'
 					},
 					{
 						id: 'community-admin-mondrook-map',
 						name: 'Mondrook Community Map',
 						link: '/admin/community/mondrook/map',
-						icon: 'gis:map-users'
+						icon: 'gis:map-users',
+						permission: 'admin.mondrook'
 					}
 				]
 			},
@@ -189,30 +264,35 @@ export const adminSidebarMenuItems: MenuItem[] = [
 				name: 'External',
 				link: '/admin/community/external',
 				icon: 'emojione-monotone:letter-e',
+				permission: 'admin.external',
 				subItems: [
 					{
 						id: 'community-admin-external-information',
 						name: 'External Information',
 						link: '/admin/community/external/information',
-						icon: 'tabler:info-square-rounded'
+						icon: 'tabler:info-square-rounded',
+						permission: 'admin.external.information'
 					},
 					{
 						id: 'community-admin-external-workshops',
 						name: 'External Workshops',
 						link: '/admin/community/external/workshops',
-						icon: 'tabler:school'
+						icon: 'tabler:school',
+						permission: 'admin.external.workshops'
 					},
 					{
 						id: 'community-admin-external-events',
 						name: 'External Events',
 						link: '/admin/community/external/events',
-						icon: 'tabler:calendar-event'
+						icon: 'tabler:calendar-event',
+						permission: 'admin.external.events'
 					},
 					{
 						id: 'community-admin-external-map',
 						name: 'External Community Map',
 						link: '/admin/community/external/map',
-						icon: 'gis:map-users'
+						icon: 'gis:map-users',
+						permission: 'admin.external'
 					}
 				]
 			}
@@ -242,7 +322,7 @@ export const profileSidebarPathLables = {
 	email: ['Change Email', 'Mailbox']
 };
 
-export const profileSidebarMenuItems = (communityText: string): MenuItem[] => [
+export const profileSidebarMenuItems = (communityText: string): ProfileMenuItem[] => [
 	{
 		id: 'about-me',
 		name: 'About Me',

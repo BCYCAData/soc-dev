@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { MenuItem } from '$lib/types';
 	import 'iconify-icon';
 
-	export let siderbarMenuItems: MenuItem[];
+	import type { AdminMenuItem } from '$lib/types';
 
-	console.log('sidebar menu items', siderbarMenuItems);
+	export let siderbarMenuItems: AdminMenuItem[];
+	// export let coordinatorKyngID: string = '';
 
 	let activeSubmenus: string[] = siderbarMenuItems
 		.filter((item) => item.initialOpen)

@@ -7,8 +7,8 @@
 	import WorkshopsTab from '$components/tabs/about/WorkshopsTab.svelte';
 
 	export let data;
-	const { allPoints, registeredPoints } = data;
-	const props = { allPoints, registeredPoints };
+	const { projectAddressPoints } = data;
+	const props = { projectAddressPoints };
 
 	// List of tab items with labels, values and assigned components
 	let items = [
@@ -16,7 +16,7 @@
 		{ label: 'Know Your Neighbour Groups', value: 2, component: KYNGsTab },
 		{ label: 'BCYCA Hall as Info Hub', value: 3, component: HallInfoHubTab },
 		{ label: 'Workshops', value: 4, component: WorkshopsTab }
-	];
+	].filter((item) => item.component);
 </script>
 
 <svelte:head>

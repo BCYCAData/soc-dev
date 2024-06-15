@@ -1,14 +1,23 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
+import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from './$types.js';
+import type { CustomJwtPayload } from '$lib/types.js';
 
 export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
 	const { user } = await getUser();
 	if (!user) {
 		redirect(307, '/auth/signin');
-	} else if (
-		!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
-	) {
-		error(401, { message: 'Unauthorized' });
+	} else {
+		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+			if (session) {
+				const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+				const userRole = jwt.user_role;
+				if (userRole?.split('_')[0] !== 'admin') {
+					error(403, { message: 'Forbidden' });
+				}
+			}
+			data.subscription.unsubscribe();
+		});
 	}
 	const { data: streetsData, error: getStreetsError } = await supabase.rpc('get_street_list', {});
 	if (getStreetsError) {
@@ -29,10 +38,17 @@ export const actions: Actions = {
 		const { user } = await getUser();
 		if (!user) {
 			redirect(307, '/auth/signin');
-		} else if (
-			!(user?.app_metadata.roles.includes('tester') | user?.app_metadata.roles.includes('admin'))
-		) {
-			error(401, { message: 'Unauthorized' });
+		} else {
+			const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+				if (session) {
+					const jwt = jwtDecode<CustomJwtPayload>(session.access_token);
+					const userRole = jwt.user_role;
+					if (userRole?.split('_')[0] !== 'admin') {
+						error(403, { message: 'Forbidden' });
+					}
+				}
+				data.subscription.unsubscribe();
+			});
 		}
 		const formData = await request.formData();
 		const street = formData.get('property_address_street') as string;

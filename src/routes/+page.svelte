@@ -2,7 +2,6 @@
 	export let data;
 	let { supabase } = data;
 	$: ({ supabase } = data);
-	console.log('supabase', supabase);
 </script>
 
 <svelte:head>

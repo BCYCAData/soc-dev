@@ -37,8 +37,8 @@
 			class="btn bg-tertiary-400 btn-base font-semibold rounded-xl sm:">Contact Us</a
 		>
 		<svelte:fragment slot="trail"
-			>{#if $page?.data?.session?.user?.id}
-				{#if $page?.data?.session?.user?.app_metadata?.roles?.includes('tester') | $page?.data?.session?.user?.app_metadata?.roles?.includes('admin')}
+			>{#if $page?.data?.user}
+				{#if $page?.data?.role?.split('_')[0] === 'admin'}
 					<a
 						class:active={$page.url.pathname.includes('/admin')}
 						href="/admin"
@@ -101,8 +101,8 @@
 			class="btn bg-tertiary-400 btn-base font-semibold rounded-xl scale-75">Contact Us</a
 		>
 		<svelte:fragment slot="trail"
-			>{#if $page?.data?.session?.user?.id}
-				{#if $page?.data?.session?.user?.app_metadata?.roles?.includes('tester') | $page?.data?.session?.user?.app_metadata?.roles?.includes('admin')}
+			>{#if $page?.data?.user}
+				{#if $page?.data?.role?.split('_')[0] === 'admin'}
 					<a
 						class:active={$page.url.pathname.includes('/admin')}
 						href="/admin"
@@ -159,8 +159,8 @@
 		</svelte:fragment>
 		<strong class="text-sm text-center">Strengthen Our Community</strong>
 		<svelte:fragment slot="trail"
-			>{#if $page?.data?.session?.user?.id}
-				{#if $page?.data?.session?.user?.app_metadata?.roles?.includes('tester') | $page?.data?.session?.user?.app_metadata?.roles?.includes('admin')}
+			>{#if $page?.data?.user}
+				{#if $page?.data?.role?.split('_')[0] === 'admin'}
 					<a
 						class:active={$page.url.pathname.includes('/admin')}
 						href="/admin"

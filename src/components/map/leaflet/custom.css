@@ -1,0 +1,20 @@
+	.custom-lable {
+		color: black;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+		font-weight: medium;
+		font-size: 14px;
+	}
+
+	.custom-lable:before {
+		background: transparent;
+		border: none;
+		box-shadow: none;
+	}
+
+	.my-div-icon {
+		background: green;
+		border: none;
+		box-shadow: none;
+	}
