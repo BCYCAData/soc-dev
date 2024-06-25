@@ -3,9 +3,8 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const {
-		locals: { supabase, getUser }
+		locals: { supabase, user }
 	} = event;
-	const { user } = await getUser();
 	if (!user) {
 		error(403, { message: 'Forbidden' });
 	}

@@ -4,8 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import type { LayoutServerLoad } from '../$types';
 import type { CustomJwtPayload } from '$lib/types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) => {
-	const { user } = await getUser();
+export const load: LayoutServerLoad = async ({ locals: { supabase, user } }) => {
 	if (!user) {
 		redirect(307, '/auth/signin');
 	} else {

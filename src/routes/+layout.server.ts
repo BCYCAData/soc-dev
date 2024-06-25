@@ -9,7 +9,7 @@ import type { LayoutServerLoad } from './$types';
 
 import type { CustomJwtPayload } from '$lib/types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) => {
+export const load: LayoutServerLoad = async ({ locals: { supabase, user } }) => {
 	let role: string | null = null;
 	let coordinatorData: string[] = [];
 	let permissionsData: string[] = [];
@@ -20,7 +20,6 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) 
 			coordinatorData = jwt.coordinates_kyng;
 		}
 	});
-	const { user } = await getUser();
 	let communityRequestOptionsData;
 	const communityRequestOptionsQuery = await supabase
 		.from('community_request_options_lut')

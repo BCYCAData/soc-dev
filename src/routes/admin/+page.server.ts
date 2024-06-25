@@ -4,8 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import type { CustomJwtPayload } from '$lib/types';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			redirect(307, '/auth/signin');
 		} else {

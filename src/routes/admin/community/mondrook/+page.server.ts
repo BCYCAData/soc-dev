@@ -3,8 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from '../$types';
 import type { CustomJwtPayload } from '$lib/types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
-	const { user } = await getUser();
+export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 	if (!user) {
 		redirect(307, '/auth/signin');
 	} else {

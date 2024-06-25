@@ -6,6 +6,7 @@
 
 	import 'leaflet/dist/leaflet.css';
 	import '$components/map/leaflet/custom.css';
+	import { addOrUpdateLayer, geoJSONLayersStore, tileLayersStore } from '$stores/leaflet';
 
 	export let centre: L.LatLngExpression;
 	export let zoom: number = 15;
@@ -21,7 +22,7 @@
 	export let zoomDelta: number = 1;
 	export let scrollWheelZoom: boolean = true;
 	export let keyboard: boolean = true;
-	export let maxBounds: L.LatLngBounds | undefined = undefined;
+	export let layersControl: boolean = false;
 	export let width = '100%';
 	export let height = '98%';
 
@@ -52,7 +53,6 @@
 			.map(mapDiv, {
 				minZoom,
 				maxZoom,
-				maxBounds,
 				zoomSnap,
 				zoomDelta,
 				boxZoom,
@@ -65,6 +65,30 @@
 				attributionControl
 			})
 			.setView(centre, zoom);
+		if (layersControl) {
+			tileLayersStore.subscribe((tileLayers) => {
+				for (const layerName in tileLayers) {
+					const { layer, layerMode, layerName: name } = tileLayers[layerName];
+					if (layerMode !== 'fixedMap') {
+						addOrUpdateLayer(layerMode === 'baseMaps' ? 'baseMaps' : 'overlayMaps', {
+							layer,
+							name
+						});
+					}
+				}
+			});
+			geoJSONLayersStore.subscribe((geoJSONLayers) => {
+				for (const layerName in geoJSONLayers) {
+					const { layer, layerMode, layerName: name } = geoJSONLayers[layerName];
+					if (layerMode !== 'fixedMap') {
+						addOrUpdateLayer(layerMode === 'baseMaps' ? 'baseMaps' : 'overlayMaps', {
+							layer,
+							name
+						});
+					}
+				}
+			});
+		}
 	});
 
 	onDestroy(() => {

@@ -1,7 +1,16 @@
 import { get } from 'svelte/store';
 import { geoJSONLayersStore } from '$stores/leaflet';
 
-import { circleMarker, marker, divIcon, type LeafletMouseEvent, Layer } from 'leaflet';
+import {
+	circleMarker,
+	marker,
+	divIcon,
+	popup,
+	tooltip,
+	point,
+	type LeafletMouseEvent,
+	Layer
+} from 'leaflet';
 import type { GeoJsonObject } from 'geojson';
 
 // ---------context---------------
@@ -191,8 +200,9 @@ export let kyngProwayGeoJsonOptions: L.GeoJSONOptions = {
 
 export let kyngPropertyAreasGeoJsonOptions: L.GeoJSONOptions = {
 	style: function (feature) {
+		const fillColour = getRandomPastelColour();
 		return {
-			fillColor: getRandomPastelColour(),
+			fillColor: fillColour,
 			fillOpacity: 0.5,
 			weight: 1,
 			color: 'black'
@@ -200,8 +210,14 @@ export let kyngPropertyAreasGeoJsonOptions: L.GeoJSONOptions = {
 	},
 	onEachFeature: function (feature, layer: L.GeoJSON) {
 		layer.on({
-			mouseover: (e) => highlightFeature(e, feature.properties['Principal Address Site OID']),
-			mouseout: (e: L.LeafletMouseEvent) => resetHighlight('Property Areas')
+			mouseover: (e) => {
+				console.log('In', layer);
+				highlightFeature(e, feature.properties['Principal Address Site OID']);
+			},
+			mouseout: (e) => {
+				console.log('Out', layer);
+				resetHighlight(e, 'Property Areas', layer);
+			}
 		});
 	}
 };
@@ -223,7 +239,7 @@ function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
 	const layer = e.target;
 	layer.setStyle({
 		weight: 5,
-		color: '#666',
+		color: '#f97316',
 		dashArray: '',
 		fillOpacity: 0.7
 	});
@@ -239,13 +255,13 @@ function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
 	// });
 }
 
-function resetHighlight(layerName: string) {
-	const layers = get(geoJSONLayersStore) as Record<string, L.GeoJSON>;
-	console.log('layers', layers);
-	const layer = layers[layerName];
-	console.log('layer', layer);
-	if (layer) {
-		layer.resetStyle();
+function resetHighlight(e: LeafletMouseEvent, layerName: string, feature: Layer) {
+	const layers = get(geoJSONLayersStore);
+	const geoJSONLayer = layers[layerName].layer;
+	let x = (geoJSONLayer.getLayers()[0].options as L.PathOptions).fillColor;
+	console.log(x);
+	if (geoJSONLayer) {
+		geoJSONLayer.resetStyle(feature);
 	}
 }
 // function resetHighlight(e: LeafletMouseEvent, layer: any) {

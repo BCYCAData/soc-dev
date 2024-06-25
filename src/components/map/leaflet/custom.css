@@ -18,3 +18,14 @@
 		border: none;
 		box-shadow: none;
 	}
+
+	.leaflet-control-layers,
+	.leaflet-control-zoom-in,
+	.leaflet-control-zoom-out {
+		background-color: #f97316 !important;
+	}
+
+	.leaflet-tooltip:not(.custom-lable),
+	.leaflet-control-scale-line {
+		background-color: #fed7aa;
+	}

@@ -5,10 +5,9 @@ import type { LayoutServerLoad } from '../$types';
 import type { CustomJwtPayload } from '$lib/types';
 
 export const load: LayoutServerLoad = async ({
-	locals: { supabase, getUser },
+	locals: { supabase, user },
 	params: { kyng_area }
 }) => {
-	const { user } = await getUser();
 	if (!user) {
 		redirect(307, '/auth/signin');
 	} else {

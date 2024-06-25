@@ -1,5 +1,4 @@
 <script lang="ts">
-	import AboutMap from '$components/map/AboutMap.svelte';
 	import LeafletMap from '$components/map/leaflet/LeafletMap.svelte';
 	import LeafletTileLayer from '$components/map/leaflet/layers/LeafletTileLayer.svelte';
 	import LeafletGeoJSONLayerOptions from '$components/map/leaflet/layers/LeafletGeoJSONLayerOptions.svelte';
@@ -70,9 +69,6 @@
 			that have participated
 		</p>
 	</div>
-	<!-- <div class="main-map flex mx-auto flex-col w-5/6 h-full">
-		<AboutMap {allPoints} {registeredPoints} />
-	</div> -->
 	{#if projectAddressPoints}
 		<div class="main-map flex mx-auto flex-col w-5/6 h-full">
 			<LeafletMap
@@ -87,30 +83,32 @@
 				touchZoom={false}
 				keyboard={false}
 			>
-				<LeafletTileLayer url={baseUrl} layerOptions={baseOptions} attribution={baseAttribution} />
-				<LeafletGeoJSONLayerOptions
-					customizeLayerOptions={aboutAddresspointsGeoJsonOptions}
-					layerName="Property Areas"
-				>
+				<LeafletTileLayer
+					url={baseUrl}
+					layerOptions={baseOptions}
+					attribution={baseAttribution}
+					layerName="Streets"
+					layerMode="baseMaps"
+				/>
+				<LeafletGeoJSONLayerOptions customizeLayerOptions={aboutAddresspointsGeoJsonOptions}>
 					<LeafletGeoJSONLayer
 						geoJSONData={projectAddressPoints.allAddresspoints}
-						layerName="Property Areas"
+						layerName="About Addresspoints"
+						layerMode="fixedMap"
 					/>
 				</LeafletGeoJSONLayerOptions>
-				<LeafletGeoJSONLayerOptions
-					customizeLayerOptions={registeredAddresspointsGeoJsonOptions}
-					layerName="Property Areas"
-				>
+				<LeafletGeoJSONLayerOptions customizeLayerOptions={registeredAddresspointsGeoJsonOptions}>
 					<LeafletGeoJSONLayer
 						geoJSONData={projectAddressPoints.registeredAddresspoints}
-						layerName="Property Areas"
+						layerName="Registered Addresspoints"
+						layerMode="fixedMap"
 					/>
 				</LeafletGeoJSONLayerOptions>
 			</LeafletMap>
 		</div>
 	{:else}
 		<div class="main-map flex mx-auto flex-col w-5/6 h-full">
-			<p class="text-center text-gray-500 mt-4"></p>
+			<p class="text-center text-gray-500 mt-4">Bugger!</p>
 		</div>
 	{/if}
 </section>

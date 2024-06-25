@@ -34,8 +34,7 @@ function insertSteps(steps: Step[], additionalValues: Step[]) {
 	return uniqueSortedSteps;
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
-	const { user } = await getUser();
+export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 	if (!user) {
 		redirect(307, '/auth/signin');
 	}
@@ -183,8 +182,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			redirect(307, '/auth/signin');
 		}

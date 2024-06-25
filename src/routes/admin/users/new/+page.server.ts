@@ -9,8 +9,7 @@ import type { PageServerLoad } from './$types.js';
 import type { Actions } from './$types.js';
 import type { CustomJwtPayload } from '$lib/types.js';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) => {
-	const { user } = await getUser();
+export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 	if (!user) {
 		redirect(307, '/auth/signin');
 	} else {
@@ -39,8 +38,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getUser } }) =>
 	};
 };
 export const actions: Actions = {
-	newusersemail: async ({ locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	newusersemail: async ({ locals: { supabase } }) => {
 		// else {
 		const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
 			if (session) {

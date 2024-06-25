@@ -6,8 +6,7 @@ import type { CommunityBCYCAProfileData } from '$lib/custom.types';
 let communityBCYCAProfile: CommunityBCYCAProfileData;
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			redirect(307, '/auth/signin');
 		}

@@ -433,6 +433,18 @@ export type Database = {
         }
         Relationships: []
       }
+      geojson: {
+        Row: {
+          jsonb_agg: Json | null
+        }
+        Insert: {
+          jsonb_agg?: Json | null
+        }
+        Update: {
+          jsonb_agg?: Json | null
+        }
+        Relationships: []
+      }
       kyng_area_users_join: {
         Row: {
           id: string

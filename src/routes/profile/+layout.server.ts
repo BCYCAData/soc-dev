@@ -33,8 +33,7 @@ import {
 } from '$lib/server/email/nodemailer';
 
 let profileMessagesData: ProfileMessageData;
-export const load: LayoutServerLoad = async ({ locals: { supabase, getUser } }) => {
-	const { user } = await getUser();
+export const load: LayoutServerLoad = async ({ locals: { supabase, user } }) => {
 	if (!user) {
 		redirect(307, '/auth/signin');
 	}

@@ -2,8 +2,7 @@ import { error, redirect, type Actions } from '@sveltejs/kit';
 import { getMyCommunityExternalEventsFormData } from '$lib/server/form.utils';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			redirect(307, '/auth/signin');
 		}

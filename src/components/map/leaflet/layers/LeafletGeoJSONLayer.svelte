@@ -7,6 +7,8 @@
 
 	export let geoJSONData: GeoJsonObject;
 	export let layerName: string;
+	export let layerMode: 'baseMaps' | 'overlayMaps' | 'fixedMap';
+	export let visible: boolean = true;
 	export let fitBounds: boolean = false;
 
 	const leaflet = (getContext('leaflet') as { getLeaflet: () => typeof L }).getLeaflet();
@@ -18,10 +20,13 @@
 	).getLeafletGeoJSONOptions();
 
 	onMount(async () => {
-		const geoJSONLayer = leaflet.geoJSON(geoJSONData, leafletGeoJSONOptions).addTo(leafletMap);
+		const geoJSONLayer = leaflet.geoJSON(geoJSONData, leafletGeoJSONOptions);
+		if (visible) {
+			geoJSONLayer.addTo(leafletMap);
+		}
 		geoJSONLayersStore.update((layers) => ({
 			...layers,
-			[layerName]: geoJSONLayer
+			[layerName]: { layer: geoJSONLayer, layerMode: layerMode, layerName }
 		}));
 		if (fitBounds) {
 			const bounds = geoJSONLayer.getBounds();

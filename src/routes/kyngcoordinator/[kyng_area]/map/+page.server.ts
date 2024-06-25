@@ -2,10 +2,9 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({
-	locals: { supabase, getUser },
+	locals: { supabase, user },
 	params: { kyng_area }
 }) => {
-	const { user } = await getUser();
 	if (!user) {
 		redirect(307, '/auth/signin');
 	}

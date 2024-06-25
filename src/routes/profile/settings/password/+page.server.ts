@@ -1,8 +1,7 @@
 import { redirect, type Actions } from '@sveltejs/kit';
 
 export const actions: Actions = {
-	resetPassword: async ({ request, locals: { supabase, getUser } }) => {
-		const { user } = await getUser();
+	resetPassword: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			redirect(307, '/auth/signin');
 		}

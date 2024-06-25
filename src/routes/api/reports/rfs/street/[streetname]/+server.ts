@@ -7,10 +7,10 @@ export const GET: RequestHandler = async (event) => {
 	const {
 		params,
 		setHeaders,
-		locals: { supabase, getUser }
+		locals: { supabase, user }
 	} = event;
-	const { user } = await getUser();
 	if (
+		user &&
 		!user.app_metadata.app_metadata?.roles?.includes('tester') &&
 		!user?.app_metadata?.roles?.includes('admin')
 	) {

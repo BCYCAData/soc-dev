@@ -10,10 +10,9 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async (event) => {
 	const {
-		locals: { getUser },
+		locals: { user },
 		request
 	} = event;
-	const { user } = await getUser();
 	if (
 		!user?.app_metadata.app_metadata?.roles?.includes('tester') &&
 		!user?.app_metadata?.roles?.includes('admin')
