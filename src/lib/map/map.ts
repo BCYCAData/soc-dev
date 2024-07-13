@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { geoJSONLayersStore } from '$stores/leaflet';
+import { featuresStore, geoJSONLayersStore, userInfo } from '$stores/leaflet';
 
 import {
 	circleMarker,
@@ -11,7 +11,7 @@ import {
 	type LeafletMouseEvent,
 	Layer
 } from 'leaflet';
-import type { GeoJsonObject } from 'geojson';
+import type { Feature, GeoJsonObject } from 'geojson';
 
 // ---------context---------------
 export const leafletContext = Symbol();
@@ -20,6 +20,11 @@ export const layerControlContext = Symbol();
 export const esriLeafletContext = Symbol();
 
 // ---------types---------------
+export type UserInfo = {
+	name: string;
+	details: string;
+};
+
 export type KyngGeoJsonData = {
 	kyngArea: GeoJsonObject;
 	addressPoints: GeoJsonObject;
@@ -198,24 +203,50 @@ export let kyngProwayGeoJsonOptions: L.GeoJSONOptions = {
 	}
 };
 
+let existingColors: Color[] = [];
+
 export let kyngPropertyAreasGeoJsonOptions: L.GeoJSONOptions = {
 	style: function (feature) {
-		const fillColour = getRandomPastelColour();
+		// const fillColour = stringToPastelColor((feature?.properties['Address']).toString());
+		const fillColour = generateUniqueColorForKey(
+			(feature?.properties['Principal Address Site OID']).toString(),
+			existingColors
+		);
+		// const fillColour = stringToColor(
+		// 	(feature?.properties['Principal Address Site OID']).toString()
+		// );
+		console.log('fillColour', fillColour);
 		return {
 			fillColor: fillColour,
-			fillOpacity: 0.5,
+			fillOpacity: 0.3,
 			weight: 1,
 			color: 'black'
 		};
 	},
 	onEachFeature: function (feature, layer: L.GeoJSON) {
+		// featuresStore.update((features) => [...features, feature]);
 		layer.on({
+			click: (e) => {
+				// userInfo.set({
+				// 	address: `Address: ${feature.properties['Address']}`,
+				// 	details: `Details`
+				// });
+				console.log('1', feature);
+				console.log('2', feature.properties.rowid);
+				// // Toggle highlight property
+				feature.properties.highlight = !feature.properties.highlight;
+				// Update the store with the selected feature
+				// featuresStore.update((features: Feature[]) => {
+				// 	return features.map((f) =>
+				// 		f.id === feature.id ? { ...f, ...feature, highlight: feature.properties.highlight } : f
+				// 	);
+				// });
+			},
 			mouseover: (e) => {
-				console.log('In', layer);
-				highlightFeature(e, feature.properties['Principal Address Site OID']);
+				// highlightFeature(e, feature.properties['Principal Address Site OID']);
+				highlightFeature(e.target);
 			},
 			mouseout: (e) => {
-				console.log('Out', layer);
 				resetHighlight(e, 'Property Areas', layer);
 			}
 		});
@@ -235,8 +266,10 @@ export let kyngAreaGeoJsonOptions: L.GeoJSONOptions = {
 
 // ---------Functions---------------
 
-function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
-	const layer = e.target;
+// function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
+// 	const layer = e.target;
+function highlightFeature(feature: L.GeoJSON) {
+	const layer = feature;
 	layer.setStyle({
 		weight: 5,
 		color: '#f97316',
@@ -258,8 +291,6 @@ function highlightFeature(e: LeafletMouseEvent, principalsiteoid: number) {
 function resetHighlight(e: LeafletMouseEvent, layerName: string, feature: Layer) {
 	const layers = get(geoJSONLayersStore);
 	const geoJSONLayer = layers[layerName].layer;
-	let x = (geoJSONLayer.getLayers()[0].options as L.PathOptions).fillColor;
-	console.log(x);
 	if (geoJSONLayer) {
 		geoJSONLayer.resetStyle(feature);
 	}
@@ -317,6 +348,7 @@ function getAddressPointDivSymbol(addressPointType: string, housenumber: string 
 	}
 	return htmlContent;
 }
+
 function getRandomPastelColour() {
 	const hue = Math.floor(Math.random() * 360);
 	const saturation = Math.floor(Math.random() * 50) + 50; // Between 50% and 100%
@@ -324,6 +356,89 @@ function getRandomPastelColour() {
 	return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
+function stringToPastelColor(key: string): string {
+	let hash = 0;
+	for (let i = 0; i < key.length; i++) {
+		// Introduce variability in how each character influences the hash
+		hash = key.charCodeAt(i) * (i + 1) + ((hash << 5) - hash);
+	}
+
+	let color = '#';
+	for (let i = 0; i < 3; i++) {
+		// Use different operations for R, G, B to reduce collision chances
+		let value = hash;
+		if (i === 1) {
+			// Green
+			value = hash >> (i * 4); // Shift right by a smaller amount for green
+		} else if (i === 2) {
+			// Blue
+			value = hash << (i * 4); // Shift left for blue
+		}
+		value = value & 0xff;
+
+		// Ensure the value is within a range that avoids too light or too dark colors
+		const minValue = 100; // Ensures some level of saturation
+		const maxValue = 200; // Avoids near-white colors
+		const adjustedValue = Math.min(maxValue, Math.max(value + minValue, minValue));
+
+		color += ('00' + adjustedValue.toString(16)).slice(-2);
+	}
+	return color;
+}
+
+function stringToColor(key: string) {
+	let hash = 0;
+	for (let i = 0; i < key.length; i++) {
+		hash = key.charCodeAt(i) + ((hash << 5) - hash);
+	}
+	let color = '#';
+	for (let i = 0; i < 3; i++) {
+		const value = (hash >> (i * 8)) & 0xff;
+		color += ('00' + value.toString(16)).substr(-2);
+	}
+	console.log('Address: %c  Colour: %d', key, color);
+	return color;
+}
+
+interface Color {
+	r: number;
+	g: number;
+	b: number;
+}
+
+function hashStringToColor(input: string): Color {
+	let hash = 0;
+	for (let i = 0; i < input.length; i++) {
+		hash = input.charCodeAt(i) + ((hash << 5) - hash);
+	}
+
+	// Convert hash to RGB color
+	const r = (hash & 0xff0000) >> 16;
+	const g = (hash & 0x00ff00) >> 8;
+	const b = hash & 0x0000ff;
+
+	return { r, g, b };
+}
+
+function ensureUniqueColor(color: Color, existingColors: Color[]): Color {
+	// Simple check for exact match; could be enhanced for "near-match"
+	for (const existingColor of existingColors) {
+		if (existingColor.r === color.r && existingColor.g === color.g && existingColor.b === color.b) {
+			// Collision detected; adjust color slightly
+			return { r: color.r, g: color.g, b: (color.b + 1) % 256 };
+		}
+	}
+	return color; // No collision
+}
+
+function generateUniqueColorForKey(key: string, existingColors: Color[]): string {
+	let color = hashStringToColor(key);
+	color = ensureUniqueColor(color, existingColors);
+
+	// Convert color object to hex string
+	const toHex = (value: number) => value.toString(16).padStart(2, '0');
+	return '#' + toHex(color.r) + toHex(color.g) + toHex(color.b);
+}
 // ----Path Options-----
 // An abstract class that contains options and constants shared between vector overlays (Polygon, Polyline, Circle).
 // Do not use it directly. Extends Layer.

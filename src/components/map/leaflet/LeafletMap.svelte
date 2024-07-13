@@ -6,7 +6,7 @@
 
 	import 'leaflet/dist/leaflet.css';
 	import '$components/map/leaflet/custom.css';
-	import { addOrUpdateLayer, geoJSONLayersStore, tileLayersStore } from '$stores/leaflet';
+	import { addOrUpdateLayer, geoJSONLayersStore, tileLayersStore, userInfo } from '$stores/leaflet';
 
 	export let centre: L.LatLngExpression;
 	export let zoom: number = 15;
@@ -89,6 +89,15 @@
 				}
 			});
 		}
+		// leafletMap.on('click', function (e) {
+		// 	// Example of updating user info based on click coordinates
+		// 	console.log(e);
+		// 	// console.log(JSON.stringify(e));
+		// 	userInfo.set({
+		// 		name: 'Clicked Location',
+		// 		details: `Latitude: ${e.latlng.lat}, Longitude: ${e.latlng.lng}`
+		// 	});
+		// });
 	});
 
 	onDestroy(() => {

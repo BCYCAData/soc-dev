@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-import type L from 'leaflet';
+import L from 'leaflet';
 import type { Geometry } from 'geojson';
 
 type LayerDefinition = {
@@ -12,12 +12,18 @@ type ControlLayersStore = {
 	overlayMaps: LayerDefinition[];
 };
 
+export const userInfo = writable({ address: '', details: '' });
+
 export const tileLayersStore = writable<
 	Record<
 		string,
 		{ layer: L.TileLayer; layerMode: 'baseMaps' | 'overlayMaps' | 'fixedMap'; layerName: string }
 	>
 >({});
+
+export const selectedFeatureStore = writable(null);
+
+export const featuresStore = writable<L.GeoJSON[]>([]);
 
 export const geoJSONLayersStore = writable<
 	Record<

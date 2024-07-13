@@ -29,3 +29,60 @@
 	.leaflet-control-scale-line {
 		background-color: #fed7aa;
 	}
+
+	.info.legend.leaflet-control {
+		background-color: #fed7aa;
+		/* Background color */
+		border: 2px solid rgb(229, 231, 235);
+		/* Border style */
+		padding-left: 10px;
+		padding-bottom: 5px;
+		/* Padding inside the element */
+		border-radius: 5px;
+		/* Rounded corners */
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+		/* Shadow effect */
+		font-size: 14px;
+		/* Font size */
+		color: black;
+		/* Text color */
+		width: 180px;
+		/* Width of the legend box */
+		line-height: 1rem;
+		/* Set line height */
+	}
+
+	.legend_heading {
+		display: flex;
+		/* Use flexbox for alignment */
+		align-items: center;
+		/* Center items vertically */
+		padding-left: 5px;
+		font-size: 13px;
+		font-weight: 600;
+		/* Bold heading */
+		margin-bottom: 1px;
+		/* Space below heading */
+	}
+
+	.legend-item {
+		display: flex;
+		/* Flexbox for alignment */
+		align-items: center;
+		/* Center items vertically */
+		margin-bottom: 0;
+		/* Remove space between items */
+		padding-left: 10px;
+		font-size: 13px;
+	}
+
+	.legend-box {
+		width: 10px;
+		/* Width of color box */
+		height: 10px;
+		/* Height of color box */
+		border: 1px solid black;
+		/* Border for color box */
+		margin-right: 5px;
+		/* Space between color box and text */
+	}

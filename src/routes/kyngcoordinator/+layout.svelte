@@ -9,6 +9,8 @@
 
 	import { kyngSidebarPathLables, kyngSidebarMenuItems } from '$lib/menu-items.js';
 	import type { AdminMenuItem } from '$lib/types.js';
+	// import DisplayUserInfo from '$components/map/leaflet/ui/DisplayUserInfo.svelte';
+	// import DisplayUnregisteredProperties from '$components/map/leaflet/ui/DisplayUnregisteredProperties.svelte';
 
 	$: classesHeader = 'w-full';
 	$: classesPageHeader = 'w-full';
@@ -18,7 +20,7 @@
 
 	export let data;
 
-	data.kyngAreas.forEach((element) => {
+	data.kyngAreas.forEach((element: { id: string | number; kyng: any }) => {
 		kyngSidebarPathLables[element.id] = [element.kyng || '', 'Area'];
 	});
 
@@ -48,13 +50,10 @@
 
 	const modifiedMenuItems: AdminMenuItem[] = [];
 
-	data.kyngAreas.forEach((kyngArea) => {
-		console.log('kyngArea', kyngArea.kyng);
+	data.kyngAreas.forEach((kyngArea: { id: string; kyng: string }) => {
 		const updatedItems = replaceLinksWithId(kyngSidebarMenuItems, kyngArea.id, kyngArea.kyng);
 		modifiedMenuItems.push(...updatedItems);
 	});
-
-	console.log('modifiedMenuItems', modifiedMenuItems);
 </script>
 
 <AppShell
@@ -83,6 +82,10 @@
 					<SidebarKyngMenu siderbarMenuItems={[modifiedMenuItem]} />
 				{/each}
 			</div>
+			<!-- <div class="flex flex-row justify-around pt-2 text-l">Registered Users</div>
+			<div class="flex flex-col rounded-lg bg-orange-600"><DisplayUserInfo /></div> -->
+			<div class="flex flex-row justify-around pt-2 text-l">Un-Registered Properties</div>
+			<!-- <div class="flex flex-col rounded-lg bg-orange-600"><DisplayUnregisteredProperties /></div> -->
 		</div></svelte:fragment
 	>
 	<svelte:fragment slot="sidebarRight">

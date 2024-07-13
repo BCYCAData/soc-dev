@@ -4,6 +4,7 @@
 	import LeafletGeoJSONLayerOptions from '$components/map/leaflet/layers/LeafletGeoJSONLayerOptions.svelte';
 	import LeafletGeoJSONLayer from '$components/map/leaflet/layers/LeafletGeoJSONLayer.svelte';
 	import LeafletLayersControl from '$components/map/leaflet/controls/LeafletLayersControl.svelte';
+	import LeafletLegendControl from '$components/map/leaflet/controls/LeafletLegendControl.svelte';
 
 	import {
 		kyngAddresspointsGeoJsonOptions,
@@ -83,5 +84,6 @@
 		<LeafletTooltip layerName={'Property Areas'} tooltipContent="Your tooltip content here" />
 		<LeafletLayersControl />
 		<LeafletScaleControl />
+		<LeafletLegendControl />
 	</LeafletMap>
 {/if}
