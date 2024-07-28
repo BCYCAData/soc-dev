@@ -1,5 +1,3 @@
-<!-- YourComponent.svelte -->
-
 <script lang="ts">
 	import { getContext, onDestroy, onMount } from 'svelte';
 	import { tileLayersStore } from '$stores/leaflet';
