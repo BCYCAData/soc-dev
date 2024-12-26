@@ -230,8 +230,9 @@
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label class="label">Email</label>
+							<label for="email" class="label">Email</label>
 							<input
+								id="email"
 								type="text"
 								value={selectedCoordinator.email}
 								class="input"
@@ -240,8 +241,15 @@
 							/>
 						</div>
 						<div>
-							<label class="label">KYNG Area</label>
-							<input type="text" value={selectedCoordinator.kyng} class="input" readonly disabled />
+							<label for="kyng_area" class="label">KYNG Area</label>
+							<input
+								id="kyng_area"
+								type="text"
+								value={selectedCoordinator.kyng}
+								class="input"
+								readonly
+								disabled
+							/>
 						</div>
 
 						<div>
