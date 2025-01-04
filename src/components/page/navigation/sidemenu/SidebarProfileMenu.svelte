@@ -11,7 +11,7 @@
 
 	let { communityText, properties, communityProfiles }: Props = $props();
 
-	let permissions = $derived(Array.isArray(page.data.permissions) ? page.data.permissions : []);
+	// let permissions = $derived(Array.isArray(page.data.permissions) ? page.data.permissions : []);
 	let menuItems = $derived(
 		profileSidebarMenuItems(communityText, properties, null, communityProfiles)
 	);
@@ -82,14 +82,6 @@
 	function generateUniqueId(parentId: string, itemId: string): string {
 		return `${parentId}-${itemId}`;
 	}
-	// In SidebarProfileMenu.svelte
-	$effect(() => {
-		console.log('Menu Items:', {
-			menuItems,
-			permissions,
-			communityProfiles
-		});
-	});
 </script>
 
 <div class="flex flex-col rounded-lg bg-orange-600">

@@ -23,7 +23,8 @@ export async function guardRoute({
 	console.log('Guard Route Debug:', {
 		path,
 		isKYNG: routeMatchers.isKYNGRoute(path),
-		requiredPermission: routeMatchers.getRequiredPermission(path)
+		requiredPermission: routeMatchers.getRequiredPermission(path),
+		permissioms: permissions
 	});
 
 	if (routeMatchers.isPublicRoute(path)) {

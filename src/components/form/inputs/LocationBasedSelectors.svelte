@@ -21,7 +21,11 @@
 	};
 </script>
 
-<Accordion.Item value="2" classes="bg-orange-100 font-medium">
+<Accordion.Item
+	value="2"
+	controlClasses="bg-primary-400 text-xl"
+	classes="bg-orange-100 font-medium"
+>
 	{#snippet control()}Individual Property - (street address){/snippet}
 	{#snippet panel()}
 		<form
@@ -58,7 +62,11 @@
 	{/snippet}
 </Accordion.Item>
 
-<Accordion.Item value="3" classes="bg-orange-100 font-medium">
+<Accordion.Item
+	value="3"
+	controlClasses="bg-primary-400 text-xl"
+	classes="bg-orange-100 font-medium"
+>
 	{#snippet control()}All in a Street{/snippet}
 	{#snippet panel()}
 		<form
@@ -94,7 +102,7 @@
 		</form>
 	{/snippet}
 </Accordion.Item>
-<Accordion.Item value="4" classes="bg-orange-100 font-medium">
+<Accordion.Item value="4"  controlClasses="bg-primary-400 text-xl" classes="bg-orange-100 font-medium">
 	{#snippet control()}All in a Community{/snippet}
 	{#snippet panel()}
 		<form

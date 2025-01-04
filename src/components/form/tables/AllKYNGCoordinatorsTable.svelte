@@ -29,16 +29,22 @@
 	let table: Tabulator;
 	let tableElement: HTMLElement;
 
-	const activeCoordinators = data.kyngCoordinators.filter(
-		(isKYNGCoordinator: KYNGCoordinator) =>
-			isKYNGCoordinator.kyng_area_id !== null && isKYNGCoordinator.end_date === null
+	const allCoordinators = data.kyngCoordinators.filter(
+		(isKYNGCoordinator: KYNGCoordinator) => isKYNGCoordinator.kyng_area_id !== null
 	);
-
-	console.log('kyngCoordinators', data.kyngCoordinators);
 
 	onMount(() => {
 		table = new Tabulator(tableElement, {
-			data: activeCoordinators,
+			data: allCoordinators,
+			rowFormatter: function (row) {
+				const data = row.getData();
+				if (data.end_date !== null) {
+					const cells = row.getCells();
+					cells.forEach((cell) => {
+						cell.getElement().style.color = '#F97316';
+					});
+				}
+			},
 			columns: [
 				{
 					title: 'KYNG',
@@ -111,18 +117,14 @@
 					}
 				},
 				{
-					title: 'Actions',
-					formatter: function (cell: CellComponent) {
-						const userId = cell.getRow().getData().user_id;
-						const kyngAreaId = cell.getRow().getData().kyng_area_id;
-						return `<form method="POST" action="?/revokeCoordinator" class="revoke-coordinator-form">
-                        <input type="hidden" name="userId" value="${userId}" />
-                        <input type="hidden" name="kyngAreaId" value="${kyngAreaId}" />
-                        <button type="submit" class="text-red-600 hover:text-red-800">Revoke</button>
-                    </form>`;
-					},
-					width: 100,
-					hozAlign: 'center'
+					title: 'End Date',
+					field: 'end_date',
+					sorter: 'datetime',
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
 				}
 			],
 			layout: 'fitColumns',

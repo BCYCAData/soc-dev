@@ -1,5 +1,39 @@
 import type L from 'leaflet';
 
+export interface FeatureLayerOptions {
+	url: string;
+	where?: string;
+	minZoom?: number;
+	maxZoom?: number;
+	style?: L.PathOptions;
+}
+
+export interface LayerEventHandlers {
+	onClick?: (feature: GeoJSON.Feature) => void;
+	onMouseOver?: (feature: GeoJSON.Feature) => void;
+	onMouseOut?: (feature: GeoJSON.Feature) => void;
+}
+
+export interface LayerMetadata {
+	objectIdField: string;
+	geometryType: string;
+	fields: FieldInfo[];
+	capabilities: string[];
+}
+
+export interface FieldInfo {
+	name: string;
+	type: string;
+	alias: string;
+}
+
+export interface LayerCapabilities {
+	query: boolean;
+	edit: boolean;
+	update: boolean;
+	delete: boolean;
+}
+
 export type MarkerShape =
 	| 'text'
 	| 'circle'

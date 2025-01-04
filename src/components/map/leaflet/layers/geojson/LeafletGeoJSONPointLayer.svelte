@@ -106,11 +106,13 @@
 	): L.Marker | null {
 		if (!leaflet) return null;
 
+		const labelText = feature.properties?.[options.html as string] || '';
+
 		return leaflet.marker(latlng, {
 			icon: leaflet.divIcon({
-				html: options.html || feature.properties?.label,
-				className: 'text-scale-label',
-				...options
+				...options,
+				html: labelText,
+				className: 'text-scale-label'
 			})
 		});
 	}
@@ -229,7 +231,6 @@
 		});
 
 		geoJSONLayer.addTo(map);
-
 		if (symbology && layersStore) {
 			const legendInfo = createLegendInfo();
 			layersStore.update((layers) => ({

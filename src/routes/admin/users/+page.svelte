@@ -41,6 +41,22 @@
 						Generate Reports on New Users
 					</a>
 				{/if}
+				{#if hasPermission('users.kyng-coordinators')}
+					<a
+						href="/admin/users/kyng-coordinators"
+						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+					>
+						Manage KYNG Coordinators
+					</a>
+				{/if}
+				{#if hasPermission('users.newusers')}
+					<a
+						href="/admin/users/new"
+						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+					>
+						Generate Reports on New Users
+					</a>
+				{/if}
 			</div>
 		</section>
 
@@ -52,6 +68,22 @@
 						<dt class="font-bold">Generate Reports on Kit Delivery</dt>
 						<dd class="text-sm opacity-90">
 							Reports can be generated for all registered users and their kit delivery status.
+						</dd>
+					</span>
+				{/if}
+				{#if hasFeaturePermission('newusers')}
+					<span class="flex-auto">
+						<dt class="font-bold">Generate Reports on New Users</dt>
+						<dd class="text-sm opacity-90">
+							Reports can be generated for all registered users and their information completeness.
+						</dd>
+					</span>
+				{/if}
+				{#if hasFeaturePermission('kyng-coordinators')}
+					<span class="flex-auto">
+						<dt class="font-bold">Manage KYNG Coordinators</dt>
+						<dd class="text-sm opacity-90">
+							Grant and Revoke KYNG Coordinator status to users. Maintain their contact information.
 						</dd>
 					</span>
 				{/if}

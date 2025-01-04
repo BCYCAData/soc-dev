@@ -57,14 +57,22 @@
 </script>
 
 <Accordion spaceY="space-y-1" {value} collapsible={true}>
-	<Accordion.Item value="0" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="0"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Current Role Assignments{/snippet}
 		{#snippet panel()}
 			<RolesTable {data} />
 		{/snippet}
 	</Accordion.Item>
 
-	<Accordion.Item value="1" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="1"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Assign New Role{/snippet}
 		{#snippet panel()}
 			<form method="POST" action="?/assignRole" use:enhance={handleSubmit} class="space-y-4">

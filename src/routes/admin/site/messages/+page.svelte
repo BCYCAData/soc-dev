@@ -142,7 +142,11 @@
 	{#snippet content()}
 		<Tabs.Panel value="add_messages">
 			<Accordion collapsible={true} spaceY="space-y-1">
-				<Accordion.Item value="0" classes="bg-orange-100 font-medium">
+				<Accordion.Item
+					value="0"
+					controlClasses="bg-primary-400 text-xl"
+					classes="bg-orange-100 font-medium"
+				>
 					{#snippet control()}All Users{/snippet}
 					{#snippet panel()}
 						<form
@@ -156,7 +160,11 @@
 					{/snippet}
 				</Accordion.Item>
 
-				<Accordion.Item value="1" classes="bg-orange-100 font-medium">
+				<Accordion.Item
+					value="1"
+					controlClasses="bg-primary-400 text-xl"
+					classes="bg-orange-100 font-medium"
+				>
 					{#snippet control()}Individual Users{/snippet}
 					{#snippet panel()}
 						<form

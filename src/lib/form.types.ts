@@ -1,3 +1,17 @@
+export interface CustomAddress {
+	id: number;
+	address: string;
+	community: string;
+	principaladdresssiteoid: number;
+	startdate: string;
+	enddate: string;
+	last_updated: string;
+	createdby: string;
+	kyng: string;
+	suburb: string;
+	postcode: string;
+}
+
 export type OptionItem = {
 	value: string;
 	lable: string;

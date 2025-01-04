@@ -7,6 +7,7 @@
 		ballBottomLeft?: string;
 		ballBottomRight?: string;
 		duration?: string;
+		message?: string;
 	}
 
 	let {
@@ -16,7 +17,8 @@
 		ballTopRight = '#FF3E00',
 		ballBottomLeft = '#44444',
 		ballBottomRight = '#F46524',
-		duration = '1.5s'
+		duration = '1.5s',
+		message = ''
 	}: Props = $props();
 
 	const style = $derived(`
@@ -30,18 +32,38 @@
     `);
 </script>
 
-<div class="spinner" {style} role="status" aria-label="Loading">
-	<div class="spinner-inner">
-		<div class="ball-container">
-			<div class="ball ball-top-left"></div>
-			<div class="ball ball-top-right"></div>
-			<div class="ball ball-bottom-left"></div>
-			<div class="ball ball-bottom-right"></div>
+<div class="spinner-container mt-4 whitespace-nowrap rounded-md bg-surface-200 p-2" {style}>
+	<div class="spinner" role="status" aria-label="Loading">
+		<div class="spinner-inner">
+			<div class="ball-container">
+				<div class="ball ball-top-left"></div>
+				<div class="ball ball-top-right"></div>
+				<div class="ball ball-bottom-left"></div>
+				<div class="ball ball-bottom-right"></div>
+			</div>
 		</div>
 	</div>
+	{#if message}
+		<div class="message text-center font-medium text-gray-700">
+			{message}
+		</div>
+	{/if}
 </div>
 
 <style lang="postcss">
+	.spinner-container {
+		@apply flex flex-col items-center justify-center;
+	}
+
+	.message {
+		@apply mt-4 text-center font-medium text-gray-700;
+		background-color: surface-200;
+		white-space: nowrap;
+		background-color: var(--surface-200);
+		padding: 4px;
+		border-radius: 8px; /* Adjust this value as needed */
+	}
+
 	.spinner {
 		@apply flex items-center justify-center;
 		width: var(--size);

@@ -43,7 +43,7 @@
 				{/if}
 				{#if hasPermission('site.kyngcoordinators')}
 					<a
-						href="/admin/site/kyngcoordinators"
+						href="/admin/users/kyngcoordinators"
 						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
 						Manage KYNG Coordinators

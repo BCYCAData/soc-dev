@@ -1,49 +1,85 @@
 <script lang="ts">
 	import { setContext, onMount } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
-	import type { CellComponent } from 'tabulator-tables';
+
+	import type { CellComponent, Options } from 'tabulator-tables';
+	import type { CustomAddress } from '$lib/form.types';
 
 	import 'tabulator-tables/dist/css/tabulator.css';
 	import '$components/form/tables/custom_tabulator.css';
 
-	interface KYNGCoordinator {
-		user_id: string;
-		kyng: string;
-		email: string;
-		user_name: string;
-		phone_number: string;
-		kyng_area_id: string;
-		start_date: string;
-		updated_at: string;
-		end_date: string | null;
-		admin_email: string;
-		admin_user_id: string;
+	interface Props {
+		customAddresses: CustomAddress[];
+		onAddressEdit: (address: CustomAddress) => void;
 	}
 
-	let { data } = $props<{
-		data: {
-			kyngCoordinators: KYNGCoordinator[];
-		};
-	}>();
+	let { customAddresses, onAddressEdit }: Props = $props();
 
 	let table: Tabulator;
 	let tableElement: HTMLElement;
 
-	const activeCoordinators = data.kyngCoordinators.filter(
-		(isKYNGCoordinator: KYNGCoordinator) =>
-			isKYNGCoordinator.kyng_area_id !== null && isKYNGCoordinator.end_date === null
-	);
-
-	console.log('kyngCoordinators', data.kyngCoordinators);
-
 	onMount(() => {
-		table = new Tabulator(tableElement, {
-			data: activeCoordinators,
+		const options: Options = {
+			data: customAddresses,
 			columns: [
+				{
+					title: 'ID',
+					field: 'id',
+					sorter: 'number',
+					editor: undefined
+				},
+				{
+					title: 'Address',
+					field: 'address',
+					sorter: 'string',
+					editor: 'input',
+					validator: 'required',
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
+				},
+				{
+					title: 'Suburb',
+					field: 'suburb',
+					sorter: 'string',
+					editor: 'input',
+					validator: 'required',
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
+				},
+				{
+					title: 'Postcode',
+					field: 'postcode',
+					sorter: 'string',
+					editor: 'input',
+					validator: 'required',
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
+				},
+				{
+					title: 'Community',
+					field: 'community',
+					sorter: 'string',
+					editor: 'input',
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
+				},
 				{
 					title: 'KYNG',
 					field: 'kyng',
 					sorter: 'string',
+					editor: 'input',
 					tooltip: function (e: MouseEvent, cell: CellComponent) {
 						const content = cell.getValue();
 						const element = cell.getElement();
@@ -51,29 +87,10 @@
 					}
 				},
 				{
-					title: 'Email',
-					field: 'email',
-					sorter: 'string',
-					tooltip: function (e: MouseEvent, cell: CellComponent) {
-						const content = cell.getValue();
-						const element = cell.getElement();
-						return element.scrollWidth > element.clientWidth ? content : '';
-					}
-				},
-				{
-					title: 'Name',
-					field: 'user_name',
-					sorter: 'string',
-					tooltip: function (e: MouseEvent, cell: CellComponent) {
-						const content = cell.getValue();
-						const element = cell.getElement();
-						return element.scrollWidth > element.clientWidth ? content : '';
-					}
-				},
-				{
-					title: 'Phone',
-					field: 'phone_number',
-					sorter: 'string',
+					title: 'Principal Address Site OID',
+					field: 'principaladdresssiteoid',
+					sorter: 'number',
+					editor: 'input',
 					tooltip: function (e: MouseEvent, cell: CellComponent) {
 						const content = cell.getValue();
 						const element = cell.getElement();
@@ -82,8 +99,20 @@
 				},
 				{
 					title: 'Start Date',
-					field: 'start_date',
+					field: 'startdate',
 					sorter: 'datetime',
+					editor: undefined,
+					tooltip: function (e: MouseEvent, cell: CellComponent) {
+						const content = cell.getValue();
+						const element = cell.getElement();
+						return element.scrollWidth > element.clientWidth ? content : '';
+					}
+				},
+				{
+					title: 'End Date',
+					field: 'enddate',
+					sorter: 'datetime',
+					editor: undefined,
 					tooltip: function (e: MouseEvent, cell: CellComponent) {
 						const content = cell.getValue();
 						const element = cell.getElement();
@@ -92,37 +121,14 @@
 				},
 				{
 					title: 'Last Updated',
-					field: 'updated_at',
+					field: 'last_updated',
 					sorter: 'datetime',
+					editor: undefined,
 					tooltip: function (e: MouseEvent, cell: CellComponent) {
 						const content = cell.getValue();
 						const element = cell.getElement();
 						return element.scrollWidth > element.clientWidth ? content : '';
 					}
-				},
-				{
-					title: 'Updated By',
-					field: 'admin_email',
-					sorter: 'string',
-					tooltip: function (e: MouseEvent, cell: CellComponent) {
-						const content = cell.getValue();
-						const element = cell.getElement();
-						return element.scrollWidth > element.clientWidth ? content : '';
-					}
-				},
-				{
-					title: 'Actions',
-					formatter: function (cell: CellComponent) {
-						const userId = cell.getRow().getData().user_id;
-						const kyngAreaId = cell.getRow().getData().kyng_area_id;
-						return `<form method="POST" action="?/revokeCoordinator" class="revoke-coordinator-form">
-                        <input type="hidden" name="userId" value="${userId}" />
-                        <input type="hidden" name="kyngAreaId" value="${kyngAreaId}" />
-                        <button type="submit" class="text-red-600 hover:text-red-800">Revoke</button>
-                    </form>`;
-					},
-					width: 100,
-					hozAlign: 'center'
 				}
 			],
 			layout: 'fitColumns',
@@ -130,9 +136,16 @@
 			paginationSize: 10,
 			paginationSizeSelector: [5, 10, 20],
 			movableColumns: true
+		};
+		table = new Tabulator(tableElement, options);
+
+		table.on('cellEdited', function (cell: CellComponent) {
+			const row = cell.getRow();
+			const data = row.getData() as CustomAddress;
+			onAddressEdit(data);
 		});
 
-		setContext('coordinatorsTable', table);
+		setContext('customAddressesTable', table);
 	});
 </script>
 

@@ -54,5 +54,26 @@ export const actions: Actions = {
 		}
 		console.log('assignKYNGCoordinatorSuccess', { userId, kyngAreaId });
 		return { success: true };
+	},
+	updateCoordinator: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+		const userId = formData.get('user_id') as string;
+		const kyngAreaId = formData.get('kyng_area_id') as string;
+		const userName = formData.get('user_name') as string;
+		const phoneNumber = formData.get('phone_number') as string;
+
+		const { error: updateKYNGCoordinatorError } = await supabase.rpc('update_kyng_area_user', {
+			p_user_id: userId,
+			p_kyng_area_id: kyngAreaId,
+			p_user_name: userName,
+			p_phone_number: phoneNumber
+		});
+
+		if (updateKYNGCoordinatorError) {
+			console.log('updateKYNGCoordinatorError', updateKYNGCoordinatorError);
+			throw error(500, 'Failed to update coordinator details');
+		}
+
+		return { success: true };
 	}
 };

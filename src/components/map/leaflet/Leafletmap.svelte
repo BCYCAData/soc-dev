@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { onMount, onDestroy, setContext } from 'svelte';
-
 	import GeomanControls from '$components/map/leaflet/controls/GeomanControls.svelte';
-
 	import type L from 'leaflet';
+	import type * as EsriLeaflet from 'esri-leaflet';
 	import type { LayerInfo, ControlInfo } from '$lib/leaflet/types';
-
 	import { writable, type Writable } from 'svelte/store';
 
 	interface Props {
 		onMapReady?: () => void;
+		onMapInstance?: (map: L.Map) => void;
 		centre?: L.LatLngExpression | [number, number] | undefined;
 		initialExtent?: L.LatLngBoundsExpression | [[number, number], [number, number]] | undefined;
 		zoom?: number | undefined;
@@ -22,14 +21,15 @@
 		editControl?: ControlInfo;
 		width?: string;
 		height?: string;
-		baseLayers: Array<{ name: string; url: string; attribution: string }>;
+		baseLayers?: Array<{ name: string; url: string; attribution: string }>;
 		children?: import('svelte').Snippet;
 	}
 
 	let {
 		onMapReady = () => {},
+		onMapInstance = () => {},
 		centre = undefined,
-		zoom = undefined,
+		zoom = 15,
 		initialExtent = undefined,
 		minZoom = undefined,
 		maxZoom = undefined,
@@ -57,6 +57,7 @@
 
 	// Leaflet module and map instance
 	let leaflet = $state<typeof L>();
+	let esriLeaflet = $state<typeof EsriLeaflet>();
 	let leafletMap = $state<L.Map>();
 	let mapDiv: HTMLDivElement;
 
@@ -74,12 +75,13 @@
 		getLeaflet: () => leaflet,
 		getLeafletMap: () => leafletMap,
 		getLeafletLayers: () => layersStore,
-		getLayersControl: () => layersControlStore
+		getLayersControl: () => layersControlStore,
+		getEsriLeaflet: () => esriLeaflet
 	});
 
 	function updateLayersControl() {
 		if (leaflet && leafletMap) {
-			baseLayers.forEach((layer, index) => {
+			baseLayers?.forEach((layer, index) => {
 				const tileLayer = leaflet?.tileLayer(layer.url, { attribution: layer.attribution });
 				if (index === 0 && leafletMap) {
 					tileLayer?.addTo(leafletMap);
@@ -105,11 +107,15 @@
 	}
 
 	onMount(async () => {
-		leaflet = await import('leaflet');
+		const [leafletModule, esriLeafletModule] = await Promise.all([
+			import('leaflet'),
+			import('esri-leaflet')
+		]);
+
+		leaflet = leafletModule;
+		esriLeaflet = esriLeafletModule;
+
 		if (mapDiv && leaflet) {
-			// if (editControl.present) {
-			// 	const geoman = await import('@geoman-io/leaflet-geoman-free');
-			// }
 			leafletMap = leaflet.map(mapDiv, {
 				minZoom,
 				maxZoom,
@@ -124,6 +130,9 @@
 				zoomControl,
 				attributionControl: attributionControl.present
 			});
+			if (onMapInstance) {
+				onMapInstance(leafletMap);
+			}
 			if (initialExtent) {
 				leafletMap.fitBounds(initialExtent);
 			} else if (centre) {
@@ -139,8 +148,12 @@
 			updateLayersControl();
 			mapStore.set(leafletMap);
 			onMapReady();
+			setTimeout(() => {
+				leafletMap?.invalidateSize();
+			}, 100);
 		}
 	});
+
 	onDestroy(() => {
 		if (leafletMap) {
 			leafletMap.remove();

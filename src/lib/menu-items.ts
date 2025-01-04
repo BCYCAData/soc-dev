@@ -27,7 +27,9 @@ import {
 	BookUp,
 	Cog,
 	Database,
-	Crown
+	Crown,
+	Layers,
+	BookPlus
 } from 'lucide-svelte';
 
 import TextIcon from '$components/page/navigation/TextIcon.svelte';
@@ -131,8 +133,10 @@ export const adminSidebarPathLables: Record<string, PathConfig> = {
 	roles: { label: 'Role Management', icon: Shield },
 	assignments: { label: 'Role Assignments', icon: UserCog },
 	permissions: { label: 'Permission Management', icon: KeyRound },
-	kyngcoordinators: { label: 'KYNG Coordinator Management', icon: Crown },
+	'kyng-coordinators': { label: 'KYNG Coordinator Management', icon: Crown },
 	data: { label: 'Data Management', icon: Database },
+	spatial: { label: 'Spatial Data Management', icon: Database },
+	addresses: { label: 'Custom Address Management', icon: Database },
 	users: { label: 'Project Administration', icon: Users },
 	new: { label: 'New Users', icon: ChartBar },
 	kits: { label: 'Kits Delivered', icon: Hammer },
@@ -188,18 +192,27 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				]
 			},
 			{
-				id: 'site-kyngcoordinators',
-				name: 'KYNG Coordinator Management',
-				link: '/admin/site/kyngcoordinators',
-				icon: { icon: Crown },
-				permission: 'admin.site.kyngcoordinators'
-			},
-			{
-				id: 'data-management',
-				name: 'Spatial Data Management',
+				id: 'site-data',
+				name: 'Data Management',
 				link: '/admin/site/data',
 				icon: { icon: Database },
-				permission: 'admin.site.data'
+				permission: 'admin.site.data',
+				subItems: [
+					{
+						id: 'site-data-spatial',
+						name: 'Spatial Data Management',
+						link: '/admin/site/data/spatial',
+						icon: { icon: Layers },
+						permission: 'admin.site.data'
+					},
+					{
+						id: 'site-data-addresses',
+						name: 'Custom Address Management',
+						link: '/admin/site/data/addresses',
+						icon: { icon: BookPlus },
+						permission: 'admin.site.data'
+					}
+				]
 			}
 		]
 	},
@@ -223,6 +236,13 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				link: '/admin/users/kits',
 				icon: { icon: Hammer },
 				permission: 'admin.users.kits'
+			},
+			{
+				id: 'users-admin-kyngcoordinators',
+				name: 'KYNG Coordinator Management',
+				link: '/admin/users/kyng-coordinators',
+				icon: { icon: Crown },
+				permission: 'admin.users.kyngcoordinators'
 			}
 		]
 	},

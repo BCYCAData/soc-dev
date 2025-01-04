@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let permissions = $derived(
-		typeof $page.data.permissions === 'string' ? $page.data.permissions.split(',') : []
+		typeof page.data.permissions === 'string' ? page.data.permissions.split(',') : []
 	);
 
 	function hasPermission(path: string): boolean {

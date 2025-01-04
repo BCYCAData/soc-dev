@@ -3,6 +3,7 @@
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import CurrentKYNGCoordinatorsTable from '$components/form/tables/CurrentKYNGCoordinatorsTable.svelte';
+	import AllKYNGCoordinatorsTable from '$components/form/tables/AllKYNGCoordinatorsTable.svelte';
 	import AutocompleteSelectWithCurrent from '$components/form/inputs/AutocompleteSelectWithCurrent.svelte';
 	import AutocompleteSingleItemInput from '$components/form/inputs/AutocompleteSingleItemInput.svelte';
 	import type { PageData } from './$types';
@@ -114,14 +115,21 @@
 </svelte:head>
 
 <Accordion spaceY="space-y-1" {value} collapsible={true}>
-	<Accordion.Item value="0" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="0"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Current KYNG Coordinators{/snippet}
 		{#snippet panel()}
 			<CurrentKYNGCoordinatorsTable {data} />
 		{/snippet}
 	</Accordion.Item>
-
-	<Accordion.Item value="1" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="1"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Add KYNG Coordinator{/snippet}
 		{#snippet panel()}
 			<form method="POST" action="?/assignCoordinator" use:enhance={handleSubmit} class="space-y-4">
@@ -171,7 +179,11 @@
 			</form>
 		{/snippet}
 	</Accordion.Item>
-	<Accordion.Item value="2" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="2"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Edit KYNG Coordinator Details{/snippet}
 		{#snippet panel()}
 			{#if !editMode}
@@ -218,7 +230,6 @@
 					{/if}
 				</div>
 			{:else if selectedCoordinator}
-				<!-- Rest of the form remains unchanged -->
 				<form
 					method="POST"
 					action="?/updateCoordinator"
@@ -277,7 +288,7 @@
 					<div class="flex justify-end gap-2">
 						<button
 							type="button"
-							class="variant-ghost btn"
+							class="rounded-md bg-surface-300 px-4 py-2 text-red-600 hover:text-red-800"
 							onclick={() => {
 								selectedCoordinator = null;
 								editMode = false;
@@ -287,10 +298,22 @@
 						>
 							Cancel
 						</button>
-						<button type="submit" class="variant-filled-primary btn">Save Changes</button>
+						<button type="submit" class="rounded-md bg-blue-600 px-4 py-2 text-white"
+							>Save Changes</button
+						>
 					</div>
 				</form>
 			{/if}
+		{/snippet}
+	</Accordion.Item>
+	<Accordion.Item
+		value="3"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
+		{#snippet control()}All KYNG Coordinators{/snippet}
+		{#snippet panel()}
+			<AllKYNGCoordinatorsTable {data} />
 		{/snippet}
 	</Accordion.Item>
 </Accordion>
