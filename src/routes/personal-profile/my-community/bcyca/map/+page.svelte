@@ -2,7 +2,13 @@
 	import Spinner from '$components/page/Spinner.svelte';
 
 	import type { PageData } from './$types';
-	import type { PointSymbologyOptions, PolygonSymbologyOptions } from '$lib/leaflet/types';
+
+	import {
+		communityFillOptions,
+		myCommunityBCYCAMapConfig,
+		projectAddresspointsOptions,
+		registeredAddresspointsOptions
+	} from '$lib/leaflet/mapconfig';
 
 	interface Props {
 		data: PageData;
@@ -17,71 +23,11 @@
 	const bcycaRegisteredPoints = registeredPoints;
 	const bcycaCommunityArea = community;
 
-	const baseLayers = [
-		{
-			name: 'NSW Streets',
-			url: `https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Base_Map/MapServer/tile/{z}/{y}/{x}`,
-			attribution: `\u003ca href='https://www.spatial.nsw.gov.au' target='_blank'\u003e\u0026copy; Spatial Services NSW \u003c/a\u003e`
-		}
-	];
-
 	let mapLoaded = $state(false);
 
 	function handleMapLoaded() {
 		mapLoaded = true;
 	}
-
-	const mapConfig = {
-		centre: undefined,
-		zoom: undefined,
-		minZoom: undefined,
-		maxZoom: undefined,
-		initialExtent: initialExtent,
-		zoomable: true,
-		zoomSnap: 0.25,
-		scaleControl: { present: true, position: 'bottomleft' as L.ControlPosition },
-		attributionControl: { present: true },
-		layersControl: { present: true, position: 'topright' as L.ControlPosition },
-		legend: { present: true, position: 'bottomright' as L.ControlPosition },
-		editControl: { present: false },
-		width: '100%',
-		height: '99%',
-		baseLayers: baseLayers
-	};
-
-	const projectAddresspointsOptions: PointSymbologyOptions = {
-		type: 'leaflet',
-		options: {
-			type: 'circleMarker',
-			options: {
-				fillColor: '#a5a5a5',
-				weight: 0,
-				radius: 3,
-				fillOpacity: 0.8
-			}
-		}
-	};
-
-	const registeredAddresspointsOptions: PointSymbologyOptions = {
-		type: 'leaflet',
-		options: {
-			type: 'circleMarker',
-			options: {
-				fillColor: '#f97316',
-				radius: 4,
-				weight: 0,
-				fillOpacity: 0.8
-			}
-		}
-	};
-
-	const communityFillOptions: PolygonSymbologyOptions = {
-		fillColor: '#3388ff',
-		fillOpacity: 0.3,
-		color: '#000',
-		weight: 1,
-		opacity: 1
-	};
 </script>
 
 <svelte:head>
@@ -91,7 +37,7 @@
 {#if initialExtent}
 	<div class="map-container mx-auto flex w-5/6 flex-col">
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
-			<LeafletMap {...mapConfig} onMapReady={handleMapLoaded}>
+			<LeafletMap {...myCommunityBCYCAMapConfig(initialExtent)} onMapReady={handleMapLoaded}>
 				{#if !mapLoaded}
 					<div class="spinner-overlay">
 						<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />

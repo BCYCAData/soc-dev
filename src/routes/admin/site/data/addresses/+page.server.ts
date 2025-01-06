@@ -30,6 +30,12 @@ export const actions: Actions = {
 
 		if (validatedAddressDataError) {
 			console.error('validatedAddressDataError', validatedAddressDataError);
+			if (validatedAddressDataError.message === 'canceling statement due to statement timeout') {
+				return {
+					success: false,
+					message: 'The network is slow. Please tap `Validate Address` again.'
+				};
+			}
 			return { success: false, message: 'Failed to validate address' };
 		}
 
@@ -39,7 +45,6 @@ export const actions: Actions = {
 
 	upsertAddress: async ({ request, locals }) => {
 		const formData = await request.formData();
-		// Extract all fields except id and date fields
 		const addressData = {
 			address: formData.get('address'),
 			community: formData.get('community'),

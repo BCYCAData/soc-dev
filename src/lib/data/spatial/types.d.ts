@@ -17,3 +17,19 @@ interface AllAddressPointProperties {
 interface RegisteredAddressPointProperties {
 	addresspointtype: string;
 }
+
+export interface GeoscapeLayer {
+	tilejson: string;
+	vector_layers: {
+		id: string;
+		fields: Record<string, string>;
+		minzoom: number;
+		maxzoom: number;
+		geometry: string;
+	}[];
+	tiles: string[];
+	attribution: string;
+	bounds: [number, number, number, number];
+	center: [number, number, number];
+	description: string;
+}

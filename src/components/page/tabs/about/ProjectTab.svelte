@@ -1,7 +1,10 @@
 <script lang="ts">
 	import Spinner from '$components/page/Spinner.svelte';
-	import type { PointSymbologyOptions } from '$lib/leaflet/types';
-	import { aboutMapConfig } from '$lib/leaflet/mapconfig';
+	import {
+		aboutMapConfig,
+		projectAddresspointsOptions,
+		registeredAddresspointsOptions
+	} from '$lib/leaflet/mapconfig';
 
 	interface Props {
 		addressPointsGeoJSON: AddressPointsGeoJSON;
@@ -33,45 +36,32 @@
 		}
 	];
 
-	const mapConfig = {
-		initialExtent: addressPointsGeoJSON.initialExtent,
-		zoomable: true,
-		zoomSnap: 0.25,
-		scaleControl: { present: true, position: 'bottomleft' as L.ControlPosition },
-		attributionControl: { present: true },
-		layersControl: { present: true, position: 'topright' as L.ControlPosition },
-		legend: { present: false, position: 'bottomright' as L.ControlPosition },
-		width: '100%',
-		height: '99%',
-		baseLayers: aboutMapConfig.baseLayers
-	};
-
-	const pointStyles = {
-		project: {
-			type: 'custom',
-			options: {
-				markerShape: 'circle',
-				fillColour: '#a5a5a5',
-				size: 6,
-				strokeColour: '#000',
-				strokeWidth: 0,
-				strokeOpacity: 0,
-				fillOpacity: 0.8
-			}
-		} as PointSymbologyOptions,
-		registered: {
-			type: 'custom',
-			options: {
-				markerShape: 'circle',
-				fillColour: '#f97316',
-				size: 8,
-				strokeColour: '#000',
-				strokeWidth: 0,
-				strokeOpacity: 0,
-				fillOpacity: 1
-			}
-		} as PointSymbologyOptions
-	};
+	// const pointStyles = {
+	// 	project: {
+	// 		type: 'custom',
+	// 		options: {
+	// 			markerShape: 'circle',
+	// 			fillColour: '#a5a5a5',
+	// 			size: 6,
+	// 			strokeColour: '#000',
+	// 			strokeWidth: 0,
+	// 			strokeOpacity: 0,
+	// 			fillOpacity: 0.8
+	// 		}
+	// 	} as PointSymbologyOptions,
+	// 	registered: {
+	// 		type: 'custom',
+	// 		options: {
+	// 			markerShape: 'circle',
+	// 			fillColour: '#f97316',
+	// 			size: 8,
+	// 			strokeColour: '#000',
+	// 			strokeWidth: 0,
+	// 			strokeOpacity: 0,
+	// 			fillOpacity: 1
+	// 		}
+	// 	} as PointSymbologyOptions
+	// };
 
 	const handleMapLoaded = () => (mapLoaded = true);
 </script>
@@ -121,13 +111,18 @@
 					</div>
 				{/if}
 
-				<LeafletMap {...mapConfig} onMapReady={handleMapLoaded}>
+				<LeafletMap
+					{...aboutMapConfig(
+						addressPointsGeoJSON.initialExtent as [[number, number], [number, number]]
+					)}
+					onMapReady={handleMapLoaded}
+				>
 					{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
 						<LeafletGeoJSONPointLayer
 							geojsonData={addressPointsGeoJSON.registeredAddresspoints}
-							layerName="Registered Address Points"
+							layerName="Project Address Points"
 							visible={true}
-							symbology={pointStyles.registered}
+							symbology={projectAddresspointsOptions}
 							staticLayer={false}
 							showInLegend={true}
 							editable={false}
@@ -136,7 +131,7 @@
 							geojsonData={addressPointsGeoJSON.registeredAddresspoints}
 							layerName="Registered Address Points"
 							visible={true}
-							symbology={pointStyles.registered}
+							symbology={registeredAddresspointsOptions}
 							staticLayer={false}
 							showInLegend={true}
 							editable={false}

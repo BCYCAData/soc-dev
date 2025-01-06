@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Spinner from '$components/page/Spinner.svelte';
-	import { kyngMapConfig } from '$lib/leaflet/mapconfig';
+	import {
+		kyngAddresspointsGeoJsonOptions,
+		kyngAreaGeoJsonOptions,
+		kyngCoordinatorKyngAreaMapConfig,
+		kyngPropertyAreasGeoJsonOptions,
+		kyngProwayGeoJsonOptions,
+		kyngWayPointsGeoJsonOptions
+	} from '$lib/leaflet/mapconfig';
 
 	import { generateUniqueColorForKey, type Color } from '$lib/leaflet/leafletlegendutility';
 	import type { PageData } from './$types';
-	import type {
-		GroupedSymbologyOptions,
-		PointSymbologyOptions,
-		PolygonSymbologyOptions,
-		LineSymbologyOptions
-	} from '$lib/leaflet/types';
+	import type { PolygonSymbologyOptions } from '$lib/leaflet/types';
 	import type { Feature } from 'geojson';
 
 	interface Props {
@@ -19,99 +21,7 @@
 	let { data }: Props = $props();
 	const kyngGeoJsonData = data.kyngGeoJsonData;
 
-	const kyngAddresspointsGeoJsonOptions: GroupedSymbologyOptions = {
-		type: 'leaflet',
-		propertyField: 'addressPointType',
-		options: {
-			type: 'divIcon',
-			options: {
-				className: 'address-marker',
-				iconSize: [10, 10],
-				iconAnchor: [5, 5],
-				html: ''
-			}
-		},
-		groups: [
-			{
-				value: 'Property',
-				label: 'Property Address',
-				symbol: {
-					type: 'leaflet',
-					options: {
-						type: 'divIcon',
-						markerShape: 'square',
-						options: {
-							className: 'address-marker',
-							color: 'blue',
-							iconSize: [8, 8],
-							iconAnchor: [4, 4],
-							html: ''
-						}
-					}
-				}
-			},
-			{
-				value: 'Building',
-				label: 'Building Address',
-				symbol: {
-					type: 'leaflet',
-					options: {
-						type: 'divIcon',
-						markerShape: 'diamond',
-						options: {
-							className: 'address-marker',
-							color: 'green',
-							iconSize: [10, 10],
-							iconAnchor: [5, 5],
-							html: ''
-						}
-					}
-				}
-			},
-			{
-				value: 'Default',
-				label: 'Address',
-				symbol: {
-					type: 'leaflet',
-					options: {
-						type: 'divIcon',
-						markerShape: 'diamond',
-						options: {
-							className: 'address-marker',
-							color: 'black',
-							iconSize: [10, 10],
-							iconAnchor: [5, 5],
-							html: ''
-						}
-					}
-				}
-			}
-		]
-	};
-
-	export const kyngAreaGeoJsonOptions: PolygonSymbologyOptions = {
-		fillColor: 'transparent',
-		fillOpacity: 0,
-		weight: 5,
-		color: 'magenta'
-	};
-
-	export const kyngProwayGeoJsonOptions: LineSymbologyOptions = {
-		width: 1,
-		color: 'steelblue',
-		pattern: 'solid',
-		lineCap: 'round',
-		lineJoin: 'round'
-	};
-
 	let existingColors: Color[] = [];
-
-	export const kyngPropertyAreasGeoJsonOptions: PolygonSymbologyOptions = {
-		fillColor: 'transparent', // Default color that will be overridden
-		fillOpacity: 0.3,
-		weight: 1,
-		color: 'black'
-	};
 
 	export function getPropertyAreaStyle(feature: Feature): PolygonSymbologyOptions {
 		return {
@@ -123,44 +33,11 @@
 		};
 	}
 
-	export const kyngWayPointsGeoJsonOptions: PointSymbologyOptions = {
-		type: 'leaflet',
-		options: {
-			type: 'circleMarker',
-			options: {
-				radius: 3,
-				fillColor: 'red',
-				color: 'black',
-				weight: 1,
-				fillOpacity: 1,
-				className: 'waypoint-marker'
-			}
-		}
-	};
-
 	let mapLoaded = $state(false);
 
 	function handleMapLoaded() {
 		mapLoaded = true;
 	}
-
-	const mapConfig = {
-		centre: [-31.940026654472703, 152.40239389529367] as [number, number],
-		zoom: 13,
-		minZoom: undefined,
-		maxZoom: undefined,
-		initialExtent: kyngGeoJsonData.bounds,
-		zoomable: true,
-		zoomSnap: 0.25,
-		scaleControl: { present: true, position: 'bottomleft' as L.ControlPosition },
-		attributionControl: { present: true },
-		layersControl: { present: true, position: 'topright' as L.ControlPosition },
-		legend: { present: true, position: 'bottomright' as L.ControlPosition },
-		editControl: { present: false },
-		width: '100%',
-		height: '98%',
-		baseLayers: kyngMapConfig.baseLayers
-	};
 </script>
 
 <svelte:head>
@@ -175,7 +52,13 @@
 			</div>
 		{/if}
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
-			<LeafletMap {...mapConfig} onMapReady={handleMapLoaded}>
+			<LeafletMap
+				{...kyngCoordinatorKyngAreaMapConfig(
+					[-31.940026654472703, 152.40239389529367] as [number, number],
+					kyngGeoJsonData.initialExtent
+				)}
+				onMapReady={handleMapLoaded}
+			>
 				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
 					<LeafletGeoJSONPointLayer
 						geojsonData={kyngGeoJsonData.wayPoints}

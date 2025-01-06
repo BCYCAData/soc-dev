@@ -1,42 +1,50 @@
+// Validation Patterns
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const PASSWORD_VALIDATIONS = [
-	{
-		description: 'at least 8 characters',
-		test: (password: string) => password.length > 8
-	},
-	{
-		description: 'at least 1 capital letter',
-		test: (password: string) => /[A-Z]/.test(password)
-	},
-	{
-		description: 'at least 1 number',
-		test: (password: string) => /[0-9]/.test(password)
-	},
-	{
-		description: 'at least 1 symbol (?~!@#%^&*()_+-=,:;|)',
-		test: (password: string) => /[?~!@#%^&*()_+-=,:;|]/.test(password)
-	},
-	{
-		description: 'matching passwords',
-		test: (password: string, confirmPassword: string) => password === confirmPassword
-	}
+    {
+        description: 'at least 8 characters',
+        test: (password: string) => password.length > 8
+    },
+    {
+        description: 'at least 1 capital letter',
+        test: (password: string) => /[A-Z]/.test(password)
+    },
+    {
+        description: 'at least 1 number',
+        test: (password: string) => /[0-9]/.test(password)
+    },
+    {
+        description: 'at least 1 symbol (?~!@#%^&*()_+-=,:;|)',
+        test: (password: string) => /[?~!@#%^&*()_+-=,:;|]/.test(password)
+    },
+    {
+        description: 'matching passwords',
+        test: (password: string, confirmPassword: string) => password === confirmPassword
+    }
 ] as const;
 
+// Geographic Data Constants
+export const DISTANCE_THRESHOLD = 0.00009;
+export const OFFSET_DISTANCE = 0.00015;
+export const GNAF_ZOOM = 15;
+
+// Community Types
 export const COMMUNITY_TYPES = {
-	BCYCA: 'BCYCA',
-	TINONEE: 'TINONEE',
-	MONDROOK: 'MONDROOK',
-	EXTERNAL: 'EXTERNAL'
+    BCYCA: 'BCYCA',
+    TINONEE: 'TINONEE',
+    MONDROOK: 'MONDROOK',
+    EXTERNAL: 'EXTERNAL'
 };
 
-// HTTP Informational responses (1xx)
+// HTTP Status Codes
+// Informational responses (1xx)
 export const CONTINUE = 100;
 export const SWITCHING_PROTOCOLS = 101;
 export const PROCESSING = 102;
 export const EARLY_HINTS = 103;
 
-// HTTP Successful responses (2xx)
+// Successful responses (2xx)
 export const SUCCESS_OK = 200;
 export const SUCCESS_CREATED = 201;
 export const SUCCESS_ACCEPTED = 202;
@@ -48,7 +56,7 @@ export const SUCCESS_MULTI_STATUS = 207;
 export const SUCCESS_ALREADY_REPORTED = 208;
 export const SUCCESS_IM_USED = 226;
 
-// HTTP Redirection messages (3xx)
+// Redirection messages (3xx)
 export const REDIRECT_MULTIPLE_CHOICES = 300;
 export const REDIRECT_MOVED_PERMANENTLY = 301;
 export const REDIRECT_FOUND = 302;
@@ -58,7 +66,7 @@ export const REDIRECT_USE_PROXY = 305;
 export const REDIRECT_TEMPORARY_REDIRECT = 307;
 export const REDIRECT_PERMANENT_REDIRECT = 308;
 
-// HTTP Client error responses (4xx)
+// Client error responses (4xx)
 export const CLIENT_ERROR_BAD_REQUEST = 400;
 export const CLIENT_ERROR_UNAUTHORIZED = 401;
 export const CLIENT_ERROR_PAYMENT_REQUIRED = 402;
@@ -89,7 +97,7 @@ export const CLIENT_ERROR_TOO_MANY_REQUESTS = 429;
 export const CLIENT_ERROR_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
 export const CLIENT_ERROR_UNAVAILABLE_FOR_LEGAL_REASONS = 451;
 
-// HTTP Server error responses (5xx)
+// Server error responses (5xx)
 export const SERVER_ERROR_INTERNAL_SERVER_ERROR = 500;
 export const SERVER_ERROR_NOT_IMPLEMENTED = 501;
 export const SERVER_ERROR_BAD_GATEWAY = 502;
