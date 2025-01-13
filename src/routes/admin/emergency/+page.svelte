@@ -5,7 +5,7 @@
 	<h1 class="mb-6 text-3xl font-bold text-orange-700">SOC Emergency Administration</h1>
 
 	<div class="mb-8 grid gap-6">
-		<section class="rounded-lg bg-white p-6 shadow">
+		<section class="rounded-lg bg-white px-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
 				<a

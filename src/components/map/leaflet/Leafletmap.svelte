@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { onMount, onDestroy, setContext } from 'svelte';
+	import { writable, type Writable } from 'svelte/store';
+
 	import GeomanControls from '$components/map/leaflet/controls/GeomanControls.svelte';
+
+	import { editingState, addFeature } from '$lib/leaflet/spatialutilities.svelte';
+
 	import type L from 'leaflet';
 	import type * as EsriLeaflet from 'esri-leaflet';
 	import type { LayerInfo, ControlInfo } from '$lib/leaflet/types';
-	import { writable, type Writable } from 'svelte/store';
+	import type { SpatialFeature } from '$lib/leaflet/spatial';
 
 	interface Props {
 		onMapReady?: () => void;
@@ -106,6 +111,19 @@
 		}
 	}
 
+	function handleFeatureCreated(e: any) {
+		if (editingState.activeTemplate && editingState.mode === 'create') {
+			const feature: SpatialFeature = {
+				id: crypto.randomUUID(),
+				user_id: '', // Add user ID from your auth context
+				property_id: '', // Add property ID from your route context
+				template_id: editingState.activeTemplate.id,
+				geom: e.layer.toGeoJSON().geometry
+			};
+			addFeature(feature);
+		}
+	}
+
 	onMount(async () => {
 		const [leafletModule, esriLeafletModule] = await Promise.all([
 			import('leaflet'),
@@ -116,6 +134,9 @@
 		esriLeaflet = esriLeafletModule;
 
 		if (mapDiv && leaflet) {
+			if (editControl.present) {
+				await import('@geoman-io/leaflet-geoman-free');
+			}
 			leafletMap = leaflet.map(mapDiv, {
 				minZoom,
 				maxZoom,
@@ -130,6 +151,8 @@
 				zoomControl,
 				attributionControl: attributionControl.present
 			});
+			// Add Geoman event listeners
+			leafletMap.on('pm:create', handleFeatureCreated);
 			if (onMapInstance) {
 				onMapInstance(leafletMap);
 			}

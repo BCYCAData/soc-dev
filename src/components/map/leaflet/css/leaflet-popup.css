@@ -1,0 +1,14 @@
+.multi-feature-popup {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.feature-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}

@@ -19,42 +19,45 @@
 	<title>Site Administration</title>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl p-6">
+<div class="mx-auto max-w-4xl px-6">
 	<h1 class="mb-6 text-3xl font-bold text-orange-700">SOC Website Administration</h1>
 	<div class="mb-8 grid gap-6">
 		<section class="rounded-lg bg-white p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid auto-rows-auto grid-cols-2 gap-4">
 				{#if hasPermission('site.messages')}
 					<a
 						href="/admin/site/messages"
-						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+						class="flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
 						Manage User Messages
 					</a>
 				{/if}
+
 				{#if hasPermission('site.roles')}
 					<a
 						href="/admin/site/roles"
-						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+						class="flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
 						Manage User Privleges
 					</a>
 				{/if}
+
 				{#if hasPermission('site.kyngcoordinators')}
 					<a
 						href="/admin/users/kyngcoordinators"
-						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+						class="col-span-2 mx-auto flex w-[calc(50%-0.5rem)] items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
 						Manage KYNG Coordinators
 					</a>
 				{/if}
+
 				{#if hasPermission('site.data')}
 					<a
 						href="/admin/site/data"
-						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
+						class="col-span-2 mx-auto flex w-[calc(50%-0.5rem)] items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
-						Manage Spatial Data Templates
+						Manage Site Spatial Data and Address Validation Settings
 					</a>
 				{/if}
 			</div>
@@ -91,12 +94,20 @@
 					</span>
 				{/if}
 
-				{#if hasFeaturePermission('data')}
+				{#if hasFeaturePermission('data.spatial')}
 					<span class="flex-auto">
 						<dt class="font-bold">Manage Spatial Data Templates</dt>
 						<dd class="text-sm opacity-90">
 							Create and customize feature templates with specific geometry types, categories, and
 							custom fields for consistent spatial data collection and management.
+						</dd>
+					</span>
+				{/if}
+				{#if hasFeaturePermission('data.addresses')}
+					<span class="flex-auto">
+						<dt class="font-bold">Manage Custom Addresses</dt>
+						<dd class="text-sm opacity-90">
+							Create and customize custom addresses to facilitate user registration.
 						</dd>
 					</span>
 				{/if}

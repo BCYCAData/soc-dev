@@ -1,4 +1,5 @@
 import type {
+	ControlInfo,
 	GroupedSymbologyOptions,
 	LineSymbologyOptions,
 	PointSymbologyOptions,
@@ -191,7 +192,11 @@ export const gnafAddressPointsOptions: PointSymbologyOptions = {
 			className: 'text-label',
 			iconSize: [20, 20],
 			iconAnchor: [10, 10]
-		} as L.DivIconOptions
+		} as L.DivIconOptions,
+		tooltip: {
+			permanent: false,
+			direction: 'top'
+		}
 	}
 };
 
@@ -241,6 +246,34 @@ const allBaseLayers = [
 			'Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community'
 	}
 ];
+
+// Feature styling configurations
+export const featureStyles = {
+	asset: {
+		color: '#2196F3',
+		weight: 3,
+		opacity: 0.8,
+		fillOpacity: 0.4
+	},
+	operational: {
+		color: '#4CAF50',
+		weight: 3,
+		opacity: 0.8,
+		fillOpacity: 0.4
+	},
+	hazard: {
+		color: '#F44336',
+		weight: 3,
+		opacity: 0.8,
+		fillOpacity: 0.4
+	}
+};
+
+// Geoman control configuration
+export const geomanControlConfig: ControlInfo = {
+	present: true,
+	position: 'topleft' as L.ControlPosition
+};
 
 //+++++++++++++++++++Map Configurations++++++++++++++++++++++++++++
 //about project tab map
@@ -393,6 +426,7 @@ export const myPropertyMapConfig = (
 	attributionControl: { present: true },
 	layersControl: { present: true, position: 'topright' as L.ControlPosition },
 	legend: { present: false, position: 'bottomright' as L.ControlPosition },
+	editControl: geomanControlConfig,
 	width: '100%',
 	height: '99%',
 	baseLayers: allBaseLayers

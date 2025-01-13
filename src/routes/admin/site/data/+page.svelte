@@ -10,7 +10,7 @@
 			href="/admin/site/data/spatial"
 			class="card bg-orange-50 p-6 transition-all hover:bg-orange-100"
 		>
-			<h2 class="mb-3 text-xl font-semibold">Manage Spatial Data Templates</h2>
+			<h2 class="mb-3 text-xl font-semibold">Manage Site Data</h2>
 			<ul class="list-inside list-disc space-y-2">
 				<li>View current feature types</li>
 				<li>Assign new feature types</li>

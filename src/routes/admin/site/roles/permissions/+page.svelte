@@ -62,9 +62,7 @@
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				isLoading = true;
-				if (result.type === 'success') {
-					await invalidateAll();
-				}
+				await invalidateAll();
 				isLoading = false;
 			}
 		};
@@ -75,7 +73,11 @@
 </script>
 
 <Accordion spaceY="space-y-1" {value} collapsible={true}>
-	<Accordion.Item value="0" controlClasses="bg-primary-400 text-xl"  classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="0"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Current Roles{/snippet}
 		{#snippet panel()}
 			{#each data.rolePermissions as { role }}
@@ -132,7 +134,11 @@
 		{/snippet}
 	</Accordion.Item>
 
-	<Accordion.Item value="1"  controlClasses="bg-primary-400 text-xl" classes="bg-orange-100 font-medium">
+	<Accordion.Item
+		value="1"
+		controlClasses="bg-primary-400 text-xl"
+		classes="bg-orange-100 font-medium"
+	>
 		{#snippet control()}Add New Role{/snippet}
 		{#snippet panel()}
 			<form method="POST" action="?/addRole" use:enhance class="space-y-4">

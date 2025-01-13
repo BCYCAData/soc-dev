@@ -3,7 +3,15 @@
 	import LeafletArcGisFeatureServerLayer from '$components/map/leaflet/layers/LeafletArcGISFeatureServerLayer.svelte';
 	import LeafletGeoJSONPointLayer from '$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte';
 	import GNAFGeoJSON from '$components/map/leaflet/layers/pbf-data/GNAFGeoJSON.svelte';
+	import GNAFAddressCheckForm from '$components/form/GNAFAddressCheckForm.svelte';
+
 	import { customAddressesMapConfig, gnafAddressPointsOptions } from '$lib/leaflet/mapconfig';
+	import {
+		gurasPropertyPopUpTemplate,
+		gnafAddressTooltipTemplate,
+		gnafMultiFeaturePopupTemplate
+	} from '$lib/leaflet/leafletdatatemplates';
+
 	import 'leaflet/dist/leaflet.css';
 
 	interface Props {
@@ -11,14 +19,19 @@
 	}
 
 	let { active = false }: Props = $props();
-
 	let leafletMapInstance = $state<L.Map>();
 	let mapLoaded = $state(false);
-	let selectedFeature = $state<GeoJSON.GeoJsonProperties | null>(null);
 	let gnafAddressPoints = $state<GeoJSON.FeatureCollection>({
 		type: 'FeatureCollection',
 		features: []
 	});
+
+	function handleAddressChecked(result: any) {
+		if (result?.geojson?.geometry) {
+			const coords = result.geojson.geometry.coordinates;
+			leafletMapInstance?.setView([coords[1], coords[0]], 18);
+		}
+	}
 
 	function handleMapInstance(map: L.Map) {
 		leafletMapInstance = map;
@@ -58,7 +71,7 @@
 					url="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12"
 					name="Property Theme"
 					visible={true}
-					onFeatureClick={(feature) => (selectedFeature = feature.properties)}
+					popupTemplate={gurasPropertyPopUpTemplate}
 				/>
 				{#if leafletMapInstance}
 					<GNAFGeoJSON {leafletMapInstance} onGnafData={handleGnafData} />
@@ -71,12 +84,17 @@
 					showInLegend={true}
 					staticLayer={false}
 					symbology={gnafAddressPointsOptions}
+					tooltipTemplate={gnafAddressTooltipTemplate}
+					multiFeaturePopupTemplate={gnafMultiFeaturePopupTemplate}
 				/>
 				{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
 					<LeafletScaleControl position="bottomleft" />
 				{/await}
 			</Leafletmap>
 		{/await}
+	</div>
+	<div class="card mb-4 px-4">
+		<GNAFAddressCheckForm onAddressChecked={handleAddressChecked} />
 	</div>
 </div>
 
@@ -88,10 +106,11 @@
 	}
 
 	.map-container {
-		height: 65vh;
+		height: 55vh;
 		min-height: 400px;
 		position: relative;
+		padding-left: 20px;
+		padding-right: 20px;
 		width: 100%;
-		margin: 1rem auto;
 	}
 </style>

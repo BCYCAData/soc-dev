@@ -18,6 +18,7 @@
 		maxZoom?: number;
 		style?: Record<string, any>;
 		onFeatureClick?: (feature: GeoJSON.Feature) => void;
+		popupTemplate?: (properties: any) => string;
 	}
 
 	let {
@@ -28,7 +29,8 @@
 		minZoom,
 		maxZoom,
 		style,
-		onFeatureClick
+		onFeatureClick,
+		popupTemplate
 	}: Props = $props();
 
 	let isLoading = $state(false);
@@ -113,6 +115,7 @@
 					});
 
 					allFeatures = [...allFeatures, ...newFeatures];
+					console.log('Loaded features:', allFeatures);
 
 					if (allFeatures.length < totalCount) {
 						offset += pageSize;
@@ -141,9 +144,10 @@
 					fillOpacity: 0.1
 				},
 				onEachFeature: (feature, layer) => {
-					layer.bindPopup(
-						`Address: ${feature.properties.address} Property Type: ${feature.properties.propertytype}`
-					);
+					if (popupTemplate) {
+						const featureProperties = feature.properties;
+						layer.bindPopup(popupTemplate(featureProperties));
+					}
 				}
 			});
 			if (map && geoJsonLayer) {
@@ -192,6 +196,16 @@
 				}
 			});
 
+			layersStore.subscribe((layers) => {
+				const layerInfo = layers[name];
+				if (map && layerInfo && geoJsonLayer) {
+					if (layerInfo.visible) {
+						geoJsonLayer.addTo(map);
+					} else {
+						geoJsonLayer.remove();
+					}
+				}
+			});
 			map?.invalidateSize();
 		});
 
@@ -254,5 +268,13 @@
 		left: 50%;
 		transform: translate(-50%, -50%);
 		z-index: 1000;
+	}
+
+	:global(.feature-popup) {
+		padding: 8px;
+	}
+
+	:global(.feature-popup div) {
+		margin: 4px 0;
 	}
 </style>

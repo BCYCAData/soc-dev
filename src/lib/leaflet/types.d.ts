@@ -71,11 +71,18 @@ export interface CustomDivIconOptions extends L.DivIconOptions {
 	markerShape?: string;
 }
 
+interface TooltipOptions {
+	property?: string;
+	permanent?: boolean;
+	direction?: L.TooltipOptions['direction'];
+}
+
 interface LeafletMarkerOptions {
 	type: 'circle' | 'circleMarker' | 'marker' | 'divIcon' | 'textLabel';
 	markerShape?: string;
 	color?: string;
 	options: L.MarkerOptions | CustomDivIconOptions | L.CircleMarkerOptions;
+	tooltip?: TooltipOptions;
 }
 
 interface LayerInfo {

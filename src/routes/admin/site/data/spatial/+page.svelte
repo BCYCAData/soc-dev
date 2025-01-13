@@ -1,7 +1,4 @@
 <script lang="ts">
-	//TODO: Refactor this route to:
-	//TODO: 	Implement the logic for managing custom addresses
-	//TODO: 	Implement the logic for managing project spatial data source tables
 	import { enhance } from '$app/forms';
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import type { PageData } from './$types';

@@ -55,7 +55,7 @@
 			<LeafletMap
 				{...kyngCoordinatorKyngAreaMapConfig(
 					[-31.940026654472703, 152.40239389529367] as [number, number],
-					kyngGeoJsonData.initialExtent
+					kyngGeoJsonData.bounds as [[number, number], [number, number]]
 				)}
 				onMapReady={handleMapLoaded}
 			>

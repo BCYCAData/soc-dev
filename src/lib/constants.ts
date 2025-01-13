@@ -2,26 +2,26 @@
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const PASSWORD_VALIDATIONS = [
-    {
-        description: 'at least 8 characters',
-        test: (password: string) => password.length > 8
-    },
-    {
-        description: 'at least 1 capital letter',
-        test: (password: string) => /[A-Z]/.test(password)
-    },
-    {
-        description: 'at least 1 number',
-        test: (password: string) => /[0-9]/.test(password)
-    },
-    {
-        description: 'at least 1 symbol (?~!@#%^&*()_+-=,:;|)',
-        test: (password: string) => /[?~!@#%^&*()_+-=,:;|]/.test(password)
-    },
-    {
-        description: 'matching passwords',
-        test: (password: string, confirmPassword: string) => password === confirmPassword
-    }
+	{
+		description: 'at least 8 characters',
+		test: (password: string) => password.length > 8
+	},
+	{
+		description: 'at least 1 capital letter',
+		test: (password: string) => /[A-Z]/.test(password)
+	},
+	{
+		description: 'at least 1 number',
+		test: (password: string) => /[0-9]/.test(password)
+	},
+	{
+		description: 'at least 1 symbol (?~!@#%^&*()_+-=,:;|)',
+		test: (password: string) => /[?~!@#%^&*()_+-=,:;|]/.test(password)
+	},
+	{
+		description: 'matching passwords',
+		test: (password: string, confirmPassword: string) => password === confirmPassword
+	}
 ] as const;
 
 // Geographic Data Constants
@@ -31,10 +31,26 @@ export const GNAF_ZOOM = 15;
 
 // Community Types
 export const COMMUNITY_TYPES = {
-    BCYCA: 'BCYCA',
-    TINONEE: 'TINONEE',
-    MONDROOK: 'MONDROOK',
-    EXTERNAL: 'EXTERNAL'
+	BCYCA: 'BCYCA',
+	TINONEE: 'TINONEE',
+	MONDROOK: 'MONDROOK',
+	EXTERNAL: 'EXTERNAL'
+};
+
+// Help Badge messages
+
+export const admimHelpMessages = {
+	site: {
+		data: {
+			addresses: {
+				searhAddressHelp: 'This is the address that was checked for validity.',
+				validatedAddressHelp:
+					"This is the address from the NSW Government's GURAS Address Database that is attached to the property that was identified from the G-NAF address.",
+				gnafAddressHelp:
+					'This is the postal address from the Geocoded National Address File - (G-NAF) that most closely matches the search address.'
+			}
+		}
+	}
 };
 
 // HTTP Status Codes

@@ -5,6 +5,9 @@
 	import type { Writable } from 'svelte/store';
 	import type { LayerInfo } from '$lib/leaflet/types';
 
+	import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+	import '../css/custom-geoman.css';
+
 	interface LeafletContext {
 		getLeaflet: () => typeof L;
 		getLeafletMap: () => L.Map;

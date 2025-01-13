@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Spinner from '$components/page/Spinner.svelte';
+	import type { AddressPointsGeoJSON } from '$lib/data/spatial/types';
 	import {
 		aboutMapConfig,
 		projectAddresspointsOptions,
@@ -11,6 +12,7 @@
 	}
 
 	let { addressPointsGeoJSON }: Props = $props();
+
 	let mapLoaded = $state(false);
 
 	const focusAreas = [
@@ -35,33 +37,6 @@
 				'locally run workshops to increase community preparedness, through knowledge sharing.'
 		}
 	];
-
-	// const pointStyles = {
-	// 	project: {
-	// 		type: 'custom',
-	// 		options: {
-	// 			markerShape: 'circle',
-	// 			fillColour: '#a5a5a5',
-	// 			size: 6,
-	// 			strokeColour: '#000',
-	// 			strokeWidth: 0,
-	// 			strokeOpacity: 0,
-	// 			fillOpacity: 0.8
-	// 		}
-	// 	} as PointSymbologyOptions,
-	// 	registered: {
-	// 		type: 'custom',
-	// 		options: {
-	// 			markerShape: 'circle',
-	// 			fillColour: '#f97316',
-	// 			size: 8,
-	// 			strokeColour: '#000',
-	// 			strokeWidth: 0,
-	// 			strokeOpacity: 0,
-	// 			fillOpacity: 1
-	// 		}
-	// 	} as PointSymbologyOptions
-	// };
 
 	const handleMapLoaded = () => (mapLoaded = true);
 </script>
@@ -119,7 +94,7 @@
 				>
 					{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
 						<LeafletGeoJSONPointLayer
-							geojsonData={addressPointsGeoJSON.registeredAddresspoints}
+							geojsonData={addressPointsGeoJSON.allAddresspoints}
 							layerName="Project Address Points"
 							visible={true}
 							symbology={projectAddresspointsOptions}

@@ -90,7 +90,7 @@ interface KYNGArea {
 	kyngName: string;
 }
 
-interface TransformedOptionsData {
+export interface TransformedOptionsData {
 	table_name: string;
 	object_names: {
 		object_name: string;
@@ -100,7 +100,6 @@ interface TransformedOptionsData {
 		}[];
 	}[];
 }
-[];
 
 interface CommunityRequestOption {
 	index_value: number;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { createPointSymbol } from '$lib/leaflet/leafletlegendutility';
+
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
 	import type {
@@ -15,6 +16,8 @@
 		MarkerShape
 	} from '$lib/leaflet/types';
 
+	import '../../css/leaflet-popup.css';
+
 	interface Props {
 		geojsonData: GeoJSON.FeatureCollection;
 		layerName: string;
@@ -25,6 +28,8 @@
 		symbology: PointSymbologyOptions | GroupedSymbologyOptions;
 		propertyForSymbol?: string;
 		symbolMap?: Record<string, PointSymbologyOptions>;
+		tooltipTemplate?: (feature: GeoJSON.Feature) => string;
+		multiFeaturePopupTemplate?: (features: GeoJSON.Feature[]) => string;
 	}
 
 	let {
@@ -34,7 +39,9 @@
 		editable = false,
 		staticLayer = false,
 		showInLegend = true,
-		symbology
+		symbology,
+		tooltipTemplate,
+		multiFeaturePopupTemplate
 	}: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl } = getContext<{
@@ -50,6 +57,53 @@
 	let layersControl: Writable<L.Control.Layers | null> = getLayersControl();
 	let geoJSONLayer: L.GeoJSON;
 	let geomanInitialized = false;
+
+	function createPopupContent(features: GeoJSON.Feature[]): string {
+		if (multiFeaturePopupTemplate) {
+			return multiFeaturePopupTemplate(features);
+		}
+		return '';
+		// 	return `
+		//     <div class="multi-feature-popup">
+		//         <h4>Addresses at this location:</h4>
+		//         ${features
+		// 						.map(
+		// 							(feature) => `
+		//             <div class="feature-item">
+		//                 <strong>${feature.properties?.street_number}</strong>
+		//                 <div>ID: ${feature.properties?.ADDRESS_DETAIL_PID}</div>
+		//                 <div>Type: ${feature.properties?.GEOCODE_TYPE}</div>
+		//             </div>
+		//         `
+		// 						)
+		// 						.join('')}
+		//     </div>
+		// `;
+	}
+
+	function findNearbyFeatures(clickedPoint: L.LatLng, radius: number): GeoJSON.Feature[] {
+		if (!geoJSONLayer) return [];
+
+		const uniqueFeatures = new Map<string, GeoJSON.Feature>();
+
+		geoJSONLayer.eachLayer((layer) => {
+			const marker = layer as L.Marker;
+			if (marker.getLatLng) {
+				const layerPoint = map.latLngToLayerPoint(marker.getLatLng());
+				const clickPoint = map.latLngToLayerPoint(clickedPoint);
+				const distance = layerPoint.distanceTo(clickPoint);
+
+				if (distance <= radius) {
+					const feature = (marker as any).feature;
+					if (feature?.properties?.ADDRESS_DETAIL_PID) {
+						uniqueFeatures.set(feature.properties.ADDRESS_DETAIL_PID, feature);
+					}
+				}
+			}
+		});
+
+		return Array.from(uniqueFeatures.values());
+	}
 
 	function createShapedMarker(latlng: L.LatLng, options: LeafletMarkerOptions): L.Marker | null {
 		if (!leaflet) return null;
@@ -120,14 +174,48 @@
 	function createPointLayer(feature: GeoJSON.Feature, latlng: L.LatLng): L.Layer | null {
 		if (!symbology) return null;
 
+		let layer: L.Layer | null = null;
+
 		if ('propertyField' in symbology && symbology.groups) {
 			const value = feature.properties?.[symbology.propertyField];
 			const groupSymbol =
 				symbology.groups.find((g) => g.value === value)?.symbol || symbology.groups[0]?.symbol;
-			return groupSymbol ? createSymbolizedLayer(groupSymbol, feature, latlng) : null;
+			layer = groupSymbol ? createSymbolizedLayer(groupSymbol, feature, latlng) : null;
+		} else {
+			layer = createSymbolizedLayer(symbology, feature, latlng);
 		}
 
-		return createSymbolizedLayer(symbology, feature, latlng);
+		if (layer && feature.properties && tooltipTemplate) {
+			// 	const tooltipContent = `
+			//     Address ID: ${feature.properties.ADDRESS_DETAIL_PID}<br>
+			//     Geocode Type: ${feature.properties.GEOCODE_TYPE}<br>
+			//     Street Number: ${feature.properties.street_number}
+			// 	<p>Click to see if there are multiple addresses</p>
+			// `;
+			layer.bindTooltip(tooltipTemplate(feature), {
+				permanent: false,
+				direction: 'top',
+				className: 'gnaf-tooltip'
+			});
+		}
+		if (layer) {
+			layer.on('click', (e: L.LeafletMouseEvent) => {
+				const nearbyFeatures = findNearbyFeatures(e.latlng, 10);
+
+				if (nearbyFeatures.length > 1) {
+					const popup = leaflet
+						.popup({
+							autoPan: false
+						})
+						.setLatLng(e.latlng)
+						.setContent(createPopupContent(nearbyFeatures));
+
+					popup.openOn(map);
+				}
+			});
+		}
+
+		return layer;
 	}
 
 	function createSymbolizedLayer(

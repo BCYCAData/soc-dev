@@ -1,3 +1,5 @@
+import type { TransformedOptionsData } from '$lib/types';
+
 export const accessOptions = [
 	{ value: 1, lable: 'All gates are more than 2.5 metres wide' },
 	{ value: 4, lable: 'Other' },
@@ -79,24 +81,13 @@ export type CommunityRequestOption = {
 	};
 };
 
-export type OptionsData = {
-	userOptionsData?: TransformedOptionsData;
-	communityBCYCAOptionsData?: TransformedOptionsData;
-	communityExternalOptionsData?: TransformedOptionsData;
-	communityMondrookOptionsData?: TransformedOptionsData;
-	communityTinoneeOptionsData?: TransformedOptionsData;
-};
-
-export type TransformedOptionsData = {
-	table_name: string;
-	object_names: {
-		object_name: string;
-		options: {
-			value: string; // Assuming this is the index_value
-			lable: string;
-		}[];
-	}[];
-};
+// export type OptionsData = {
+// 	userOptionsData?: TransformedOptionsData;
+// 	communityBCYCAOptionsData?: TransformedOptionsData;
+// 	communityExternalOptionsData?: TransformedOptionsData;
+// 	communityMondrookOptionsData?: TransformedOptionsData;
+// 	communityTinoneeOptionsData?: TransformedOptionsData;
+// };
 
 export function getCommunityOptions(data: CommunityRequestOption[]): TransformedOptionsData[] {
 	const result: TransformedOptionsData[] = [];

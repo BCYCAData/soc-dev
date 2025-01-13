@@ -106,9 +106,22 @@
 			});
 		});
 
+		const featuresWithTooltips = [...duplicatedGroups.flat(), ...nonColocatedFeatures].map(
+			(feature) => {
+				if (feature.properties) {
+					feature.properties.tooltipContent = `
+            Address ID: ${feature.properties.ADDRESS_DETAIL_PID}<br>
+            Geocode Type: ${feature.properties.GEOCODE_TYPE}<br>
+            Street Number: ${feature.properties.street_number}
+        `;
+				}
+				return feature;
+			}
+		);
+
 		onGnafData({
 			type: 'FeatureCollection',
-			features: [...duplicatedGroups.flat(), ...nonColocatedFeatures]
+			features: featuresWithTooltips
 		});
 	}
 

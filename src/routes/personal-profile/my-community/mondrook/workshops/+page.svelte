@@ -90,8 +90,7 @@
 	</div>
 	<TextAreaInput
 		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
-		headingText="If there are other workshops that you would like to see run, please add
-			the details here"
+		headingText="If there are other workshops that you would like to see run, please add the details here"
 		lableClass={null}
 		lableText={null}
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"
@@ -101,8 +100,7 @@
 	/>
 	<TextAreaInput
 		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
-		headingText="If you would like to help run any of the workshops, please indicate which
-			ones below."
+		headingText="If you would like to help run any of the workshops, please indicate which ones below."
 		lableClass={null}
 		lableText={null}
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"

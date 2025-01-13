@@ -19,7 +19,7 @@
 	<title>Community Administration</title>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl p-6">
+<div class="mx-auto max-w-4xl px-6">
 	<h1 class="mb-6 text-3xl font-bold text-orange-700">Community Administration</h1>
 
 	<div class="mb-8 grid gap-6">

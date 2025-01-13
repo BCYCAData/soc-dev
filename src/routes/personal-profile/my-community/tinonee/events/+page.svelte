@@ -83,8 +83,7 @@
 	</div>
 	<TextAreaInput
 		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
-		headingText="If there are other events you would be interested in, please add them
-			below."
+		headingText="If there are other events you would be interested in, please add them below."
 		lableClass={null}
 		lableText={null}
 		divClass="px-4 pt-2 rounded-lg sm:text-lg"

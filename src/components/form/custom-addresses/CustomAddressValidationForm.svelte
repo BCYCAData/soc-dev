@@ -11,15 +11,34 @@
 	let validationResult: any = $state(null);
 	let isLoading = $state(false);
 	let error = $state('');
+	let successMessage = $state('');
+
+	function handleInputChange() {
+		onValidatedAddress(null);
+		successMessage = '';
+	}
 
 	function handleValidation(result: any) {
 		if (result.data.success) {
-			validationResult = result.data.validatedAddressData;
+			const data = result.data.validatedAddressData[0];
+
+			if (data.found_in_custom) {
+				successMessage = 'Address found in custom addresses';
+				validationResult = null;
+			} else if (data.found_in_project) {
+				successMessage = 'Address found in project addresses';
+				validationResult = null;
+			} else {
+				validationResult = result.data.validatedAddressData;
+				successMessage = '';
+			}
+
 			onValidatedAddress(result.data.validatedAddressData);
 			error = '';
 		} else {
 			error = result.data.message || 'Validation failed';
 			validationResult = null;
+			successMessage = '';
 		}
 	}
 </script>
@@ -30,6 +49,7 @@
 	use:enhance={({ formElement, formData, action, cancel }) => {
 		isLoading = true;
 		error = '';
+		successMessage = '';
 
 		return async ({ result }) => {
 			handleValidation(result);
@@ -45,7 +65,8 @@
 				name="address"
 				id="address"
 				bind:value={address}
-				class="input w-full"
+				oninput={handleInputChange}
+				class="input w-full pl-2 text-lg"
 				required
 			/>
 		</div>
@@ -57,7 +78,8 @@
 				name="suburb"
 				id="suburb"
 				bind:value={suburb}
-				class="input w-full"
+				oninput={handleInputChange}
+				class="input w-full pl-2 text-lg"
 				required
 			/>
 		</div>
@@ -76,17 +98,20 @@
 	</div>
 
 	{#if error}
-		<div class="mt-4 rounded bg-error-500/20 p-4 text-error-500">
+		<div class="mt-1 rounded bg-error-500/20 p-2 text-error-800">
 			{error}
 		</div>
 	{/if}
 
+	{#if successMessage}
+		<div class="mt-1 rounded bg-success-500/20 p-2 text-success-800">
+			{successMessage}
+		</div>
+	{/if}
+
 	{#if validationResult}
-		<div class="mt-4">
+		<div class="mt-1">
 			<h3 class="text-lg font-semibold">Validation Result:</h3>
-			<pre class="bg-surface-100-800-token rounded p-4">
-                {JSON.stringify(validationResult, null, 2)}
-            </pre>
 		</div>
 	{/if}
 </form>

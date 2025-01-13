@@ -13,11 +13,6 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 
 	return {
 		projectAddressPointData: projectAddressPointData ?? [],
-		session: null,
-		user: null,
-		userRoles: null,
-		permissions: null,
-		coordinatesKYNG: null,
 		propertyIds: null,
 		userProfile: null,
 		optionsData: {

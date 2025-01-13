@@ -3,6 +3,8 @@
 	import CustomAddressMapTab from '$components/page/tabs/addresses/CustomAddressMapTab.svelte';
 	import CustomAddressManagementTab from '$components/page/tabs/addresses/CustomAddressManagementTab.svelte';
 
+	import '../../../../../components/page/tabs/tabs.css';
+
 	import type { PageData } from './$types';
 
 	let { data } = $props<{ data: PageData }>();
@@ -38,10 +40,3 @@
 		</Tabs.Panel>
 	{/snippet}
 </Tabs>
-
-<style>
-	:global(.tab-panel) {
-		height: 100%;
-		width: 100%;
-	}
-</style>
