@@ -44,8 +44,8 @@
 				<button
 					type="button"
 					class="absolute right-3 top-1/2 -translate-y-1/2 text-surface-950"
-					on:mouseenter={() => (showPassword = true)}
-					on:mouseleave={() => (showPassword = false)}
+					onmouseenter={() => (showPassword = true)}
+					onmouseleave={() => (showPassword = false)}
 				>
 					{showPassword ? '👁️' : '👁️'}
 				</button>
