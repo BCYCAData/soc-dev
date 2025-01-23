@@ -1,5 +1,7 @@
 import { AuthApiError } from '@supabase/supabase-js';
 import { error, redirect, type Actions } from '@sveltejs/kit';
+import { isEmailAllowed } from '$lib/server/auth/dev-config';
+
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
 
 interface AddressValidationResponse {
@@ -20,7 +22,7 @@ export const actions: Actions = {
 		const searchaddresssuburb = String(formData.get('suburb')).toUpperCase();
 
 		const { data: validationData, error: validationError } = await supabase.rpc(
-			'get_addresspoint_from_address',
+			'get_addresspoint_from_address_old',
 			{
 				address_text: searchaddressstreet,
 				given_suburb: searchaddresssuburb,
@@ -58,6 +60,13 @@ export const actions: Actions = {
 
 		if (!email || !password) {
 			throw error(400, 'Email and password are required');
+		}
+
+		const allowed = await isEmailAllowed(email);
+
+		if (!allowed) {
+			console.error('Email not allowed:', email);
+			throw redirect(303, '/auth/redirect/email-not-allowed');
 		}
 
 		const { error: signUpError } = await supabase.auth.signUp({

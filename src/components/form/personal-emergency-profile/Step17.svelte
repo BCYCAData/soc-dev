@@ -3,10 +3,10 @@
 
 	import type { ExternalCommunityProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		communityExternalProfile: ExternalCommunityProfile;
 		communityExternalWorkshopOptions?: { value: string; lable: string }[];
-	};
+	}
 
 	let { communityExternalProfile = $bindable(), communityExternalWorkshopOptions = [] }: Props =
 		$props();

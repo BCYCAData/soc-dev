@@ -3,10 +3,10 @@
 
 	import type { MondrookCommunityProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		communityMondrookProfile: MondrookCommunityProfile;
 		communityMondrookMeetingOptions?: { value: string; lable: string }[];
-	};
+	}
 
 	let { communityMondrookProfile = $bindable(), communityMondrookMeetingOptions = [] }: Props =
 		$props();

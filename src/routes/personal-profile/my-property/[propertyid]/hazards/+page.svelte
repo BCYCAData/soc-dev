@@ -9,9 +9,9 @@
 
 	import { siteHazardsOptions, yesNoMaybeOptions } from '$lib/profile-options';
 
-	type Props = {
+	interface Props {
 		form: ActionData;
-	};
+	}
 
 	let { form }: Props = $props();
 

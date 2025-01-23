@@ -12,7 +12,7 @@
 		gnafMultiFeaturePopupTemplate
 	} from '$lib/leaflet/leafletdatatemplates';
 
-	import 'leaflet/dist/leaflet.css';
+	// import 'leaflet/dist/leaflet.css';
 
 	interface Props {
 		active: boolean;

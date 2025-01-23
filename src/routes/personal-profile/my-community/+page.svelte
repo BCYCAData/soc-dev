@@ -13,10 +13,10 @@
 		alert(`Requesting access to ${id}`);
 	}
 
-	type Props = {
+	interface Props {
 		data: PageData;
 		form: ActionData;
-	};
+	}
 
 	let { data = $bindable(), form }: Props = $props();
 

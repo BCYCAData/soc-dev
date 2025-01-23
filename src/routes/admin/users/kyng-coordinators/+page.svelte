@@ -192,7 +192,7 @@
 						<label for="selectEmail" class="label">Select by Email</label>
 						<AutocompleteSingleItemInput
 							listData={data.kyngCoordinators
-								.filter((c: EditableCoordinator) => c.kyng) // Only includes users who are KYNG Coordinators
+								.filter((c: EditableCoordinator) => c.kyng)
 								.map((c: EditableCoordinator) => c.email)}
 							placeholder="Select User Email"
 							bind:selectedValue={selectedUserEmail}

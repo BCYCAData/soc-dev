@@ -8,6 +8,6 @@ export default defineConfig({
 		devSourcemap: true
 	},
 	optimizeDeps: {
-		include: ['leaflet', '@geoman-io/leaflet-geoman-free']
+		include: ['leaflet']
 	}
 });

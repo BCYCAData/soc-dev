@@ -1,5 +1,5 @@
 <script lang="ts">
-	type Props = {
+	interface Props {
 		lableClass: string | null;
 		lableText: string | null;
 		headingClass: string | null;
@@ -8,7 +8,7 @@
 		divClass: string;
 		textAreaClass: string;
 		inputValue: string | null | undefined;
-	};
+	}
 
 	let {
 		lableClass,

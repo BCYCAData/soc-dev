@@ -5,9 +5,9 @@
 
 	import type { PropertyProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		propertyProfile: PropertyProfile;
-	};
+	}
 
 	let { propertyProfile = $bindable() }: Props = $props();
 

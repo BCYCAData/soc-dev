@@ -7,7 +7,8 @@ export const routeMatchers = {
 			'/policies/privacy',
 			'/policies/termsofservice',
 			'/auth/signup',
-			'/auth/signin'
+			'/auth/signin',
+			'/auth/redirect/email-not-allowed'
 		];
 		return publicRoutes.includes(path);
 	},

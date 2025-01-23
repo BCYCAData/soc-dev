@@ -24,12 +24,14 @@
 		visible: boolean;
 		staticLayer: boolean;
 		showInLegend: boolean;
+		order?: number;
 		editable: boolean;
 		symbology: PointSymbologyOptions | GroupedSymbologyOptions;
 		propertyForSymbol?: string;
 		symbolMap?: Record<string, PointSymbologyOptions>;
 		tooltipTemplate?: (feature: GeoJSON.Feature) => string;
 		multiFeaturePopupTemplate?: (features: GeoJSON.Feature[]) => string;
+		template_id?: string;
 	}
 
 	let {
@@ -39,9 +41,11 @@
 		editable = false,
 		staticLayer = false,
 		showInLegend = true,
+		order,
 		symbology,
 		tooltipTemplate,
-		multiFeaturePopupTemplate
+		multiFeaturePopupTemplate,
+		template_id
 	}: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl } = getContext<{
@@ -56,29 +60,12 @@
 	let layersStore: Writable<Record<string, LayerInfo>> = getLeafletLayers();
 	let layersControl: Writable<L.Control.Layers | null> = getLayersControl();
 	let geoJSONLayer: L.GeoJSON;
-	let geomanInitialized = false;
 
 	function createPopupContent(features: GeoJSON.Feature[]): string {
 		if (multiFeaturePopupTemplate) {
 			return multiFeaturePopupTemplate(features);
 		}
 		return '';
-		// 	return `
-		//     <div class="multi-feature-popup">
-		//         <h4>Addresses at this location:</h4>
-		//         ${features
-		// 						.map(
-		// 							(feature) => `
-		//             <div class="feature-item">
-		//                 <strong>${feature.properties?.street_number}</strong>
-		//                 <div>ID: ${feature.properties?.ADDRESS_DETAIL_PID}</div>
-		//                 <div>Type: ${feature.properties?.GEOCODE_TYPE}</div>
-		//             </div>
-		//         `
-		// 						)
-		// 						.join('')}
-		//     </div>
-		// `;
 	}
 
 	function findNearbyFeatures(clickedPoint: L.LatLng, radius: number): GeoJSON.Feature[] {
@@ -184,18 +171,18 @@
 		} else {
 			layer = createSymbolizedLayer(symbology, feature, latlng);
 		}
-
-		if (layer && feature.properties && tooltipTemplate) {
-			// 	const tooltipContent = `
-			//     Address ID: ${feature.properties.ADDRESS_DETAIL_PID}<br>
-			//     Geocode Type: ${feature.properties.GEOCODE_TYPE}<br>
-			//     Street Number: ${feature.properties.street_number}
-			// 	<p>Click to see if there are multiple addresses</p>
-			// `;
+		if (layer && feature.properties && tooltipTemplate && !editable) {
 			layer.bindTooltip(tooltipTemplate(feature), {
 				permanent: false,
 				direction: 'top',
 				className: 'gnaf-tooltip'
+			});
+		} else if (layer && editable && feature.properties) {
+			const defaultTooltip = `${layerName} ID: ${feature.properties.name}`;
+			layer.bindTooltip(tooltipTemplate ? tooltipTemplate(feature) : defaultTooltip, {
+				permanent: false,
+				direction: 'top',
+				className: 'editable-feature-tooltip'
 			});
 		}
 		if (layer) {
@@ -227,13 +214,28 @@
 
 		if (symbolOptions.type === 'custom') {
 			const customOptions = symbolOptions.options as CustomMarkerOptions;
+			if (customOptions.markerShape) {
+				return createShapedMarker(latlng, {
+					type: 'divIcon',
+					markerShape: customOptions.markerShape,
+					color: customOptions.fillColour,
+					options: {
+						className: 'custom-marker',
+						iconSize: [customOptions.size || 12, customOptions.size || 12],
+						iconAnchor: [
+							customOptions.size ? customOptions.size / 2 : 6,
+							customOptions.size ? customOptions.size / 2 : 6
+						]
+					}
+				});
+			}
 			return leaflet.circleMarker(latlng, {
-				radius: customOptions?.size || 1,
-				fillColor: customOptions?.fillColour,
-				color: customOptions?.strokeColour,
-				weight: customOptions?.strokeWidth,
-				opacity: customOptions?.strokeOpacity,
-				fillOpacity: customOptions?.fillOpacity
+				radius: (customOptions.size || 12) / 2,
+				fillColor: customOptions.fillColour,
+				color: customOptions.strokeColour,
+				weight: customOptions.strokeWidth,
+				opacity: customOptions.strokeOpacity,
+				fillOpacity: customOptions.fillOpacity
 			});
 		}
 
@@ -267,7 +269,9 @@
 						items: symbology.groups
 							.map((group) => {
 								const symbol = group.symbol as ExtendedPointSymbologyOptions;
-								const pointSymbol = symbol ? createPointSymbol(symbol) : null;
+								const pointSymbol = symbol
+									? createPointSymbol(symbol, undefined, layerName) // Use layerName instead of template_id
+									: null;
 								return pointSymbol
 									? {
 											symbol: pointSymbol,
@@ -281,7 +285,11 @@
 			};
 		}
 
-		const pointSymbol = createPointSymbol(symbology as ExtendedPointSymbologyOptions);
+		const pointSymbol = createPointSymbol(
+			symbology as ExtendedPointSymbologyOptions,
+			undefined,
+			layerName // Use layerName instead of template_id
+		);
 		return {
 			items: pointSymbol
 				? [
@@ -318,6 +326,19 @@
 			}
 		});
 
+		const markerStyle: PointSymbologyOptions = {
+			type: 'custom',
+			options: {
+				markerShape: (symbology.options as CustomMarkerOptions).markerShape,
+				fillColour: (symbology.options as CustomMarkerOptions).fillColour,
+				strokeColour: (symbology.options as CustomMarkerOptions).strokeColour,
+				size: (symbology.options as CustomMarkerOptions).size || 8,
+				fillOpacity: (symbology.options as CustomMarkerOptions).fillOpacity,
+				strokeWidth: (symbology.options as CustomMarkerOptions).strokeWidth,
+				strokeOpacity: (symbology.options as CustomMarkerOptions).strokeOpacity
+			}
+		};
+
 		geoJSONLayer.addTo(map);
 		if (symbology && layersStore) {
 			const legendInfo = createLegendInfo();
@@ -328,7 +349,10 @@
 					visible,
 					editable,
 					showInLegend,
-					legendInfo
+					legendInfo,
+					template_id,
+					originalStyle: markerStyle,
+					order
 				}
 			}));
 		}
@@ -342,71 +366,12 @@
 		}
 	}
 
-	function enableEditing() {
-		if (geoJSONLayer?.pm) {
-			geoJSONLayer.pm.enable({
-				allowSelfIntersection: false
-			});
-		}
-	}
-
-	function disableEditing() {
-		if (geoJSONLayer?.pm) {
-			geoJSONLayer.pm.disable();
-		}
-	}
-
-	function setupGeomanControls() {
-		if (!map?.pm?.Toolbar || geomanInitialized) return;
-
-		const actions = ['add', 'edit', 'delete'] as const;
-		actions.forEach((action) => {
-			const controlName = `${layerName}-${action}`;
-			const existingButtons = map.pm.Toolbar.getButtons();
-
-			if (!existingButtons[controlName]) {
-				map.pm.Toolbar.createCustomControl({
-					name: controlName,
-					block: 'custom',
-					title: `${action.charAt(0).toUpperCase() + action.slice(1)} ${layerName}`,
-					onClick: () => handleGeomanAction(action),
-					toggle: true,
-					className: `custom-geoman-${action}-icon`
-				});
-			}
-		});
-	}
-
-	function handleGeomanAction(action: 'add' | 'edit' | 'delete') {
-		if (!geoJSONLayer?.pm) return;
-
-		switch (action) {
-			case 'add':
-			case 'delete':
-				geoJSONLayer.pm.enable();
-				break;
-			case 'edit':
-				enableEditing();
-				break;
-		}
-	}
-
 	onMount(() => {
 		if (leaflet && map) {
 			createGeoJSONLayer();
-			if (editable) {
-				setupGeomanControls();
-				geomanInitialized = true;
-			}
-		}
-	});
 
-	$effect(() => {
-		if (geoJSONLayer) {
 			if (editable) {
-				enableEditing();
-			} else {
-				disableEditing();
+				// setupSnapping();
 			}
 		}
 	});
@@ -436,8 +401,6 @@
 					}
 				});
 			}
-
-			disableEditing();
 		}
 	});
 </script>

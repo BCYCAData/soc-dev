@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
-	import { createPolygonStyle, createPolygonSymbol } from '$lib/leaflet/leafletlegendutility';
+	import { createPolygonSymbol } from '$lib/leaflet/leafletlegendutility';
 
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
@@ -18,12 +18,14 @@
 		visible: boolean;
 		staticLayer: boolean;
 		showInLegend: boolean;
+		order?: number;
 		editable: boolean;
 		symbology: PolygonSymbologyOptions | GroupedSymbologyOptions;
 		propertyForSymbol?: string;
 		symbolMap?: Record<string, PolygonSymbologyOptions>;
 		tooltipField?: string;
 		tooltipOptions?: L.TooltipOptions;
+		template_id?: string;
 	}
 
 	let {
@@ -33,9 +35,11 @@
 		editable = false,
 		staticLayer = false,
 		showInLegend = true,
+		order,
 		symbology,
 		tooltipField,
-		tooltipOptions = {}
+		tooltipOptions = {},
+		template_id
 	}: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl } = getContext<{
@@ -50,16 +54,15 @@
 	let layersStore: Writable<Record<string, LayerInfo>>;
 	let layersControl: Writable<L.Control.Layers | null>;
 	let geoJSONLayer: L.GeoJSON;
-	let geomanInitialized = false;
 
 	function getPolygonStyle(feature: GeoJSON.Feature): L.PathOptions {
 		if ('propertyField' in symbology && symbology.groups) {
 			const value = feature.properties?.[symbology.propertyField];
 			const groupSymbol =
 				symbology.groups.find((g) => g.value === value)?.symbol || symbology.groups[0].symbol;
-			return createPolygonStyle(groupSymbol as ExtendedPolygonSymbologyOptions);
+			return groupSymbol as L.PathOptions;
 		}
-		return createPolygonStyle(symbology as ExtendedPolygonSymbologyOptions);
+		return symbology as L.PathOptions;
 	}
 
 	function createGeoJSONLayer() {
@@ -79,6 +82,13 @@
 						direction: 'center',
 						...tooltipOptions
 					});
+				} else if (editable && feature.properties) {
+					const tooltipContent = `${layerName}<br>ID: ${feature.properties.id}`;
+					layer.bindTooltip(tooltipContent, {
+						permanent: false,
+						direction: 'center',
+						className: 'editable-feature-tooltip'
+					});
 				}
 			}
 		});
@@ -94,7 +104,10 @@
 				visible,
 				editable,
 				showInLegend,
-				legendInfo
+				legendInfo,
+				template_id,
+				originalStyle: symbology,
+				order
 			}
 		}));
 
@@ -107,7 +120,7 @@
 		}
 
 		if (editable) {
-			enableEditing();
+			// Handel editing
 		}
 	}
 
@@ -136,54 +149,6 @@
 		};
 	}
 
-	function enableEditing() {
-		if (geoJSONLayer?.pm) {
-			geoJSONLayer.pm.enable({
-				allowSelfIntersection: false
-			});
-		}
-	}
-
-	function disableEditing() {
-		if (geoJSONLayer?.pm) {
-			geoJSONLayer.pm.disable();
-		}
-	}
-
-	function setupGeomanControls() {
-		if (!map.pm?.Toolbar || geomanInitialized) return;
-		const actions = ['add', 'edit', 'delete'] as const;
-		actions.forEach((action) => {
-			const controlName = `${layerName}-${action}`;
-			const existingButtons = map.pm.Toolbar.getButtons();
-
-			if (!existingButtons[controlName]) {
-				map.pm.Toolbar.createCustomControl({
-					name: controlName,
-					block: 'custom',
-					title: `${action.charAt(0).toUpperCase() + action.slice(1)} ${layerName}`,
-					onClick: () => handleGeomanAction(action),
-					toggle: true,
-					className: `custom-geoman-${action}-icon`
-				});
-			}
-		});
-	}
-
-	function handleGeomanAction(action: 'add' | 'edit' | 'delete') {
-		if (!geoJSONLayer?.pm) return;
-
-		switch (action) {
-			case 'add':
-			case 'delete':
-				geoJSONLayer.pm.enable();
-				break;
-			case 'edit':
-				enableEditing();
-				break;
-		}
-	}
-
 	onMount(() => {
 		leaflet = getLeaflet();
 		map = getLeafletMap();
@@ -192,18 +157,7 @@
 		if (leaflet && map) {
 			createGeoJSONLayer();
 			if (editable) {
-				setupGeomanControls();
-				geomanInitialized = true;
-			}
-		}
-	});
-
-	$effect(() => {
-		if (geoJSONLayer) {
-			if (editable) {
-				enableEditing();
-			} else {
-				disableEditing();
+				// setupSnapping();
 			}
 		}
 	});
@@ -230,7 +184,6 @@
 					}
 				});
 			}
-			disableEditing();
 		}
 	});
 </script>

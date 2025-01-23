@@ -3,10 +3,10 @@
 	import StreetSelectInput from '$components/form/inputs/StreetSelectInput.svelte';
 	import type { PageData, ActionData } from './$types';
 
-	type Props = {
+	interface Props {
 		data: PageData;
 		form: ActionData;
-	};
+	}
 
 	let { data, form }: Props = $props();
 

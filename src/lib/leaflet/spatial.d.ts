@@ -23,12 +23,16 @@ export enum FieldType {
 export interface FeatureTemplate {
 	id: string;
 	name: string;
-	description: string | null;
-	geometry_type: GeometryType;
-	category: FeatureCategory;
-	is_active: boolean;
-	created_at?: string;
-	last_edited?: string;
+	category: 'asset' | 'operational' | 'hazard';
+	geometry_type: 'point' | 'line' | 'polygon';
+	attributes: Array<{
+		id: string;
+		name: string;
+		type: string;
+		required: boolean;
+		default: string | null;
+		validation: string | null;
+	}>;
 }
 
 export interface TemplateField {
@@ -44,12 +48,13 @@ export interface TemplateField {
 
 export interface SpatialFeature {
 	id: string;
-	user_id: string;
+	user_id?: string;
 	property_id: string;
 	template_id: string;
 	geom: GeoJSON.Geometry;
 	created_at?: string;
 	last_edited?: string;
+	properties?: Record<string, any>;
 }
 
 export interface FeatureAttribute {

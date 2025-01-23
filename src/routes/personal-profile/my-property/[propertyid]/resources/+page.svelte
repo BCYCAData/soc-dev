@@ -14,9 +14,9 @@
 
 	let noneChecked = $state(false);
 
-	type Props = {
+	interface Props {
 		form: ActionData;
-	};
+	}
 
 	let { form }: Props = $props();
 

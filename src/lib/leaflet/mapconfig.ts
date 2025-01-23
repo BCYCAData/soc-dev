@@ -1,5 +1,4 @@
 import type {
-	ControlInfo,
 	GroupedSymbologyOptions,
 	LineSymbologyOptions,
 	PointSymbologyOptions,
@@ -269,12 +268,6 @@ export const featureStyles = {
 	}
 };
 
-// Geoman control configuration
-export const geomanControlConfig: ControlInfo = {
-	present: true,
-	position: 'topleft' as L.ControlPosition
-};
-
 //+++++++++++++++++++Map Configurations++++++++++++++++++++++++++++
 //about project tab map
 export const aboutMapConfig = (initialExtent: [[number, number], [number, number]]) => ({
@@ -426,7 +419,7 @@ export const myPropertyMapConfig = (
 	attributionControl: { present: true },
 	layersControl: { present: true, position: 'topright' as L.ControlPosition },
 	legend: { present: false, position: 'bottomright' as L.ControlPosition },
-	editControl: geomanControlConfig,
+	editControl: { present: true },
 	width: '100%',
 	height: '99%',
 	baseLayers: allBaseLayers

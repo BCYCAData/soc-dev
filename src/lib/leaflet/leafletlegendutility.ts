@@ -1,5 +1,7 @@
 import { PATTERNS, GRADIENTS, SHAPE_TEMPLATES } from '$lib/leaflet/symbol/shapes';
 import { createSVGWrapper, createDefs } from '$lib/leaflet/symbol/svg';
+import { pointTemplateStyles } from '$lib/leaflet/symbol/leaflet-template-symbol';
+
 import type {
 	ExtendedPointSymbologyOptions,
 	ExtendedPolygonSymbologyOptions,
@@ -18,45 +20,26 @@ class SymbologyGenerator {
 
 	static createPointSymbol(
 		symbolOptions: ExtendedPointSymbologyOptions,
-		legendBaseSize?: number
+		legendBaseSize?: number,
+		template_name?: string
 	): string {
-		if (!symbolOptions) return '';
+		// Get template style using template name
+		const templateStyle = template_name ? pointTemplateStyles[template_name] : null;
 
-		const baseSize = legendBaseSize || SymbologyGenerator.calculatePointSymbolSize(symbolOptions);
+		if (templateStyle) {
+			const size = templateStyle.size || 12;
+			const color = templateStyle.fillColour || '#3388ff';
+			const shape = templateStyle.markerShape as keyof typeof SHAPE_TEMPLATES;
 
-		if (symbolOptions.options?.type === 'circleMarker') {
-			const { options: circleOptions } = symbolOptions.options;
-			const hasStroke = circleOptions?.weight && circleOptions.weight > 0;
-			const patternId = `pattern-${circleOptions?.fillColor?.replace('#', '')}`;
-			const fillType = circleOptions?.fillPattern || 'solid';
-
-			const patterns = [];
-			if (fillType !== 'solid' && fillType in PATTERNS) {
-				patterns.push(
-					PATTERNS[fillType as keyof typeof PATTERNS](patternId, circleOptions?.fillColor || '#000')
-				);
+			if (shape && SHAPE_TEMPLATES[shape]) {
+				const shapeTemplate = SHAPE_TEMPLATES[shape];
+				const content = shapeTemplate(size, color);
+				return createSVGWrapper(content, size, size);
 			}
-			if (circleOptions?.gradient && circleOptions.gradient in GRADIENTS) {
-				patterns.push(
-					GRADIENTS[circleOptions.gradient](patternId, circleOptions?.fillColor || '#000')
-				);
-			}
-
-			const content = `
-                ${patterns.length > 0 ? createDefs(patterns) : ''}
-                ${
-									hasStroke
-										? `<circle cx="${baseSize / 2}" cy="${baseSize / 2}" r="${(circleOptions?.radius || 0) + 1}" 
-                        fill="${circleOptions?.color}"/>`
-										: ''
-								}
-                <circle cx="${baseSize / 2}" cy="${baseSize / 2}" r="${circleOptions?.radius || 0}" 
-                    fill="${SymbologyGenerator.getFillStyle(fillType, patternId, circleOptions)}"
-                    fill-opacity="${circleOptions?.fillOpacity || 1}"/>
-            `;
-
-			return createSVGWrapper(content, baseSize, baseSize);
 		}
+
+		// Original symbol generation logic for fallback
+		const baseSize = legendBaseSize || SymbologyGenerator.calculatePointSymbolSize(symbolOptions);
 
 		if (symbolOptions.options?.type === 'divIcon') {
 			const { options: iconOptions } = symbolOptions;
@@ -65,14 +48,7 @@ class SymbologyGenerator {
 			const shape = iconOptions?.markerShape as keyof typeof SHAPE_TEMPLATES;
 
 			const shapeTemplate = SHAPE_TEMPLATES[shape] || SHAPE_TEMPLATES.square;
-			const content = `
-                ${shapeTemplate(size, color)}
-                ${
-									iconOptions?.options?.stroke
-										? `<path d="${shapeTemplate(size, color)}" fill="none" stroke="black" stroke-width="1"/>`
-										: ''
-								}
-            `;
+			const content = shapeTemplate(size, color);
 
 			return createSVGWrapper(content, size, size);
 		}
@@ -84,22 +60,6 @@ class SymbologyGenerator {
 		);
 	}
 
-	// static createLineStyle(options: LineSymbologyOptions): L.PathOptions {
-	// 	const style: L.PathOptions = {
-	// 		color: options.color || '#3388ff',
-	// 		weight: options.width || 3,
-	// 		opacity: options.opacity || 1,
-	// 		lineCap: options.lineCap || 'round',
-	// 		lineJoin: options.lineJoin || 'round'
-	// 	};
-
-	// 	if (options.pattern) {
-	// 		style.dashArray = this.getLineDashArray(options.pattern);
-	// 	}
-
-	// 	return style;
-	// }
-
 	static createLineStyle(options: LineSymbologyOptions): L.PathOptions {
 		const style: L.PathOptions = {
 			color: options.color || '#3388ff',
@@ -109,45 +69,15 @@ class SymbologyGenerator {
 			lineJoin: options.lineJoin || 'round'
 		};
 
-		// Only set dashArray if pattern is not 'solid'
-		if (options.pattern && options.pattern !== 'solid') {
-			style.dashArray = this.getLineDashArray(options.pattern);
+		if (options?.pattern && options.pattern !== 'solid') {
+			const dashArray = SymbologyGenerator.getLineDashArray(options.pattern);
+			if (dashArray) {
+				style.dashArray = dashArray;
+			}
 		}
 
 		return style;
 	}
-
-	// static createLineSymbol(options: LineSymbologyOptions): string {
-	// 	const pattern = options.pattern
-	// 		? `stroke-dasharray="${this.getLineDashArray(options.pattern, true)}"`
-	// 		: '';
-	// 	const gradient = options.gradient
-	// 		? GRADIENTS.linear('lineGradient', options.color || '#3388ff')
-	// 		: '';
-
-	// 	const content = `
-	//         ${gradient}
-	//         <line x1="0" y1="2" x2="20" y2="2"
-	//             stroke="${options.gradient ? 'url(#lineGradient)' : options.color || '#3388ff'}"
-	//             stroke-width="${options.width || 2}"
-	//             ${pattern}
-	//             stroke-linecap="${options.lineCap || 'round'}"
-	//             stroke-linejoin="${options.lineJoin || 'round'}"
-	//         />
-	//         ${
-	// 						options.arrowheads
-	// 							? `
-	//             <path d="M16,0 L20,2 L16,4"
-	//                 fill="none"
-	//                 stroke="${options.color || '#3388ff'}"
-	//                 stroke-width="1"
-	//             />`
-	// 							: ''
-	// 					}
-	//     `;
-
-	// 	return createSVGWrapper(content, 20, 4);
-	// }
 
 	static createLineSymbol(options: LineSymbologyOptions): string {
 		const pattern =
@@ -233,9 +163,10 @@ class SymbologyGenerator {
 	}
 
 	private static getLineDashArray(pattern: string, forSVG = false): string {
+		if (!pattern) return '';
 		const scale = forSVG ? 0.4 : 1;
 		const patterns = {
-			solid: '', // Add this line
+			solid: '',
 			dashed: `${10 * scale}, ${10 * scale}`,
 			dotted: `${2 * scale}, ${8 * scale}`,
 			dashdot: `${10 * scale}, ${5 * scale}, ${2 * scale}, ${5 * scale}`

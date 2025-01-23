@@ -13,9 +13,9 @@
 	import type { ActionData } from './$types';
 	import type { PropertyProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		form: ActionData;
-	};
+	}
 
 	let { form }: Props = $props();
 

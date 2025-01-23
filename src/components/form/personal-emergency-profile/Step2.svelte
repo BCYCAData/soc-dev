@@ -5,10 +5,10 @@
 
 	import type { PersonalProfileFormData } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		propertyWasRented: boolean;
 		userProfile: PersonalProfileFormData;
-	};
+	}
 
 	let { propertyWasRented, userProfile = $bindable() }: Props = $props();
 

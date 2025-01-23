@@ -3,10 +3,10 @@
 
 	import type { TinoneeCommunityProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		communityTinoneeProfile: TinoneeCommunityProfile;
 		communityTinoneeInformationOptions?: { value: string; lable: string }[];
-	};
+	}
 
 	let { communityTinoneeProfile = $bindable(), communityTinoneeInformationOptions = [] }: Props =
 		$props();

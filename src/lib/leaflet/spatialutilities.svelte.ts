@@ -23,6 +23,7 @@ function setActiveTemplate(template: FeatureTemplate | null) {
 }
 
 function setActiveFeature(feature: SpatialFeature | null) {
+	console.log('activeFeature', feature);
 	editingState.activeFeature = feature;
 }
 
@@ -49,6 +50,49 @@ function deleteFeature(featureId: string) {
 	});
 }
 
+function transformFeaturesToGeoJSON(
+	features: Record<string, any>,
+	attributes: Record<string, any>
+) {
+	// Group features by template_id
+	const featuresByTemplate: Record<string, GeoJSON.FeatureCollection> = {};
+	console.log('features', features);
+	console.log('attributes', attributes);
+
+	// Process features
+	Object.values(features).forEach((feature) => {
+		console.log('feature', feature);
+		if (!featuresByTemplate[feature.template_id]) {
+			featuresByTemplate[feature.template_id] = {
+				type: 'FeatureCollection',
+				features: []
+			};
+		}
+
+		// Group attributes for this feature
+		const featureAttributes = Object.values(attributes)
+			.filter((attr) => attr.feature_id === feature.id)
+			.reduce(
+				(acc, attr) => ({
+					...acc,
+					[attr.field_id]: attr.value
+				}),
+				{}
+			);
+
+		featuresByTemplate[feature.template_id].features.push({
+			type: 'Feature',
+			geometry: feature.geom,
+			properties: {
+				id: feature.id,
+				...featureAttributes
+			}
+		});
+	});
+
+	return featuresByTemplate;
+}
+
 export {
 	editingState,
 	spatialFeatures,
@@ -59,5 +103,6 @@ export {
 	setEditingMode,
 	addFeature,
 	updateFeature,
-	deleteFeature
+	deleteFeature,
+	transformFeaturesToGeoJSON
 };

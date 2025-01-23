@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { AppMessageFunctionData } from '$lib/types';
 
-	type Props = {
+	interface Props {
 		messagesData: AppMessageFunctionData;
-	};
+	}
 
 	let { messagesData }: Props = $props();
 </script>

@@ -6,10 +6,10 @@
 	import { setUpperCase } from '$lib/svelte-actions';
 	import type { ActionData, PageData } from './$types';
 
-	type Props = {
+	interface Props {
 		data: PageData;
 		form: ActionData;
-	};
+	}
 
 	let { data = $bindable(), form }: Props = $props();
 	let unsaved = $state(false);

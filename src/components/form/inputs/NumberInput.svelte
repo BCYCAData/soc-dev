@@ -1,12 +1,12 @@
 <script lang="ts">
-	type Props = {
+	interface Props {
 		name: string;
 		lable: string;
 		inputClass: string;
 		divClass?: string;
 		lableClass: string;
 		inputValue: number | null | undefined;
-	};
+	}
 
 	let {
 		name,

@@ -5,11 +5,11 @@
 
 	import type { PersonalProfileFormData } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		userProfile: PersonalProfileFormData;
 		communityName?: string;
 		userProfileStayInTouchOptions?: { value: string; lable: string }[];
-	};
+	}
 
 	let {
 		userProfile = $bindable(),

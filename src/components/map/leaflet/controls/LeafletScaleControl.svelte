@@ -3,13 +3,13 @@
 
 	import type L from 'leaflet';
 
-	type Props = {
+	interface Props {
 		position?: L.ControlPosition;
 		maxWidth?: number;
 		metric?: boolean;
 		imperial?: boolean;
 		updateWhenIdle?: boolean;
-	};
+	}
 
 	let {
 		position = 'bottomleft',

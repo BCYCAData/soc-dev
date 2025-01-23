@@ -72,3 +72,16 @@
 	stroke: #000000;
 	stroke-width: 2;
 }
+
+.editable-feature-tooltip {
+	background-color: rgba(0, 0, 0, 0.8);
+	border: none;
+	border-radius: 4px;
+	color: white;
+	font-size: 12px;
+	padding: 6px 8px;
+}
+
+.editable-feature-tooltip::before {
+	border-top-color: rgba(0, 0, 0, 0.8);
+}

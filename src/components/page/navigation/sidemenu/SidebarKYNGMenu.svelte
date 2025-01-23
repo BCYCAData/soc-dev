@@ -3,9 +3,9 @@
 	import { kyngSidebarMenuItems } from '$lib/menu-items';
 	import type { KYNGArea } from '$lib/types';
 
-	type Props = {
+	interface Props {
 		kyngArea: KYNGArea;
-	};
+	}
 
 	let { kyngArea }: Props = $props();
 	let permissions = $derived(page.data.permissions ? page.data.permissions.split(',') : []);

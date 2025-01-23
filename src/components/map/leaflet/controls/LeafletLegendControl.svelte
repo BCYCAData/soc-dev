@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
-	import L from 'leaflet';
+	import type L from 'leaflet';
 	import { LeafletLegendControlClass } from '$lib/leaflet/leafletlegendcontrol';
 	import type { Writable } from 'svelte/store';
 	import type { LegendItem, LegendInfo, LayerInfo } from '$lib/leaflet/types';
@@ -11,12 +11,14 @@
 
 	let { position = 'bottomleft' }: Props = $props();
 	let leafletMap: L.Map;
-	const { getLeafletMap, getLeafletLayers } = getContext<{
+	const { getLeafletMap, getLeaflet, getLeafletLayers } = getContext<{
 		getLeafletMap: () => L.Map;
+		getLeaflet: () => typeof L;
 		getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
 	}>('leafletContext');
 
 	const layersStore: Writable<Record<string, LayerInfo>> = getLeafletLayers();
+	const leafletModule: typeof L = getLeaflet();
 
 	let addedLayers = new Set<string>();
 	let customControl: LeafletLegendControlClass;
@@ -24,7 +26,9 @@
 	onMount(() => {
 		let unsubscribe: (() => void) | undefined;
 		leafletMap = getLeafletMap();
-		customControl = new LeafletLegendControlClass(leafletMap, layersStore, { position });
+		customControl = new LeafletLegendControlClass(leafletMap, leafletModule, layersStore, {
+			position
+		});
 		leafletMap.addControl(customControl);
 
 		unsubscribe = layersStore.subscribe((layers: Record<string, LayerInfo>) => {

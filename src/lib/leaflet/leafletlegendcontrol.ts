@@ -1,28 +1,32 @@
-import L from 'leaflet';
 import { writable, get } from 'svelte/store';
+import { Control } from 'leaflet';
+import type L from 'leaflet';
 
 import type { LayerInfo } from './types';
 
-export class LeafletLegendControlClass extends L.Control {
+export class LeafletLegendControlClass extends Control {
 	private container: HTMLElement;
 	private legendContent: { [key: string]: HTMLElement } = {};
 	private legendContentWrapper: HTMLElement;
 	private map: L.Map;
+	private leaflet: typeof L;
 	private isExpanded: boolean = false;
 	private icon: HTMLElement;
 	private layersStore: ReturnType<typeof writable<Record<string, LayerInfo>>>;
 
 	constructor(
 		map: L.Map,
+		leaflet: typeof L,
 		layersStore: ReturnType<typeof writable<Record<string, LayerInfo>>>,
 		options?: L.ControlOptions
 	) {
 		super(options);
 		this.map = map;
+		this.leaflet = leaflet;
 		this.layersStore = layersStore;
 
 		// Initialize container
-		this.container = L.DomUtil.create('div', 'leaflet-bar leaflet-control custom-legend');
+		this.container = leaflet.DomUtil.create('div', 'leaflet-bar leaflet-control custom-legend');
 		this.container.style.cssText = `
             background-color: white;
             padding: 0;
@@ -31,7 +35,7 @@ export class LeafletLegendControlClass extends L.Control {
         `;
 
 		// Create icon
-		this.icon = L.DomUtil.create('div', 'legend-icon', this.container);
+		this.icon = leaflet.DomUtil.create('div', 'legend-icon', this.container);
 		this.icon.innerHTML = `
             <svg class="legend-icon-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <rect class="dot-1" x="2" y="6" width="3" height="3"></rect>
@@ -49,7 +53,11 @@ export class LeafletLegendControlClass extends L.Control {
         `;
 
 		// Initialize content wrapper
-		this.legendContentWrapper = L.DomUtil.create('div', 'legend-content-wrapper', this.container);
+		this.legendContentWrapper = leaflet.DomUtil.create(
+			'div',
+			'legend-content-wrapper',
+			this.container
+		);
 		this.legendContentWrapper.style.cssText = `
             display: none;
             max-height: 80vh;
@@ -64,15 +72,19 @@ export class LeafletLegendControlClass extends L.Control {
 	}
 
 	onAdd(map: L.Map): HTMLElement {
-		L.DomEvent.disableClickPropagation(this.container);
-		L.DomEvent.disableScrollPropagation(this.container);
+		this.leaflet.DomEvent.disableClickPropagation(this.container);
+		this.leaflet.DomEvent.disableScrollPropagation(this.container);
 
-		const title = L.DomUtil.create('h3', 'leaflet-legend-title', this.legendContentWrapper);
+		const title = this.leaflet.DomUtil.create(
+			'h3',
+			'leaflet-legend-title',
+			this.legendContentWrapper
+		);
 		title.textContent = 'Legend';
 		title.style.margin = '0 0 10px 0';
 
-		L.DomEvent.on(this.container, 'mouseenter', this._expand, this);
-		L.DomEvent.on(this.container, 'mouseleave', this._collapse, this);
+		this.leaflet.DomEvent.on(this.container, 'mouseenter', this._expand, this);
+		this.leaflet.DomEvent.on(this.container, 'mouseleave', this._collapse, this);
 
 		this.map = map;
 		return this.container;
@@ -80,7 +92,7 @@ export class LeafletLegendControlClass extends L.Control {
 
 	private _expand() {
 		if (!this.isExpanded) {
-			L.DomUtil.addClass(this.container, 'leaflet-control-legend-expanded');
+			this.leaflet.DomUtil.addClass(this.container, 'leaflet-control-legend-expanded');
 			this.legendContentWrapper.style.display = 'block';
 			this.icon.style.display = 'none';
 
@@ -98,7 +110,7 @@ export class LeafletLegendControlClass extends L.Control {
 
 	private _collapse() {
 		if (this.isExpanded) {
-			L.DomUtil.removeClass(this.container, 'leaflet-control-legend-expanded');
+			this.leaflet.DomUtil.removeClass(this.container, 'leaflet-control-legend-expanded');
 			this.legendContentWrapper.style.display = 'none';
 			this.icon.style.display = 'flex';
 			this.isExpanded = false;
@@ -109,7 +121,11 @@ export class LeafletLegendControlClass extends L.Control {
 		// Create or get existing layer group
 		let wrapper = this.legendContent[layerName];
 		if (!wrapper) {
-			wrapper = L.DomUtil.create('div', 'leaflet-legend-layer', this.legendContentWrapper);
+			wrapper = this.leaflet.DomUtil.create(
+				'div',
+				'leaflet-legend-layer',
+				this.legendContentWrapper
+			);
 			wrapper.style.cssText = `
             margin-bottom: 5px;
             background-color: #f8f8f8;
@@ -117,7 +133,7 @@ export class LeafletLegendControlClass extends L.Control {
         `;
 
 			// Add layer heading
-			const layerTitle = L.DomUtil.create('div', 'leaflet-legend-layer-title', wrapper);
+			const layerTitle = this.leaflet.DomUtil.create('div', 'leaflet-legend-layer-title', wrapper);
 			layerTitle.textContent = layerName;
 			layerTitle.style.cssText = `
             font-weight: bold;
@@ -130,7 +146,7 @@ export class LeafletLegendControlClass extends L.Control {
 		}
 
 		// Add content under the layer heading
-		const itemContainer = L.DomUtil.create('div', 'legend-item-container');
+		const itemContainer = this.leaflet.DomUtil.create('div', 'legend-item-container');
 		itemContainer.appendChild(content);
 		wrapper.appendChild(itemContainer);
 

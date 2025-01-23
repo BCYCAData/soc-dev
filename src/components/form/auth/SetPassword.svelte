@@ -38,7 +38,7 @@
 			password.length > 8,
 			/[A-Z]/.test(password),
 			/[0-9]/.test(password),
-			/[?~!@#%^&*()_+-=,:;|]/.test(password),
+			/[?~!@#%^&*()\\_+=,:;|]/.test(password),
 			password === confirmPassword
 		];
 		strength = validations.filter(Boolean).length;

@@ -7,10 +7,10 @@
 	import type { UserPostalAddress } from '$lib/form.types';
 	import type { ActionData, PageData } from './$types';
 
-	type Props = {
+	interface Props {
 		data: PageData;
 		form: ActionData;
-	};
+	}
 
 	let { data = $bindable(), form }: Props = $props();
 

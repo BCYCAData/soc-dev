@@ -3,10 +3,10 @@
 
 	import type { BCYCACommunityProfile } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		communityBCYCAProfile: BCYCACommunityProfile;
 		communityBCYCAMeetingOptions?: { value: string; lable: string }[];
-	};
+	}
 
 	let { communityBCYCAProfile = $bindable(), communityBCYCAMeetingOptions = [] }: Props = $props();
 </script>

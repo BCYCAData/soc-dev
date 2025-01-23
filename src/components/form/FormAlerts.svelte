@@ -1,10 +1,10 @@
 <script lang="ts">
-	type Props = {
+	interface Props {
 		unsaved: boolean;
 		formError: boolean;
 		formSuccess: boolean;
 		errorMessage?: string;
-	};
+	}
 
 	let { unsaved, formError, formSuccess, errorMessage = '' }: Props = $props();
 

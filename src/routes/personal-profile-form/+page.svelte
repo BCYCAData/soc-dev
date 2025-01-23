@@ -5,10 +5,10 @@
 	import type { ActionData, PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
 
-	type Props = {
+	interface Props {
 		data: PageData;
 		form: ActionData;
-	};
+	}
 
 	interface ProgressBarInstance extends SvelteComponent {
 		handleProgress: (stepIncrement: number) => void;

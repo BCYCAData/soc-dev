@@ -93,6 +93,13 @@ interface LayerInfo {
 	legendSymbol?: string;
 	legendLabel?: string;
 	legendInfo: LegendInfo;
+	template_id?: string;
+	originalStyle?:
+		| L.PathOptions
+		| PointSymbologyOptions
+		| LineSymbologyOptions
+		| PolygonSymbologyOptions;
+	order?: number;
 }
 
 interface LegendInfo {
@@ -151,6 +158,15 @@ export interface ExtendedPolygonSymbologyOptions extends L.PathOptions {
 export interface EnhancedPathOptions extends L.PathOptions {
 	fillPattern?: 'hatch' | 'dots' | 'grid';
 	gradient?: 'linear' | 'radial';
+}
+
+export interface LineGroupedSymbologyOptions {
+	propertyField: string;
+	groups: Array<{
+		value: string | number;
+		symbol: LineSymbologyOptions;
+		label: string;
+	}>;
 }
 
 export interface PolygonSymbologyOptions {

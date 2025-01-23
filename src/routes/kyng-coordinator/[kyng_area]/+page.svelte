@@ -3,10 +3,6 @@
 
 	let { data } = $props<{ data: PageData }>();
 
-	// const currentArea = $state(data.currentArea);
-	// $effect(() => {
-	// 	console.log('Current Area:', currentArea);
-	// })
 	const kyngAreaId = $derived(data.currentArea?.kyngAreaId);
 
 	const kyngName = $derived(data.currentArea.kyngName);

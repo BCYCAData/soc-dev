@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { Step } from '$lib/menu-items';
 
-	type Props = {
+	interface Props {
 		steps?: Step[];
 		currentActive?: number;
 		onStepClick?: (event: MouseEvent | KeyboardEvent | CustomEvent<any>) => void;
-	};
+	}
 
 	let { steps = [], currentActive = $bindable(1), onStepClick }: Props = $props();
 

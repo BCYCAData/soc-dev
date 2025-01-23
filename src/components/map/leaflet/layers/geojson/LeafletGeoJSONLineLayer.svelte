@@ -3,16 +3,12 @@
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
 	import { createLineStyle, createLineSymbol } from '$lib/leaflet/leafletlegendutility';
-	import type { LineSymbologyOptions, LegendInfo, LayerInfo } from '$lib/leaflet/types';
-
-	interface LineGroupedSymbologyOptions {
-		propertyField: string;
-		groups: Array<{
-			value: string | number;
-			symbol: LineSymbologyOptions;
-			label: string;
-		}>;
-	}
+	import type {
+		LineSymbologyOptions,
+		LegendInfo,
+		LayerInfo,
+		LineGroupedSymbologyOptions
+	} from '$lib/leaflet/types';
 
 	interface Props {
 		geojsonData: GeoJSON.FeatureCollection;
@@ -20,12 +16,15 @@
 		visible: boolean;
 		staticLayer: boolean;
 		showInLegend: boolean;
+		order?: number;
 		editable: boolean;
 		symbology: LineSymbologyOptions | LineGroupedSymbologyOptions;
 		propertyForSymbol?: string;
 		symbolMap?: Record<string, LineSymbologyOptions>;
 		tooltipField?: string;
 		tooltipOptions?: L.TooltipOptions;
+		tooltipTemplate?: (feature: GeoJSON.Feature) => string;
+		template_id?: string;
 	}
 
 	let {
@@ -34,12 +33,14 @@
 		visible = true,
 		staticLayer = false,
 		showInLegend = true,
+		order,
 		editable = false,
 		symbology = {},
 		propertyForSymbol,
 		symbolMap = {},
 		tooltipField,
-		tooltipOptions = {}
+		tooltipOptions = {},
+		template_id
 	}: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl } = getContext<{
@@ -54,7 +55,6 @@
 	let layersStore: Writable<Record<string, LayerInfo>>;
 	let layersControl: Writable<L.Control.Layers | null>;
 	let geoJSONLayer: L.GeoJSON;
-	let geomanInitialized = false;
 
 	function getLineStyle(feature: GeoJSON.Feature): L.PathOptions {
 		if ('propertyField' in symbology && 'groups' in symbology) {
@@ -84,6 +84,12 @@
 
 		const dataToUse = geojsonData?.features?.length ? geojsonData : defaultGeojsonData;
 
+		const lineStyle: L.PathOptions = {
+			color: (symbology as LineSymbologyOptions).color,
+			weight: (symbology as LineSymbologyOptions).width,
+			opacity: (symbology as LineSymbologyOptions).opacity
+		};
+
 		geoJSONLayer = leaflet.geoJSON(dataToUse, {
 			style: (feature) => getLineStyle(feature as GeoJSON.Feature),
 			onEachFeature: (feature, layer) => {
@@ -92,6 +98,13 @@
 						permanent: false,
 						direction: 'center',
 						...tooltipOptions
+					});
+				} else if (editable && feature.properties) {
+					const tooltipContent = `${layerName}<br>ID: ${feature.properties.id}`;
+					layer.bindTooltip(tooltipContent, {
+						permanent: false,
+						direction: 'center',
+						className: 'editable-feature-tooltip'
 					});
 				}
 			}
@@ -108,7 +121,10 @@
 				visible,
 				editable,
 				showInLegend,
-				legendInfo
+				legendInfo,
+				template_id,
+				originalStyle: lineStyle,
+				order
 			}
 		}));
 
@@ -121,7 +137,7 @@
 		}
 
 		if (editable) {
-			enableEditing();
+			// enableEditing();
 		}
 	}
 
@@ -151,54 +167,6 @@
 		};
 	}
 
-	function enableEditing() {
-		if (geoJSONLayer.pm) {
-			geoJSONLayer.pm.enable({
-				allowSelfIntersection: false
-			});
-		}
-	}
-
-	function disableEditing() {
-		if (geoJSONLayer?.pm) {
-			geoJSONLayer.pm.disable();
-		}
-	}
-
-	function setupGeomanControls() {
-		if (!map.pm?.Toolbar || geomanInitialized) return;
-		const actions = ['add', 'edit', 'delete'] as const;
-		actions.forEach((action) => {
-			const controlName = `${layerName}-${action}`;
-			const existingButtons = map.pm.Toolbar.getButtons();
-
-			if (!existingButtons[controlName]) {
-				map.pm.Toolbar.createCustomControl({
-					name: controlName,
-					block: 'custom',
-					title: `${action.charAt(0).toUpperCase() + action.slice(1)} ${layerName}`,
-					onClick: () => handleGeomanAction(action),
-					toggle: true,
-					className: `custom-geoman-${action}-icon`
-				});
-			}
-		});
-	}
-
-	function handleGeomanAction(action: 'add' | 'edit' | 'delete') {
-		if (!geoJSONLayer?.pm) return;
-
-		switch (action) {
-			case 'add':
-			case 'delete':
-				geoJSONLayer.pm.enable();
-				break;
-			case 'edit':
-				enableEditing();
-				break;
-		}
-	}
-
 	onMount(() => {
 		leaflet = getLeaflet();
 		map = getLeafletMap();
@@ -206,19 +174,8 @@
 		layersControl = getLayersControl();
 		if (leaflet && map) {
 			createGeoJSONLayer();
-			if (editable) {
-				setupGeomanControls();
-				geomanInitialized = true;
-			}
-		}
-	});
-
-	$effect(() => {
-		if (geoJSONLayer) {
-			if (editable) {
-				enableEditing();
-			} else {
-				disableEditing();
+			if (geoJSONLayer && editable) {
+				// setupSnapping();
 			}
 		}
 	});
@@ -245,7 +202,6 @@
 					}
 				});
 			}
-			disableEditing();
 		}
 	});
 </script>

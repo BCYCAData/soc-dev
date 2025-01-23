@@ -3,11 +3,11 @@
 	import type { PropertyProfile } from '$lib/form.types';
 	import { profileSidebarMenuItems } from '$lib/menu-items';
 
-	type Props = {
+	interface Props {
 		communityText: string;
 		properties: PropertyProfile[];
 		communityProfiles: Record<string, string | null>;
-	};
+	}
 
 	let { communityText, properties, communityProfiles }: Props = $props();
 

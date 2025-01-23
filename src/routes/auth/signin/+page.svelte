@@ -9,6 +9,7 @@
 	let email = $state();
 	let password = $state();
 	let errorMessage = form?.error ?? '';
+	let showPassword = $state(false);
 </script>
 
 <svelte:head>
@@ -29,16 +30,26 @@
 				autocomplete="email"
 				bind:value={email}
 			/>
-			<input
-				id="password"
-				type="password"
-				class="form-input mb-4 w-full rounded !border !border-secondary-700 py-3"
-				name="password"
-				required={true}
-				placeholder="Password"
-				autocomplete="current-password"
-				bind:value={password}
-			/>
+			<div class="relative mb-4">
+				<input
+					id="password"
+					type={showPassword ? 'text' : 'password'}
+					class="form-input w-full rounded !border !border-secondary-700 py-3"
+					name="password"
+					required={true}
+					placeholder="Password"
+					autocomplete="current-password"
+					bind:value={password}
+				/>
+				<button
+					type="button"
+					class="absolute right-3 top-1/2 -translate-y-1/2 text-surface-950"
+					on:mouseenter={() => (showPassword = true)}
+					on:mouseleave={() => (showPassword = false)}
+				>
+					{showPassword ? '👁️' : '👁️'}
+				</button>
+			</div>
 			<div class="mb-4 text-center">
 				<a href="/auth/requestresetpassword" class="font-semibold text-orange-900 hover:underline">
 					&gt&gt&gt Forgot Your Password ? &lt&lt&lt

@@ -8,9 +8,9 @@
 
 	import type { PersonalProfileFormData } from '$lib/form.types';
 
-	type Props = {
+	interface Props {
 		userProfile: PersonalProfileFormData;
-	};
+	}
 
 	let { userProfile = $bindable() }: Props = $props();
 </script>
