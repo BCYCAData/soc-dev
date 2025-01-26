@@ -22,6 +22,7 @@
 	const bcycaAddressPoints = addressPoints;
 	const bcycaRegisteredPoints = registeredPoints;
 	const bcycaCommunityArea = community;
+
 	let mapLoaded = $state(false);
 
 	function handleMapLoaded() {
@@ -41,7 +42,7 @@
 			</div>
 		{/if}
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
-			<LeafletMap {...adminCommunityBCYCAMapConfig} onMapReady={handleMapLoaded}>
+			<LeafletMap {...adminCommunityBCYCAMapConfig(initialExtent)} onMapReady={handleMapLoaded}>
 				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte') then { default: LeafletGeoJSONPolygonLayer }}
 					<LeafletGeoJSONPolygonLayer
 						geojsonData={bcycaCommunityArea}

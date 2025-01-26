@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import SetPassword from '$components/form/auth/SetPassword.svelte';
 	import SetEmail from '$components/form/auth/SetEmail.svelte';
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
@@ -6,18 +7,26 @@
 
 	interface Props {
 		apiData: APIData;
+		form: any;
 	}
 
-	let { apiData = $bindable() }: Props = $props();
-
+	let { apiData = $bindable(), form }: Props = $props();
+	let email = $state('');
+	let password = $state('');
 	let validPassword = $state(false);
 	let validEmail = $state(false);
-	let errorMessage = $state('');
+	let loading = $state(false);
 
 	let canGo = $derived(validPassword && validEmail);
 	let searchAddress = $derived(`${apiData.searchaddressstreet} ${apiData.searchaddresssuburb}`);
 	let validAddress = $derived(`${apiData.validaddressstreet} ${apiData.validaddresssuburb}`);
 	let apiDataJson = $derived(JSON.stringify(apiData));
+	$effect(() => {
+		if (form?.formInputs) {
+			email = form.formInputs.email;
+			password = form.formInputs.password;
+		}
+	});
 </script>
 
 <div class="flex flex-col gap-4">
@@ -41,10 +50,21 @@
 				Please enter your email address and a password to complete the registration process.
 			</h1>
 
-			<form action="/auth/signup?/signup" method="POST" class="flex flex-col gap-4">
+			<form
+				action="/auth/signup?/signup"
+				method="POST"
+				class="flex flex-col gap-4"
+				use:enhance={() => {
+					loading = true;
+					return async ({ update }) => {
+						await update();
+						loading = false;
+					};
+				}}
+			>
 				<input id="data" type="hidden" name="apiDatajson" value={apiDataJson} />
-				<SetEmail bind:validEmail />
-				<SetPassword bind:validPassword />
+				<SetEmail bind:email bind:validEmail />
+				<SetPassword bind:password bind:validPassword />
 
 				<button type="submit" class="btn-primary" disabled={!canGo}> Create Account </button>
 
@@ -57,9 +77,15 @@
 			</form>
 		</div>
 
-		{#if errorMessage}
-			<AuthErrorMessage {errorMessage} />
+		{#if form?.error}
+			<AuthErrorMessage errorMessage={form?.message ?? ''} />
 		{/if}
+		<div class="text-center text-surface-950">
+			By signing up, you agree to the
+			<a class="link" href="/policies/termsofservice">Terms of Service</a>
+			and
+			<a class="link" href="/policies/privacy">Privacy Policy</a>
+		</div>
 	</div>
 </div>
 

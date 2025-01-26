@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
 	import Spinner from '$components/page/Spinner.svelte';
 	import AddressInput from '$components/form/auth/AddressInput.svelte';
@@ -7,10 +8,19 @@
 	interface Props {
 		streetaddress?: string;
 		suburb?: string;
+		form?: any;
 	}
 
-	let loading = false;
-	let { streetaddress = '', suburb = '' }: Props = $props();
+	let loading = $state(false);
+
+	let { streetaddress = '', suburb = '', form }: Props = $props();
+
+	$effect(() => {
+		if (form?.formInputs) {
+			streetaddress = form.formInputs.streetaddress;
+			suburb = form.formInputs.suburb;
+		}
+	});
 
 	const canGoStreet = $derived(checkStreetAddressString(streetaddress));
 	const canGoSuburb = $derived(checkSuburbString(suburb));
@@ -27,7 +37,17 @@
 		Please enter your Street Address and Suburb to check your qualification
 	</p>
 
-	<form action="/auth/signup?/validate" method="POST">
+	<form
+		action="/auth/signup?/validate"
+		method="POST"
+		use:enhance={() => {
+			loading = true;
+			return async ({ update }) => {
+				await update();
+				loading = false;
+			};
+		}}
+	>
 		<AddressInput
 			id="streetaddress"
 			name="streetaddress"
@@ -59,6 +79,10 @@
 
 		{#if !canGoSuburb && suburb.length > 0}
 			<ValidationMessage>The suburb must not have State or Postcode.</ValidationMessage>
+		{/if}
+
+		{#if form?.error}
+			<ValidationMessage>{form.message}</ValidationMessage>
 		{/if}
 	</form>
 </div>

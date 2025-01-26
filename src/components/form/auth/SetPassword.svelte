@@ -5,16 +5,17 @@
 	import { PASSWORD_VALIDATIONS } from '$lib/constants';
 
 	interface Props {
+		password: string;
 		validPassword: boolean;
 	}
 
 	// @ts-ignore
-	let { validPassword = $bindable() }: Props = $props();
+	let { password = $bindable(), validPassword = $bindable() }: Props = $props();
 
 	let strength = $state(0);
 	let validations = $state<boolean[]>([]);
 	let showPassword = $state(false);
-	let password = $state('');
+	// let password = $state('');
 	let confirmPassword = $state('');
 
 	let isPasswordValid = $derived(strength === PASSWORD_VALIDATIONS.length);

@@ -22,6 +22,51 @@ export type FullAutoFill =
 	| 'additional-name'
 	| 'family-name';
 
+export interface AddressValidationResponse {
+	principaladdresssiteoid: string;
+	validaddressstreet: string;
+	validaddresssuburb: string;
+	validaddresspostcode: string;
+	searchaddressstreet: string;
+	searchaddresssuburb: string;
+	community: string;
+	status: number;
+}
+
+interface ValidateAddressSuccessResponse {
+	apiData: AddressValidationResponse;
+	error: false;
+	success: true;
+}
+
+interface ValidateAddressErrorResponse {
+	error: true;
+	message: string;
+	success: false;
+	formInputs: {
+		streetaddress: string;
+		suburb: string;
+	};
+}
+
+interface SignupSuccessResponse {
+	apiData: AddressValidationResponse;
+	error: false;
+	success: true;
+	redirect: string;
+}
+
+interface SignupErrorResponse {
+	error: true;
+	message: string;
+	success: false;
+	apiData: AddressValidationResponse;
+}
+
+export type SignupActionResponse = SignupSuccessResponse | SignupErrorResponse;
+
+export type ValidateActionResponse = ValidateSuccessResponse | ValidateErrorResponse;
+
 export interface TabulatorProps {
 	columns: any[];
 	data: any[];

@@ -85,3 +85,18 @@ declare global {
 }
 
 export {};
+
+declare module '@fontsource/inter' {
+	const content: any;
+	export default content;
+}
+
+declare module '@fontsource/poppins' {
+	const content: any;
+	export default content;
+}
+
+declare module '@fontsource/open-sans' {
+	const content: any;
+	export default content;
+}

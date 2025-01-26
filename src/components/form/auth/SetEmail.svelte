@@ -2,11 +2,11 @@
 	import { EMAIL_REGEX } from '$lib/constants';
 
 	interface Props {
+		email: string;
 		validEmail: boolean;
 	}
 
-	let { validEmail = $bindable() }: Props = $props();
-	let email = $state('');
+	let { email = $bindable(), validEmail = $bindable() }: Props = $props();
 	let touched = $state(false);
 
 	function validateEmail(email: string): boolean {

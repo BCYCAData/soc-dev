@@ -20,10 +20,6 @@ export async function isEmailAllowed(email: string): Promise<boolean> {
 			console.error('Allowed emails list is not properly configured');
 			return false;
 		}
-		console.log(
-			'allowedEmails.includes(email.toLowerCase())',
-			allowedEmails.includes(email.toLowerCase())
-		);
 		return allowedEmails.includes(email.toLowerCase());
 	} catch (error) {
 		console.error('Error checking allowed emails:', error);

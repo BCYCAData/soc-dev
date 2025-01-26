@@ -85,3 +85,29 @@
 .editable-feature-tooltip::before {
 	border-top-color: rgba(0, 0, 0, 0.8);
 }
+
+.leaflet-bottom.leaflet-left {
+	display: flex;
+	align-items: flex-end;
+	/* This aligns items to the bottom */
+}
+
+.leaflet-control-zoom {
+	margin-bottom: 0 !important;
+	/* Remove default bottom margin */
+}
+
+.leaflet-control-scale {
+	margin-bottom: 0 !important;
+	/* Remove default bottom margin */
+	margin-left: 10px !important;
+	/* Add some space between controls */
+}
+
+.leaflet-control-zoom {
+	order: 1;
+}
+
+.leaflet-control-scale {
+	order: 2;
+}
