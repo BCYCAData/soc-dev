@@ -22,6 +22,11 @@ export type FullAutoFill =
 	| 'additional-name'
 	| 'family-name';
 
+export interface PropertyAddress {
+	lut_text: string;
+	property_id: string[];
+}
+
 export interface AddressValidationResponse {
 	principaladdresssiteoid: string;
 	validaddressstreet: string;

@@ -25,7 +25,7 @@ export const GET: RequestHandler = async (event) => {
 		throw error(500, { message: 'Error fetching property data' });
 	}
 
-	console.log('propertyData', propertyData);
+	console.log('streetPropertyData', propertyData);
 
 	if (!propertyData?.length) {
 		throw error(404, { message: 'No properties found for this street' });

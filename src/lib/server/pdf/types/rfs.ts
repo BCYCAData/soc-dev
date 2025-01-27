@@ -28,6 +28,10 @@ export interface RfsReportData {
 		};
 		other_site_hazards: string;
 	};
+	other_local_hazards: {
+		land_adjacent_hazard: string;
+		other_local_hazards: string;
+	};
 	fire_fighting_assets: {
 		static_water: string;
 		stortz_fitting: string;

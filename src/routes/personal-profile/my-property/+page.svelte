@@ -5,8 +5,6 @@
 	let { data } = $props<{ data: PageData }>();
 	const propertyIds = $derived(page.data.propertyIds);
 	const properties = $derived(data.properties);
-	$inspect('propertyIds', propertyIds);
-	$inspect('properties', properties);
 
 	const title = $derived(
 		properties.length === 1 ? 'My Property Dashboard' : 'My Properties Dashboard'

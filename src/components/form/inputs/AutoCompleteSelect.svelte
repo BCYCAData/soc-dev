@@ -1,21 +1,25 @@
 <script lang="ts">
-	interface ListItem {
-		user_id: string;
+	interface ListDataItem {
 		lut_text: string;
+		[key: string]: any; // This allows for additional properties
 	}
 
 	interface Props {
-		listData: ListItem[];
+		listData: ListDataItem[];
 		placeholder: string;
 		selectedValues?: string[];
+		targetValues?: string[];
 	}
 
-	let { listData, placeholder, selectedValues = $bindable([]) }: Props = $props();
+	let {
+		listData,
+		placeholder,
+		selectedValues = $bindable([]),
+		targetValues = $bindable([])
+	}: Props = $props();
 
 	let inputValue = $state('');
-	let targetValues: string[] = [];
-	let targetData = $state('');
-	let sortedListData: ListItem[] = $state([]);
+	let sortedListData: ListDataItem[] = $state([]);
 
 	// Helper function to get sortable text (excluding leading numbers)
 	const getSortableText = (text: string) => {
@@ -40,24 +44,29 @@
 
 		if (selectedItem && !selectedValues.includes(selectedItem.lut_text)) {
 			selectedValues = [...selectedValues, selectedItem.lut_text];
-			targetValues = [...targetValues, selectedItem.user_id];
-			targetData = JSON.stringify(targetValues);
+			// Add all property_ids from the selected item
+			targetValues = [...targetValues, ...selectedItem.property_id];
 			input.value = '';
 		}
 	};
 
 	const removeValue = (valueToRemove: string) => {
-		selectedValues = selectedValues.filter((value) => value !== valueToRemove);
-		const removedItem = sortedListData.find((item) => item.lut_text === valueToRemove);
-		if (removedItem) {
-			targetValues = targetValues.filter((id) => id !== removedItem.user_id);
-			targetData = JSON.stringify(targetValues);
+		const index = selectedValues.indexOf(valueToRemove);
+		if (index > -1) {
+			// Find the corresponding property_id to remove
+			const selectedItem = listData.find((item) => item.lut_text === valueToRemove);
+			if (selectedItem) {
+				selectedValues = selectedValues.filter((_, i) => i !== index);
+				// Remove all property_ids associated with this address
+				targetValues = targetValues.filter((id) => !selectedItem.property_id.includes(id));
+			}
 		}
 	};
 
 	const listId = `autocomplete-${Math.random().toString(36).slice(2)}`;
 </script>
 
+// AutoCompleteSelect.svelte
 <div>
 	<div class="relative mt-1.5">
 		<input
@@ -68,8 +77,6 @@
 			bind:value={inputValue}
 			onchange={handleSelection}
 		/>
-
-		<input name="target_data" type="hidden" bind:value={targetData} />
 	</div>
 
 	<datalist id={listId}>
