@@ -145,7 +145,7 @@ async function buildReportContent(
 			buildLocalHazardsSection(property),
 			buildFireAssetsSection(property),
 			buildAnimalsSection(property),
-			await buildPropertyMapSection(property, fetch),
+			// await buildPropertyMapSection(property, fetch),
 			index < propertyData.length - 1 ? { text: '', pageBreak: 'after' } : { text: '' }
 		);
 	}
@@ -399,49 +399,49 @@ function buildLocalHazardsSection(property: any): Content {
 	};
 }
 
-async function buildPropertyMapSection(
-	property: any,
-	fetch: RequestEvent['fetch']
-): Promise<Content> {
-	try {
-		const mapImage = await fetch(`/api/property-map/${property.id}`);
-		// Ensure we're getting a PNG response
-		const contentType = mapImage.headers.get('content-type');
+// async function buildPropertyMapSection(
+// 	property: any,
+// 	fetch: RequestEvent['fetch']
+// ): Promise<Content> {
+// 	try {
+// 		const mapImage = await fetch(`/api/property-map/${property.id}`);
+// 		// Ensure we're getting a PNG response
+// 		const contentType = mapImage.headers.get('content-type');
 
-		if (contentType !== 'image/png') {
-			// Return a placeholder or empty stack if image isn't available
-			return {
-				stack: [
-					{
-						text: 'Map not available',
-						alignment: 'center'
-					}
-				]
-			};
-		}
+// 		if (contentType !== 'image/png') {
+// 			// Return a placeholder or empty stack if image isn't available
+// 			return {
+// 				stack: [
+// 					{
+// 						text: 'Map not available',
+// 						alignment: 'center'
+// 					}
+// 				]
+// 			};
+// 		}
 
-		const imageBuffer = await mapImage.arrayBuffer();
-		const base64String = Buffer.from(imageBuffer).toString('base64');
-		const dataUrl = `data:image/png;base64,${base64String}`;
+// 		const imageBuffer = await mapImage.arrayBuffer();
+// 		const base64String = Buffer.from(imageBuffer).toString('base64');
+// 		const dataUrl = `data:image/png;base64,${base64String}`;
 
-		return {
-			stack: [
-				{
-					image: dataUrl,
-					width: 500,
-					height: 400
-				}
-			]
-		};
-	} catch (error) {
-		// Return a placeholder if there's any error
-		return {
-			stack: [
-				{
-					text: 'Map not available',
-					alignment: 'center'
-				}
-			]
-		};
-	}
-}
+// 		return {
+// 			stack: [
+// 				{
+// 					image: dataUrl,
+// 					width: 500,
+// 					height: 400
+// 				}
+// 			]
+// 		};
+// 	} catch (error) {
+// 		// Return a placeholder if there's any error
+// 		return {
+// 			stack: [
+// 				{
+// 					text: 'Map not available',
+// 					alignment: 'center'
+// 				}
+// 			]
+// 		};
+// 	}
+// }
