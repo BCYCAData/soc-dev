@@ -1,6 +1,14 @@
-import * as L from 'leaflet';
-import { Canvas, createCanvas } from 'canvas';
+// Initialize DOM environment before Leaflet import
 import { JSDOM } from 'jsdom';
+const dom = new JSDOM('<!DOCTYPE html><div id="map"></div>');
+(global as any).window = dom.window;
+(global as any).document = dom.window.document;
+(global as any).navigator = dom.window.navigator;
+(global as any).HTMLElement = dom.window.HTMLElement;
+
+// Now import Leaflet and other dependencies
+import * as L from 'leaflet';
+import { createCanvas } from 'canvas';
 
 interface Asset {
 	type: 'water_tank' | 'pump';
