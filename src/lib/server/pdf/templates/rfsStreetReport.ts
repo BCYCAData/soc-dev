@@ -83,29 +83,21 @@ function getReportStyles(): StyleDictionary {
 	return {
 		title_h1: {
 			font: 'Poppins',
-			fontSize: 26,
+			fontSize: 20,
 			bold: true,
 			alignment: 'center',
 			color: '#1e293b'
 		},
 		title_h2: {
 			font: 'Inter',
-			fontSize: 22,
+			fontSize: 16,
 			margin: [0, 20, 0, 20],
 			alignment: 'center',
 			color: '#334155'
 		},
-		sectionHeader: {
-			font: 'OpenSans',
-			fontSize: 14,
-			bold: true,
-			fillColor: '#c2410c',
-			color: 'white',
-			margin: [0, 10, 0, 5]
-		},
 		tableContent: {
 			font: 'Inter',
-			fontSize: 11,
+			fontSize: 10,
 			color: '#1e293b'
 		},
 		propertyAddress: {
@@ -118,41 +110,41 @@ function getReportStyles(): StyleDictionary {
 		},
 		footer: {
 			font: 'Inter',
-			fontSize: 9,
+			fontSize: 8,
 			color: '#64748b',
 			margin: [40, 0]
 		},
 		quickRefHeader: {
 			font: 'Poppins',
-			fontSize: 12,
+			fontSize: 10,
 			bold: true,
 			color: '#0f172a',
 			margin: [0, 0, 0, 5] as [number, number, number, number]
 		},
 		criticalFlag: {
 			font: 'Inter',
-			fontSize: 12,
+			fontSize: 10,
 			bold: true,
 			color: '#991b1b',
 			lineHeight: 1.5
 		},
 		warningHeader: {
 			font: 'Poppins',
-			fontSize: 14,
+			fontSize: 10,
 			bold: true,
 			alignment: 'center',
 			margin: [0, 5, 0, 5]
 		},
 		emergencyHeader: {
 			font: 'Poppins',
-			fontSize: 14,
+			fontSize: 10,
 			bold: true,
 			alignment: 'center',
 			margin: [0, 5, 0, 5]
 		},
 		hazardLabel: {
 			font: 'Inter',
-			fontSize: 11,
+			fontSize: 10,
 			bold: true,
 			color: '#1e293b'
 		},
@@ -224,40 +216,29 @@ function buildReportContent(streetName: string, propertyData: RfsReportData[]): 
 	return content;
 }
 
+const compactMargin: [number, number, number, number] = [0, 2, 0, 2];
+const headerMargin: [number, number, number, number] = [5, 2, 5, 2];
+const sectionSpacing: [number, number, number, number] = [0, 5, 0, 5];
+
 function buildPropertyHeader(property: RfsReportData): Content {
 	const ageProfile = `Ages 0-18: ${property.property.age_profile.age0_18} | Ages 19-50: ${property.property.age_profile.age19_50} | Ages 51-70: ${property.property.age_profile.age51_70} | Ages 71+: ${property.property.age_profile.age71_}`;
 
-	const headerContent: Content = {
+	return {
 		stack: [
 			{
-				table: {
-					widths: ['*'],
-					body: [
-						[{ text: property.address, style: 'tableHeader', alignment: 'center' }],
-						[{ text: `Landline: ${property.phone}`, alignment: 'center' }],
-						[{ text: `Age Profile: ${ageProfile}`, alignment: 'center' }]
-					]
-				},
-				layout: 'noBorders'
-			}
-		]
-	};
-
-	if (property.agentinformation) {
-		(headerContent.stack as Content[]).push({
-			table: {
-				widths: ['auto', '*'] as string[],
-				body: [
-					['Agent Name:', property.agentinformation.agentname],
-					['Agent Mobile:', property.agentinformation.agentmobile],
-					['Agent Phone:', property.agentinformation.agentphone]
+				columns: [
+					{ text: property.address, style: 'tableHeader', width: '*' },
+					{
+						text: `Landline: ${property.phone || 'None'}`,
+						style: 'tableHeader',
+						alignment: 'right'
+					}
 				]
 			},
-			layout: 'lightHorizontalLines'
-		});
-	}
-
-	return headerContent;
+			{ text: `Age Profile: ${ageProfile}`, alignment: 'center' }
+		],
+		margin: [0, 0, 0, 5]
+	};
 }
 
 function buildHazardsTable(property: RfsReportData) {
@@ -265,50 +246,39 @@ function buildHazardsTable(property: RfsReportData) {
 		stack: [
 			{
 				table: {
-					headerRows: 1,
 					widths: ['*'],
 					body: [
 						[
 							{
 								text: [
 									{ text: '⚠️', font: 'NotoEmoji' },
-									{ text: ' HAZARDS', font: 'Poppins' }
+									{ text: ' HAZARDS', font: 'Poppins', bold: true }
 								],
-								style: 'warningHeader',
-								fillColor: '#dc2626',
-								color: 'white'
-							}
-						]
-					]
-				}
-			},
-			{
-				table: {
-					widths: ['30%', '*'],
-					body: [
-						...Object.entries(property.onsite_hazards.on_site_hazards).map(([key, value]) => [
-							{ text: key.replace(/_/g, ' '), style: 'hazardLabel' },
-							{
-								text: value,
-								fillColor: value.toLowerCase() === 'yes' ? '#fee2e2' : '#ffffff'
-							}
-						]),
-						[
-							{ text: 'Other Hazards:', style: 'hazardLabel' },
-							{
-								text: property.onsite_hazards.other_site_hazards,
-								fillColor: property.onsite_hazards.other_site_hazards ? '#fee2e2' : '#ffffff'
+								fillColor: '#c2410c',
+								color: 'white',
+								margin: headerMargin
 							}
 						]
 					]
 				},
-				layout: {
-					fillColor: (rowIndex: number) => (rowIndex % 2 === 0 ? '#fafafa' : null),
-					hLineWidth: () => 0.5,
-					vLineWidth: () => 0.5
-				}
+				layout: 'noBorders'
+			},
+			{
+				table: {
+					widths: ['25%', '*'],
+					body: [
+						...Object.entries(property.onsite_hazards.on_site_hazards).map(([key, value]) => [
+							{ text: key.replace(/_/g, ' '), style: 'hazardLabel' },
+							{ text: value, fillColor: value.toLowerCase() === 'yes' ? '#fee2e2' : '#ffffff' }
+						]),
+						['Other Hazards:', property.onsite_hazards.other_site_hazards]
+					]
+				},
+				layout: 'lightHorizontalLines',
+				margin: compactMargin
 			}
-		]
+		],
+		margin: sectionSpacing
 	};
 }
 
@@ -382,7 +352,7 @@ function buildFireAssetsTable(property: RfsReportData) {
 								],
 								fillColor: '#c2410c',
 								color: 'white',
-								margin: [5, 2, 5, 2]
+								margin: headerMargin
 							}
 						]
 					]
@@ -391,21 +361,20 @@ function buildFireAssetsTable(property: RfsReportData) {
 			},
 			{
 				table: {
-					widths: ['auto', '*'],
+					widths: ['25%', '*'],
 					body: [
 						['Static Water:', property.fire_fighting_assets.static_water],
-						['Stortz Fitting:', property.fire_fighting_assets.stortz_fitting],
 						['Equipment:', property.fire_fighting_assets.equipment],
 						['Firebreaks:', property.fire_fighting_assets.firebreaks],
-						['Slashed APZ(s):', property.fire_fighting_assets.slashed_apz_s],
 						['Backup Pump:', property.fire_fighting_assets.backup_pump],
-						['Driveway Clearance:', property.fire_fighting_assets.driveway_overhead_clearance],
-						['Truck Access:', property.fire_fighting_assets.truck_access_around_property]
+						['Access:', property.fire_fighting_assets.truck_access_around_property]
 					]
 				},
-				layout: 'lightHorizontalLines'
+				layout: 'lightHorizontalLines',
+				margin: compactMargin
 			}
-		]
+		],
+		margin: sectionSpacing
 	};
 }
 
@@ -424,7 +393,7 @@ function buildResidentsTable(property: RfsReportData): Content {
 								],
 								fillColor: '#c2410c',
 								color: 'white',
-								margin: [5, 2, 5, 2]
+								margin: headerMargin
 							}
 						]
 					]
@@ -433,19 +402,18 @@ function buildResidentsTable(property: RfsReportData): Content {
 			},
 			...property.residents.map((resident) => ({
 				table: {
-					widths: ['auto', '*'],
+					widths: ['25%', '*'],
 					body: [
 						['Name:', resident.name],
 						['Mobile:', resident.mobile],
-						['Occupancy:', resident.resident],
-						['Survival Plan:', resident.survival_plan],
-						['Plan to Leave:', resident.plan_to_leave]
+						['Status:', `${resident.resident} | Plan to Leave: ${resident.plan_to_leave}`]
 					]
 				},
 				layout: 'lightHorizontalLines',
-				margin: [0, 0, 0, 10] as [number, number, number, number]
+				margin: compactMargin
 			}))
-		]
+		],
+		margin: sectionSpacing
 	};
 }
 
@@ -464,7 +432,7 @@ function buildLocalHazardsTable(property: RfsReportData) {
 								],
 								fillColor: '#c2410c',
 								color: 'white',
-								margin: [5, 2, 5, 2]
+								margin: headerMargin
 							}
 						]
 					]
@@ -473,15 +441,17 @@ function buildLocalHazardsTable(property: RfsReportData) {
 			},
 			{
 				table: {
-					widths: ['auto', '*'],
+					widths: ['25%', '*'],
 					body: [
-						['Adjacent Land Hazards:', property.other_local_hazards.land_adjacent_hazard],
-						['Other Local Hazards:', property.other_local_hazards.other_local_hazards]
+						['Adjacent Land:', property.other_local_hazards.land_adjacent_hazard],
+						['Other Local:', property.other_local_hazards.other_local_hazards]
 					]
 				},
-				layout: 'lightHorizontalLines'
+				layout: 'lightHorizontalLines',
+				margin: compactMargin
 			}
-		]
+		],
+		margin: sectionSpacing
 	};
 }
 
@@ -504,7 +474,7 @@ function buildAnimalsTable(property: RfsReportData) {
 								],
 								fillColor: '#c2410c',
 								color: 'white',
-								margin: [5, 2, 5, 2]
+								margin: headerMargin
 							}
 						]
 					]
@@ -513,7 +483,7 @@ function buildAnimalsTable(property: RfsReportData) {
 			},
 			{
 				table: {
-					widths: ['auto', '*'],
+					widths: ['25%', '*'],
 					body: [
 						[
 							'Pets:',
@@ -524,9 +494,11 @@ function buildAnimalsTable(property: RfsReportData) {
 						['Safe Area:', safeAreaText]
 					]
 				},
-				layout: 'lightHorizontalLines'
+				layout: 'lightHorizontalLines',
+				margin: compactMargin
 			}
-		]
+		],
+		margin: sectionSpacing
 	};
 }
 

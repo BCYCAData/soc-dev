@@ -3,18 +3,20 @@ import blobStream from 'blob-stream';
 import { fonts, getLogo } from '$lib/server/pdf/config/pdfConfig';
 
 import type { TDocumentDefinitions, Content, Alignment, StyleDictionary } from 'pdfmake/interfaces';
+import type { RfsReportData } from '../types/rfs';
 
 interface RfsPropertyReportParams {
-	propertyData: any[];
+	propertyData: RfsReportData[];
 	generatedBy: string;
 }
 
-export async function generateRfsPropertyReport({
-	propertyData,
-	generatedBy
-}: RfsPropertyReportParams): Promise<Blob> {
+export async function generateRfsPropertyReport(options: {
+    propertyData: any;
+    generatedBy: string;
+    fetch: typeof fetch; // Add this line
+} RfsPropertyReportParams): Promise<Blob> {
 	const printer = new PdfPrinter(fonts);
-	const content = buildReportContent(propertyData);
+	// const content = buildReportContent(propertyData);
 	const styles = getReportStyles();
 
 	const documentDefinition: TDocumentDefinitions = {
@@ -43,7 +45,7 @@ export async function generateRfsPropertyReport({
 			// Only show footer after cover page
 			display: currentPage === 1 ? 'none' : 'block'
 		}),
-		content,
+		content: await buildReportContent(propertyData),
 		styles,
 		defaultStyle: {
 			font: 'Poppins',
@@ -110,7 +112,7 @@ function getReportStyles(): StyleDictionary {
 	};
 }
 
-function buildReportContent(propertyData: any[]): Content[] {
+async function buildReportContent(propertyData: any[]): Promise<Content[]> {
 	const content: Content[] = [];
 
 	// Cover page
@@ -130,16 +132,18 @@ function buildReportContent(propertyData: any[]): Content[] {
 	);
 
 	// Property sections
-	propertyData.forEach((property, index) => {
+	for (const [index, property] of propertyData.entries()) {
 		content.push(
 			buildPropertySection(property),
 			buildResidentsSection(property),
 			buildHazardsSection(property),
+			buildLocalHazardsSection(property),
 			buildFireAssetsSection(property),
 			buildAnimalsSection(property),
+			await buildPropertyMapSection(property),
 			index < propertyData.length - 1 ? { text: '', pageBreak: 'after' } : { text: '' }
 		);
-	});
+	}
 
 	return content;
 }
@@ -349,6 +353,58 @@ function buildResidentsSection(property: any): Content {
 				layout: 'lightHorizontalLines',
 				margin: compactMargin
 			}))
+		]
+	};
+}
+
+function buildLocalHazardsSection(property: any): Content {
+	return {
+		stack: [
+			{
+				table: {
+					widths: ['*'],
+					body: [
+						[
+							{
+								text: [
+									{ text: '🌳 ', font: 'NotoEmoji' },
+									{ text: 'LOCAL HAZARDS', font: 'Poppins', bold: true }
+								],
+								fillColor: '#c2410c',
+								color: 'white',
+								margin: headerMargin
+							}
+						]
+					]
+				},
+				layout: 'noBorders'
+			},
+			{
+				table: {
+					widths: ['25%', '*'],
+					body: [
+						['Adjacent Land:', property.other_local_hazards.land_adjacent_hazard],
+						['Other Local:', property.other_local_hazards.other_local_hazards]
+					]
+				},
+				layout: 'lightHorizontalLines',
+				margin: compactMargin
+			}
+		]
+	};
+}
+
+async function buildPropertyMapSection(property: any): Promise<Content> {
+	const mapImage = await fetch(`/api/property-map/${property.id}`);
+	const imageBuffer = Buffer.from(await mapImage.arrayBuffer()).toString('base64');
+
+	return {
+		stack: [
+			{
+				image: `data:image/png;base64,${imageBuffer}`,
+				width: 500,
+				height: 400
+			}
 		]
 	};
 }

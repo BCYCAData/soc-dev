@@ -11,7 +11,8 @@
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "format": "prettier --write .",
         "lint": "prettier --check . && eslint .",
-        "update-db-types": "npx supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" > src/lib/db.types.ts"
+        "update-db-types": "npx supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" > src/lib/db.types.ts",
+        "vercel-build": "ls -la src/lib/server/pdf/fonts && vite build"
     },
     "devDependencies": {
         "@eslint/compat": "^1.2.4",
@@ -28,6 +29,7 @@
         "@sveltejs/vite-plugin-svelte": "^5.0.3",
         "@types/blob-stream": "^0.1.33",
         "@types/esri-leaflet": "^3.0.3",
+        "@types/jsdom": "^21.1.7",
         "@types/leaflet": "^1.9.16",
         "@types/leaflet-draw": "^1.0.11",
         "@types/leaflet-editable": "^1.2.6",
@@ -36,11 +38,13 @@
         "@vercel/edge-config": "^1.4.0",
         "autoprefixer": "^10.4.20",
         "blob-stream": "^0.1.3",
+        "canvas": "^3.1.0",
         "eslint": "^9.17.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-svelte": "^2.46.1",
         "esri-leaflet": "^3.0.14",
         "globals": "^15.13.0",
+        "jsdom": "^26.0.0",
         "leaflet": "^1.9.4",
         "leaflet-draw": "^1.0.4",
         "leaflet-editable": "^1.3.0",
