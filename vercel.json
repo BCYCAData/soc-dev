@@ -2,7 +2,7 @@
     "framework": "sveltekit",
     "buildCommand": "npm run build",
     "functions": {
-        "api/**": {
+        "src/routes/api/**": {
             "memory": 1024,
             "maxDuration": 10
         }
