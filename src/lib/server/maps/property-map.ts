@@ -1,14 +1,20 @@
-// Initialize DOM environment before Leaflet import
+// Set up the environment before any imports
 import { JSDOM } from 'jsdom';
-const dom = new JSDOM('<!DOCTYPE html><div id="map"></div>');
-(global as any).window = dom.window;
-(global as any).document = dom.window.document;
-(global as any).navigator = dom.window.navigator;
-(global as any).HTMLElement = dom.window.HTMLElement;
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
 
-// Now import Leaflet and other dependencies
+// Define globals needed by Leaflet
+global.window = dom.window as unknown as Window & typeof globalThis;
+global.document = dom.window.document;
+global.navigator = dom.window.navigator;
+global.HTMLElement = dom.window.HTMLElement;
+global.Node = dom.window.Node;
+global.NodeList = dom.window.NodeList;
+global.Image = dom.window.Image;
+global.self = global.window;
+
+// Now we can safely import the rest
 import * as L from 'leaflet';
-import { createCanvas } from 'canvas';
+import { Canvas, createCanvas } from 'canvas';
 
 interface Asset {
 	type: 'water_tank' | 'pump';
