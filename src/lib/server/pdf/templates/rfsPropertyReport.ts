@@ -2,19 +2,21 @@ import PdfPrinter from 'pdfmake';
 import blobStream from 'blob-stream';
 import { fonts, getLogo } from '$lib/server/pdf/config/pdfConfig';
 
+import type { RequestEvent } from '@sveltejs/kit';
 import type { TDocumentDefinitions, Content, Alignment, StyleDictionary } from 'pdfmake/interfaces';
 import type { RfsReportData } from '../types/rfs';
 
 interface RfsPropertyReportParams {
 	propertyData: RfsReportData[];
 	generatedBy: string;
+	fetch: RequestEvent['fetch'];
 }
 
-export async function generateRfsPropertyReport(options: {
-    propertyData: any;
-    generatedBy: string;
-    fetch: typeof fetch; // Add this line
-} RfsPropertyReportParams): Promise<Blob> {
+export async function generateRfsPropertyReport({
+	propertyData,
+	generatedBy,
+	fetch
+}: RfsPropertyReportParams): Promise<Blob> {
 	const printer = new PdfPrinter(fonts);
 	// const content = buildReportContent(propertyData);
 	const styles = getReportStyles();
@@ -45,7 +47,7 @@ export async function generateRfsPropertyReport(options: {
 			// Only show footer after cover page
 			display: currentPage === 1 ? 'none' : 'block'
 		}),
-		content: await buildReportContent(propertyData),
+		content: await buildReportContent(propertyData, fetch),
 		styles,
 		defaultStyle: {
 			font: 'Poppins',
@@ -112,7 +114,10 @@ function getReportStyles(): StyleDictionary {
 	};
 }
 
-async function buildReportContent(propertyData: any[]): Promise<Content[]> {
+async function buildReportContent(
+	propertyData: any[],
+	fetch: RequestEvent['fetch']
+): Promise<Content[]> {
 	const content: Content[] = [];
 
 	// Cover page
@@ -140,7 +145,7 @@ async function buildReportContent(propertyData: any[]): Promise<Content[]> {
 			buildLocalHazardsSection(property),
 			buildFireAssetsSection(property),
 			buildAnimalsSection(property),
-			await buildPropertyMapSection(property),
+			await buildPropertyMapSection(property, fetch),
 			index < propertyData.length - 1 ? { text: '', pageBreak: 'after' } : { text: '' }
 		);
 	}
@@ -394,17 +399,49 @@ function buildLocalHazardsSection(property: any): Content {
 	};
 }
 
-async function buildPropertyMapSection(property: any): Promise<Content> {
-	const mapImage = await fetch(`/api/property-map/${property.id}`);
-	const imageBuffer = Buffer.from(await mapImage.arrayBuffer()).toString('base64');
+async function buildPropertyMapSection(
+	property: any,
+	fetch: RequestEvent['fetch']
+): Promise<Content> {
+	try {
+		const mapImage = await fetch(`/api/property-map/${property.id}`);
+		// Ensure we're getting a PNG response
+		const contentType = mapImage.headers.get('content-type');
 
-	return {
-		stack: [
-			{
-				image: `data:image/png;base64,${imageBuffer}`,
-				width: 500,
-				height: 400
-			}
-		]
-	};
+		if (contentType !== 'image/png') {
+			// Return a placeholder or empty stack if image isn't available
+			return {
+				stack: [
+					{
+						text: 'Map not available',
+						alignment: 'center'
+					}
+				]
+			};
+		}
+
+		const imageBuffer = await mapImage.arrayBuffer();
+		const base64String = Buffer.from(imageBuffer).toString('base64');
+		const dataUrl = `data:image/png;base64,${base64String}`;
+
+		return {
+			stack: [
+				{
+					image: dataUrl,
+					width: 500,
+					height: 400
+				}
+			]
+		};
+	} catch (error) {
+		// Return a placeholder if there's any error
+		return {
+			stack: [
+				{
+					text: 'Map not available',
+					alignment: 'center'
+				}
+			]
+		};
+	}
 }

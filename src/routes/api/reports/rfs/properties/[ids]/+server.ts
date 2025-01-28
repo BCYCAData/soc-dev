@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { generateRfsPropertyReport } from '$lib/server/pdf/templates/rfsPropertyReport';
 
-export const GET: RequestHandler = async ({ params, locals: { supabase }, request }) => {
+export const GET: RequestHandler = async ({ params, locals: { supabase }, fetch }) => {
 	const propertyIds = params.ids ? JSON.parse(decodeURIComponent(params.ids)) : [];
 
 	// Get property data
@@ -18,7 +18,7 @@ export const GET: RequestHandler = async ({ params, locals: { supabase }, reques
 	const pdfBlob = await generateRfsPropertyReport({
 		propertyData,
 		generatedBy: 'Admin User', // You may want to pass the actual user info here
-		fetch: request.event.fetch
+		fetch: fetch
 	});
 
 	return new Response(pdfBlob, {
