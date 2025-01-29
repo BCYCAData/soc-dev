@@ -43,6 +43,7 @@ export const actions: Actions = {
 			const password = formData.get('password')?.toString();
 
 			if (!email || !password) {
+				console.error('Email and password are required');
 				await logSignUpSignInError(supabase, {
 					errorType: 'VALIDATION_ERROR',
 					errorMessage: 'Email and password are required',
@@ -64,6 +65,7 @@ export const actions: Actions = {
 			});
 
 			if (signInError) {
+				console.error('Sign-in error:', signInError);
 				if (signInError instanceof AuthError) {
 					if (signInError.status === 400) {
 						await logSignUpSignInError(supabase, {
@@ -80,6 +82,7 @@ export const actions: Actions = {
 							error: 'Invalid credentials'
 						});
 					} else if (signInError.status === 429) {
+						console;
 						await logSignUpSignInError(supabase, {
 							errorType: 'RATE_LIMIT_ERROR',
 							errorMessage: signInError.message,
@@ -95,7 +98,7 @@ export const actions: Actions = {
 						});
 					}
 				}
-
+				console.error('Server error:', signInError);
 				await logSignUpSignInError(supabase, {
 					errorType: 'SERVER_ERROR',
 					errorMessage: signInError.message,
@@ -112,6 +115,7 @@ export const actions: Actions = {
 			}
 
 			if (!data.session) {
+				console.error('Session not established after successful sign-in');
 				await logSignUpSignInError(supabase, {
 					errorType: 'SESSION_ERROR',
 					errorMessage: 'Session not established after successful sign-in',
@@ -126,10 +130,9 @@ export const actions: Actions = {
 					error: 'Failed to establish session. Please try again.'
 				});
 			}
-
-			throw redirect(303, '/personal-profile');
 		} catch (error) {
 			const catchError = error as Error;
+			console.error('Unexpected error:', catchError);
 			await logSignUpSignInError(supabase, {
 				errorType: 'UNEXPECTED_ERROR',
 				errorMessage: catchError.message,
@@ -144,5 +147,6 @@ export const actions: Actions = {
 				error: 'An unexpected error occurred. Please try again.'
 			});
 		}
+		throw redirect(303, '/personal-profile');
 	}
 };

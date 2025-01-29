@@ -31,7 +31,7 @@
 	let hadUserPostalAddress: boolean = $state(data.hadUserPostalAddress);
 
 	const stayInTouchOptions =
-		data.optionsData?.userOptionsData?.object_names.find(
+		data.optionsData?.userOptionsData?.object_names?.find(
 			(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
 		)?.options || [];
 
@@ -151,13 +151,12 @@
 </form>
 <h2 class="h2 pt-2 text-center text-base font-semibold text-gray-900">
 	We have determined that you are part of the <span class="text-orange-600"
-		>{data.userProfile?.property_profile.type === 'single'
-			? data.userProfile.property_profile.profile.community_area
-			: data.userProfile.property_profile.profiles[0].community_area} Community</span
+		>{data.userProfile?.property_profile?.type === 'single'
+			? data.userProfile?.property_profile?.profile?.community_area
+			: data.userProfile?.property_profile?.profiles?.[0]?.community_area || 'Unknown'} Community</span
 	>
 	based on your address.
 	<br />
-
 	If you would like to connect with another community team please click on the buttons below.
 </h2>
 

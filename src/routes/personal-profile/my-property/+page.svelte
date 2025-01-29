@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/state';
+	import { invalidate } from '$app/navigation';
+	import AddPropertyModal from '$components/page/modals/AddPropertyModal.svelte';
 	import type { PageData } from './$types';
 
 	let { data } = $props<{ data: PageData }>();
-	const propertyIds = $derived(page.data.propertyIds);
+
 	const properties = $derived(data.properties);
+	let showAddPropertyModal = $state(false);
 
 	const title = $derived(
 		properties.length === 1 ? 'My Property Dashboard' : 'My Properties Dashboard'
@@ -18,7 +20,9 @@
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
-
+{#if showAddPropertyModal}
+	<AddPropertyModal onClose={() => (showAddPropertyModal = false)} />
+{/if}
 <div class="mx-auto max-w-4xl px-6">
 	<h1 class="mb-6 text-3xl font-bold text-orange-700">{title}</h1>
 
@@ -55,4 +59,11 @@
 			</section>
 		{/each}
 	</div>
+
+	<button
+		class="rounded bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
+		onclick={() => (showAddPropertyModal = true)}
+	>
+		Add New Property
+	</button>
 </div>
