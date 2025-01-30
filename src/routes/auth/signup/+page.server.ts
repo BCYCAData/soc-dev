@@ -27,6 +27,9 @@ interface AddressValidationResponse {
 	status: number;
 }
 
+const SITE_URL =
+	process.env.NODE_ENV === 'production' ? 'https://soc-dev.vercel.app' : 'http://127.0.0.1:5173';
+
 export const actions: Actions = {
 	validate: async ({ request, locals: { supabase } }): Promise<ValidateActionResponse> => {
 		const formData = await request.formData();
@@ -132,7 +135,7 @@ export const actions: Actions = {
 						searchaddresssuburb: userMetadata.searchaddresssuburb,
 						community: userMetadata.community
 					},
-					emailRedirectTo: `${url.origin}/auth/redirect/signup/personal-profile-form/`
+					emailRedirectTo: `${SITE_URL}/auth/redirect/signup/personal-profile-form/`
 				}
 			});
 			if (signUpError) {

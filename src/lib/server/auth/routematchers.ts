@@ -10,7 +10,10 @@ export const routeMatchers = {
 			'/auth/signin',
 			'/auth/redirect/email-not-allowed',
 			'/auth/redirect/signup/respond',
-			'/auth/redirect/signup/respond/'
+			'/auth/redirect/signup/respond/',
+			'/auth/redirect/confirm',
+			'/auth/redirect/signup/personal-profile-form',
+			'/auth/redirect/signup/personal-profile-form/'
 		];
 		return publicRoutes.includes(path);
 	},
