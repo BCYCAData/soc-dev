@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { CLIENT_ERROR_FORBIDDEN, CLIENT_ERROR_UNAUTHORIZED } from '$lib/constants';
+import { CLIENT_ERROR_UNAUTHORIZED } from '$lib/constants';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export async function getUserPermissions(
@@ -20,11 +20,6 @@ export async function getUserPermissions(
 	const permission = Array.from(
 		new Set(permissionData?.flatMap((p) => p.permission.split(',')))
 	).join(',');
-
-	if (!permissionData || !permission.includes('admin')) {
-		console.error('Forbidden attempt on /admin by userId:', userId);
-		error(CLIENT_ERROR_FORBIDDEN, 'Forbidden');
-	}
 
 	return permission;
 }
