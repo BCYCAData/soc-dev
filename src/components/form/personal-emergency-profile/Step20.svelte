@@ -1,8 +1,6 @@
 <script lang="ts">
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
-
 	import { setUpperCase } from '$lib/svelte-actions';
-
 	import type { PersonalProfileFormData } from '$lib/form.types';
 
 	interface Props {
@@ -11,17 +9,26 @@
 		userProfileStayInTouchOptions?: { value: string; lable: string }[];
 	}
 
-	let {
-		userProfile = $bindable(),
-		communityName = '',
-		userProfileStayInTouchOptions = []
-	}: Props = $props();
+	let { userProfile, communityName = '', userProfileStayInTouchOptions = [] }: Props = $props();
 
-	const postalWasChecked = $state(userProfile.stay_in_touch_choices?.includes(5));
+	let formState = $state({
+		stay_in_touch_choices: userProfile.stay_in_touch_choices ?? [],
+		other_comments: userProfile.other_comments ?? '',
+		user_postal_address: {
+			postal_address_street: userProfile.user_postal_address?.postal_address_street ?? '',
+			postal_address_suburb: userProfile.user_postal_address?.postal_address_suburb ?? '',
+			postal_address_postcode: userProfile.user_postal_address?.postal_address_postcode ?? ''
+		}
+	});
 
-	let postalChecked = $state(false);
-	$effect.pre(() => {
-		postalChecked = userProfile.stay_in_touch_choices?.includes(5) ?? false;
+	let postalChecked = $state(formState.stay_in_touch_choices.includes(5));
+	let postalWasChecked = $state(formState.stay_in_touch_choices.includes(5));
+
+	$effect(() => {
+		userProfile.stay_in_touch_choices = formState.stay_in_touch_choices;
+		userProfile.other_comments = formState.other_comments;
+		userProfile.user_postal_address = formState.user_postal_address;
+		postalChecked = formState.stay_in_touch_choices.includes(5);
 	});
 </script>
 
@@ -46,9 +53,9 @@
 				name="stay_in_touch_choices"
 				type="checkbox"
 				onchange={() => {
-					postalChecked = userProfile.stay_in_touch_choices?.includes(5) ?? false;
+					postalChecked = formState.stay_in_touch_choices?.includes(5) ?? false;
 				}}
-				bind:group={userProfile.stay_in_touch_choices}
+				bind:group={formState.stay_in_touch_choices}
 				value={Number(value)}
 				checked={userProfile?.stay_in_touch_choices?.includes(Number(value))}
 			/>
@@ -82,7 +89,7 @@
 				autocomplete="street-address"
 				use:setUpperCase
 				style="text-transform:uppercase"
-				value={userProfile.user_postal_address?.postal_address_street}
+				value={formState.user_postal_address?.postal_address_street}
 			/>
 		</div>
 	</div>
@@ -107,7 +114,7 @@
 					autocomplete="address-level2"
 					use:setUpperCase
 					style="text-transform:uppercase"
-					value={userProfile.user_postal_address?.postal_address_suburb}
+					value={formState.user_postal_address?.postal_address_suburb}
 				/>
 			</div>
 			<div class="col-span-2 flex items-center">
@@ -127,7 +134,7 @@
 					placeholder="POSTCODE"
 					autocomplete="postal-code"
 					style="text-transform:uppercase"
-					value="userProfile.user_postal_address?.postal_address_postcode}"
+					value="formState.user_postal_address?.postal_address_postcode}"
 				/>
 			</div>
 		</div>
@@ -141,5 +148,5 @@
 	divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 	nameText="other_comments"
 	textAreaClass="w-full resize-y sm:text-scale-5"
-	bind:inputValue={userProfile.other_comments}
+	bind:inputValue={formState.other_comments}
 />

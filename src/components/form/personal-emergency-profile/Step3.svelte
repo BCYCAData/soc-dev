@@ -1,14 +1,35 @@
 <script lang="ts">
 	import { residencyOptions, yesNoOptions } from '$lib/profile-options';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
-
 	import type { PersonalProfileFormData } from '$lib/form.types';
 
 	interface Props {
 		userProfile: PersonalProfileFormData;
 	}
 
-	let { userProfile = $bindable() }: Props = $props();
+	let { userProfile }: Props = $props();
+
+	// Create reactive state for the form data
+	let formData = $state({
+		residency_profile: userProfile.residency_profile,
+		property_profile: {
+			mobile_reception: userProfile.property_profile.mobile_reception,
+			residents0_18: userProfile.property_profile.residents0_18,
+			residents19_50: userProfile.property_profile.residents19_50,
+			residents51_70: userProfile.property_profile.residents51_70,
+			residents71_: userProfile.property_profile.residents71_,
+			vulnerable_residents: userProfile.property_profile.vulnerable_residents
+		}
+	});
+
+	// Sync formData back to parent
+	$effect(() => {
+		userProfile.residency_profile = formData.residency_profile;
+		userProfile.property_profile = {
+			...userProfile.property_profile,
+			...formData.property_profile
+		};
+	});
 </script>
 
 <h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
@@ -23,7 +44,7 @@
 					name="mobile_reception"
 					type="radio"
 					class="h-4 w-4 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
-					bind:group={userProfile.property_profile.mobile_reception}
+					bind:group={formData.property_profile.mobile_reception}
 					value={i + 1}
 				/>
 				<label class="ml-1 inline-block text-primary-700" for="mobile_reception">
@@ -45,7 +66,7 @@
 				id="residency_profile"
 				type="radio"
 				name="residency_profile"
-				bind:group={userProfile.residency_profile}
+				bind:group={formData.residency_profile}
 				value={Number(value)}
 				checked={value != null}
 			/>
@@ -65,28 +86,28 @@
 			lable="0-18 years"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={userProfile.property_profile.residents0_18}
+			bind:inputValue={formData.property_profile.residents0_18}
 		/>
 		<NumberInput
 			name="residents19_50"
 			lable="19-50 years"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={userProfile.property_profile.residents19_50}
+			bind:inputValue={formData.property_profile.residents19_50}
 		/>
 		<NumberInput
 			name="residents51_70"
 			lable="51-70 years"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={userProfile.property_profile.residents51_70}
+			bind:inputValue={formData.property_profile.residents51_70}
 		/>
 		<NumberInput
 			name="residents71_"
 			lable="71 years +"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={userProfile.property_profile.residents71_}
+			bind:inputValue={formData.property_profile.residents71_}
 		/>
 	</ul>
 </div>
@@ -102,7 +123,7 @@
 					id="vulnerable_residents"
 					type="radio"
 					name="vulnerable_residents"
-					bind:group={userProfile.property_profile.vulnerable_residents}
+					bind:group={formData.property_profile.vulnerable_residents}
 					{value}
 				/>
 				<label class="text-scale-6 ml-2 font-medium text-orange-700" for="vulnerable_residents"

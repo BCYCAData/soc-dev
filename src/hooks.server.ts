@@ -40,11 +40,8 @@ const supabase: Handle = async ({ event, resolve }) => {
 			console.error('Failed to fetch community request options:', requestError);
 			throw error(400, `Failed to fetch community request options: ${requestError.message}`);
 		}
-
 		const transformedData = getCommunityOptions(data as CommunityRequestOption[]);
-		return {
-			userOptionsData: transformedData
-		};
+		return transformedData;
 	};
 
 	event.locals.getSessionAndUser = async (): Promise<{

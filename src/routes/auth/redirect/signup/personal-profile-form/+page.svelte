@@ -16,16 +16,10 @@
 		</p>
 
 		<p class="text-scale-3 sm:text-scale-5 mb-2">By providing this information, you're:</p>
-		<ul class="text-scale-3 sm:text-scale-5 mb-3 list-none pl-5">
-			<li class="relative mb-1 pl-5">
-				<span class="absolute left-0">•</span>Helping emergency services respond more effectively
-			</li>
-			<li class="relative mb-1 pl-5">
-				<span class="absolute left-0">•</span>Improving your own preparedness for fire and flood
-			</li>
-			<li class="relative pl-5">
-				<span class="absolute left-0">•</span>Contributing to the safety of our entire community
-			</li>
+		<ul class="text-scale-3 sm:text-scale-5 mb-3 list-disc pl-8 text-left">
+			<li class="mb-1">Helping emergency services respond more effectively</li>
+			<li class="mb-1">Improving your own preparedness for fire and flood</li>
+			<li>Contributing to the safety of our entire community</li>
 		</ul>
 
 		<div
@@ -34,18 +28,10 @@
 		>
 			<p class="mb-2 text-center font-bold">Your Privacy is Protected</p>
 			<p class="mb-2">We take your privacy seriously. Your information will:</p>
-			<ul class="list-none pl-5">
-				<li class="relative mb-1 pl-5">
-					<span class="absolute left-0">•</span>Never be sold or misused
-				</li>
-				<li class="relative mb-1 pl-5">
-					<span class="absolute left-0">•</span>Only be shared with emergency services during an
-					actual emergency
-				</li>
-				<li class="relative pl-5">
-					<span class="absolute left-0">•</span>Remain confidential unless you grant permission for
-					access
-				</li>
+			<ul class="list-disc pl-8 text-left">
+				<li class="mb-1">Never be sold or misused</li>
+				<li class="mb-1">Only be shared with emergency services during an actual emergency</li>
+				<li>Remain confidential unless you grant permission for access</li>
 			</ul>
 		</div>
 

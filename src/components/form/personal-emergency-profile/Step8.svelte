@@ -1,6 +1,5 @@
 <script lang="ts">
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
-
 	import type { BCYCACommunityProfile } from '$lib/form.types';
 
 	interface Props {
@@ -8,7 +7,21 @@
 		communityBCYCAWorkshopOptions?: { value: string; lable: string }[];
 	}
 
-	let { communityBCYCAProfile = $bindable(), communityBCYCAWorkshopOptions = [] }: Props = $props();
+	let { communityBCYCAProfile, communityBCYCAWorkshopOptions = [] }: Props = $props();
+
+	let formState = $state({
+		community_workshop_choices: communityBCYCAProfile?.community_workshop_choices ?? [],
+		other_community_workshop: communityBCYCAProfile?.other_community_workshop ?? '',
+		will_run_community_workshops: communityBCYCAProfile?.will_run_community_workshops ?? ''
+	});
+
+	$effect(() => {
+		if (communityBCYCAProfile) {
+			communityBCYCAProfile.community_workshop_choices = formState.community_workshop_choices;
+			communityBCYCAProfile.other_community_workshop = formState.other_community_workshop;
+			communityBCYCAProfile.will_run_community_workshops = formState.will_run_community_workshops;
+		}
+	});
 </script>
 
 <h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
@@ -28,9 +41,9 @@
 					class="ml-8 h-6 w-6"
 					name="community_workshop_choices"
 					type="checkbox"
-					bind:group={communityBCYCAProfile.community_workshop_choices}
+					bind:group={formState.community_workshop_choices}
 					value={Number(value)}
-					checked={communityBCYCAProfile?.community_workshop_choices?.includes(Number(value))}
+					checked={formState.community_workshop_choices.includes(Number(value))}
 				/>
 				<label
 					class="text-scale-6 ml-2 font-medium text-orange-900"
@@ -39,6 +52,7 @@
 			</div>
 		{/each}
 	</div>
+
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="If there are other workshops that you would like to see run, please add the details here:"
@@ -47,8 +61,9 @@
 		divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 		nameText="other_community_workshop"
 		textAreaClass="w-full resize-y sm:text-scale-5"
-		bind:inputValue={communityBCYCAProfile.other_community_workshop}
+		bind:inputValue={formState.other_community_workshop}
 	/>
+
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="If you would like to help run any of the workshops, please indicate which ones below."
@@ -57,6 +72,6 @@
 		divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 		nameText="will_run_community_workshops"
 		textAreaClass="w-full resize-y sm:text-scale-5"
-		bind:inputValue={communityBCYCAProfile.will_run_community_workshops}
+		bind:inputValue={formState.will_run_community_workshops}
 	/>
 {/if}

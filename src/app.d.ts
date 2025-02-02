@@ -1,8 +1,6 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
 declare global {
 	namespace App {
-		// interface Error {}
 		interface Locals {
 			supabase: SupabaseClient;
 			getSessionAndUser: () => Promise<{
@@ -13,14 +11,22 @@ declare global {
 				propertyIds: string[] | null;
 				userProfile: UserProfile | null;
 			}>;
-			getCommunityRequestOptions: () => Promise<{
-				userOptionsData: any;
-			}>;
+			getCommunityRequestOptions: () => Promise<TransformedOptionsData[]>;
 			user: User | null;
 			permissions: string | null;
 			coordinatesKYNG: KYNGArea[] | null;
 			userProfile: UserProfile | null;
 			propertyIds: string[] | null;
+			userOptionsData: {
+				table_name: string;
+				object_names: Array<{
+					object_name: string;
+					options: Array<{
+						value: string;
+						lable: string;
+					}>;
+				}>;
+			}[];
 		}
 
 		interface PageData {
@@ -29,6 +35,7 @@ declare global {
 			userRoles: string[] | null;
 			permissions: string | null;
 			coordinatesKYNG: KYNGArea[] | null;
+			steps?: { index: number; text: string; page: string }[];
 			optionsData: {
 				userOptionsData: {
 					object_names: Array<{
@@ -66,7 +73,7 @@ declare global {
 						}>;
 					}>;
 				};
-				communityTinoneeOptionsData: {
+				communityMondrookOptionsData: {
 					object_names: Array<{
 						object_name: string;
 						options: Array<{
@@ -79,8 +86,6 @@ declare global {
 			propertyIds: string[] | null;
 			userProfile: UserProfile | null;
 		}
-		// interface PageState {}
-		// interface Platform {}
 	}
 }
 

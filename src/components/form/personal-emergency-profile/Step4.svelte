@@ -2,17 +2,35 @@
 	import { yesNoMaybeOptions, yesNoOptions } from '$lib/profile-options';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
-
 	import type { PropertyProfile } from '$lib/form.types';
 
 	interface Props {
 		propertyProfile: PropertyProfile;
 	}
 
-	let { propertyProfile = $bindable() }: Props = $props();
+	let { propertyProfile }: Props = $props();
 
-	let live_stock_present = $state(propertyProfile.live_stock_present);
-	let live_stock_safe_area = $state(propertyProfile.live_stock_safe_area);
+	let formState = $state({
+		number_dogs: propertyProfile.number_dogs,
+		number_cats: propertyProfile.number_cats,
+		number_birds: propertyProfile.number_birds,
+		number_other_pets: propertyProfile.number_other_pets,
+		live_stock_present: propertyProfile.live_stock_present,
+		live_stock_safe_area: propertyProfile.live_stock_safe_area,
+		share_livestock_safe_area: propertyProfile.share_livestock_safe_area,
+		other_essential_assets: propertyProfile.other_essential_assets
+	});
+
+	$effect(() => {
+		propertyProfile.number_dogs = formState.number_dogs;
+		propertyProfile.number_cats = formState.number_cats;
+		propertyProfile.number_birds = formState.number_birds;
+		propertyProfile.number_other_pets = formState.number_other_pets;
+		propertyProfile.live_stock_present = formState.live_stock_present;
+		propertyProfile.live_stock_safe_area = formState.live_stock_safe_area;
+		propertyProfile.share_livestock_safe_area = formState.share_livestock_safe_area;
+		propertyProfile.other_essential_assets = formState.other_essential_assets;
+	});
 </script>
 
 <h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
@@ -25,28 +43,28 @@
 			lable="Dogs"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={propertyProfile.number_dogs}
+			bind:inputValue={formState.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={propertyProfile.number_cats}
+			bind:inputValue={formState.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={propertyProfile.number_birds}
+			bind:inputValue={formState.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
 			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
-			bind:inputValue={propertyProfile.number_other_pets}
+			bind:inputValue={formState.number_other_pets}
 		/>
 	</ul>
 </div>
@@ -61,9 +79,9 @@
 				type="radio"
 				name="live_stock_present"
 				onchange={() => {
-					live_stock_present = value;
+					formState.live_stock_present = value;
 				}}
-				bind:group={propertyProfile.live_stock_present}
+				bind:group={formState.live_stock_present}
 				{value}
 			/>
 			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="live_stock_present"
@@ -73,7 +91,7 @@
 	{/each}
 </div>
 
-{#if live_stock_present === true}
+{#if formState.live_stock_present === true}
 	<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
 		Do you have an area which would be safe for stock in the event of a bushfire or flood?
 	</h2>
@@ -87,9 +105,9 @@
 					type="radio"
 					name="live_stock_safe_area"
 					onchange={() => {
-						live_stock_safe_area = value;
+						formState.live_stock_safe_area = value;
 					}}
-					bind:group={propertyProfile.live_stock_safe_area}
+					bind:group={formState.live_stock_safe_area}
 					{value}
 				/>
 				<label class="text-scale-6 ml-2 font-medium text-orange-900" for="live_stock_safe_area"
@@ -98,7 +116,7 @@
 			</div>
 		{/each}
 	</div>
-	{#if live_stock_present && live_stock_safe_area != 'N'}
+	{#if formState.live_stock_present && formState.live_stock_safe_area != 'N'}
 		<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
 			Would you be happy for other people to leave their stock on your property, in your safe area,
 			for a short period in an emergency?
@@ -112,7 +130,7 @@
 						id="share_livestock_safe_area"
 						type="radio"
 						name="share_livestock_safe_area"
-						bind:group={propertyProfile.share_livestock_safe_area}
+						bind:group={formState.share_livestock_safe_area}
 						{value}
 					/>
 					<label
@@ -133,5 +151,5 @@
 	divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 	nameText="other_essential_assets"
 	textAreaClass="w-full resize-y sm:text-scale-5"
-	bind:inputValue={propertyProfile.other_essential_assets}
+	bind:inputValue={formState.other_essential_assets}
 />

@@ -12,10 +12,17 @@ export const routeMatchers = {
 			'/auth/redirect/signup/respond',
 			'/auth/redirect/signup/respond/',
 			'/auth/redirect/confirm',
+			'/auth/requestresetpassword',
+			'/auth/requestresetpassword/',
 			'/auth/redirect/signup/personal-profile-form',
 			'/auth/redirect/signup/personal-profile-form/'
 		];
 		return publicRoutes.includes(path);
+	},
+
+	isProtectedAuthRoute: (path: string): boolean => {
+		const protectedAuthRoutes = ['/auth/redirect/resetpassword', '/auth/redirect/changeemail'];
+		return protectedAuthRoutes.includes(path);
 	},
 
 	isSignOutRoute: (path: string): boolean => {
@@ -43,11 +50,6 @@ export const routeMatchers = {
 	isKYNGRoute: (path: string): boolean => {
 		return path.startsWith('/kyng-coordinator');
 	},
-
-	// getKYNGArea: (path: string): string | null => {
-	// 	const match = path.match(/^\/kyng-coordinator\/(.+)$/);
-	// 	return match ? match[1] : null;
-	// },
 
 	getKYNGArea: (path: string): string | null => {
 		const match = path.match(/^\/kyng-coordinator\/([^/]+)/);

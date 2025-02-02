@@ -31,6 +31,7 @@
 			(property: { id: string }) => property.id === propertyId
 		)
 	);
+
 	let propertyWasRented = writable(false);
 
 	let agentName = $state('');

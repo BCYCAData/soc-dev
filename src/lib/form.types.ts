@@ -25,15 +25,28 @@ export type CommunityOptionsData = {
 	table_name: string;
 	object_names: OptionsData[];
 };
-export type FormOptionsData =
-	| {
-			userOptionsData?: CommunityOptionsData;
-			communityBCYCAOptionsData?: CommunityOptionsData;
-			communityExternalOptionsData?: CommunityOptionsData;
-			communityMondrookOptionsData?: CommunityOptionsData;
-			communityTinoneeOptionsData?: CommunityOptionsData;
-	  }
-	| undefined;
+export type FormOptionsData = {
+	userOptionsData: {
+		table_name: string;
+		object_names: OptionsData[];
+	};
+	communityBCYCAOptionsData: {
+		table_name: string;
+		object_names: OptionsData[];
+	};
+	communityExternalOptionsData: {
+		table_name: string;
+		object_names: OptionsData[];
+	};
+	communityMondrookOptionsData: {
+		table_name: string;
+		object_names: OptionsData[];
+	};
+	communityTinoneeOptionsData: {
+		table_name: string;
+		object_names: OptionsData[];
+	};
+};
 
 export type UserProfile = {
 	family_name: string | null;
@@ -167,7 +180,23 @@ export type MultiplePropertyProfile = {
 
 export type UserPropertyProfile = SinglePropertyProfile | MultiplePropertyProfile;
 
+type KYNGArea = {
+	kyng: string;
+};
+
+type CommunityArea = {
+	community: string;
+};
+
 export type PropertyProfile = {
+	id: string;
+	kyng_areas: KYNGArea[];
+	community_areas: CommunityArea[];
+	property_address_postcode: string;
+	property_address_street: string;
+	property_address_suburb: string;
+	property_agent: PropertyAgent | null;
+	property_rented: boolean;
 	fire_fighting_resources: number[] | null;
 	fire_hazard_reduction: number[] | null;
 	have_stortz: string | null;
@@ -183,11 +212,6 @@ export type PropertyProfile = {
 	other_hazards: string | null;
 	other_site_hazards: string | null;
 	phone: string | null;
-	property_address_postcode: string | null;
-	property_address_street: string;
-	property_address_suburb: string;
-	property_rented: boolean | null;
-	property_agent: PropertyAgent | null;
 	residents0_18: number | null;
 	residents19_50: number | null;
 	residents51_70: number | null;
@@ -200,9 +224,6 @@ export type PropertyProfile = {
 	truck_access: number | null;
 	truck_access_other_information: string | null;
 	vulnerable_residents: boolean | null;
-	id: string;
-	kyng_area: string;
-	community_area: string;
 };
 
 export type PropertyAgent = {

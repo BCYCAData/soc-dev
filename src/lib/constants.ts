@@ -1,3 +1,7 @@
+// Environments
+export const SITE_URL =
+	process.env.NODE_ENV === 'production' ? 'https://soc-dev.vercel.app' : 'http://127.0.0.1:5173';
+
 // Validation Patterns
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

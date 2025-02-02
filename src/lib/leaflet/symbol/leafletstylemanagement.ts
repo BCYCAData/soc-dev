@@ -1,5 +1,6 @@
 import { Path, Marker, CircleMarker, Icon, DivIcon } from 'leaflet';
 import type L from 'leaflet';
+
 import type {
 	CustomMarkerOptions,
 	CustomDivIconOptions,

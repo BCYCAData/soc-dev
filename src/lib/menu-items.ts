@@ -441,7 +441,7 @@ export const profileSidebarPathLables: Record<string, PathConfig> = {
 	resources: { label: 'Firefighting Resources', icon: FireExtinguisher },
 	hazards: { label: 'Firefighting Hazards', icon: Flame },
 	mymap: { label: 'My Map', icon: MapPinned },
-	mycommunity: { label: 'My Community', icon: Users },
+	'my-community': { label: 'My Community', icon: Users },
 	bcyca: { label: 'BCYCA', icon: TextIcon, letter: 'B' },
 	tinonee: { label: 'Tinonee', icon: TextIcon, letter: 'T' },
 	mondrook: { label: 'Mondrook', icon: TextIcon, letter: 'M' },
@@ -676,7 +676,7 @@ const baseProfileSidebarMenuItems = (
 	{
 		id: 'my-settings',
 		name: `My Settings`,
-		link: '/personal-profile/settings',
+		link: '/personal-profile/my-settings',
 		icon: { icon: Settings },
 		permission: 'profile.view',
 		initialOpen: false,
@@ -684,14 +684,14 @@ const baseProfileSidebarMenuItems = (
 			{
 				id: 'profile',
 				name: 'Change Email',
-				link: '/personal-profile/settings/email',
+				link: '/auth/redirect/changeemail',
 				icon: { icon: User },
 				permission: 'profile.view'
 			},
 			{
 				id: 'password',
 				name: 'Change Password',
-				link: '/personal-profile/settings/password',
+				link: '/auth/redirect/resetpassword',
 				icon: { icon: KeyRound },
 				permission: 'profile.view'
 			}

@@ -287,11 +287,11 @@ export const getPersonalProfileFormData = (body: FormData) => {
 		type: 'single',
 		profile: {
 			id: (body.get('property_id') as string) || '',
+			kyng_areas: [{ kyng: (body.get('kyng_area') as string) || '' }],
+			community_areas: [{ community: (body.get('community_area') as string) || '' }],
 			property_address_postcode: (body.get('property_address_postcode') as string) || '',
 			property_address_street: (body.get('property_address_street') as string) || '',
 			property_address_suburb: (body.get('property_address_suburb') as string) || '',
-			kyng_area: (body.get('kyng_area') as string) || '',
-			community_area: (body.get('community_area') as string) || '',
 			property_agent: {
 				agent_mobile: (body.get('agent_mobile') as string) || null,
 				agent_name: (body.get('agent_name') as string) || null,

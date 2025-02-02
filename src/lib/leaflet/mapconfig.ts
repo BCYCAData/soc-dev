@@ -272,12 +272,13 @@ export const featureStyles = {
 //about project tab map
 export const aboutMapConfig = (initialExtent: [[number, number], [number, number]]) => ({
 	initialExtent,
-	zoomable: true,
+	zoomable: false,
 	zoomSnap: 0.25,
 	scaleControl: { present: true, position: 'bottomleft' as L.ControlPosition },
 	attributionControl: { present: true },
 	layersControl: { present: true, position: 'topright' as L.ControlPosition },
 	legend: { present: false, position: 'bottomright' as L.ControlPosition },
+	editControl: { present: false },
 	width: '100%',
 	height: '99%',
 	baseLayers: streetBaseLayer

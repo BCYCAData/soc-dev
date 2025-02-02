@@ -1,4 +1,6 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
+import { setLoading } from '$stores/loading';
+
 import type { PageServerLoad } from './$types';
 import type {
 	PersonalProfileFormData,
@@ -13,16 +15,21 @@ function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof Prope
 		: (propertyData.profiles[0][key] as T);
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser } }) => {
+export const load: PageServerLoad = async ({
+	locals: { supabase, getSessionAndUser, getCommunityRequestOptions }
+}) => {
 	const { user } = await getSessionAndUser();
 	if (!user) {
 		throw redirect(303, '/auth/signin');
 	}
 
+	setLoading(true);
 	let { data: user_profile, error: userProfileError } = await supabase.rpc('get_profile_for_user', {
 		id_input: user.id
 	});
+	setLoading(false);
 
+	console.log('user_profile:', user_profile);
 	if (userProfileError) {
 		console.log('GET data error Personal Profile:', userProfileError);
 		error(400, `GET data error Personal Profile:  Error ${userProfileError.message}`);
@@ -32,7 +39,12 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 		error(404, 'Personal profile data not found');
 	}
 
-	const personalProfileFormData = user_profile as unknown as PersonalProfileFormData;
+	const personalProfileFormData = {
+		...user_profile,
+		property_profile: user_profile.property_profile[0] // Take first item from array
+	} as PersonalProfileFormData;
+
+	const userOptionsData = await getCommunityRequestOptions();
 
 	let steps: { index: number; text: string; page: string }[] = [
 		{ index: 1, text: '1', page: 'Step1' },
@@ -44,66 +56,94 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 		{ index: 7, text: '7', page: 'Step7' }
 	];
 
+	let nextIndex = 8;
+
+	// BCYCA steps
 	if (personalProfileFormData.community_bcyca_profile) {
 		steps = [
 			...steps,
-			{ index: 8, text: '8', page: 'Step8' },
-			{ index: 9, text: '9', page: 'Step9' },
-			{ index: 10, text: '10', page: 'Step10' }
+			{ index: nextIndex, text: String(nextIndex), page: 'Step8' },
+			{ index: nextIndex + 1, text: String(nextIndex + 1), page: 'Step9' },
+			{ index: nextIndex + 2, text: String(nextIndex + 2), page: 'Step10' }
 		];
+		nextIndex += 3;
 	}
 
+	// Tinonee steps
 	if (personalProfileFormData.community_tinonee_profile) {
 		steps = [
 			...steps,
-			{ index: 8, text: '8', page: 'Step11' },
-			{ index: 9, text: '9', page: 'Step12' },
-			{ index: 10, text: '10', page: 'Step13' }
+			{ index: nextIndex, text: String(nextIndex), page: 'Step11' },
+			{ index: nextIndex + 1, text: String(nextIndex + 1), page: 'Step12' },
+			{ index: nextIndex + 2, text: String(nextIndex + 2), page: 'Step13' }
 		];
+		nextIndex += 3;
 	}
 
+	// Mondrook steps
 	if (personalProfileFormData.community_mondrook_profile) {
 		steps = [
 			...steps,
-			{ index: 8, text: '8', page: 'Step14' },
-			{ index: 9, text: '9', page: 'Step15' },
-			{ index: 10, text: '10', page: 'Step16' }
+			{ index: nextIndex, text: String(nextIndex), page: 'Step14' },
+			{ index: nextIndex + 1, text: String(nextIndex + 1), page: 'Step15' },
+			{ index: nextIndex + 2, text: String(nextIndex + 2), page: 'Step16' }
 		];
+		nextIndex += 3;
 	}
 
+	// External steps
 	if (personalProfileFormData.community_external_profile) {
 		steps = [
 			...steps,
-			{ index: 8, text: '8', page: 'Step17' },
-			{ index: 9, text: '9', page: 'Step18' },
-			{ index: 10, text: '10', page: 'Step19' }
+			{ index: nextIndex, text: String(nextIndex), page: 'Step17' },
+			{ index: nextIndex + 1, text: String(nextIndex + 1), page: 'Step18' },
+			{ index: nextIndex + 2, text: String(nextIndex + 2), page: 'Step19' }
 		];
+		nextIndex += 3;
 	}
+
+	// Final steps
+	steps = [
+		...steps,
+		{ index: nextIndex, text: String(nextIndex), page: 'Step20' },
+		{ index: nextIndex + 1, text: String(nextIndex + 1), page: 'Step21' }
+	];
+
+	const optionsData = {
+		userOptionsData: {
+			table_name: 'user_profile',
+			object_names:
+				userOptionsData.find((opt) => opt.table_name === 'user_profile')?.object_names || []
+		},
+		communityBCYCAOptionsData: {
+			table_name: 'community_bcyca_profile',
+			object_names:
+				userOptionsData.find((opt) => opt.table_name === 'community_bcyca_profile')?.object_names ||
+				[]
+		},
+		communityExternalOptionsData: {
+			table_name: 'community_external_profile',
+			object_names:
+				userOptionsData.find((opt) => opt.table_name === 'community_external_profile')
+					?.object_names || []
+		},
+		communityMondrookOptionsData: {
+			table_name: 'community_mondrook_profile',
+			object_names:
+				userOptionsData.find((opt) => opt.table_name === 'community_mondrook_profile')
+					?.object_names || []
+		},
+		communityTinoneeOptionsData: {
+			table_name: 'community_tinonee_profile',
+			object_names:
+				userOptionsData.find((opt) => opt.table_name === 'community_tinonee_profile')
+					?.object_names || []
+		}
+	};
 
 	return {
 		steps,
-		optionsData: {
-			userOptionsData: {
-				table_name: 'user_profile',
-				object_names: personalProfileFormData.userOptionsData?.object_names || []
-			},
-			communityBCYCAOptionsData: {
-				table_name: 'community_bcyca_profile',
-				object_names: personalProfileFormData.communityBCYCAOptionsData?.object_names || []
-			},
-			communityExternalOptionsData: {
-				table_name: 'community_external_profile',
-				object_names: personalProfileFormData.communityExternalOptionsData?.object_names || []
-			},
-			communityMondrookOptionsData: {
-				table_name: 'community_mondrook_profile',
-				object_names: personalProfileFormData.communityMondrookOptionsData?.object_names || []
-			},
-			communityTinoneeOptionsData: {
-				table_name: 'community_tinonee_profile',
-				object_names: personalProfileFormData.communityTinoneeOptionsData?.object_names || []
-			}
-		},
+		optionsData,
 		propertyIds: [],
 		userProfile: personalProfileFormData
 	};
@@ -111,13 +151,14 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 
 export const actions: Actions = {
 	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+		console.log('Form submission received');
 		const { user } = await getSessionAndUser();
 		if (!user) {
 			throw redirect(303, '/auth/signin');
 		}
 		const formData = await request.formData();
 		const bodyObject = getPersonalProfileFormData(formData);
-		console.log('bodyObject:', bodyObject.communityProfileId);
+
 		if (
 			getPropertyValue(bodyObject.propertyProfileData, 'property_rented') !==
 			bodyObject.propertyWasRented

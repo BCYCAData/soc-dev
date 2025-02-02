@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
 import { Control } from 'leaflet';
+import type { Map, ControlOptions } from 'leaflet';
 import type L from 'leaflet';
 
 import type { LayerInfo } from './types';
@@ -8,17 +9,17 @@ export class LeafletLegendControlClass extends Control {
 	private container: HTMLElement;
 	private legendContent: { [key: string]: HTMLElement } = {};
 	private legendContentWrapper: HTMLElement;
-	private map: L.Map;
+	private map: Map;
 	private leaflet: typeof L;
 	private isExpanded: boolean = false;
 	private icon: HTMLElement;
 	private layersStore: ReturnType<typeof writable<Record<string, LayerInfo>>>;
 
 	constructor(
-		map: L.Map,
+		map: Map,
 		leaflet: typeof L,
 		layersStore: ReturnType<typeof writable<Record<string, LayerInfo>>>,
-		options?: L.ControlOptions
+		options?: ControlOptions
 	) {
 		super(options);
 		this.map = map;
@@ -71,7 +72,7 @@ export class LeafletLegendControlClass extends Control {
 		});
 	}
 
-	onAdd(map: L.Map): HTMLElement {
+	onAdd(map: Map): HTMLElement {
 		this.leaflet.DomEvent.disableClickPropagation(this.container);
 		this.leaflet.DomEvent.disableScrollPropagation(this.container);
 

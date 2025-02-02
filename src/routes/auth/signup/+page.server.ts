@@ -4,6 +4,7 @@ import { isEmailAllowed } from '$lib/server/auth/dev-config';
 
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
 import { logSignUpSignInError } from '$lib/server/errorLogging';
+import { SITE_URL } from '$lib/constants';
 
 interface ValidateActionResponse {
 	apiData?: AddressValidationResponse;
@@ -26,9 +27,6 @@ interface AddressValidationResponse {
 	community: string;
 	status: number;
 }
-
-const SITE_URL =
-	process.env.NODE_ENV === 'production' ? 'https://soc-dev.vercel.app' : 'http://127.0.0.1:5173';
 
 export const actions: Actions = {
 	validate: async ({ request, locals: { supabase } }): Promise<ValidateActionResponse> => {

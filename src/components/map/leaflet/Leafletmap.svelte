@@ -55,7 +55,7 @@
 	const zoomDelta = zoomSnap;
 	const scrollWheelZoom = zoomable;
 	const keyboard = zoomable;
-	const zoomControl = false;
+	const zoomControl = zoomable;
 
 	let style = $derived(`width:${width};height:${height};`);
 
@@ -144,12 +144,12 @@
 				scrollWheelZoom,
 				dragging,
 				keyboard,
-				zoomControl,
+				zoomControl: false,
 				attributionControl: attributionControl.present
 			});
-
-			leaflet.control.zoom({ position: 'bottomleft' }).addTo(leafletMap);
-
+			if (zoomControl) {
+				leaflet.control.zoom({ position: 'bottomleft' }).addTo(leafletMap);
+			}
 			if (editControl.present) {
 				await import('leaflet-editable');
 				leafletMap.editTools = new (window as any).L.Editable(leafletMap);

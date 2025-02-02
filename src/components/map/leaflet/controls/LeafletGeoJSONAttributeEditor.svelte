@@ -12,7 +12,7 @@
 	} from '$lib/leaflet/spatialutilities.svelte';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { LayerInfo } from '$lib/leaflet/types';
-	import L from 'leaflet';
+	import type { GeoJSON } from 'leaflet';
 	interface Props {
 		currentPropertyId: string;
 	}
@@ -107,7 +107,7 @@
 			const layers = get(layersStore);
 			const currentLayer = layers[feature.template_id];
 			if (currentLayer?.layer) {
-				(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+				(currentLayer.layer as GeoJSON).eachLayer((layer: any) => {
 					if (layer.feature.properties.id === feature.id) {
 						layer.feature.properties = feature.properties;
 						updateStatus = 'Changes pending...';
@@ -153,7 +153,7 @@
 				const layers = get(layersStore);
 				const currentLayer = layers[feature?.template_id || ''];
 				if (currentLayer?.layer) {
-					(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+					(currentLayer.layer as GeoJSON).eachLayer((layer: any) => {
 						if (layer.feature.properties.id === feature?.id) {
 							layer.setStyle(layer.originalStyle);
 						}
@@ -197,7 +197,7 @@
 		const layers = get(layersStore);
 		const currentLayer = layers[feature?.template_id || ''];
 		if (currentLayer?.layer) {
-			(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+			(currentLayer.layer as GeoJSON).eachLayer((layer: any) => {
 				if (layer.feature.properties.id === feature?.id) {
 					layer.setStyle(layer.originalStyle);
 				}

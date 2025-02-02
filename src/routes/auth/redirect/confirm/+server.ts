@@ -9,8 +9,6 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 	const type = url.searchParams.get('type') as EmailOtpType | null;
 	const next = url.searchParams.get('next') ?? '/';
 
-	console.log('token_hash:', token_hash);
-
 	const redirectTo = new URL(url);
 	redirectTo.pathname = next;
 	redirectTo.searchParams.delete('token_hash');
@@ -40,7 +38,21 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 					redirect(REDIRECT_FOUND, redirectTo);
 					break;
 				case 'email_change':
-					console.log('Is email_change confirmed');
+					console.log('Email change confirmed');
+					try {
+						const { error: refreshError } = await supabase.auth.refreshSession();
+						if (refreshError) throw refreshError;
+
+						// Sign out after successful email change
+						await supabase.auth.signOut();
+						redirectTo.pathname = '/auth/signin';
+						redirectTo.searchParams.set('message', 'email_changed');
+					} catch (error) {
+						console.error('Session refresh error:', error);
+						redirectTo.pathname = '/auth/error';
+						redirectTo.searchParams.set('error', 'email_change_failed');
+					}
+					redirect(REDIRECT_SEE_OTHER, redirectTo);
 					break;
 			}
 		}

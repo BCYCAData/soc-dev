@@ -39,6 +39,9 @@ export async function guardRoute({
 	if (routeMatchers.isSignOutRoute(path)) {
 		return;
 	}
+	if (routeMatchers.isProtectedAuthRoute(path)) {
+		return;
+	}
 
 	if (routeMatchers.isKYNGRoute(path)) {
 		if (!coordinatesKYNG?.length) {

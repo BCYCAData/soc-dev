@@ -1,16 +1,16 @@
+import { setLoading } from '$stores/loading';
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
-// import type { ValidateActionResponse } from '$lib/types';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	const parentData = await parent();
 	const propertyIds = parentData.propertyIds;
-
+	setLoading(true);
 	const { data: properties, error } = await supabase
 		.from('property_profile')
 		.select('id, property_address_street, property_address_suburb, property_address_postcode')
 		.in('id', propertyIds);
-
+	setLoading(false);
 	if (error) {
 		throw error;
 	}

@@ -4,24 +4,32 @@
 		yesNoMaybeOptions,
 		fireFightingResourceOptions
 	} from '$lib/profile-options';
-
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
-
 	import type { PropertyProfile } from '$lib/form.types';
 
 	interface Props {
 		propertyProfile: PropertyProfile;
 	}
 
-	let { propertyProfile = $bindable() }: Props = $props();
+	let { propertyProfile }: Props = $props();
 
-	propertyProfile.static_water_available = propertyProfile.static_water_available ?? [];
-	propertyProfile.fire_fighting_resources = propertyProfile.fire_fighting_resources ?? [];
+	let formState = $state({
+		static_water_available: propertyProfile.static_water_available ?? [],
+		fire_fighting_resources: propertyProfile.fire_fighting_resources ?? [],
+		have_stortz: propertyProfile.have_stortz,
+		stortz_size: propertyProfile.stortz_size
+	});
 
 	let noneChecked = $state(false);
-	let have_stortzChecked = $state(propertyProfile.have_stortz === 'Y');
+	let have_stortzChecked = $state(formState.have_stortz === 'Y');
+	let selectedStaticSources = $state(new Set<EventTarget & HTMLInputElement>());
 
-	let selectedStaticSources = new Set<EventTarget & HTMLInputElement>();
+	$effect(() => {
+		propertyProfile.static_water_available = formState.static_water_available;
+		propertyProfile.fire_fighting_resources = formState.fire_fighting_resources;
+		propertyProfile.have_stortz = formState.have_stortz;
+		propertyProfile.stortz_size = formState.stortz_size;
+	});
 
 	const unCheckAllStaticWater = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
 		if (e.currentTarget.checked) {
@@ -30,7 +38,7 @@
 			}
 			selectedStaticSources.clear();
 			noneChecked = true;
-			propertyProfile.static_water_available = []; // Clear the array when "None" is selected
+			formState.static_water_available = [];
 		}
 	};
 
@@ -61,10 +69,10 @@
 					class="ml-8 h-6 w-6"
 					id="static_water_available_{value}"
 					type="checkbox"
-					bind:group={propertyProfile.static_water_available}
+					bind:group={formState.static_water_available}
 					name="static_water_available"
 					value={Number(value)}
-					checked={propertyProfile.static_water_available?.includes(Number(value))}
+					checked={formState.static_water_available?.includes(Number(value))}
 					onchange={setStaticWater}
 				/>
 				<label
@@ -79,7 +87,7 @@
 					id="static_water_available_{value}"
 					type="checkbox"
 					name="static_water_available"
-					bind:group={propertyProfile.static_water_available}
+					bind:group={formState.static_water_available}
 					value={Number(value)}
 					onchange={unCheckAllStaticWater}
 					checked={noneChecked}
@@ -107,7 +115,7 @@
 				onchange={(e) => {
 					have_stortzChecked = e.currentTarget.value === 'Y';
 				}}
-				bind:group={propertyProfile.have_stortz}
+				bind:group={formState.have_stortz}
 				{value}
 			/>
 			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="have_stortz_{value}"
@@ -127,7 +135,7 @@
 				lableClass="min-w-fit mr-3 text-scale-6 font-medium text-orange-900 font-Poppins"
 				inputClass="max-w-sm border border-secondary-700 text-center w-20 rounded sm:text-scale-5"
 				divClass="flex items-center"
-				bind:inputValue={propertyProfile.stortz_size}
+				bind:inputValue={formState.stortz_size}
 			/>
 		</div>
 	</div>
@@ -148,9 +156,9 @@
 				id="fire_fighting_resources_{value}"
 				type="checkbox"
 				name="fire_fighting_resources"
-				bind:group={propertyProfile.fire_fighting_resources}
+				bind:group={formState.fire_fighting_resources}
 				value={Number(value)}
-				checked={propertyProfile.fire_fighting_resources?.includes(Number(value)) ?? false}
+				checked={formState.fire_fighting_resources?.includes(Number(value)) ?? false}
 			/>
 			<label
 				class="text-scale-6 ml-2 font-medium text-orange-900"

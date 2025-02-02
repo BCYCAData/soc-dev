@@ -1,36 +1,97 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import FeatureAttributesForm from '$components/map/leaflet/FeatureAttributesForm.svelte';
 	import { featureTemplates, editingState } from '$lib/leaflet/spatialutilities.svelte';
-	import type { PageData } from './$types';
 	import {
 		addresspointOptions,
 		myPropertyMapConfig,
 		propertyOptions,
 		waypointOptions
 	} from '$lib/leaflet/mapconfig';
-
-	import type { FeatureTemplate } from '$lib/leaflet/spatial';
-
 	import {
 		getLineSymbology,
 		getPointSymbology,
 		getPolygonSymbology
 	} from '$lib/leaflet/symbol/leaflet-template-symbol';
 
+	import type { Feature, Geometry, GeoJsonProperties } from 'geojson';
+	import type { FeatureTemplate } from '$lib/leaflet/spatial';
+	import type { PageData } from './$types';
+	import type { Component } from 'svelte';
+	import type {
+		ControlInfo,
+		GroupedSymbologyOptions,
+		LineGroupedSymbologyOptions,
+		LineSymbologyOptions,
+		PointSymbologyOptions,
+		PolygonSymbologyOptions
+	} from '$lib/leaflet/types';
+
+	interface BaseLayerProps {
+		geojsonData: GeoJSON.FeatureCollection;
+		layerName: string;
+		visible: boolean;
+		staticLayer: boolean;
+		showInLegend: boolean;
+		order: number;
+		template_id?: string;
+		editable: boolean;
+		tooltipTemplate?: (feature: Feature<Geometry, GeoJsonProperties>) => string;
+	}
+
+	interface PolygonLayerProps extends BaseLayerProps {
+		symbology: PolygonSymbologyOptions | GroupedSymbologyOptions;
+	}
+
+	interface LineLayerProps extends BaseLayerProps {
+		symbology: LineSymbologyOptions | LineGroupedSymbologyOptions;
+	}
+
+	interface PointLayerProps extends BaseLayerProps {
+		symbology: PointSymbologyOptions | GroupedSymbologyOptions;
+	}
+
+	interface MapProps {
+		onMapReady?: () => void;
+		onMapInstance?: (map: L.Map) => void;
+		centre?: L.LatLngExpression | [number, number] | undefined;
+		initialExtent?: L.LatLngBoundsExpression | [[number, number], [number, number]] | undefined;
+		zoom?: number | undefined;
+		minZoom?: number | undefined;
+		maxZoom?: number | undefined;
+		zoomable?: boolean;
+		zoomSnap?: number;
+		attributionControl?: ControlInfo;
+		layersControl?: ControlInfo;
+		editControl?: ControlInfo;
+		width?: string;
+		height?: string;
+		baseLayers?: Array<{ name: string; url: string; attribution: string }>;
+		children?: import('svelte').Snippet;
+	}
+
+	interface ControlProps {
+		position: L.ControlPosition;
+	}
+
 	interface Props {
 		data: PageData;
 	}
-
 	let { data }: Props = $props();
 	const propertyGeometryData = data.propertyGeometryData[0];
 
-	// Add this type for the category mapping
+	let LeafletMap = $state<Component<MapProps>>();
+	let LeafletGeoJSONPolygonLayer = $state<Component<PolygonLayerProps>>();
+	let LeafletGeoJSONLineLayer = $state<Component<LineLayerProps>>();
+	let LeafletGeoJSONPointLayer = $state<Component<PointLayerProps>>();
+	let LeafletScaleControl = $state<Component<ControlProps>>();
+	let LeafletLegendControl = $state<Component<ControlProps>>();
+
 	type CategoryOrder = {
 		[key in 'asset' | 'operational' | 'hazard']: number;
 	};
 
-	// Type the accumulator
 	type CategoryGroups = {
 		[key: string]: FeatureTemplate[];
 	};
@@ -116,6 +177,30 @@
 		leafletMapInstance = map;
 	}
 
+	onMount(async () => {
+		[
+			LeafletMap,
+			LeafletGeoJSONPolygonLayer,
+			LeafletGeoJSONLineLayer,
+			LeafletGeoJSONPointLayer,
+			LeafletScaleControl,
+			LeafletLegendControl
+		] = await Promise.all([
+			import('$components/map/leaflet/Leafletmap.svelte').then((m) => m.default),
+			import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte').then(
+				(m) => m.default
+			),
+			import('$components/map/leaflet/layers/geojson/LeafletGeoJSONLineLayer.svelte').then(
+				(m) => m.default
+			),
+			import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte').then(
+				(m) => m.default
+			),
+			import('$components/map/leaflet/controls/LeafletScaleControl.svelte').then((m) => m.default),
+			import('$components/map/leaflet/controls/LeafletLegendControl.svelte').then((m) => m.default)
+		]);
+	});
+
 	$effect(() => {
 		if (mapLoaded && leafletMapInstance) {
 			setTimeout(() => {
@@ -132,7 +217,7 @@
 <div class="flex h-full">
 	<div class="relative flex-1">
 		<div class="map-container">
-			{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
+			{#if LeafletMap && LeafletGeoJSONPolygonLayer && LeafletGeoJSONLineLayer && LeafletGeoJSONPointLayer}
 				{#if !mapLoaded}
 					<div class="spinner-overlay">
 						<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
@@ -144,114 +229,103 @@
 						onMapReady={handleMapLoaded}
 						onMapInstance={handleMapInstance}
 					>
-						{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte') then { default: LeafletGeoJSONPolygonLayer }}
-							<LeafletGeoJSONPolygonLayer
-								geojsonData={propertyGeometryData.property}
-								layerName="Property Boundary Layer"
-								visible={true}
-								editable={false}
-								staticLayer={false}
-								showInLegend={true}
-								order={BASE_LAYER_ORDERS['Property Boundary Layer']}
-								symbology={propertyOptions}
-							/>
-						{/await}
+						<LeafletGeoJSONPolygonLayer
+							geojsonData={propertyGeometryData.property}
+							layerName="Property Boundary Layer"
+							visible={true}
+							editable={false}
+							staticLayer={false}
+							showInLegend={true}
+							order={BASE_LAYER_ORDERS['Property Boundary Layer']}
+							symbology={propertyOptions}
+						/>
 
 						{#each Object.entries(templatesByCategory) as [category, templates]}
 							{#each templates as template, templateIndex}
 								{@const typedTemplate = template as FeatureTemplate}
 								{#if typedTemplate.geometry_type === 'polygon'}
-									{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte') then { default: LeafletGeoJSONPolygonLayer }}
-										<LeafletGeoJSONPolygonLayer
-											order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
-											geojsonData={featuresByTemplate[typedTemplate.id] || {
-												type: 'FeatureCollection',
-												features: []
-											}}
-											layerName={typedTemplate.name}
-											template_id={typedTemplate.id}
-											visible={true}
-											editable={true}
-											staticLayer={false}
-											showInLegend={true}
-											symbology={getPolygonSymbology(typedTemplate.category, typedTemplate.name)}
-										/>
-									{/await}
+									<LeafletGeoJSONPolygonLayer
+										order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
+										geojsonData={featuresByTemplate[typedTemplate.id] || {
+											type: 'FeatureCollection',
+											features: []
+										}}
+										layerName={typedTemplate.name}
+										template_id={typedTemplate.id}
+										visible={true}
+										editable={true}
+										staticLayer={false}
+										showInLegend={true}
+										symbology={getPolygonSymbology(typedTemplate.category, typedTemplate.name)}
+									/>
 								{:else if typedTemplate.geometry_type === 'line'}
-									{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONLineLayer.svelte') then { default: LeafletGeoJSONLineLayer }}
-										<LeafletGeoJSONLineLayer
-											order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
-											geojsonData={featuresByTemplate[typedTemplate.id] || {
-												type: 'FeatureCollection',
-												features: []
-											}}
-											layerName={typedTemplate.name}
-											template_id={typedTemplate.id}
-											visible={true}
-											editable={true}
-											staticLayer={false}
-											showInLegend={true}
-											symbology={getLineSymbology(typedTemplate.category, typedTemplate.name)}
-											tooltipTemplate={(feature) => `Type: ${typedTemplate.name}<br>
-											Length: ${feature.properties?.length}m<br>
-											ID: ${feature.properties?.id}
-										`}
-										/>
-									{/await}
+									<LeafletGeoJSONLineLayer
+										order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
+										geojsonData={featuresByTemplate[typedTemplate.id] || {
+											type: 'FeatureCollection',
+											features: []
+										}}
+										layerName={typedTemplate.name}
+										template_id={typedTemplate.id}
+										visible={true}
+										editable={true}
+										staticLayer={false}
+										showInLegend={true}
+										symbology={getLineSymbology(typedTemplate.category, typedTemplate.name)}
+										tooltipTemplate={(
+											feature: Feature<Geometry, GeoJsonProperties>
+										) => `Type: ${typedTemplate.name}<br>
+                                        Length: ${feature.properties?.length}m<br>
+                                        ID: ${feature.properties?.id}
+                                    `}
+									/>
 								{:else if typedTemplate.geometry_type === 'point'}
-									{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
-										<LeafletGeoJSONPointLayer
-											order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
-											geojsonData={featuresByTemplate[typedTemplate.id] || {
-												type: 'FeatureCollection',
-												features: []
-											}}
-											layerName={typedTemplate.name}
-											template_id={typedTemplate.id}
-											visible={true}
-											editable={true}
-											staticLayer={false}
-											showInLegend={true}
-											symbology={getPointSymbology(typedTemplate.category, typedTemplate.name)}
-											tooltipTemplate={(feature) => `
-															Name: ${feature.properties?.name}<br>
-															Type: ${typedTemplate.name}<br>
-															ID: ${feature.properties?.id}
-														`}
-										/>
-									{/await}
+									<LeafletGeoJSONPointLayer
+										order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
+										geojsonData={featuresByTemplate[typedTemplate.id] || {
+											type: 'FeatureCollection',
+											features: []
+										}}
+										layerName={typedTemplate.name}
+										template_id={typedTemplate.id}
+										visible={true}
+										editable={true}
+										staticLayer={false}
+										showInLegend={true}
+										symbology={getPointSymbology(typedTemplate.category, typedTemplate.name)}
+										tooltipTemplate={(feature: Feature<Geometry, GeoJsonProperties>) => `
+                                            Name: ${feature.properties?.name}<br>
+                                            Type: ${typedTemplate.name}<br>
+                                            ID: ${feature.properties?.id}
+                                        `}
+									/>
 								{/if}
 							{/each}
 						{/each}
-						{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
-							<LeafletGeoJSONPointLayer
-								geojsonData={propertyGeometryData.address_point}
-								layerName="Addresspoint Layer"
-								visible={true}
-								editable={false}
-								staticLayer={false}
-								showInLegend={true}
-								order={BASE_LAYER_ORDERS['Property Boundary Layer']}
-								symbology={addresspointOptions}
-							/>
-							<LeafletGeoJSONPointLayer
-								geojsonData={propertyGeometryData.way_point}
-								layerName="Waypoint Layer"
-								visible={true}
-								editable={false}
-								staticLayer={false}
-								showInLegend={true}
-								order={BASE_LAYER_ORDERS['Property Boundary Layer']}
-								symbology={waypointOptions}
-							/>
-						{/await}
 
-						{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
-							<LeafletScaleControl position="bottomleft" />
-						{/await}
-						{#await import('$components/map/leaflet/controls/LeafletLegendControl.svelte') then { default: LeafletLegendControl }}
-							<LeafletLegendControl position="bottomright" />
-						{/await}
+						<LeafletGeoJSONPointLayer
+							geojsonData={propertyGeometryData.address_point}
+							layerName="Addresspoint Layer"
+							visible={true}
+							editable={false}
+							staticLayer={false}
+							showInLegend={true}
+							order={BASE_LAYER_ORDERS['Property Boundary Layer']}
+							symbology={addresspointOptions}
+						/>
+						<LeafletGeoJSONPointLayer
+							geojsonData={propertyGeometryData.way_point}
+							layerName="Waypoint Layer"
+							visible={true}
+							editable={false}
+							staticLayer={false}
+							showInLegend={true}
+							order={BASE_LAYER_ORDERS['Property Boundary Layer']}
+							symbology={waypointOptions}
+						/>
+
+						<LeafletScaleControl position="bottomleft" />
+						<LeafletLegendControl position="bottomright" />
 					</LeafletMap>
 				</div>
 				{#if editingState.mode === 'create' || editingState.mode === 'edit'}
@@ -259,7 +333,11 @@
 						<FeatureAttributesForm />
 					</div>
 				{/if}
-			{/await}
+			{:else}
+				<div class="spinner-overlay">
+					<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>

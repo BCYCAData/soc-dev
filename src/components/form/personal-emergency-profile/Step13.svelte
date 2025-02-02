@@ -1,6 +1,5 @@
 <script lang="ts">
 	import TextAreaInput from '../inputs/TextAreaInput.svelte';
-
 	import type { TinoneeCommunityProfile } from '$lib/form.types';
 
 	interface Props {
@@ -8,8 +7,19 @@
 		communityTinoneeMeetingOptions?: { value: string; lable: string }[];
 	}
 
-	let { communityTinoneeProfile = $bindable(), communityTinoneeMeetingOptions = [] }: Props =
-		$props();
+	let { communityTinoneeProfile, communityTinoneeMeetingOptions = [] }: Props = $props();
+
+	let formState = $state({
+		community_meeting_choices: communityTinoneeProfile?.community_meeting_choices ?? [],
+		other_community_meeting: communityTinoneeProfile?.other_community_meeting ?? ''
+	});
+
+	$effect(() => {
+		if (communityTinoneeProfile) {
+			communityTinoneeProfile.community_meeting_choices = formState.community_meeting_choices;
+			communityTinoneeProfile.other_community_meeting = formState.other_community_meeting;
+		}
+	});
 </script>
 
 <h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
@@ -29,9 +39,9 @@
 					class="ml-8 h-6 w-6"
 					name="community_meeting_choices"
 					type="checkbox"
-					bind:group={communityTinoneeProfile.community_meeting_choices}
+					bind:group={formState.community_meeting_choices}
 					value={Number(value)}
-					checked={communityTinoneeProfile?.community_meeting_choices?.includes(Number(value))}
+					checked={formState.community_meeting_choices.includes(Number(value))}
 				/>
 				<label class="text-scale-6 ml-2 font-medium text-orange-900" for="community_meeting_choices"
 					>{lable}</label
@@ -39,6 +49,7 @@
 			</div>
 		{/each}
 	</div>
+
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="If there are other events you would be interested in, please add them below."
@@ -47,6 +58,6 @@
 		divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 		nameText="other_community_meeting"
 		textAreaClass="w-full resize-y sm:text-scale-5"
-		bind:inputValue={communityTinoneeProfile.other_community_meeting}
+		bind:inputValue={formState.other_community_meeting}
 	/>
 {/if}

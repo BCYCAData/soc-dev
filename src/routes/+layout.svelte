@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { invalidate } from '$app/navigation';
+	import { getLoading } from '$stores/loading';
 
+	import Spinner from '$components/page/Spinner.svelte';
 	import Footer from '$components/page/Footer.svelte';
 	import Navbar from '$components/page/navigation/Navbar.svelte';
 
 	import '../app.postcss';
 
 	import type { LayoutData } from './$types';
-	import { invalidate } from '$app/navigation';
 
 	interface Props {
 		data: LayoutData;
@@ -52,7 +54,13 @@
 <div class="app-container flex h-screen flex-col">
 	<Navbar />
 	<main class="flex-1 overflow-y-auto">
-		{@render children?.()}
+		{#if getLoading()}
+			<div class="fixed inset-0 flex items-center justify-center bg-black/20">
+				<Spinner />
+			</div>
+		{:else}
+			{@render children?.()}
+		{/if}
 	</main>
 	<Footer />
 </div>

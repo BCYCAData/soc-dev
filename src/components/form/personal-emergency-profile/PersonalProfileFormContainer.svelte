@@ -45,14 +45,21 @@
 		userProfile: PersonalProfileFormData;
 		optionsData: FormOptionsData;
 		onFormResult?: (result: FormResult) => void;
+		steps: { index: number; text: string; page: string }[];
 	}
 
-	let { active_step, propertyWasRented, userProfile, optionsData, onFormResult }: Props = $props();
+	let { active_step, propertyWasRented, userProfile, optionsData, onFormResult, steps }: Props =
+		$props();
 
 	let isLoading = $state(false);
 
 	function extractOptionsData(community: string, objectName: string): OptionItem[] {
-		const key = `community${community}OptionsData` as keyof NonNullable<FormOptionsData>;
+		const formattedCommunity =
+			community === 'BCYCA'
+				? community
+				: community.charAt(0).toUpperCase() + community.slice(1).toLowerCase();
+
+		const key = `community${formattedCommunity}OptionsData` as keyof NonNullable<FormOptionsData>;
 		return (
 			optionsData?.[key]?.object_names.find((item: OptionsData) => item.object_name === objectName)
 				?.options ?? []
@@ -145,7 +152,6 @@
 
 	const handleSubmit: SubmitFunction = () => {
 		isLoading = true;
-
 		return async ({ result, update }) => {
 			await update();
 
@@ -162,7 +168,7 @@
 					formData: result.data
 				});
 			}
-
+			console.log('Form Submission Result:', result);
 			isLoading = false;
 		};
 	};
@@ -173,7 +179,8 @@
 		class="text-scale-5 p-1 text-center text-orange-600"
 		hidden={active_step == 1 || active_step == 12}
 	>
-		Please complete all steps and tap <span
+		Please complete all steps and tap
+		<span
 			class="text-scale-3 rounded-lg border border-purple-700 bg-[#0099E8] p-1 font-semibold text-secondary-50"
 		>
 			Save My Answers
@@ -189,32 +196,22 @@
 		<input
 			type="hidden"
 			name="communityName"
-			value={userProfile.property_profile?.community_area ?? ''}
+			value={userProfile?.property_profile?.community_areas?.[0]?.community ?? ''}
 		/>
-		<input type="hidden" name="propertyId" value={userProfile.property_profile.id} />
+		<input type="hidden" name="propertyId" value={userProfile?.property_profile?.id ?? ''} />
 		<input type="hidden" name="propertyWasRented" value={propertyWasRented} />
 		<input type="hidden" name="communityProfileId" value={communityProfileId} />
-		<div hidden={active_step != 1}>
-			<Step1 />
-		</div>
-		<div hidden={active_step != 2}>
-			<Step2 {userProfile} {propertyWasRented} />
-		</div>
-		<div hidden={active_step != 3}>
-			<Step3 {userProfile} />
-		</div>
-		<div hidden={active_step != 4}>
-			<Step4 propertyProfile={userProfile.property_profile} />
-		</div>
-		<div hidden={active_step != 5}>
-			<Step5 propertyProfile={userProfile.property_profile} />
-		</div>
-		<div hidden={active_step != 6}>
-			<Step6 propertyProfile={userProfile.property_profile} />
-		</div>
-		<div hidden={active_step != 7}>
-			<Step7 {userProfile} />
-		</div>
+
+		<!-- Base steps - always shown -->
+		<div hidden={active_step != 1}><Step1 /></div>
+		<div hidden={active_step != 2}><Step2 {userProfile} {propertyWasRented} /></div>
+		<div hidden={active_step != 3}><Step3 {userProfile} /></div>
+		<div hidden={active_step != 4}><Step4 propertyProfile={userProfile.property_profile} /></div>
+		<div hidden={active_step != 5}><Step5 propertyProfile={userProfile.property_profile} /></div>
+		<div hidden={active_step != 6}><Step6 propertyProfile={userProfile.property_profile} /></div>
+		<div hidden={active_step != 7}><Step7 {userProfile} /></div>
+
+		<!-- BCYCA Profile Steps -->
 		{#if userProfile.community_bcyca_profile}
 			<div hidden={active_step != 8}>
 				<Step8
@@ -235,80 +232,89 @@
 				/>
 			</div>
 		{/if}
+
+		<!-- Tinonee Profile Steps -->
 		{#if userProfile.community_tinonee_profile}
-			<div hidden={active_step != 8}>
+			<div hidden={active_step != 11}>
 				<Step11
 					communityTinoneeProfile={userProfile.community_tinonee_profile}
 					{communityTinoneeWorkshopOptions}
 				/>
 			</div>
-			<div hidden={active_step != 9}>
+			<div hidden={active_step != 12}>
 				<Step12
 					communityTinoneeProfile={userProfile.community_tinonee_profile}
 					{communityTinoneeInformationOptions}
 				/>
 			</div>
-			<div hidden={active_step != 10}>
+			<div hidden={active_step != 13}>
 				<Step13
 					communityTinoneeProfile={userProfile.community_tinonee_profile}
 					{communityTinoneeMeetingOptions}
 				/>
 			</div>
 		{/if}
+
+		<!-- Mondrook Profile Steps -->
 		{#if userProfile.community_mondrook_profile}
-			<div hidden={active_step != 8}>
+			<div hidden={active_step != 14}>
 				<Step14
 					communityMondrookProfile={userProfile.community_mondrook_profile}
 					{communityMondrookWorkshopOptions}
 				/>
 			</div>
-			<div hidden={active_step != 9}>
+			<div hidden={active_step != 15}>
 				<Step15
 					communityMondrookProfile={userProfile.community_mondrook_profile}
 					{communityMondrookInformationOptions}
 				/>
 			</div>
-			<div hidden={active_step != 10}>
+			<div hidden={active_step != 16}>
 				<Step16
 					communityMondrookProfile={userProfile.community_mondrook_profile}
 					{communityMondrookMeetingOptions}
 				/>
 			</div>
 		{/if}
+
+		<!-- External Profile Steps -->
 		{#if userProfile.community_external_profile}
-			<div hidden={active_step != 8}>
+			<div hidden={active_step != 17}>
 				<Step17
 					communityExternalProfile={userProfile.community_external_profile}
 					{communityExternalWorkshopOptions}
 				/>
 			</div>
-			<div hidden={active_step != 9}>
+			<div hidden={active_step != 18}>
 				<Step18
 					communityExternalProfile={userProfile.community_external_profile}
 					{communityExternalInformationOptions}
 				/>
 			</div>
-			<div hidden={active_step != 10}>
+			<div hidden={active_step != 19}>
 				<Step19
 					communityExternalProfile={userProfile.community_external_profile}
 					{communityExternalMeetingOptions}
 				/>
 			</div>
 		{/if}
-		<div hidden={active_step != 11}>
+
+		<!-- Final Steps -->
+		<div hidden={active_step != steps.length - 1}>
 			<Step20
 				{userProfile}
 				{userProfileStayInTouchOptions}
-				communityName={userProfile.property_profile.community_area}
+				communityName={userProfile?.property_profile?.community_areas?.[0]?.community ?? ''}
 			/>
 		</div>
-		<div hidden={active_step != 12}>
+		<div hidden={active_step != steps.length}>
 			<Step21 />
 		</div>
+
 		<div class="sm:text-scale-5 flex flex-col items-center justify-center">
 			<button
 				class="text-scale-3 mx-3 mb-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] font-semibold text-secondary-50"
-				hidden={active_step != 12}
+				hidden={active_step != steps.length}
 				type="submit"
 				form="personalProfileForm"
 				disabled={isLoading}

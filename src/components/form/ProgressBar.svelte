@@ -23,7 +23,9 @@
 
 		const actives = document.querySelectorAll('.active');
 		if (progress) {
-			progress.style.width = ((actives.length - 1) / (circles.length - 1)) * 100 + '%';
+			const isLastStep = currentActive === circles.length;
+			const width = isLastStep ? 100 : ((actives.length - 1) / (circles.length - 1)) * 100;
+			progress.style.width = width + '%';
 		}
 	};
 

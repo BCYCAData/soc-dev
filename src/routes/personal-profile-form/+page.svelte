@@ -21,7 +21,29 @@
 	let progressBar: ProgressBarInstance;
 
 	const propertyWasRented = data.userProfile.property_profile.property_rented || false;
-	const { steps, optionsData } = data;
+	const { steps } = data;
+	const optionsData = {
+		userOptionsData: {
+			table_name: 'user_profile',
+			object_names: data.optionsData.userOptionsData.object_names
+		},
+		communityBCYCAOptionsData: {
+			table_name: 'community_bcyca_profile',
+			object_names: data.optionsData.communityBCYCAOptionsData.object_names
+		},
+		communityExternalOptionsData: {
+			table_name: 'community_external_profile',
+			object_names: data.optionsData.communityExternalOptionsData.object_names
+		},
+		communityMondrookOptionsData: {
+			table_name: 'community_mondrook_profile',
+			object_names: data.optionsData.communityMondrookOptionsData.object_names
+		},
+		communityTinoneeOptionsData: {
+			table_name: 'community_tinonee_profile',
+			object_names: data.optionsData.communityTinoneeOptionsData.object_names
+		}
+	};
 
 	const handleProgress = (stepIncrement: number) => {
 		progressBar?.handleProgress(stepIncrement);
@@ -43,6 +65,7 @@
 			{propertyWasRented}
 			userProfile={data.userProfile}
 			{optionsData}
+			{steps}
 			onFormResult={({ success, message, formData }) => {
 				// Handle form submission feedback
 				console.log('Form action data:', formData);

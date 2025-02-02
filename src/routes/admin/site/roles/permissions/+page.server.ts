@@ -1,4 +1,6 @@
 import { error } from '@sveltejs/kit';
+import { setLoading } from '$stores/loading';
+
 import type { PageServerLoad, Actions } from './$types';
 
 interface RolePermission {
@@ -11,13 +13,14 @@ interface PermissionTree {
 }
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
+	setLoading(true);
 	const { data: rolePermissions, error: rpError } = await supabase
 		.from('role_permissions')
 		.select('*')
 		.order('role');
 
 	const { data: userRoles, error: urError } = await supabase.rpc('get_user_roles');
-
+	setLoading(false);
 	if (rpError || urError) {
 		throw error(500, 'Failed to load roles data');
 	}

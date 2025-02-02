@@ -81,14 +81,6 @@ export type CommunityRequestOption = {
 	};
 };
 
-// export type OptionsData = {
-// 	userOptionsData?: TransformedOptionsData;
-// 	communityBCYCAOptionsData?: TransformedOptionsData;
-// 	communityExternalOptionsData?: TransformedOptionsData;
-// 	communityMondrookOptionsData?: TransformedOptionsData;
-// 	communityTinoneeOptionsData?: TransformedOptionsData;
-// };
-
 export function getCommunityOptions(data: CommunityRequestOption[]): TransformedOptionsData[] {
 	const result: TransformedOptionsData[] = [];
 

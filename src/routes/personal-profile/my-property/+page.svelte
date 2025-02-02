@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
 	import AddPropertyModal from '$components/page/modals/AddPropertyModal.svelte';
 	import type { PageData } from './$types';
 
