@@ -135,6 +135,19 @@
 				}
 			});
 		}
+		if (!visible) {
+			map.removeLayer(geoJSONLayer);
+		}
+
+		$effect(() => {
+			if (!geoJSONLayer || !map) return;
+
+			if (visible) {
+				geoJSONLayer.addTo(map);
+			} else {
+				map.removeLayer(geoJSONLayer);
+			}
+		});
 
 		if (editable) {
 			// enableEditing();

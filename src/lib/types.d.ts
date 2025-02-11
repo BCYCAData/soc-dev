@@ -1,3 +1,16 @@
+export interface HelpContent {
+	hasHelp: boolean;
+	content?: string;
+	title?: string;
+	sections?: HelpSection[];
+}
+
+export interface HelpSection {
+	title?: string;
+	content: string;
+	importance?: 'info' | 'warning' | 'tip';
+}
+
 export type FullAutoFill =
 	| 'street-address'
 	| 'address-line1'

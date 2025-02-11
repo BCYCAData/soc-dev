@@ -18,6 +18,16 @@ interface TileJsonMetadataResponse {
 	layers: GeoscapeMetadataLayer[];
 }
 
+export function getGeometryTypeFromLayer(layerId: string): 'Point' | 'LineString' | 'Polygon' {
+	const geometryMap: Record<string, 'Point' | 'LineString' | 'Polygon'> = {
+		address: 'Point',
+		roads: 'LineString',
+		parcels: 'Polygon'
+		// Add more mappings as needed
+	};
+	return geometryMap[layerId] || 'Point';
+}
+
 export async function getLayerMetadata() {
 	const response = await fetch(
 		`https://api.psma.com.au/v1/maps/index.json?key=${PUBLIC_GEOSCAPE_GNAF_TILES_API_KEY}`,
@@ -43,6 +53,7 @@ export async function fetchVectorTile(layerId: string, z: number, x: number, y: 
 	);
 	return await response.arrayBuffer();
 }
+
 export function vectorTileToGeoJSON(
 	buffer: ArrayBuffer,
 	z: number,

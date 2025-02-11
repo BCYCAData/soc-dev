@@ -1,16 +1,15 @@
-import { setLoading } from '$stores/loading';
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	const parentData = await parent();
 	const propertyIds = parentData.propertyIds;
-	setLoading(true);
+
 	const { data: properties, error } = await supabase
 		.from('property_profile')
 		.select('id, property_address_street, property_address_suburb, property_address_postcode')
 		.in('id', propertyIds);
-	setLoading(false);
+
 	if (error) {
 		throw error;
 	}
@@ -66,7 +65,7 @@ export const actions: Actions = {
 		const { user } = await getSessionAndUser();
 		const formData = await request.formData();
 
-		const { data, error } = await supabase.rpc('create_property_for_user', {
+		const { error } = await supabase.rpc('create_property_for_user', {
 			user_id: user.id,
 			var_principaladdresssiteoid: Number(formData.get('principaladdresssiteoid')),
 			var_valid_address_street: String(formData.get('validaddressstreet')),

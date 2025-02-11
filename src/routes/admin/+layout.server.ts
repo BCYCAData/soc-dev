@@ -1,5 +1,5 @@
 import { error } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
+
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({
@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({
 	parent
 }) => {
 	const parentData = await parent();
-	setLoading(true);
+
 	const { data: adminMessagesData, error: adminMessagesError } = await supabase.rpc(
 		'get_admin_messages_for_user',
 		{
@@ -19,7 +19,6 @@ export const load: LayoutServerLoad = async ({
 		console.error('Error getting admin messages:', adminMessagesError);
 		throw error(400, adminMessagesError.message);
 	}
-	setLoading(false);
 
 	return {
 		adminMessages: adminMessagesData || [],

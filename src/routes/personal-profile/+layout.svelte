@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { page } from '$app/state';
+	import { browser } from '$app/environment';
+	import { helpContent } from '$stores/helpstore';
+	import { loadHelpContent } from '$lib/utility';
 	import Breadcrumbs from '$components/page/navigation/Breadcrumbs.svelte';
-	import MessageContainer from '$components/message/MessageContainer.svelte';
-	import SidebarProfileMenu from '$components/page/navigation/sidemenu/SidebarProfileMenu.svelte';
+	// import MessageContainer from '$components/message/MessageContainer.svelte';
+	import ProfileSideMenu from '$components/page/navigation/sidemenu/ProfileSideMenu.svelte';
+	import MenuToggleIcon from '$components/icons/MenuToggleIcon.svelte';
+	// import HelpToggleIcon from '$components/icons/HelpToggleIcon.svelte';
+	import HelpPanel from '$components/page/help/HelpPanel.svelte';
 	import { profileSidebarPathLables } from '$lib/menu-items';
-	import type { ProfileMessageData } from '$lib/types';
+	// import type { ProfileMessageData } from '$lib/types';
 	import type { PageData } from './$types';
 	import type { PropertyProfile } from '$lib/form.types';
 
@@ -13,14 +20,54 @@
 	}
 
 	let { data, children }: Props = $props();
-	let profileMessages: ProfileMessageData = $state(data.profileMessages);
+	// let profileMessages: ProfileMessageData = $state(data.profileMessages);
+	let isSidebarCollapsed = $state(
+		browser ? localStorage.getItem('sidebarCollapsed') === 'true' : false
+	);
+
+	let isHelpbarCollapsed = $state(
+		browser ? localStorage.getItem('helpbarCollapsed') === 'true' : false
+	);
 
 	const propertyProfiles: PropertyProfile[] = Array.isArray(data.userProfile.property_profile)
 		? data.userProfile.property_profile
 		: [data.userProfile.property_profile];
 
 	const communityProfiles = data.communityProfiles;
+
+	function toggleSidebar() {
+		isSidebarCollapsed = !isSidebarCollapsed;
+		if (browser) {
+			localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.toString());
+		}
+	}
+
+	// function toggleHelpbar() {
+	// 	isHelpbarCollapsed = !isHelpbarCollapsed;
+	// 	if (browser) {
+	// 		localStorage.setItem('helpbarCollapsed', isHelpbarCollapsed.toString());
+	// 	}
+	// }
+
+	function handleKeyboardShortcut(event: KeyboardEvent) {
+		if (event.ctrlKey && event.key === '[') {
+			toggleSidebar();
+		}
+		if (event.ctrlKey && event.key === ']') {
+			// Update this to directly modify isHelpbarCollapsed
+			isHelpbarCollapsed = !isHelpbarCollapsed;
+			if (browser) {
+				localStorage.setItem('helpbarCollapsed', isHelpbarCollapsed.toString());
+			}
+		}
+	}
+	$effect(() => {
+		const path = page.url.pathname.slice(1);
+		loadHelpContent(path).then((content) => ($helpContent = content));
+	});
 </script>
+
+<svelte:window on:keydown={handleKeyboardShortcut} />
 
 <div class="app-shell bg-orange-200">
 	<header class="mx-auto flex w-full items-center justify-center bg-orange-100">
@@ -30,28 +77,41 @@
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={profileSidebarPathLables} properties={propertyProfiles} />
 	</div>
+
 	<div class="app-shell-main">
-		<div class="app-shell-sidebar-left w-1/6 bg-stone-200">
+		<div
+			class="app-shell-sidebar-left {isSidebarCollapsed
+				? 'w-16'
+				: 'w-1/6'} transition-all duration-300"
+		>
 			<div class="flex w-full flex-col p-1">
-				<div class="flex flex-row justify-around pt-2 text-xl">Profile Menu</div>
+				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
+					<MenuToggleIcon isMenuCollapsed={isSidebarCollapsed} color="#FAFAF9" size={20} />
+				</button>
+				<div class="flex flex-row justify-around pt-2 text-xl">
+					{#if !isSidebarCollapsed}Profile Menu{/if}
+				</div>
 				<div class="flex flex-col rounded-lg bg-orange-600">
-					<SidebarProfileMenu
+					<ProfileSideMenu
+						{isSidebarCollapsed}
 						communityText="Community"
 						properties={propertyProfiles}
 						{communityProfiles}
 					/>
 				</div>
-				<p class="ml-2">
-					Please make sure you click every heading in the menu on the left <br />
-					<b>and</b>
-					check your answers to all the questions.
-				</p>
-				<p class="ml-2">
-					Remember this is <b>your</b>
-					data. To help keep
-					<b>you</b>
-					prepared.
-				</p>
+				{#if !isSidebarCollapsed}
+					<p class="ml-2">
+						Please make sure you click every heading in the menu on the left <br />
+						<b>and</b>
+						check your answers to all the questions.
+					</p>
+					<p class="ml-2">
+						Remember this is <b>your</b>
+						data. To help keep
+						<b>you</b>
+						prepared.
+					</p>
+				{/if}
 			</div>
 		</div>
 
@@ -59,9 +119,24 @@
 			{@render children?.()}
 		</div>
 
-		<div class="app-shell-sidebar-right w-1/6 bg-stone-200">
-			<MessageContainer messagesData={profileMessages} />
-		</div>
+		<HelpPanel isCollapsed={isHelpbarCollapsed} />
+
+		<!-- <div
+			class="app-shell-sidebar-right {isHelpbarCollapsed
+				? 'w-16'
+				: 'w-1/6'} transition-all duration-300"
+		> -->
+		<!-- {#if $helpContent.hasHelp}
+				<button class="collapse-toggle self-end p-2" onclick={toggleHelpbar}>
+					<HelpToggleIcon color="#EA580C" size={28} />
+				</button>
+				{#if !isHelpbarCollapsed}
+					<div class="bg-orange-100 p-4">
+						{$helpContent.content}
+					</div>
+				{/if}
+			{/if} -->
+		<!-- </div> -->
 	</div>
 </div>
 
@@ -78,8 +153,7 @@
 		overflow: hidden;
 	}
 
-	.app-shell-sidebar-left,
-	.app-shell-sidebar-right {
+	.app-shell-sidebar-left {
 		overflow-y: auto;
 	}
 

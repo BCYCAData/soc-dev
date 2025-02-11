@@ -45,12 +45,53 @@
 		}
 	};
 
-	const handleProgress = (stepIncrement: number) => {
-		progressBar?.handleProgress(stepIncrement);
+	// const handleProgress = (stepIncrement: number) => {
+	// 	progressBar?.handleProgress(stepIncrement);
+	// };
+	const handleProgress = async (stepIncrement: number) => {
+		const formElement = document.querySelector('#personalProfileForm');
+		if (formElement instanceof HTMLFormElement) {
+			const formData = new FormData(formElement);
+			try {
+				const response = await fetch('?/saveData', {
+					method: 'POST',
+					body: formData
+				});
+				if (response.ok) {
+					progressBar?.handleProgress(stepIncrement);
+				}
+			} catch (error) {
+				console.error('Error saving form data:', error);
+			}
+		} else {
+			progressBar?.handleProgress(stepIncrement);
+		}
 	};
 
-	const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
-		progressBar?.skipTo(e);
+	// const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+	// 	progressBar?.skipTo(e);
+	// };
+
+	const skipTo = async (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+		const formElement = document.querySelector('#personalProfileForm');
+		if (formElement instanceof HTMLFormElement) {
+			const formData = new FormData(formElement);
+			try {
+				const response = await fetch('?/saveData', {
+					method: 'POST',
+					body: formData
+				});
+				if (response.ok) {
+					progressBar?.skipTo(e);
+				} else {
+					console.error('Failed to save form data');
+				}
+			} catch (error) {
+				console.error('Error saving form data:', error);
+			}
+		} else {
+			progressBar?.skipTo(e);
+		}
 	};
 </script>
 
@@ -67,8 +108,6 @@
 			{optionsData}
 			{steps}
 			onFormResult={({ success, message, formData }) => {
-				// Handle form submission feedback
-				console.log('Form action data:', formData);
 				if (success) {
 					// Show success notification
 					console.log('Survey Form submitted successfully:', message);

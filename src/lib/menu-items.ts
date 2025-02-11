@@ -23,7 +23,6 @@ import {
 	BookOpenText,
 	SquareMenu,
 	Hammer,
-	Contact,
 	BookUp,
 	Cog,
 	Database,
@@ -60,8 +59,8 @@ export type Crumb = {
 };
 
 export const kyngSidebarPathLables: Record<string, PathConfig> = {
-	kyngcoordinator: { label: 'KYNG Coordinator' },
-	messages: { label: 'KYNG Area Messages', icon: MessagesSquare },
+	'kyng-coordinator': { label: 'KYNG Coordinator' },
+	'unregistered-addresses': { label: 'Unregistered Addresses', icon: MessagesSquare },
 	user_admin: { label: 'User Administration', icon: UsersIcon },
 	registered: { label: 'Registered', icon: User },
 	map: { label: 'KYNG Map', icon: Map }
@@ -76,9 +75,9 @@ const baseKyngSidebarMenuItems: MenuItem[] = [
 		permission: 'kyng',
 		subItems: [
 			{
-				id: 'area-messages',
-				name: 'KYNG Messages',
-				link: '/kyng-coordinator/{kyng_area}/messages',
+				id: 'area-unregistered-addresses',
+				name: 'Unregistered Addresses',
+				link: '/kyng-coordinator/{kyng_area}/unregistered-addresses',
 				icon: { icon: MessagesSquare },
 				permission: 'kyng'
 			},
@@ -87,16 +86,7 @@ const baseKyngSidebarMenuItems: MenuItem[] = [
 				name: 'Area User Administration',
 				link: '/kyng-coordinator/{kyng_area}/user-admin',
 				icon: { icon: Users },
-				permission: 'kyng',
-				subItems: [
-					{
-						id: 'area-users-registered',
-						name: 'Registered Users',
-						link: '/kyng-coordinator/{kyng_area}/user-admin/registered',
-						icon: { icon: Contact },
-						permission: 'kyng'
-					}
-				]
+				permission: 'kyng'
 			},
 			{
 				id: 'area-map',

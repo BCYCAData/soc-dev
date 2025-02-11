@@ -1,5 +1,4 @@
 import { error, type Actions } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { PageServerLoad } from './$types';
 
@@ -19,7 +18,6 @@ interface ListsData {
 type MessageContext = 'users' | 'admins' | 'both';
 
 async function sendMessage(supabase: any, message: string, context?: MessageContext, ids?: string) {
-	setLoading(true);
 	const { data: response, error: sendError } = await supabase.rpc('insert_message', {
 		message_text: message,
 		context_text: context,
@@ -28,13 +26,12 @@ async function sendMessage(supabase: any, message: string, context?: MessageCont
 
 	if (sendError) throw error(400, sendError.message);
 	if (response !== 200) throw error(400, 'Message sending failed');
-	setLoading(false);
+
 	return response;
 }
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser } }) => {
 	try {
-		setLoading(true);
 		const [listsResponse, messagesResponse] = await Promise.all([
 			supabase.rpc('get_lists'),
 			supabase.rpc('get_app_messages')
@@ -50,7 +47,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 			suburbList: listsData?.suburbList ?? [],
 			appMessages: messagesResponse.data ?? []
 		};
-		setLoading(false);
 	} catch (err) {
 		console.error('Load error:', err);
 		throw error(500, 'Failed to load messages data');

@@ -1,18 +1,17 @@
 import { error } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) => {
 	const parentData = await parent();
-	setLoading(true);
+
 	const { data: kyngMessagesData, error: kyngMessagesError } = await supabase.rpc(
 		'get_kyng_coordinator_messages_for_user',
 		{
 			id_input: parentData.user.id as string
 		}
 	);
-	setLoading(false);
+
 	if (kyngMessagesError) {
 		console.log('error get KYNG Coordinator Messages for User:', kyngMessagesError);
 		error(400, kyngMessagesError.message);

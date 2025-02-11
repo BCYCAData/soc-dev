@@ -152,8 +152,31 @@
 
 	const handleSubmit: SubmitFunction = () => {
 		isLoading = true;
+
+		// Check if this is the final step
+		const isFinalStep = active_step === steps.length;
+
 		return async ({ result, update }) => {
-			await update();
+			if (isFinalStep) {
+				// On final step, let the redirect happen naturally
+				if (result.type === 'success') {
+					onFormResult?.({
+						success: true,
+						message: 'Profile updated successfully!',
+						formData: result.data
+					});
+				}
+			} else {
+				// For intermediate steps, prevent redirect
+				await update({ reset: false });
+				if (result.type === 'success') {
+					onFormResult?.({
+						success: true,
+						message: 'Progress saved',
+						formData: result.data
+					});
+				}
+			}
 
 			if (result.type === 'failure') {
 				onFormResult?.({
@@ -161,14 +184,8 @@
 					message: 'Failed to update profile. Please try again.',
 					formData: result.data
 				});
-			} else if (result.type === 'success') {
-				onFormResult?.({
-					success: false,
-					message: 'Profile updated successfully!',
-					formData: result.data
-				});
 			}
-			console.log('Form Submission Result:', result);
+
 			isLoading = false;
 		};
 	};
@@ -187,12 +204,9 @@
 		</span>
 		at Step 12
 	</div>
-	<form
-		method="post"
-		action="/personal-profile-form"
-		id="personalProfileForm"
-		use:enhance={handleSubmit}
-	>
+	<form method="post" action="?/saveData" id="personalProfileForm" use:enhance={handleSubmit}>
+		<input type="hidden" name="currentStep" value={active_step} />
+		<input type="hidden" name="totalSteps" value={steps.length} />
 		<input
 			type="hidden"
 			name="communityName"

@@ -33,12 +33,10 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
 					console.log('Is invite confirmed');
 					break;
 				case 'recovery':
-					console.log('Is recovery confirmed');
 					redirectTo.pathname = '/auth/redirect/resetpassword/';
 					redirect(REDIRECT_FOUND, redirectTo);
 					break;
 				case 'email_change':
-					console.log('Email change confirmed');
 					try {
 						const { error: refreshError } = await supabase.auth.refreshSession();
 						if (refreshError) throw refreshError;

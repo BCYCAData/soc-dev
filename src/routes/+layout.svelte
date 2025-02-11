@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { invalidate } from '$app/navigation';
-	import { getLoading } from '$stores/loading';
+	import { invalidate, beforeNavigate, afterNavigate } from '$app/navigation';
+	import { getLoading } from '$stores/loadingstore';
 
 	import Spinner from '$components/page/Spinner.svelte';
 	import Footer from '$components/page/Footer.svelte';
@@ -17,8 +17,23 @@
 	}
 
 	let { data, children }: Props = $props();
-	// let { children }: Props = $props();
 
+	let showSpinner = $state(false);
+	let loadTimeout = $state<number | null>(null);
+
+	beforeNavigate(() => {
+		if (!loadTimeout) {
+			loadTimeout = window.setTimeout(() => (showSpinner = true), 150);
+		}
+	});
+
+	afterNavigate(() => {
+		showSpinner = false;
+		if (loadTimeout) {
+			clearTimeout(loadTimeout);
+			loadTimeout = null;
+		}
+	});
 	let { session, supabase } = data;
 
 	function initDarkMode() {
@@ -51,6 +66,11 @@
 	});
 </script>
 
+{#if showSpinner}
+	<div class="fixed inset-0 flex items-center justify-center bg-black/20">
+		<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+	</div>
+{/if}
 <div class="app-container flex h-screen flex-col">
 	<Navbar />
 	<main class="flex-1 overflow-y-auto">

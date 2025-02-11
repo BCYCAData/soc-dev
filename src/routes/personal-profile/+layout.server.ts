@@ -1,5 +1,4 @@
 import { error } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { LayoutServerLoad } from './$types';
 
@@ -37,7 +36,7 @@ export const load: LayoutServerLoad = async ({
 		'get_profile_messages_for_user',
 		{ id_input: user.id }
 	);
-	setLoading(false);
+
 	if (profileMessagesError) {
 		console.log('error get Profile Messages for User:', profileMessagesError);
 		error(400, profileMessagesError.message);

@@ -1,23 +1,21 @@
 import { error } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-	setLoading(true);
 	const { data: kyngCoordinators, error: kyngCoordinatorsError } = await supabase.rpc(
 		'get_users_with_kyng_status'
 	);
-	setLoading(false);
+
 	if (kyngCoordinatorsError) {
 		throw error(500, kyngCoordinatorsError.message);
 	}
-	setLoading(true);
+
 	const { data: kyngAreas, error: kyngAreasError } = await supabase.from('kyng_areas').select(`
             kyng_area_id:id,
             kyng_area_name:kyng
         `);
-	setLoading(false);
+
 	if (kyngAreasError) {
 		throw error(500, kyngAreasError.message);
 	}

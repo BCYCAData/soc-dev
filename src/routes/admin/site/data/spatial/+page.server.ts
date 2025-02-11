@@ -1,10 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-	setLoading(true);
 	const { data: templates, error: templatesError } = await supabase
 		.from('feature_templates')
 		.select('*, template_fields(*)');
@@ -12,7 +10,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: enumValues, error: enumError } = await supabase.rpc('get_enum_values', {
 		enum_names: ['geometry_type', 'field_type', 'feature_category']
 	});
-	setLoading(false);
+
 	if (templatesError || enumError) {
 		throw error(500, 'Failed to load data');
 	}

@@ -4,7 +4,6 @@
 	let { data } = $props<{ data: PageData }>();
 
 	const kyngAreaId = $derived(data.currentArea?.kyngAreaId);
-
 	const kyngName = $derived(data.currentArea.kyngName);
 </script>
 
@@ -26,10 +25,10 @@
 					{kyngName} KYNG Map
 				</a>
 				<a
-					href="/kyng-coordinator/{kyngAreaId}/messages"
+					href="/kyng-coordinator/{kyngAreaId}/unregistered-addresses"
 					class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 				>
-					{kyngName} KYNG Messages
+					{kyngName} Un-registered Addresses
 				</a>
 				<a
 					href="/kyng-coordinator/{kyngAreaId}/user-admin"
@@ -45,7 +44,7 @@
 			<div class="prose">
 				<ul class="list-disc pl-4">
 					<li>See a map representing the current state of your KYNG group</li>
-					<li>Manage messages to users in your KYNG</li>
+					<li>Identify Unregistered Addresses in your KYNG</li>
 					<li>Reporting tools to help know the state of your KYNG group</li>
 				</ul>
 			</div>

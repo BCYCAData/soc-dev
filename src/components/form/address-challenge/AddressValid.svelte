@@ -15,6 +15,7 @@
 	let password = $state('');
 	let validPassword = $state(false);
 	let validEmail = $state(false);
+	//@ts-ignore
 	let loading = $state(false);
 
 	let canGo = $derived(validPassword && validEmail);

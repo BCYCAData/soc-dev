@@ -1,5 +1,4 @@
 import { error, redirect, type Actions } from '@sveltejs/kit';
-import { setLoading } from '$stores/loading';
 
 import type { PageServerLoad } from './$types';
 import type {
@@ -15,7 +14,7 @@ function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof Prope
 		: (propertyData.profiles[0][key] as T);
 }
 
-export const load: PageServerLoad = async ({
+export const load = (async ({
 	locals: { supabase, getSessionAndUser, getCommunityRequestOptions }
 }) => {
 	const { user } = await getSessionAndUser();
@@ -23,13 +22,9 @@ export const load: PageServerLoad = async ({
 		throw redirect(303, '/auth/signin');
 	}
 
-	setLoading(true);
 	let { data: user_profile, error: userProfileError } = await supabase.rpc('get_profile_for_user', {
 		id_input: user.id
 	});
-	setLoading(false);
-
-	console.log('user_profile:', user_profile);
 	if (userProfileError) {
 		console.log('GET data error Personal Profile:', userProfileError);
 		error(400, `GET data error Personal Profile:  Error ${userProfileError.message}`);
@@ -147,24 +142,22 @@ export const load: PageServerLoad = async ({
 		propertyIds: [],
 		userProfile: personalProfileFormData
 	};
-};
+}) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		console.log('Form submission received');
+	saveData: async ({ request, locals: { supabase, getSessionAndUser } }) => {
 		const { user } = await getSessionAndUser();
 		if (!user) {
 			throw redirect(303, '/auth/signin');
 		}
 		const formData = await request.formData();
+		const isFinalSubmission = formData.get('currentStep') === formData.get('totalSteps');
 		const bodyObject = getPersonalProfileFormData(formData);
-
 		if (
 			getPropertyValue(bodyObject.propertyProfileData, 'property_rented') !==
 			bodyObject.propertyWasRented
 		) {
 			if (bodyObject.propertyWasRented === false) {
-				console.log('Add Agent');
 				const { error: agentUpsertError } = await supabase.from('property_agent').upsert({
 					property_id: bodyObject.propertyId,
 					agent_mobile: bodyObject.agentData?.agent_mobile,
@@ -175,7 +168,6 @@ export const actions: Actions = {
 					error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
 				}
 			} else {
-				console.log('Delete Agent');
 				const { error: deleteAgentError } = await supabase
 					.from('property_agent')
 					.delete()
@@ -413,6 +405,12 @@ export const actions: Actions = {
 		if (propertyProfileUpdateError) {
 			console.log('propertyProfileUpdateError', propertyProfileUpdateError);
 			error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
+		}
+		if (!isFinalSubmission) {
+			return {
+				success: true,
+				message: 'Data saved successfully'
+			};
 		}
 		throw redirect(303, '/personal-profile');
 	}

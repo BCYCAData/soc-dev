@@ -29,6 +29,9 @@
 	let stayInTouchChoices: number[] | null = $state(data.userProfile.stay_in_touch_choices);
 	let userPostalAddress: UserPostalAddress | null = $state(data.userProfile.user_postal_address);
 	let hadUserPostalAddress: boolean = $state(data.hadUserPostalAddress);
+	let intergratedCommunity = $derived(
+		data.userProfile?.property_profile[0]?.community_areas[0]?.community ?? 'Unknown'
+	);
 
 	const stayInTouchOptions =
 		data.optionsData?.userOptionsData?.object_names?.find(
@@ -149,13 +152,21 @@
 	<input type="text" name="had_user_postal_address" value={hadUserPostalAddress} hidden />
 	<FormActions onReset={handleReset} isUnsaved={unsaved} />
 </form>
+<!-- <pre>Community: {JSON.stringify(data.userProfile, null, 2)}</pre> -->
 <h2 class="h2 pt-2 text-center text-base font-semibold text-gray-900">
-	We have determined that you are part of the <span class="text-orange-600"
-		>{data.userProfile?.property_profile?.type === 'single'
-			? data.userProfile?.property_profile?.profile?.community_area
-			: data.userProfile?.property_profile?.profiles?.[0]?.community_area || 'Unknown'} Community</span
-	>
-	based on your address.
+	We have determined that you are part of the <span class="text-orange-600">
+		{intergratedCommunity}
+	</span>
+	Community based on your address.
+	<br />
+	{#if data.communityProfiles}
+		{#each ['bcyca', 'mondrook', 'tinonee', 'external'] as connectedCommunity}
+			{#if data.communityProfiles[`community_${connectedCommunity}_profile_id`] !== null && connectedCommunity !== intergratedCommunity.toLowerCase()}
+				You have also connected with the {connectedCommunity.toUpperCase()} community.
+			{/if}
+		{/each}
+	{/if}
+	<br />
 	<br />
 	If you would like to connect with another community team please click on the buttons below.
 </h2>

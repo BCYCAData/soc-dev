@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import Spinner from '$components/page/Spinner.svelte';
 	import {
 		kyngAddresspointsGeoJsonOptions,
@@ -17,6 +18,26 @@
 	interface Props {
 		data: PageData;
 	}
+	let center = $derived(() => {
+		const lat = page.url.searchParams.get('lat');
+		const lng = page.url.searchParams.get('lng');
+		const zoom = page.url.searchParams.get('zoom');
+
+		// Use URL params if all are present
+		if (lat && lng && zoom) {
+			return {
+				useBounds: false,
+				center: [Number(lat), Number(lng)] as [number, number],
+				zoom: Number(zoom)
+			};
+		}
+
+		// Use bounds for initial extent
+		return {
+			useBounds: true,
+			bounds: kyngGeoJsonData.bounds as [[number, number], [number, number]]
+		};
+	});
 
 	let { data }: Props = $props();
 	const kyngGeoJsonData = data.kyngGeoJsonData;
@@ -38,6 +59,7 @@
 	function handleMapLoaded() {
 		mapLoaded = true;
 	}
+	$inspect('kyngGeoJsonData.addressPoints', kyngGeoJsonData.addressPoints);
 </script>
 
 <svelte:head>
@@ -54,8 +76,9 @@
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
 			<LeafletMap
 				{...kyngCoordinatorKyngAreaMapConfig(
-					[-31.940026654472703, 152.40239389529367] as [number, number],
-					kyngGeoJsonData.bounds as [[number, number], [number, number]]
+					center().useBounds ? undefined : center().center,
+					center().useBounds ? center().bounds : undefined,
+					center().useBounds ? undefined : center().zoom
 				)}
 				onMapReady={handleMapLoaded}
 			>
@@ -63,7 +86,7 @@
 					<LeafletGeoJSONPointLayer
 						geojsonData={kyngGeoJsonData.wayPoints}
 						layerName="Way Points"
-						visible={true}
+						visible={false}
 						editable={false}
 						staticLayer={false}
 						showInLegend={true}
@@ -77,6 +100,12 @@
 						staticLayer={false}
 						showInLegend={true}
 						symbology={kyngAddresspointsGeoJsonOptions}
+						tooltipTemplate={(feature) => `
+									<strong>${feature.properties?.Address}</strong><br>
+									<i>Type: </i> ${feature.properties ? feature.properties['Address Type'] : 'N/A'}<br>
+									<i>Principal Address Type: </i> ${feature.properties ? feature.properties['Principal Address Type'] : 'N/A'}<br>
+									<i>Address Point Type: </i> ${feature.properties ? feature.properties['Address Point Type'] : 'N/A'}
+								`}
 					/>
 				{/await}
 				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONLineLayer.svelte') then { default: LeafletGeoJSONLineLayer }}
@@ -109,6 +138,9 @@
 						showInLegend={true}
 						symbology={kyngPropertyAreasGeoJsonOptions}
 					/>
+				{/await}
+				{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
+					<LeafletScaleControl position="bottomleft" />
 				{/await}
 				{#await import('$components/map/leaflet/controls/LeafletLegendControl.svelte') then { default: LeafletLegendControl }}
 					<LeafletLegendControl position="bottomright" />

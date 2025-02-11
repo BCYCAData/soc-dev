@@ -62,6 +62,9 @@
 	bind:inputValue={formState.other_site_hazards}
 />
 
+<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+	Does your property have:<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
+</h2>
 <div
 	class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
@@ -80,7 +83,9 @@
 		</div>
 	{/each}
 </div>
-
+<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+	Does any adjoining land represent a hazard?
+</h2>
 <div class="flex justify-start rounded-lg bg-secondary-200 p-2">
 	{#each yesNoMaybeOptions as { value, lable }}
 		<div class="flex items-center">

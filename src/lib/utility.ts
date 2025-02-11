@@ -1,3 +1,21 @@
+import {
+	getPersonalProfileHelpContent,
+	getAdminHelpContent,
+	getKYNGCoordinatorHelpContent
+} from '$lib/help/utility';
+
+export async function loadHelpContent(path: string) {
+	if (path.startsWith('personal-profile')) {
+		return getPersonalProfileHelpContent(path);
+	} else if (path.startsWith('admin')) {
+		return getAdminHelpContent(path);
+	} else if (path.startsWith('kyng-coordinator')) {
+		console.log('path', path);
+		return getKYNGCoordinatorHelpContent(path);
+	}
+	return { hasHelp: false };
+}
+
 export const toTitleCase = (text: string) => {
 	return text
 		.toLowerCase()

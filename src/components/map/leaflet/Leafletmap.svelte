@@ -29,6 +29,13 @@
 		children?: import('svelte').Snippet;
 	}
 
+	// Add this after the props declaration
+	$effect(() => {
+		if (leafletMap && centre) {
+			leafletMap.setView(centre, zoom);
+		}
+	});
+
 	let {
 		onMapReady = () => {},
 		onMapInstance = () => {},

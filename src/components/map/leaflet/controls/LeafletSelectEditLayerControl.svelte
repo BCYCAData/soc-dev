@@ -45,6 +45,7 @@
 
 	let selectElement: HTMLSelectElement;
 	let editToolsContainer: HTMLDivElement;
+	//@ts-ignore
 	let attributeEditorContainer: HTMLDivElement;
 	let unsubscribe: () => void = () => {};
 	let control: L.Control | null = null;

@@ -77,7 +77,7 @@ export const propertyOptions: PolygonSymbologyOptions = {
 
 export const kyngAddresspointsGeoJsonOptions: GroupedSymbologyOptions = {
 	type: 'leaflet',
-	propertyField: 'addressPointType',
+	propertyField: 'Address Point Type',
 	options: {
 		type: 'divIcon',
 		options: {
@@ -99,7 +99,7 @@ export const kyngAddresspointsGeoJsonOptions: GroupedSymbologyOptions = {
 					options: {
 						className: 'address-marker',
 						color: 'blue',
-						iconSize: [8, 8],
+						iconSize: [9, 9],
 						iconAnchor: [4, 4],
 						html: ''
 					}
@@ -117,8 +117,8 @@ export const kyngAddresspointsGeoJsonOptions: GroupedSymbologyOptions = {
 					options: {
 						className: 'address-marker',
 						color: 'green',
-						iconSize: [10, 10],
-						iconAnchor: [5, 5],
+						iconSize: [8, 8],
+						iconAnchor: [4, 4],
 						html: ''
 					}
 				}
@@ -385,13 +385,16 @@ export const adminCommunityTinoneeMapConfig = (
 
 //kyng-coordinator/[kyng-area]/map
 export const kyngCoordinatorKyngAreaMapConfig = (
-	centre: [number, number],
-	bounds: [[number, number], [number, number]]
+	centre?: [number, number],
+	bounds?: [[number, number], [number, number]],
+	zoom?: number
 ) => ({
-	centre,
-	zoom: 13,
+	// Use centre and zoom only when provided, otherwise undefined
+	centre: centre || undefined,
+	zoom: centre ? zoom || 13 : undefined,
 	minZoom: undefined,
 	maxZoom: undefined,
+	// Always include bounds, but the map component will prioritize centre/zoom when they exist
 	initialExtent: bounds,
 	zoomable: true,
 	zoomSnap: 0.25,

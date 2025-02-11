@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
 
-	import Spinner from '$components/page/Spinner.svelte';
-
 	import type L from 'leaflet';
 	import type * as EsriLeaflet from 'esri-leaflet';
 	import type { Writable } from 'svelte/store';
@@ -33,7 +31,9 @@
 		popupTemplate
 	}: Props = $props();
 
+	//@ts-ignore
 	let isLoading = $state(false);
+	//@ts-ignore
 	let loadingMessage = $state('');
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl, getEsriLeaflet } =
@@ -255,21 +255,7 @@
 	});
 </script>
 
-{#if isLoading}
-	<div class="spinner-overlay">
-		<Spinner message={loadingMessage} />
-	</div>
-{/if}
-
 <style>
-	.spinner-overlay {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		z-index: 1000;
-	}
-
 	:global(.feature-popup) {
 		padding: 8px;
 	}

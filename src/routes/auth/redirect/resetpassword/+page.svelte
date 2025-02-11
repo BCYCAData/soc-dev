@@ -4,29 +4,35 @@
 
 	let heading = 'Please enter your new password to complete the process.';
 	let errorMessage = '';
-
 	let validPassword = $state(false);
 	let password = $state('');
-
 	let canGo = $derived(validPassword);
 </script>
 
-<div class="max-w-container mx-auto flex flex-col items-center justify-center">
-	<div class="w-5/6 rounded bg-orange-50 p-6 text-gray-900 shadow-md sm:ml-0 sm:w-full">
-		<h1 class="unstyled text-center text-2xl">{heading}</h1>
+<svelte:head>
+	<title>Reset Password</title>
+</svelte:head>
+
+<div class="mx-auto flex max-w-md flex-col items-center justify-center">
+	<div class="w-5/6 rounded bg-secondary-100 p-6 text-surface-950 shadow-md sm:ml-0 sm:w-full">
+		<h1 class="h1 mb-6 text-center text-2xl">{heading}</h1>
+
 		<form action="?/resetpassword" method="POST">
 			<SetPassword bind:password bind:validPassword />
+
 			<button
 				type="submit"
-				class="my-4 w-full rounded-full bg-orange-500 py-2 text-center text-stone-100 hover:bg-orange-700 focus:outline-none disabled:opacity-25"
-				value=""
+				class="mt-6 w-full rounded-full bg-secondary-500 py-2 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none disabled:opacity-25"
 				disabled={!canGo}
 			>
 				Update Password
 			</button>
+
+			{#if errorMessage !== ''}
+				<div class="mt-4">
+					<AuthErrorMessage {errorMessage} />
+				</div>
+			{/if}
 		</form>
-		{#if errorMessage !== ''}
-			<AuthErrorMessage {errorMessage} />
-		{/if}
 	</div>
 </div>
