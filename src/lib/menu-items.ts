@@ -430,7 +430,7 @@ export const profileSidebarPathLables: Record<string, PathConfig> = {
 	assets: { label: 'Assets', icon: HousePlus },
 	resources: { label: 'Firefighting Resources', icon: FireExtinguisher },
 	hazards: { label: 'Firefighting Hazards', icon: Flame },
-	mymap: { label: 'My Map', icon: MapPinned },
+	'my-map': { label: 'My Map', icon: MapPinned },
 	'my-community': { label: 'My Community', icon: Users },
 	bcyca: { label: 'BCYCA', icon: TextIcon, letter: 'B' },
 	tinonee: { label: 'Tinonee', icon: TextIcon, letter: 'T' },
@@ -465,7 +465,7 @@ const baseProfileSidebarMenuItems = (
 		initialOpen: true,
 		subItems: properties.map((property, index) => ({
 			id: `property-${property.id}`,
-			name: properties.length === 1 ? 'My Property' : `Property ${index + 1}`,
+			name: property.property_address_street,
 			icon: { icon: MapPinHouse, letter: `${index + 1}` },
 			permission: 'profile.view',
 			link: `/personal-profile/my-property/${property.id}`,

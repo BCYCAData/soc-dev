@@ -12,6 +12,8 @@
 
 	let { pathLables, properties = [], coordinatesKYNG = [] }: Props = $props();
 
+	console.log('properties', properties);
+
 	let crumbs: Crumb[] = $state([]);
 
 	function isPropertyId(label: string): boolean {
@@ -32,8 +34,8 @@
 			}
 
 			if (isPropertyId(t)) {
-				const propertyIndex = properties.findIndex((p) => p.id === t);
-				const label = properties.length === 1 ? 'My Property' : `Property ${propertyIndex + 1}`;
+				const property = properties.find((p) => p.id === t);
+				const label = property ? property.property_address_street : 'Property';
 				config = { label, icon: pathLables['my-property'].icon };
 			}
 			return {

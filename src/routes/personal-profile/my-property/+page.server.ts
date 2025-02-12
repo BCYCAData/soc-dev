@@ -76,6 +76,7 @@ export const actions: Actions = {
 		});
 
 		if (error) {
+			console.log('error', error);
 			return {
 				type: 'error',
 				error: 'Failed to add property'

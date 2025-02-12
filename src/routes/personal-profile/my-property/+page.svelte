@@ -16,11 +16,10 @@
 	}
 </script>
 
-//TODO: Implement AddPropertyModal
-
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
+
 {#if showAddPropertyModal}
 	<AddPropertyModal onClose={() => (showAddPropertyModal = false)} />
 {/if}

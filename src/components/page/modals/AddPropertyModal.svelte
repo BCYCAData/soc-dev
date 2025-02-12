@@ -5,6 +5,7 @@
 	import AddressInput from '$components/form/auth/AddressInput.svelte';
 	import ValidationMessage from '$components/form/auth/ValidationMessage.svelte';
 	import type { ActionResult } from '@sveltejs/kit';
+	import { invalidateAll, goto } from '$app/navigation';
 
 	interface ValidationResponse {
 		status: number;
@@ -29,37 +30,34 @@
 	const canGoSuburb = $derived(checkSuburbString(suburb));
 
 	let validationData = $state<ValidationResponse | null>(null);
+	let successMessage = $state<string | null>(null);
 
-	// function isValidationResponse(data: Record<string, unknown>): data is ValidationResponse {
-	// 	const validationData = Array.isArray(data.data) ? data.data[0] : null;
-
-	// 	if (!validationData) return false;
-
-	// 	return (
-	// 		typeof validationData.status === 'number' &&
-	// 		typeof validationData.validaddressstreet === 'string' &&
-	// 		typeof validationData.validaddresssuburb === 'string' &&
-	// 		typeof validationData.validaddresspostcode === 'string' &&
-	// 		typeof validationData.principaladdresssiteoid === 'number'
-	// 	);
-	// }
-
-	function handleValidationResult(
+	async function handleValidationResult(
 		result: ActionResult<Record<string, unknown>, Record<string, unknown>>
 	) {
 		if (result.type === 'success' && result.data) {
-			const dataArray = (result.data as any).data; // Access the nested data property
-			const responseData = dataArray[0] as ValidationResponse;
-			validationData = responseData;
-			error = null;
-			if (responseData.status === 200) {
-				step = 'add';
-			} else if (responseData.status === 403) {
-				error =
-					'Unfortunately we could not find this address. If you are sure it exists please send us a message.';
-			} else if (responseData.status === 404) {
-				error =
-					'Unfortunately this address is not part of any of the communities we are engaging with at the moment.';
+			if (step === 'validate') {
+				const dataArray = (result.data as any).data;
+				const responseData = dataArray[0] as ValidationResponse;
+				validationData = responseData;
+				error = null;
+
+				if (responseData.status === 200) {
+					step = 'add';
+				} else if (responseData.status === 403) {
+					error =
+						'Unfortunately we could not find this address. If you are sure it exists please send us a message.';
+				} else if (responseData.status === 404) {
+					error =
+						'Unfortunately this address is not part of any of the communities we are engaging with at the moment.';
+				}
+			} else {
+				successMessage = 'Property added successfully!';
+				await invalidateAll();
+				await goto('/personal-profile/my-property', { invalidateAll: true });
+				setTimeout(() => {
+					onClose();
+				}, 2000);
 			}
 		} else if ('error' in result) {
 			error = String(result.error);
@@ -94,6 +92,18 @@
 		{#if loading}
 			<div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
 				<Spinner />
+			</div>
+		{/if}
+		<!-- Add before the form -->
+		{#if successMessage}
+			<div class="mb-4 rounded-md bg-green-100 p-4 text-green-700">
+				<p>{successMessage}</p>
+			</div>
+		{/if}
+
+		{#if error}
+			<div class="mb-4 rounded-md bg-red-100 p-4 text-red-700">
+				<p>{error}</p>
 			</div>
 		{/if}
 
