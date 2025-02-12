@@ -7,9 +7,6 @@
 	import type { ValidateActionResponse, SignupActionResponse } from '$lib/types';
 	import type { APIData } from '$lib/types';
 
-	//TODO: Change width
-	//TODO: Change button enabled colour
-
 	interface Props {
 		form: ValidateActionResponse | SignupActionResponse | null;
 	}
@@ -29,11 +26,6 @@
 	let streetaddress = $derived(apiData?.searchaddressstreet ?? '');
 	let suburb = $derived(apiData?.searchaddresssuburb ?? '');
 	let addressStatus = $derived(form?.apiData?.status ?? ADDRESS_STATUS.UNCHALLENGED);
-
-	$effect(() => {
-		console.log('Current address status:', addressStatus);
-		console.log('Current form data:', form);
-	});
 
 	let encodedRef = $derived(
 		encodeURIComponent(`SOC Address not found: '${streetaddress}, ${suburb}'`)

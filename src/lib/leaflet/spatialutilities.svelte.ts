@@ -23,7 +23,6 @@ function setActiveTemplate(template: FeatureTemplate | null) {
 }
 
 function setActiveFeature(feature: SpatialFeature | null) {
-	console.log('activeFeature', feature);
 	editingState.activeFeature = feature;
 }
 
@@ -56,12 +55,9 @@ function transformFeaturesToGeoJSON(
 ) {
 	// Group features by template_id
 	const featuresByTemplate: Record<string, GeoJSON.FeatureCollection> = {};
-	console.log('features', features);
-	console.log('attributes', attributes);
 
 	// Process features
 	Object.values(features).forEach((feature) => {
-		console.log('feature', feature);
 		if (!featuresByTemplate[feature.template_id]) {
 			featuresByTemplate[feature.template_id] = {
 				type: 'FeatureCollection',

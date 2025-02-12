@@ -94,7 +94,6 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const role = formData.get('role')?.toString();
 		const permissions = formData.getAll('permissions').join(',');
-		console.log('permissions', permissions);
 		const { error: updateError } = await supabase
 			.from('role_permissions')
 			.update({ permission: permissions })

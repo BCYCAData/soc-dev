@@ -37,8 +37,6 @@ export const actions: Actions = {
 			}
 			return { success: false, message: 'Failed to validate address' };
 		}
-
-		console.log('validatedAddressData', validatedAddressData);
 		return { success: true, validatedAddressData };
 	},
 
@@ -84,8 +82,6 @@ export const actions: Actions = {
 				console.error('validatedAddressDataError', updateAddressDataError);
 				return { success: false, message: 'Failed to validate address' };
 			}
-
-			console.log('updatedAddressData', updatedAddressData);
 			return { success: true, updatedAddressData };
 		} else {
 			// Insert new address
@@ -96,8 +92,6 @@ export const actions: Actions = {
 				console.error('insertAddressDataError', insertAddressDataError);
 				return { success: false, message: 'Failed to validate address' };
 			}
-
-			console.log('insertedAddressData', insertedAddressData);
 			return { success: true, insertedAddressData };
 		}
 	}

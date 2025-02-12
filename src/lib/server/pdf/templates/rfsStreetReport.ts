@@ -57,7 +57,6 @@ export async function generateRfsStreetReport({
 			const stream = pdfDoc.pipe(blobStream());
 
 			stream.on('finish', function (this: any) {
-				console.log('Stream finished');
 				resolve(this.toBlob('application/pdf'));
 			});
 

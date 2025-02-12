@@ -33,7 +33,6 @@ export const getKYNGCoordinatorHelpContent = (path: string): HelpContent => {
 			return helpContentKYNGCoordinatorMap['kyng-coordinator/[kyng-area]'];
 		}
 		const dynamicPath = 'kyng-coordinator/[kyng-area]/' + pathParts[2];
-		console.log('dynamicPath:', dynamicPath);
 		return helpContentPersonalProfileMap[dynamicPath];
 	}
 	return { hasHelp: false };

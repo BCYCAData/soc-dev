@@ -16,6 +16,8 @@
 	}
 </script>
 
+//TODO: Implement AddPropertyModal
+
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>

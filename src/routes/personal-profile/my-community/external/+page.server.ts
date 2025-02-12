@@ -30,7 +30,6 @@ export const actions: Actions = {
 				};
 			} else {
 				if (hadUserPostalAddress === 'true' && havePostalAddress) {
-					console.log('Will update UserPostalAddress');
 					const { error: userPostalAddressUpdateError } = await supabase
 						.from('user_postal_address')
 						.update({

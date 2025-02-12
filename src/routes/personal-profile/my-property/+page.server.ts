@@ -35,7 +35,7 @@ export const actions: Actions = {
 					api_key: PUBLIC_GEOSCAPE_ADDRESS_API_KEY
 				}
 			);
-			console.log('validationData', validationData);
+
 			if (validationError) {
 				return {
 					type: 'error',

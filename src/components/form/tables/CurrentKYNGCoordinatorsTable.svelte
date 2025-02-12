@@ -34,8 +34,6 @@
 			isKYNGCoordinator.kyng_area_id !== null && isKYNGCoordinator.end_date === null
 	);
 
-	console.log('kyngCoordinators', data.kyngCoordinators);
-
 	onMount(() => {
 		table = new Tabulator(tableElement, {
 			data: activeCoordinators,

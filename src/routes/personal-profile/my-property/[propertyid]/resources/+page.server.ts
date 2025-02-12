@@ -6,7 +6,7 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const pid = formData.get('property_key') as string;
 		const profileMyPlaceResourcesFormData = getMyPlaceResourcesFormData(formData);
-		console.log('profileMyPlaceResourcesFormData: ', profileMyPlaceResourcesFormData);
+
 		const { error: myPlaceResourcesError } = await supabase
 			.from('property_profile')
 			.update({

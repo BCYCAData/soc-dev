@@ -9,7 +9,6 @@
 	}
 
 	let { isCollapsed = $bindable(false) }: Props = $props();
-	$inspect('isCollapsed', isCollapsed);
 
 	function toggleHelp() {
 		isCollapsed = !isCollapsed;

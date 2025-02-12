@@ -20,14 +20,6 @@ export async function guardRoute({
 	permissions?: string | null;
 	propertyIds?: string[];
 }) {
-	console.log('Guard Route Debug:', {
-		path,
-		isPublicRoute: routeMatchers.isPublicRoute(path),
-		isKYNG: routeMatchers.isKYNGRoute(path),
-		requiredPermission: routeMatchers.getRequiredPermission(path),
-		permissioms: permissions
-	});
-
 	if (routeMatchers.isPublicRoute(path)) {
 		return;
 	}

@@ -50,7 +50,6 @@
 	}
 
 	function handleValidatedAddress(data: any) {
-		console.log('handleValidatedAddress', data);
 		validatedData = data;
 	}
 </script>

@@ -10,7 +10,6 @@ export async function loadHelpContent(path: string) {
 	} else if (path.startsWith('admin')) {
 		return getAdminHelpContent(path);
 	} else if (path.startsWith('kyng-coordinator')) {
-		console.log('path', path);
 		return getKYNGCoordinatorHelpContent(path);
 	}
 	return { hasHelp: false };

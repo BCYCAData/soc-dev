@@ -95,7 +95,7 @@
 				.limit(pageSize)
 				.run((error: Error | null, featureCollection: FeatureCollection) => {
 					if (error) {
-						console.log('Query error:', error);
+						console.log('ArcGISFeatureServerLayer Query error:', error);
 						isLoading = false;
 						return;
 					}
@@ -115,7 +115,6 @@
 					});
 
 					allFeatures = [...allFeatures, ...newFeatures];
-					console.log('Loaded features:', allFeatures);
 
 					if (allFeatures.length < totalCount) {
 						offset += pageSize;

@@ -133,10 +133,6 @@
 							});
 
 							layer.on('click', () => {
-								console.log('Before setActiveFeature:', {
-									mode: editingState.mode,
-									template: editingState.activeTemplate
-								});
 								// Clear previous selection first
 								clearFeatureSelection(currentLayer);
 
@@ -154,11 +150,6 @@
 								layer.lastStyle = captureLayerStyle(layer);
 								layer.enableEdit();
 								applyGeometryStyle(leaflet, layer, 'selected');
-								console.log('After setActiveFeature:', {
-									mode: editingState.mode,
-									template: editingState.activeTemplate,
-									feature: editingState.activeFeature
-								});
 							});
 
 							layer.on('editable:editing', () => {
@@ -224,7 +215,6 @@
 								}
 							});
 							layer.on('click', () => {
-								console.log('Before click handler:', editingState.activeFeature);
 								const featureId = layer.feature.properties.id;
 								const templateId = currentLayer.template_id;
 
@@ -243,8 +233,6 @@
 									geom: layer.toGeoJSON().geometry,
 									properties: layer.feature.properties
 								});
-
-								console.log('After setActiveFeature:', editingState.activeFeature);
 
 								layer.lastStyle = captureLayerStyle(layer);
 								applyGeometryStyle(leaflet, layer, 'delete');
@@ -465,11 +453,6 @@
 </script>
 
 {#if editingState.mode && editingState.activeTemplate}
-	{console.log('Form Display Debug:', {
-		mode: editingState.mode,
-		activeTemplate: editingState.activeTemplate,
-		activeFeature: editingState.activeFeature
-	})}
 	{#if editingState.mode === 'delete' && editingState.activeFeature}
 		<div class="delete-editor-wrapper">
 			<LeafletGeoJSONDeleteEditor {currentPropertyId} />

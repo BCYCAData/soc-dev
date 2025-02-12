@@ -70,7 +70,6 @@ export const actions: Actions = {
 			};
 		}
 		const apiData = validationData[0] as AddressValidationResponse;
-		console.log('apiData', apiData);
 		return { apiData, error: false, success: true };
 	},
 

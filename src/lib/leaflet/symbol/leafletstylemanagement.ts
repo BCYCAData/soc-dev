@@ -171,8 +171,6 @@ export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 	}
 
 	if (isMarkerLayer(layer)) {
-		console.log('style', style);
-
 		if ('markerShape' in style) {
 			const customStyle = style as CustomMarkerOptions;
 			const size = customStyle.size || 12;

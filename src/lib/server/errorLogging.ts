@@ -44,7 +44,6 @@ const logSignUpSignInError = async (
 			validation_status: status
 		});
 	} else {
-		console.log(`will update ${table} errors`, baseErrorData, ipData);
 		await supabase.from(table).insert({
 			...baseErrorData,
 			...ipData,

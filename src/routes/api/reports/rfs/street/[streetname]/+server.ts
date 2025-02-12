@@ -25,21 +25,17 @@ export const GET: RequestHandler = async (event) => {
 		throw error(500, { message: 'Error fetching property data' });
 	}
 
-	console.log('streetPropertyData', propertyData);
-
 	if (!propertyData?.length) {
 		throw error(404, { message: 'No properties found for this street' });
 	}
 
 	try {
 		// Generate PDF
-		console.log('Generating PDF report');
 		const pdf = await generateRfsStreetReport({
 			streetName: params.streetname,
 			propertyData,
 			generatedBy: user.email
 		});
-		console.log('pdf', pdf);
 		// Set response headers
 		setHeaders({
 			'Content-Type': 'application/pdf',

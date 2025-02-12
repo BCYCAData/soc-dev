@@ -59,7 +59,6 @@
 	function handleMapLoaded() {
 		mapLoaded = true;
 	}
-	$inspect('kyngGeoJsonData.addressPoints', kyngGeoJsonData.addressPoints);
 </script>
 
 <svelte:head>

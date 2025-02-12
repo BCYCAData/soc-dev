@@ -9,6 +9,8 @@
 	import type { ActionData, PageData } from './$types';
 	import type { UserPostalAddress } from '$lib/form.types';
 
+	//TODO: Implement requestAccess()
+
 	function requestAccess(id: string) {
 		alert(`Requesting access to ${id}`);
 	}
