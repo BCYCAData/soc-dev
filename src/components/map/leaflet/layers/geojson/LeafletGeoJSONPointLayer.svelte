@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { createPointSymbol } from '$lib/leaflet/leafletlegendutility';
+	import { generateMarkerHtml } from '$lib/leaflet/symbol/leafletstylemanagement';
 
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
@@ -12,8 +13,7 @@
 		LegendInfo,
 		LayerInfo,
 		CustomDivIconOptions,
-		ExtendedPointSymbologyOptions,
-		MarkerShape
+		ExtendedPointSymbologyOptions
 	} from '$lib/leaflet/types';
 
 	import '../../css/leaflet-popup.css';
@@ -108,37 +108,37 @@
 		});
 	}
 
-	function generateMarkerHtml(options: LeafletMarkerOptions): string {
-		if (!options) return '';
+	// function generateMarkerHtml(options: LeafletMarkerOptions): string {
+	// 	if (!options) return '';
 
-		const divIconOptions = options.options as CustomDivIconOptions;
-		const shape = (options.markerShape || 'circle') as MarkerShape;
-		const color = options.color || '#3388ff';
-		const size = (divIconOptions?.iconSize?.[0] || 10) + 'px';
+	// 	const divIconOptions = options.options as CustomDivIconOptions;
+	// 	const shape = (options.markerShape || 'circle') as MarkerShape;
+	// 	const color = options.color || '#3388ff';
+	// 	const size = (divIconOptions?.iconSize?.[0] || 10) + 'px';
 
-		const shapeStyles: Record<MarkerShape, string> = {
-			text: '',
-			circle: 'border-radius: 50%;',
-			square: '',
-			star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
-			triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
-			'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
-			wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
-			diamond: 'transform: rotate(45deg);',
-			'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
-		};
+	// 	const shapeStyles: Record<MarkerShape, string> = {
+	// 		text: '',
+	// 		circle: 'border-radius: 50%;',
+	// 		square: '',
+	// 		star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
+	// 		triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
+	// 		'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
+	// 		wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
+	// 		diamond: 'transform: rotate(45deg);',
+	// 		'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	// 		'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	// 		'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	// 		'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
+	// 	};
 
-		return `<div style="
-            width: ${size};
-            height: ${size};
-            background-color: ${color};
-            border: 1px solid #000;
-            ${shapeStyles[shape] || ''}
-        "></div>`;
-	}
+	// 	return `<div style="
+	//         width: ${size};
+	//         height: ${size};
+	//         background-color: ${color};
+	//         border: 1px solid #000;
+	//         ${shapeStyles[shape] || ''}
+	//     "></div>`;
+	// }
 
 	function createTextLabel(
 		feature: GeoJSON.Feature,

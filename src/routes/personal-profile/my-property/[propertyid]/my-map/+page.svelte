@@ -128,6 +128,9 @@
 		features: Record<string, any>,
 		attributes: Record<string, any>
 	) {
+		if (!features || !attributes) {
+			return {};
+		}
 		const featuresByTemplate: Record<string, GeoJSON.FeatureCollection> = {};
 
 		Object.values(features).forEach((feature) => {
@@ -162,8 +165,8 @@
 	}
 
 	const featuresByTemplate = transformFeaturesToGeoJSON(
-		data.spatialFeatures,
-		data.featureAttributes
+		data?.spatialFeatures || {},
+		data?.featureAttributes || {}
 	);
 
 	let mapLoaded = $state(false);

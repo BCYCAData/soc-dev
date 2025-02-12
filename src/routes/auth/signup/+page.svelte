@@ -7,7 +7,8 @@
 	import type { ValidateActionResponse, SignupActionResponse } from '$lib/types';
 	import type { APIData } from '$lib/types';
 
-	// import type { ActionData } from './$types';
+	//TODO: Change width
+	//TODO: Change button enabled colour
 
 	interface Props {
 		form: ValidateActionResponse | SignupActionResponse | null;

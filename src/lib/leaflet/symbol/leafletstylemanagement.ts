@@ -9,8 +9,9 @@ import type {
 	ExtendedPolygonSymbologyOptions,
 	LineSymbologyOptions,
 	PolygonSymbologyOptions,
-	EnhancedPathOptions
-} from '../types';
+	EnhancedPathOptions,
+	MarkerShape
+} from '$lib/leaflet/types';
 
 type LayerStyle =
 	| L.PathOptions
@@ -127,17 +128,73 @@ export function captureLayerStyle(layer: L.Layer): LayerStyle {
 	throw new Error('Unsupported layer type');
 }
 
+export function generateMarkerHtml(style: LayerStyle | LeafletMarkerOptions): string {
+	if (!style) return '';
+
+	// Handle CustomMarkerOptions
+	if ('options' in style && 'markerShape' in style.options) {
+		const options = style.options as CustomMarkerOptions;
+		const shape = options.markerShape || 'circle';
+		const color = options.fillColour || '#3388ff';
+		const size = (options.size || 10) + 'px';
+
+		const shapeStyles: Record<MarkerShape, string> = {
+			text: '',
+			circle: 'border-radius: 50%;',
+			square: '',
+			star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
+			triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
+			'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
+			wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
+			diamond: 'transform: rotate(45deg);',
+			'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+			'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+			'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+			'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
+		};
+
+		return `<div style="
+      width: ${size};
+      height: ${size};
+      background-color: ${color};
+      border: 1px solid #000;
+      ${shapeStyles[shape] || ''}
+    "></div>`;
+	}
+
+	return '';
+}
+
 export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 	if (isPathLayer(layer)) {
 		layer.setStyle(style as L.PathOptions);
 	}
 
 	if (isMarkerLayer(layer)) {
-		const markerStyle = style as LeafletMarkerOptions;
-		if (markerStyle.type === 'divIcon') {
-			const icon = new DivIcon(markerStyle.options as CustomDivIconOptions);
+		console.log('style', style);
+
+		if ('markerShape' in style) {
+			const customStyle = style as CustomMarkerOptions;
+			const size = customStyle.size || 12;
+			const markerShape = customStyle.markerShape || 'circle';
+			const fillColour = customStyle.fillColour || '#3388ff';
+			const strokeWidth = customStyle.strokeWidth || 1;
+
+			const icon = new DivIcon({
+				html: `<div style="
+                    width: ${size}px;
+                    height: ${size}px;
+                    background-color: ${fillColour};
+                    border: ${strokeWidth}px solid #000;
+                    ${getShapeStyle(markerShape, fillColour)}
+                "></div>`,
+				className: 'custom-marker',
+				iconSize: [size, size],
+				iconAnchor: [size / 2, size / 2]
+			});
 			layer.setIcon(icon);
 		} else {
+			const markerStyle = style as LeafletMarkerOptions;
 			const icon = new Icon(markerStyle.options as L.IconOptions);
 			layer.setIcon(icon);
 		}
@@ -149,7 +206,25 @@ export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 	}
 }
 
-// Add style caching mechanism
+function getShapeStyle(shape: MarkerShape, color: string): string {
+	const shapeStyles = {
+		text: '',
+		circle: 'border-radius: 50%;',
+		square: '',
+		star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
+		triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
+		'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
+		wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
+		diamond: 'transform: rotate(45deg);',
+		'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+		'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+		'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+		'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
+	} as Record<MarkerShape, string>;
+
+	return shapeStyles[shape] || '';
+}
+
 const styleCache = new Map<string, LayerStyle>();
 
 function generateStyleFromTemplate(templateId: string, feature: any): LayerStyle {
