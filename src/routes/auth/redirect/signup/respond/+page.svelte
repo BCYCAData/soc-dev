@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
 
 	const redirectType = page.url.searchParams.get('redirectType');
+	const encodedRef = encodeURIComponent('SOC Email Already Registered');
+	const mailtoUrl = `mailto:${PUBLIC_CONTACT_EMAIL}?subject=${encodedRef}`;
 </script>
 
 <section class="mx-auto mt-5 flex h-full max-w-3xl flex-col items-center text-center sm:mt-1">
@@ -22,6 +25,15 @@
 			<p class="my-1 text-xl">
 				Please contact our support team who will help guide you through the next steps.
 			</p>
+			<div class="mt-5">
+				<a href={mailtoUrl} class="contact-button"> Tap here to send us an email </a>
+			</div>
 		</div>
 	{/if}
 </section>
+
+<style lang="postcss">
+	.contact-button {
+		@apply mt-5 inline-block rounded-xl bg-secondary-500 p-2 font-medium text-secondary-50 hover:underline;
+	}
+</style>

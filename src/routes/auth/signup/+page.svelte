@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
 	import AddressIneligible from '$components/form/address-challenge/AddressIneligible.svelte';
 	import AddressSystemError from '$components/form/address-challenge/AddressSystemError.svelte';
 	import AddressUnchallenged from '$components/form/address-challenge/AddressUnchallenged.svelte';
@@ -30,7 +31,7 @@
 	let encodedRef = $derived(
 		encodeURIComponent(`SOC Address not found: '${streetaddress}, ${suburb}'`)
 	);
-	let subjectUrl = $derived(`/contact?subject=${encodedRef}`);
+	let mailtoUrl = $derived(`mailto:${PUBLIC_CONTACT_EMAIL}?subject=${encodedRef}`);
 </script>
 
 <div class="max-w-container mx-0 flex flex-col items-center justify-center sm:w-full">
@@ -61,14 +62,12 @@
 			<p>If you are sure it exists please send us a message.</p>
 		</div>
 
-		<a href={subjectUrl} class="btn-secondary my-1" rel="noopener noreferrer"> Contact Us </a>
+		<div class="mt-5">
+			<a href={mailtoUrl} class="contact-button" rel="noopener noreferrer">
+				Tap here to send us an email
+			</a>
+		</div>
 	{:else}
 		<AddressSystemError />
 	{/if}
 </div>
-
-<style lang="postcss">
-	.btn-secondary {
-		@apply rounded-full bg-secondary-500 px-5 py-1 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none;
-	}
-</style>

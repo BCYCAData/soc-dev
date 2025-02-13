@@ -115,7 +115,7 @@
 			</div>
 		</div>
 
-		<div class="app-shell-content mx-4">
+		<div class="app-shell-content mx-4 flex-grow">
 			{@render children?.()}
 		</div>
 
@@ -144,21 +144,23 @@
 	.app-shell {
 		display: flex;
 		flex-direction: column;
-		height: 100%;
+		height: 100vh;
 	}
 
 	.app-shell-main {
 		display: flex;
 		flex: 1;
-		overflow: hidden;
+		min-height: 0;
 	}
 
 	.app-shell-sidebar-left {
+		flex: 0 0 auto;
 		overflow-y: auto;
 	}
 
 	.app-shell-content {
-		flex: 1;
+		flex: 1 1 auto;
 		overflow-y: auto;
+		width: 0;
 	}
 </style>

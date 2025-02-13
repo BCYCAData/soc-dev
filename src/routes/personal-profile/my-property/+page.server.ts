@@ -1,9 +1,18 @@
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
 import type { Actions, PageServerLoad } from './$types';
 
+interface PropertyProfile {
+	id: string;
+	property_address_street: string;
+	property_address_suburb: string;
+	property_address_postcode: string;
+	linked_users: string[];
+}
+
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	const parentData = await parent();
 	const propertyIds = parentData.propertyIds;
+	const propertyProfiles = parentData.userProfile.property_profile;
 
 	const { data: properties, error } = await supabase
 		.from('property_profile')
@@ -14,8 +23,20 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		throw error;
 	}
 
+	const propertiesWithLinkedUsers = properties.map(
+		(property: Omit<PropertyProfile, 'linked_users'>) => {
+			const matchingProfile = propertyProfiles.find(
+				(profile: PropertyProfile) => profile.id === property.id
+			);
+			return {
+				...property,
+				linked_users: matchingProfile?.linked_users || []
+			};
+		}
+	);
+
 	return {
-		properties
+		properties: propertiesWithLinkedUsers
 	};
 };
 

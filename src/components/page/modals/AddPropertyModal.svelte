@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
 	import Spinner from '$components/page/Spinner.svelte';
 	import AddressInput from '$components/form/auth/AddressInput.svelte';
@@ -32,6 +33,11 @@
 	let validationData = $state<ValidationResponse | null>(null);
 	let successMessage = $state<string | null>(null);
 
+	let encodedRef = $derived(
+		encodeURIComponent(`SOC Address not found: '${streetaddress}, ${suburb}'`)
+	);
+	let mailtoUrl = $derived(`mailto:${PUBLIC_CONTACT_EMAIL}?subject=${encodedRef}`);
+
 	async function handleValidationResult(
 		result: ActionResult<Record<string, unknown>, Record<string, unknown>>
 	) {
@@ -45,8 +51,7 @@
 				if (responseData.status === 200) {
 					step = 'add';
 				} else if (responseData.status === 403) {
-					error =
-						'Unfortunately we could not find this address. If you are sure it exists please send us a message.';
+					error = 'Unfortunately we could not find this address.';
 				} else if (responseData.status === 404) {
 					error =
 						'Unfortunately this address is not part of any of the communities we are engaging with at the moment.';
@@ -94,7 +99,7 @@
 				<Spinner />
 			</div>
 		{/if}
-		<!-- Add before the form -->
+
 		{#if successMessage}
 			<div class="mb-4 rounded-md bg-green-100 p-4 text-green-700">
 				<p>{successMessage}</p>
@@ -104,6 +109,11 @@
 		{#if error}
 			<div class="mb-4 rounded-md bg-red-100 p-4 text-red-700">
 				<p>{error}</p>
+				{#if error.includes('could not find this address')}
+					<div class="mt-5">
+						<a href={mailtoUrl} class="contact-button"> Tap here to send us an email </a>
+					</div>
+				{/if}
 			</div>
 		{/if}
 
@@ -166,10 +176,6 @@
 				/>
 			{/if}
 
-			{#if error}
-				<ValidationMessage>{error}</ValidationMessage>
-			{/if}
-
 			<div class="mt-6 flex justify-end space-x-3">
 				<button
 					type="button"
@@ -189,3 +195,9 @@
 		</form>
 	</div>
 </div>
+
+<style lang="postcss">
+	.contact-button {
+		@apply mt-5 inline-block rounded-xl bg-secondary-500 p-2 font-medium text-secondary-50 hover:underline;
+	}
+</style>

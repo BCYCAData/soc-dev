@@ -12,8 +12,6 @@
 
 	let { pathLables, properties = [], coordinatesKYNG = [] }: Props = $props();
 
-	console.log('properties', properties);
-
 	let crumbs: Crumb[] = $state([]);
 
 	function isPropertyId(label: string): boolean {
