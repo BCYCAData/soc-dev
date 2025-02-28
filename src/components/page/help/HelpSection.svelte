@@ -14,15 +14,15 @@
 	};
 
 	let sectionClass = $derived(
-		section.importance ? `border-l-4 p-3 my-2 ${importanceClasses[section.importance]}` : 'my-2'
+		section.importance ? `border-l-4 p-1 my-1 ${importanceClasses[section.importance]}` : 'my-1'
 	);
 </script>
 
 {#if section.title}
-	<h4 class="mb-1 font-semibold">{section.title}</h4>
+	<h4 class=" font-semibold">{section.title}</h4>
 {/if}
 <div class={sectionClass}>
 	{#each section.content.split('\n\n') as paragraph}
-		<p class="mb-2">{paragraph}</p>
+		<p class="mb-1">{paragraph}</p>
 	{/each}
 </div>

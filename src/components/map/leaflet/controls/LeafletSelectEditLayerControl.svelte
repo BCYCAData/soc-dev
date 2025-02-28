@@ -20,13 +20,15 @@
 	import { pointTemplateStyles } from '$lib/leaflet/symbol/leaflet-template-symbol';
 
 	import { captureLayerStyle, applyLayerStyle } from '$lib/leaflet/symbol/leafletstylemanagement';
+	import { SelectionBoxControl } from '$lib/leaflet/leafletselectionboxcontrol';
 
 	import LeafletGeoJSONAttributeEditor from '$components/map/leaflet/controls/LeafletGeoJSONAttributeEditor.svelte';
-	import LeafletGeoJSONDeleteEditor from './LeafletGeoJSONDeleteEditor.svelte';
+	import LeafletGeoJSONDeleteEditor from '$components/map/leaflet/controls/LeafletGeoJSONDeleteEditor.svelte';
 
 	import type L from 'leaflet';
 	import type { LayerInfo } from '$lib/leaflet/types';
 	import type { GeometryType } from '$lib/leaflet/spatial';
+	import { invalidateAll } from '$app/navigation';
 
 	const currentPropertyId = page.params.propertyid;
 
@@ -50,10 +52,83 @@
 	let unsubscribe: () => void = () => {};
 	let control: L.Control | null = null;
 	let previousLayerSelection: string | null = null;
+	let selectionBox = $state<SelectionBoxControl | null>(null);
+	let isSelectionActive = $state(false);
 
 	const map = getLeafletMap();
 	const leaflet = getLeaflet();
 	const layersStore = getLeafletLayers();
+
+	$effect(() => {
+		if (isSelectionActive && selectionBox) {
+			return () => {
+				selectionBox?.disable();
+				selectionBox = null;
+			};
+		}
+	});
+
+	$effect(() => {
+		if (editToolsContainer) {
+			const titleDisplay = editToolsContainer.querySelector('.tool-title-display');
+			const buttons = editToolsContainer.querySelectorAll('.edit-tool-button');
+
+			if (!editingState.mode) {
+				if (titleDisplay) {
+					titleDisplay.innerHTML = 'Select a tool';
+				}
+				buttons.forEach((btn) => btn.classList.remove('active'));
+			}
+		}
+	});
+
+	$effect(() => {
+		if (!editingState.mode) {
+			cleanup();
+		}
+	});
+
+	function setupSelectionBox(currentLayer: LayerInfo | undefined, mode: 'edit' | 'delete') {
+		selectionBox = new SelectionBoxControl(map, async (bounds) => {
+			if (currentLayer?.layer) {
+				let firstMatchFound = false;
+				(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+					if (!layer.originalStyle) {
+						layer.originalStyle = captureLayerStyle(layer);
+					}
+					const isInBounds = layer.getLatLng
+						? bounds.contains(layer.getLatLng())
+						: bounds.contains(layer.getBounds());
+
+					if (!firstMatchFound && isInBounds) {
+						layer.lastStyle = captureLayerStyle(layer);
+						applyGeometryStyle(leaflet, layer, mode === 'edit' ? 'selected' : 'delete');
+
+						if (mode === 'edit') {
+							layer.enableEdit();
+						}
+
+						const featureId = layer.feature.properties.id || crypto.randomUUID();
+
+						setActiveFeature({
+							id: featureId,
+							user_id: layer.feature.properties.user_id || currentPropertyId,
+							property_id: currentPropertyId,
+							template_id: currentLayer.template_id || '',
+							geom: layer.toGeoJSON().geometry,
+							properties: layer.feature.properties
+						});
+
+						selectionBox?.setSelectedFeature(layer);
+						firstMatchFound = true;
+					}
+				});
+			}
+		});
+
+		selectionBox.enable();
+		isSelectionActive = true;
+	}
 
 	function setFeatureStyle(layer: any, styleType: 'original' | 'hover' | 'selected') {
 		switch (styleType) {
@@ -78,103 +153,87 @@
 				}
 				setFeatureStyle(featureLayer, 'original');
 				delete featureLayer.lastStyle;
+				featureLayer.options.cursor = undefined;
 			});
 		}
+
 		setActiveFeature(null);
-		setEditingMode(null);
+		// setEditingMode(null);
 	}
 
 	function getEditControls(geometryType: GeometryType): EditControl[] {
 		const map = getLeafletMap();
+		let selectionBox: SelectionBoxControl | null = null;
 
 		const baseControls = [
 			{
 				name: 'EditFeatures',
-				callback: () => {
+				callback: async () => {
 					setEditingMode('edit');
 					const layers = get(layersStore);
 					const currentLayer = layers[selectElement.value];
 
-					// Clear any existing selection
 					clearFeatureSelection(currentLayer);
 
-					if (currentLayer?.layer) {
-						map.on('contextmenu', () => clearFeatureSelection(currentLayer));
-						(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
-							if (!layer.originalStyle) {
-								const baseStyle = captureLayerStyle(layer);
-								const templateStyle = currentLayer.template_id
-									? pointTemplateStyles[featureTemplates[currentLayer.template_id].name]
-									: null;
-
-								layer.originalStyle = templateStyle
-									? { ...baseStyle, ...templateStyle }
-									: baseStyle;
-							}
-							layer.on('mouseover', () => {
-								if (
-									!editingState.activeFeature ||
-									layer.feature.properties.id !== editingState.activeFeature.id
-								) {
-									layer.lastStyle = captureLayerStyle(layer);
-									applyGeometryStyle(leaflet, layer, 'hover');
-								}
-							});
-
-							layer.on('mouseout', () => {
-								if (
-									!editingState.activeFeature ||
-									layer.feature.properties.id !== editingState.activeFeature.id
-								) {
-									if (layer.lastStyle) {
-										applyLayerStyle(layer, layer.lastStyle);
-									}
-								}
-							});
-
-							layer.on('click', () => {
-								// Clear previous selection first
-								clearFeatureSelection(currentLayer);
-
-								const featureId = layer.feature.properties.id || crypto.randomUUID();
-								setEditingMode('edit');
-								setActiveFeature({
-									id: featureId,
-									user_id: layer.feature.properties.user_id || currentPropertyId,
-									property_id: currentPropertyId,
-									template_id: currentLayer.template_id || '',
-									geom: layer.toGeoJSON().geometry,
-									properties: layer.feature.properties // Add this line
-								});
-
-								layer.lastStyle = captureLayerStyle(layer);
-								layer.enableEdit();
-								applyGeometryStyle(leaflet, layer, 'selected');
-							});
-
-							layer.on('editable:editing', () => {
-								if (
-									editingState.activeFeature &&
-									layer.feature.properties.id === editingState.activeFeature.id
-								) {
-									setActiveFeature({
-										...editingState.activeFeature,
-										geom: layer.toGeoJSON().geometry
-									});
-								}
-							});
-						});
+					if (currentLayer?.template_id) {
+						const template = featureTemplates[currentLayer.template_id];
+						setActiveTemplate(template);
 					}
 
+					selectionBox = new SelectionBoxControl(map, async (bounds) => {
+						if (currentLayer?.layer) {
+							let firstMatchFound = false;
+
+							(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+								if (!layer.originalStyle) {
+									layer.originalStyle = captureLayerStyle(layer);
+								}
+
+								// Check if point or other geometry type
+								const isInBounds = layer.getLatLng
+									? bounds.contains(layer.getLatLng())
+									: bounds.contains(layer.getBounds());
+
+								if (!firstMatchFound && isInBounds) {
+									layer.lastStyle = captureLayerStyle(layer);
+									applyGeometryStyle(leaflet, layer, 'selected');
+									layer.enableEdit();
+
+									const featureId = layer.feature.properties.id || crypto.randomUUID();
+									invalidateAll();
+									setActiveFeature({
+										id: featureId,
+										user_id: layer.feature.properties.user_id || currentPropertyId,
+										property_id: currentPropertyId,
+										template_id: currentLayer.template_id || '',
+										geom: layer.toGeoJSON().geometry,
+										properties: layer.feature.properties
+									});
+
+									selectionBox?.setSelectedFeature(layer);
+									firstMatchFound = true;
+								}
+							});
+						}
+					});
+
+					setupSelectionBox(currentLayer, 'edit');
+
+					map.on('contextmenu', () => clearFeatureSelection(currentLayer));
+
 					return () => {
+						if (selectionBox) {
+							selectionBox.disable();
+							selectionBox = null;
+						}
 						map.off('contextmenu', () => clearFeatureSelection(currentLayer));
 						clearFeatureSelection(currentLayer);
 					};
 				},
 				kind: 'edit',
-				html: '<span style="font-size: 20px; font-weight: bold;">✎</span>',
+				html: '<span style="font-size: 20px; font-weight: bold; position: relative; display: inline-block;">✎<span style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 1px; font-size: 12px; font-weight: normal;">Edit</span></span>',
 				mode: 'edit' as const,
-				title: `Edit ${selectElement.value}`
+				title: `Select a ${selectElement.value} to Edit`
 			},
 			{
 				name: 'DeleteFeatures',
@@ -187,83 +246,66 @@
 						const template = featureTemplates[currentLayer.template_id];
 						setActiveTemplate(template);
 					}
-					map.on('contextmenu', () => clearFeatureSelection(currentLayer));
-					if (currentLayer?.layer) {
-						(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
-							if (!layer.originalStyle) {
-								layer.originalStyle = captureLayerStyle(layer);
-							}
 
-							layer.on('mouseover', () => {
-								if (
-									!editingState.activeFeature ||
-									layer.feature.properties.id !== editingState.activeFeature.id
-								) {
+					selectionBox = new SelectionBoxControl(map, (bounds) => {
+						if (currentLayer?.layer) {
+							let firstMatchFound = false;
+
+							(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
+								if (!layer.originalStyle) {
+									layer.originalStyle = captureLayerStyle(layer);
+								}
+
+								const isInBounds = layer.getLatLng
+									? bounds.contains(layer.getLatLng())
+									: bounds.contains(layer.getBounds());
+
+								if (!firstMatchFound && isInBounds) {
 									layer.lastStyle = captureLayerStyle(layer);
 									applyGeometryStyle(leaflet, layer, 'delete');
-								}
-							});
 
-							layer.on('mouseout', () => {
-								if (
-									!editingState.activeFeature ||
-									layer.feature.properties.id !== editingState.activeFeature.id
-								) {
-									if (layer.lastStyle) {
-										applyLayerStyle(layer, layer.lastStyle);
+									const featureId = layer.feature.properties.id;
+									const templateId = currentLayer.template_id;
+
+									if (featureId && templateId) {
+										setActiveFeature({
+											id: featureId,
+											property_id: currentPropertyId,
+											template_id: templateId,
+											geom: layer.toGeoJSON().geometry,
+											properties: layer.feature.properties
+										});
 									}
-								}
-							});
-							layer.on('click', () => {
-								const featureId = layer.feature.properties.id;
-								const templateId = currentLayer.template_id;
 
-								if (!featureId || !templateId) {
-									console.error('Feature missing required properties');
-									return;
-								}
-
-								clearFeatureSelection(currentLayer);
-								setEditingMode('delete');
-
-								setActiveFeature({
-									id: featureId,
-									property_id: currentPropertyId,
-									template_id: templateId,
-									geom: layer.toGeoJSON().geometry,
-									properties: layer.feature.properties
-								});
-
-								layer.lastStyle = captureLayerStyle(layer);
-								applyGeometryStyle(leaflet, layer, 'delete');
-							});
-						});
-					}
-					return () => {
-						map.off('contextmenu', () => clearFeatureSelection(currentLayer));
-						if (currentLayer?.layer) {
-							(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
-								layer.off('mouseover');
-								layer.off('mouseout');
-								layer.off('click');
-								if (layer.lastStyle) {
-									applyLayerStyle(layer, layer.lastStyle);
+									selectionBox?.setSelectedFeature(layer);
+									firstMatchFound = true;
 								}
 							});
 						}
+					});
+					setupSelectionBox(currentLayer, 'delete');
+
+					map.on('contextmenu', () => clearFeatureSelection(currentLayer));
+
+					return () => {
+						if (selectionBox) {
+							selectionBox.disable();
+							selectionBox = null;
+						}
+						map.off('contextmenu', () => clearFeatureSelection(currentLayer));
 						clearFeatureSelection(currentLayer);
 					};
 				},
 				kind: 'delete',
-				html: '<span style="font-size: 20px; font-weight: bold;">🗑</span>',
+				html: '<span style="font-size: 20px; font-weight: bold; position: relative; display: inline-block;">🗑<span style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 1px; font-size: 12px; font-weight: normal;">Delete</span></span>',
 				mode: 'delete' as const,
-				title: `Delete ${selectElement.value}`
+				title: `Select a ${selectElement.value} to Delete`
 			}
 		];
 
 		const createControls = getControlsForGeometryType(geometryType).map((control) => ({
 			...control,
-			title: `Create ${selectElement.value}`,
+			title: `Click on the map to Create a ${selectElement.value}`,
 			callback: () => {
 				setEditingMode('create');
 				switch (geometryType) {
@@ -288,6 +330,7 @@
 		editToolsContainer.innerHTML = '';
 		const layers = get(layersStore);
 		const layer = layers[selectedLayer];
+
 		if (layer?.template_id) {
 			const template = featureTemplates[layer.template_id];
 			if (template) {
@@ -295,6 +338,12 @@
 				const legendSymbol = getLegendSymbol(layer);
 
 				const toolContainer = leaflet.DomUtil.create('div', 'edit-tools-group', editToolsContainer);
+				const titleDisplay = leaflet.DomUtil.create(
+					'div',
+					'tool-title-display',
+					editToolsContainer
+				);
+				titleDisplay.textContent = 'Select a tool';
 
 				tools.forEach((tool) => {
 					const button = leaflet.DomUtil.create(
@@ -302,18 +351,57 @@
 						`edit-tool-button ${tool.mode}`,
 						toolContainer
 					);
-					if (tool.mode === 'create' && legendSymbol) {
-						button.innerHTML = legendSymbol;
-					} else {
-						button.innerHTML = tool.html;
-					}
-					button.title = tool.title || `${tool.mode.charAt(0).toUpperCase() + tool.mode.slice(1)}`;
 
-					leaflet.DomEvent.on(button, 'click', leaflet.DomEvent.stop).on(
-						button,
-						'click',
-						tool.callback
-					);
+					if (tool.mode === 'create' && legendSymbol) {
+						button.innerHTML = `<span style="font-size: 20px; font-weight: bold; position: relative; display: inline-block;">${legendSymbol}<span style="position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 6px; font-size: 12px; font-weight: normal;">Create</span></span>`;
+						button.setAttribute('title', 'Create a new ' + selectedLayer);
+					}
+					if (tool.mode === 'edit') {
+						button.innerHTML = tool.html;
+						button.setAttribute(
+							'title',
+							'Select a ' + selectedLayer + ' to Edit\nRight click the mouse to clear the selection'
+						);
+					}
+					if (tool.mode === 'delete') {
+						button.innerHTML = tool.html;
+						button.setAttribute(
+							'title',
+							'Select a ' +
+								selectedLayer +
+								' to Delete\nRight click the mouse to clear the selection'
+						);
+					}
+
+					leaflet.DomEvent.on(button, 'click', leaflet.DomEvent.stop).on(button, 'click', () => {
+						if (tool.mode === 'create') {
+							const geometryType = template.geometry_type;
+							let createInstruction = '';
+
+							switch (geometryType) {
+								case 'point':
+									createInstruction = `Click on the map to create a new ${selectedLayer} point`;
+									break;
+								case 'line':
+									createInstruction = `Click on the map to draw a new ${selectedLayer} line.<br>Click again for each bend.<br>Double-click to finish`;
+									break;
+								case 'polygon':
+									createInstruction = `Click on the map to draw a new ${selectedLayer} area,<br>Click again for each bend.<br>Double-click to finish`;
+									break;
+							}
+							titleDisplay.innerHTML = createInstruction;
+						} else if (tool.mode === 'edit') {
+							titleDisplay.innerHTML = `Drag a box around a ${selectedLayer} to select it for Editing<br>Right click the mouse to clear the selection`;
+						} else if (tool.mode === 'delete') {
+							titleDisplay.innerHTML = `Drag a box around a ${selectedLayer} to select it for Deleting<br>Right click the mouse to clear the selection`;
+						}
+
+						toolContainer
+							.querySelectorAll('.edit-tool-button')
+							.forEach((btn) => btn.classList.remove('active'));
+						button.classList.add('active');
+						tool.callback();
+					});
 				});
 			}
 		}
@@ -440,6 +528,16 @@
 		}
 	});
 
+	function cleanup(currentLayer?: LayerInfo) {
+		isSelectionActive = false;
+		if (selectionBox) {
+			selectionBox.disable();
+			selectionBox = null;
+		}
+		map?.off('contextmenu', () => clearFeatureSelection(currentLayer));
+		clearFeatureSelection(currentLayer);
+	}
+
 	onDestroy(() => {
 		if (map) {
 			if (control) {
@@ -448,6 +546,7 @@
 			map.off('editable:drawing:end');
 			map.off('editable:editing');
 		}
+		cleanup();
 		unsubscribe();
 	});
 </script>
@@ -493,7 +592,7 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
-		z-index: 1000;
+		z-index: 1001;
 		max-width: 300px;
 		width: 100%;
 	}
@@ -566,5 +665,27 @@
 		width: 20px;
 		height: 20px;
 		vertical-align: middle;
+	}
+	:global(.tool-title-display) {
+		text-align: center;
+		padding: 5px;
+		font-size: 12px;
+		color: #666;
+		min-height: 24px;
+		margin-top: 14px;
+		border-top: 1px solid #eee;
+	}
+
+	:global(.edit-tools-group) {
+		display: flex;
+		gap: 5px;
+		flex-wrap: wrap;
+		padding: 5px;
+		border-bottom: none;
+	}
+
+	:global(.edit-tool-button.active) {
+		border: 2px solid #4a90e2;
+		transform: scale(1.05);
 	}
 </style>

@@ -91,6 +91,11 @@
 		z-index: -1;
 	}
 
+	.progress-container::after {
+		content: '';
+		background-color: #e0e0e0;
+	}
+
 	.progress {
 		background-color: #fdba74;
 		position: absolute;
@@ -101,6 +106,8 @@
 		width: 0%;
 		z-index: -1;
 		transition: 0.4s ease;
+		/* Add this line to ensure clean edges */
+		clip-path: inset(0);
 	}
 
 	.circle {
@@ -115,6 +122,9 @@
 		border: 3px solid #e0e0e0;
 		transition: 0.4s ease;
 		cursor: pointer;
+		/* Add this to ensure circles are above the progress bar */
+		position: relative;
+		z-index: 1;
 	}
 
 	.circle::after {

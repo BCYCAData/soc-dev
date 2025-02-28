@@ -62,7 +62,7 @@ export const actions: Actions = {
 	upsertAddress: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const addressData = {
-			address: formData.get('address') + '' + formData.get('suburb'),
+			address: formData.get('address') + ' ' + formData.get('suburb'),
 			community: formData.get('community'),
 			principaladdresssiteoid: Number(formData.get('principaladdresssiteoid')) || null,
 			kyng: formData.get('kyng'),
@@ -80,7 +80,7 @@ export const actions: Actions = {
 				.eq('id', id);
 			if (updateAddressDataError) {
 				console.error('validatedAddressDataError', updateAddressDataError);
-				return { success: false, message: 'Failed to validate address' };
+				return { success: false, message: 'Failed to add address' };
 			}
 			return { success: true, updatedAddressData };
 		} else {
@@ -90,7 +90,7 @@ export const actions: Actions = {
 				.insert(addressData);
 			if (insertAddressDataError) {
 				console.error('insertAddressDataError', insertAddressDataError);
-				return { success: false, message: 'Failed to validate address' };
+				return { success: false, message: 'Failed to add address' };
 			}
 			return { success: true, insertedAddressData };
 		}

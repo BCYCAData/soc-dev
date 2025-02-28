@@ -27,8 +27,6 @@
 
 	let showEmailPopup = $state<string | null>(null);
 
-	$inspect('properties 2', properties);
-
 	function toggleEmailPopup(propertyId: string) {
 		showEmailPopup = showEmailPopup === propertyId ? null : propertyId;
 	}

@@ -47,7 +47,6 @@
 				const responseData = dataArray[0] as ValidationResponse;
 				validationData = responseData;
 				error = null;
-
 				if (responseData.status === 200) {
 					step = 'add';
 				} else if (responseData.status === 403) {

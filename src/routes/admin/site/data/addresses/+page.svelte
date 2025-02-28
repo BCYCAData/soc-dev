@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
-	import CustomAddressMapTab from '$components/page/tabs/addresses/CustomAddressMapTab.svelte';
 	import CustomAddressManagementTab from '$components/page/tabs/addresses/CustomAddressManagementTab.svelte';
 
 	import '../../../../../components/page/tabs/tabs.css';
@@ -36,7 +35,11 @@
 			<CustomAddressManagementTab {customAddresses} />
 		</Tabs.Panel>
 		<Tabs.Panel value="1">
-			<CustomAddressMapTab active={tabSet === '1'} />
+			{#if tabSet === '1'}
+				{#await import('$components/page/tabs/addresses/CustomAddressMapTab.svelte') then { default: CustomAddressMapTab }}
+					<CustomAddressMapTab active={true} />
+				{/await}
+			{/if}
 		</Tabs.Panel>
 	{/snippet}
 </Tabs>

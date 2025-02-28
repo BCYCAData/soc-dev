@@ -1,9 +1,9 @@
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, params }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser }, params }) => {
+	const { user } = await getSessionAndUser();
 	const propertyId = params.propertyid;
-
 	const [
 		{ data: propertyGeometryData, error: propertyGeometryError },
 		{ data: templates, error: templatesError },
@@ -12,8 +12,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, params }) => 
 	] = await Promise.all([
 		supabase.rpc('get_property_geometry', { id_input: propertyId }),
 		supabase.rpc('get_spatial_feature_templates'),
-		supabase.rpc('get_spatial_features', { p_property_id: propertyId }),
-		supabase.rpc('get_spatial_feature_attributes', { p_property_id: propertyId })
+		supabase.rpc('get_spatial_features', { p_property_id: propertyId, p_user_id: user.id }),
+		supabase.rpc('get_spatial_feature_attributes', {
+			p_property_id: propertyId,
+			p_user_id: user.id
+		})
 	]);
 
 	if (propertyGeometryError) {
@@ -39,7 +42,6 @@ export const actions: Actions = {
 	saveFeature: async ({ request, locals: { supabase, getSessionAndUser } }) => {
 		const { user } = await getSessionAndUser();
 		const formData = await request.formData();
-
 		const propertyId = formData.get('propertyId');
 		const templateId = formData.get('templateId');
 		const geometryStr = formData.get('geometry');
@@ -51,10 +53,11 @@ export const actions: Actions = {
 
 		const geometry = JSON.parse(geometryStr.toString());
 
+		// First save the feature
 		const { data: featureData, error: featureError } = await supabase.rpc(
 			'upsert_spatial_feature',
 			{
-				p_feature_id: featureId ? featureId.toString() : null, // Added feature ID parameter
+				p_feature_id: featureId ? featureId.toString() : null,
 				p_user_id: user.id,
 				p_property_id: propertyId.toString(),
 				p_template_id: templateId.toString(),
@@ -67,28 +70,32 @@ export const actions: Actions = {
 			throw error(400, featureError.message);
 		}
 
-		// Transform attributes into the correct format
+		// Then update any provided attribute values
 		const attributesArray = Array.from(formData.entries())
 			.filter(([key]) => key.startsWith('attr_'))
 			.map(([key]) => ({
 				feature_id: featureData,
 				field_id: key.replace('attr_', ''),
-				value: formData.get(key)?.toString() || ''
+				value: formData.get(key)?.toString() || null // Allow null values
 			}));
 
-		const { data: attributeData, error: attributeError } = await supabase.rpc(
-			'upsert_feature_attributes',
-			{
-				p_attributes: attributesArray
-			}
-		);
+		if (attributesArray.length > 0) {
+			const { data: attributeData, error: attributeError } = await supabase.rpc(
+				'upsert_feature_attributes',
+				{
+					p_attributes: attributesArray
+				}
+			);
 
-		if (attributeError) {
-			console.log('attributeError', attributeError.message);
-			throw error(400, attributeError.message);
+			if (attributeError) {
+				console.log('attributeError', attributeError.message);
+				throw error(400, attributeError.message);
+			}
+
+			return { success: true, featureId: featureData, attributeIds: attributeData };
 		}
 
-		return { success: true, featureId: featureData, attributeIds: attributeData };
+		return { success: true, featureId: featureData };
 	},
 	deleteFeature: async ({ request, locals: { supabase, getSessionAndUser } }) => {
 		const { user } = await getSessionAndUser();
@@ -107,7 +114,7 @@ export const actions: Actions = {
 		});
 
 		if (rpcError) {
-			console.log('attributeError', rpcError.message);
+			console.log('deleteSpatialFeatureError', rpcError.message);
 			throw error(400, rpcError.message);
 		}
 

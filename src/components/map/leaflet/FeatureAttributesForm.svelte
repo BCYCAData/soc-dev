@@ -2,6 +2,7 @@
 	import { editingState, featureAttributes } from '$lib/leaflet/spatialutilities.svelte';
 	import type { TemplateField } from '$lib/leaflet/spatial';
 	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
 
 	// Add templateFields state
 	let templateFields = $state<Record<string, TemplateField[]>>({});
@@ -26,7 +27,7 @@
 		}
 	});
 
-	function handleSubmit() {
+	const handleSubmit: SubmitFunction = () => {
 		if (editingState.activeFeature && editingState.mode) {
 			Object.entries(attributes).forEach(([fieldId, value]) => {
 				const attributeId = crypto.randomUUID();
@@ -38,7 +39,7 @@
 				};
 			});
 		}
-	}
+	};
 </script>
 
 <form

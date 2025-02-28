@@ -10,6 +10,8 @@
 	import type { CustomAddress } from '$lib/form.types';
 
 	import { admimHelpMessages } from '$lib/constants';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { invalidateAll } from '$app/navigation';
 
 	const { searhAddressHelp, validatedAddressHelp, gnafAddressHelp } =
 		admimHelpMessages.site.data.addresses;
@@ -22,6 +24,8 @@
 
 	let value = $state(['']);
 	let validatedData = $state<any>(null);
+	let formMessage = $state('');
+	let formStatus = $state<'success' | 'error' | ''>('');
 	let validatedAddress = $derived(
 		validatedData
 			? {
@@ -52,6 +56,26 @@
 	function handleValidatedAddress(data: any) {
 		validatedData = data;
 	}
+	const handleSubmit: SubmitFunction = () => {
+		return async ({ result }) => {
+			console.log('Form submission result:', result);
+			if (result.type === 'success') {
+				const data = result.data;
+				if (data?.success) {
+					formStatus = 'success';
+					formMessage = 'Address successfully added';
+					validatedData = null;
+					await invalidateAll();
+				} else {
+					formStatus = 'error';
+					formMessage = data?.message || 'Failed to add address';
+				}
+			} else {
+				formStatus = 'error';
+				formMessage = 'An unexpected error occurred';
+			}
+		};
+	};
 </script>
 
 <div class="container mx-auto p-4">
@@ -91,6 +115,13 @@
 			{#snippet panel()}
 				<div class="form-container" id="custom-address-form">
 					<CustomAddressValidationForm onValidatedAddress={handleValidatedAddress} />
+					{#if formMessage}
+						<div
+							class={`mt-4 rounded p-2 text-center ${formStatus === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+						>
+							{formMessage}
+						</div>
+					{/if}
 					{#if validatedAddress}
 						<div class="mt-1 flex flex-col gap-y-4">
 							<div class="flex justify-between">
@@ -156,7 +187,7 @@
 							<form
 								method="POST"
 								action="?/upsertAddress"
-								use:enhance
+								use:enhance={handleSubmit}
 								class="mt-1 flex items-center justify-center gap-x-4"
 							>
 								<input type="hidden" name="address" value={validatedAddress.validaddressstreet} />
@@ -173,7 +204,11 @@
 								/>
 								<input type="hidden" name="community" value={validatedAddress.community} />
 								<input type="hidden" name="kyng" value={validatedAddress.kyng || 'External'} />
-
+								<input
+									type="hidden"
+									name="addresspoint_geom"
+									value={`SRID=7844;POINT(${validatedData[0].geojson.coordinates[0]} ${validatedData[0].geojson.coordinates[1]})`}
+								/>
 								<div class="text-xs text-gray-500">
 									<p>
 										© State Government of NSW and Spatial Services (DCS) {new Date().getFullYear()}.
@@ -189,16 +224,22 @@
 										'<a href="$1" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>'
 									)}
 								</div>
-
-								<button
-									type="submit"
-									class="rounded-md border border-transparent bg-tertiary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2 sm:text-sm"
-									disabled={validatedData[0].geocoder_result.matchQuality === 'fair' ||
-										(validatedData[0].matchcodes.localityName !== 'exact' &&
-											validatedData[0].matchcodes.localityName !== 'neighbour')}
-								>
-									Add Validated Address
-								</button>
+								{#if validatedData[0].geocoder_result.matchQuality === 'fair' || (validatedData[0].matchcodes.localityName !== 'exact' && validatedData[0].matchcodes.localityName !== 'neighbour')}
+									<button
+										type="button"
+										onclick={() => (validatedData = null)}
+										class="flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-base font-medium text-red-500 shadow-sm sm:text-sm"
+									>
+										This address cannot be validated
+									</button>
+								{:else}
+									<button
+										type="submit"
+										class="rounded-md border border-transparent bg-tertiary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2 sm:text-sm"
+									>
+										Add Validated Address
+									</button>
+								{/if}
 							</form>
 						</div>
 					{/if}

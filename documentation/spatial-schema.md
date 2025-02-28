@@ -232,7 +232,7 @@ CREATE POLICY feature_attributes_feature_member ON feature_attributes
 INSERT INTO feature_templates (name, description, geometry_type, category) VALUES
     ('Water Tank', 'Water storage location', 'point', 'asset'),
     ('Fire Hydrant', 'Fire hydrant location', 'point', 'asset'),
-    ('Building', 'Structure location', 'polygon', 'asset'),
+    ('Building', 'Structure location', 'point', 'asset'),
     
     ('Fire Break', 'Maintained fire break area', 'line', 'operational'),
     ('Access Route', 'Vehicle access route', 'line', 'operational'),

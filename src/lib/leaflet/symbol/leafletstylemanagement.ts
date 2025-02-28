@@ -22,6 +22,26 @@ type LayerStyle =
 	| LineSymbologyOptions
 	| PolygonSymbologyOptions;
 
+type ShapeStyle = string | ((color: string) => string);
+
+const SHAPE_STYLES: Record<MarkerShape, ShapeStyle> = {
+	text: '',
+	circle: 'border-radius: 50%;',
+	square: '',
+	star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
+	triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
+	'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
+	wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
+	diamond: 'transform: rotate(45deg);',
+	'concentric-circle': (color: string) =>
+		`border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	'concentric-square': (color: string) => `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	'concentric-triangle': (color: string) =>
+		`clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
+	'concentric-diamond': (color: string) =>
+		`transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
+};
+
 function isPathLayer(layer: L.Layer): layer is L.Path {
 	return layer instanceof Path;
 }
@@ -118,6 +138,10 @@ export function captureLayerStyle(layer: L.Layer): LayerStyle {
 	}
 
 	if (isMarkerLayer(layer)) {
+		console.log('Capturing layer style:', {
+			layer,
+			capturedStyle: captureMarkerStyle(layer)
+		});
 		return captureMarkerStyle(layer);
 	}
 
@@ -130,38 +154,23 @@ export function captureLayerStyle(layer: L.Layer): LayerStyle {
 
 export function generateMarkerHtml(style: LayerStyle | LeafletMarkerOptions): string {
 	if (!style) return '';
-
-	// Handle CustomMarkerOptions
 	if ('options' in style && 'markerShape' in style.options) {
 		const options = style.options as CustomMarkerOptions;
 		const shape = options.markerShape || 'circle';
-		const color = options.fillColour || '#3388ff';
+		const color = options.color || '#3388ff';
 		const size = (options.size || 10) + 'px';
 
-		const shapeStyles: Record<MarkerShape, string> = {
-			text: '',
-			circle: 'border-radius: 50%;',
-			square: '',
-			star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
-			triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
-			'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
-			wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
-			diamond: 'transform: rotate(45deg);',
-			'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-			'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
-		};
+		const shapeStyle = SHAPE_STYLES[shape];
+		const styleString = typeof shapeStyle === 'function' ? shapeStyle(color) : shapeStyle;
 
 		return `<div style="
-      width: ${size};
-      height: ${size};
-      background-color: ${color};
-      border: 1px solid #000;
-      ${shapeStyles[shape] || ''}
-    "></div>`;
+            width: ${size};
+            height: ${size};
+            background-color: ${color};
+            border: 1px solid #000;
+            ${styleString || ''}
+        "></div>`;
 	}
-
 	return '';
 }
 
@@ -177,6 +186,11 @@ export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 			const markerShape = customStyle.markerShape || 'circle';
 			const fillColour = customStyle.fillColour || '#3388ff';
 			const strokeWidth = customStyle.strokeWidth || 1;
+			console.log('Applying layer style:', {
+				layer,
+				style,
+				isMarker: isMarkerLayer(layer)
+			});
 
 			const icon = new DivIcon({
 				html: `<div style="
@@ -203,24 +217,17 @@ export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 		layer.setStyle(pointStyle.options.options as L.PathOptions);
 	}
 }
+const SHAPE_CACHE = new Map<MarkerShape, string>();
 
 function getShapeStyle(shape: MarkerShape, color: string): string {
-	const shapeStyles = {
-		text: '',
-		circle: 'border-radius: 50%;',
-		square: '',
-		star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
-		triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
-		'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
-		wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
-		diamond: 'transform: rotate(45deg);',
-		'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-		'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-		'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-		'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
-	} as Record<MarkerShape, string>;
+	if (SHAPE_CACHE.has(shape)) {
+		return SHAPE_CACHE.get(shape)!;
+	}
 
-	return shapeStyles[shape] || '';
+	const style = SHAPE_STYLES[shape];
+	const result = typeof style === 'function' ? style(color) : style;
+	SHAPE_CACHE.set(shape, result);
+	return result;
 }
 
 const styleCache = new Map<string, LayerStyle>();

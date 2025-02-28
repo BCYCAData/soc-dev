@@ -7,7 +7,6 @@
 	// import MessageContainer from '$components/message/MessageContainer.svelte';
 	import ProfileSideMenu from '$components/page/navigation/sidemenu/ProfileSideMenu.svelte';
 	import MenuToggleIcon from '$components/icons/MenuToggleIcon.svelte';
-	// import HelpToggleIcon from '$components/icons/HelpToggleIcon.svelte';
 	import HelpPanel from '$components/page/help/HelpPanel.svelte';
 	import { profileSidebarPathLables } from '$lib/menu-items';
 	// import type { ProfileMessageData } from '$lib/types';
@@ -41,13 +40,6 @@
 			localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.toString());
 		}
 	}
-
-	// function toggleHelpbar() {
-	// 	isHelpbarCollapsed = !isHelpbarCollapsed;
-	// 	if (browser) {
-	// 		localStorage.setItem('helpbarCollapsed', isHelpbarCollapsed.toString());
-	// 	}
-	// }
 
 	function handleKeyboardShortcut(event: KeyboardEvent) {
 		if (event.ctrlKey && event.key === '[') {
@@ -120,23 +112,6 @@
 		</div>
 
 		<HelpPanel isCollapsed={isHelpbarCollapsed} />
-
-		<!-- <div
-			class="app-shell-sidebar-right {isHelpbarCollapsed
-				? 'w-16'
-				: 'w-1/6'} transition-all duration-300"
-		> -->
-		<!-- {#if $helpContent.hasHelp}
-				<button class="collapse-toggle self-end p-2" onclick={toggleHelpbar}>
-					<HelpToggleIcon color="#EA580C" size={28} />
-				</button>
-				{#if !isHelpbarCollapsed}
-					<div class="bg-orange-100 p-4">
-						{$helpContent.content}
-					</div>
-				{/if}
-			{/if} -->
-		<!-- </div> -->
 	</div>
 </div>
 

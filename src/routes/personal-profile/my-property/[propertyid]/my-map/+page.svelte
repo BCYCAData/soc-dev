@@ -9,6 +9,7 @@
 		propertyOptions,
 		waypointOptions
 	} from '$lib/leaflet/mapconfig';
+
 	import {
 		getLineSymbology,
 		getPointSymbology,
@@ -17,7 +18,7 @@
 
 	import type { Feature, Geometry, GeoJsonProperties } from 'geojson';
 	import type { FeatureTemplate } from '$lib/leaflet/spatial';
-	import type { PageData } from './$types';
+	import type { PageData as BasePageData } from './$types';
 	import type { Component } from 'svelte';
 	import type {
 		ControlInfo,
@@ -28,6 +29,31 @@
 		PolygonSymbologyOptions
 	} from '$lib/leaflet/types';
 
+	interface Attribute {
+		feature_id: string;
+		field_id: string;
+		value: any;
+	}
+
+	interface SpatialFeature extends Feature<Geometry, GeoJsonProperties> {
+		id: string;
+		template_id: string;
+		geom: GeoJSON.Geometry;
+	}
+
+	interface ExtendedPageData extends BasePageData {
+		propertyGeometryData: Array<{
+			centre: [number, number];
+			bounds: [[number, number], [number, number]];
+			property: GeoJSON.FeatureCollection;
+			address_point: GeoJSON.FeatureCollection;
+			way_point: GeoJSON.FeatureCollection;
+		}>;
+		featureTemplates: Record<string, any>;
+		spatialFeatures: Record<string, any>;
+		featureAttributes: Record<string, any>;
+	}
+
 	interface BaseLayerProps {
 		geojsonData: GeoJSON.FeatureCollection;
 		layerName: string;
@@ -37,6 +63,7 @@
 		order: number;
 		template_id?: string;
 		editable: boolean;
+		interactive?: boolean;
 		tooltipTemplate?: (feature: Feature<Geometry, GeoJsonProperties>) => string;
 	}
 
@@ -76,7 +103,7 @@
 	}
 
 	interface Props {
-		data: PageData;
+		data: ExtendedPageData;
 	}
 	let { data }: Props = $props();
 	const propertyGeometryData = data.propertyGeometryData[0];
@@ -125,8 +152,8 @@
 	);
 
 	function transformFeaturesToGeoJSON(
-		features: Record<string, any>,
-		attributes: Record<string, any>
+		features: Record<string, SpatialFeature>,
+		attributes: Record<string, Attribute>
 	) {
 		if (!features || !attributes) {
 			return {};
@@ -160,14 +187,19 @@
 				}
 			});
 		});
-
 		return featuresByTemplate;
 	}
 
-	const featuresByTemplate = transformFeaturesToGeoJSON(
-		data?.spatialFeatures || {},
-		data?.featureAttributes || {}
-	);
+	let featuresByTemplate = $state<Record<string, GeoJSON.FeatureCollection>>({});
+
+	$effect(() => {
+		const spatialFeatures = data?.spatialFeatures;
+		const featureAttributes = data?.featureAttributes;
+
+		if (spatialFeatures && featureAttributes) {
+			featuresByTemplate = transformFeaturesToGeoJSON(spatialFeatures, featureAttributes);
+		}
+	});
 
 	let mapLoaded = $state(false);
 	let leafletMapInstance = $state<L.Map>();
@@ -239,6 +271,7 @@
 							editable={false}
 							staticLayer={false}
 							showInLegend={true}
+							interactive={false}
 							order={BASE_LAYER_ORDERS['Property Boundary Layer']}
 							symbology={propertyOptions}
 						/>
@@ -283,6 +316,19 @@
                                     `}
 									/>
 								{:else if typedTemplate.geometry_type === 'point'}
+									<!-- {#if featuresByTemplate[typedTemplate.id]}
+										{@const layerData = featuresByTemplate[typedTemplate.id]}
+										{@const symbology = getPointSymbology(
+											typedTemplate.category,
+											typedTemplate.name
+										)}
+										{@const debugData = {
+											templateName: typedTemplate.name,
+											layerData,
+											symbology
+										}}
+										{console.log('Point layer data:', debugData)}
+									{/if} -->
 									<LeafletGeoJSONPointLayer
 										order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
 										geojsonData={featuresByTemplate[typedTemplate.id] || {
@@ -332,7 +378,7 @@
 					</LeafletMap>
 				</div>
 				{#if editingState.mode === 'create' || editingState.mode === 'edit'}
-					<div class="absolute bottom-4 right-4 w-96">
+					<div class="absolute right-4 bottom-4 w-96">
 						<FeatureAttributesForm />
 					</div>
 				{/if}
@@ -345,7 +391,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	.map-container {
 		height: 95%;
 		min-height: 400px;

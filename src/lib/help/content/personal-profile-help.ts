@@ -101,17 +101,39 @@ export const helpContentPersonalProfileMap: Record<string, HelpContent> = {
 	},
 	'personal-profile/my-property/[propertyid]/my-map': {
 		hasHelp: true,
-		title: 'Property Map',
+		title: 'Drawing on the Map',
 		sections: [
 			{
-				title: 'Editing the map',
-				content: 'Help on editing the map'
-			},
-			{
-				title: 'This is a bit difficult',
-				content: 'Read the instructions carefully',
-				importance: 'tip'
+				title: 'Select a Layer to Edit',
+				content:
+					'Pick the type of thing you want to draw. \n\n' +
+					'The drawing operations work on the selected layer type only. \n\n' +
+					"If it shows Building you can't do anything with Tank(s) etc.",
+				importance: 'warning'
 			}
+			// {
+			// 	title: 'Create New Features',
+			// 	content:
+			// 		'Use the Left tool to Create a new feature. \n\n' +
+			// 		'To create a point: Click where you want the feature to be.\n\n' +
+			// 		'To create a line: Click where you want to start, click for each bend and double-click to end. \n\n' +
+			// 		'To create an area: Click where you want to start, click for each bend and double-click to end. \n\n',
+			// 	importance: 'info'
+			// },
+			// {
+			// 	title: 'Edit Existing Features',
+			// 	content:
+			// 		'Use the Middle tool to Edit an Existing feature. \n\n' +
+			// 		'Make sure you have selected the correct type of feature then click the feature on the map',
+			// 	importance: 'info'
+			// },
+			// {
+			// 	title: 'Delete Features',
+			// 	content:
+			// 		'Use the Right tool to Delete an existing feature. \n\n' +
+			// 		'The middle button to Edit an Existing feature; The right button to Delete an existing feature.',
+			// 	importance: 'info'
+			// }
 		]
 	},
 	'personal-profile/my-property/[propertyid]/resources': {

@@ -26,6 +26,7 @@
 		tooltipField?: string;
 		tooltipOptions?: L.TooltipOptions;
 		template_id?: string;
+		interactive?: boolean;
 	}
 
 	let {
@@ -39,7 +40,8 @@
 		symbology,
 		tooltipField,
 		tooltipOptions = {},
-		template_id
+		template_id,
+		interactive = true
 	}: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl } = getContext<{
@@ -74,6 +76,7 @@
 		const dataToUse = geojsonData?.features?.length ? geojsonData : defaultGeojsonData;
 
 		geoJSONLayer = leaflet.geoJSON(dataToUse, {
+			interactive: interactive,
 			style: (feature) => getPolygonStyle(feature as GeoJSON.Feature),
 			onEachFeature: (feature, layer) => {
 				if (tooltipField && feature.properties?.[tooltipField]) {
@@ -106,6 +109,7 @@
 				showInLegend,
 				legendInfo,
 				template_id,
+				interactive,
 				originalStyle: symbology,
 				order
 			}

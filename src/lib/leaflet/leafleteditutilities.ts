@@ -76,32 +76,80 @@ export const editingStyles = {
 	}
 };
 
+// export function applyGeometryStyle(
+// 	leaflet: typeof L,
+// 	layer: L.Layer,
+// 	styleType: 'hover' | 'selected' | 'delete'
+// ) {
+// 	const styles = {
+// 		...editingStyles,
+// 		marker: {
+// 			...editingStyles.marker,
+// 			delete: { className: 'delete-marker' }
+// 		},
+// 		point: {
+// 			...editingStyles.point,
+// 			delete: { color: '#ff0000', weight: 2 }
+// 		},
+// 		line: {
+// 			...editingStyles.line,
+// 			delete: { color: '#ff0000', weight: 2 }
+// 		},
+// 		polygon: {
+// 			...editingStyles.polygon,
+// 			delete: { color: '#ff0000', weight: 2 }
+// 		}
+// 	};
+
+// 	if ('setStyle' in layer) {
+// 		if (layer instanceof leaflet.CircleMarker) {
+// 			layer.setStyle(styles.point[styleType]);
+// 		} else if (layer instanceof leaflet.Polyline && !(layer instanceof leaflet.Polygon)) {
+// 			layer.setStyle(styles.line[styleType]);
+// 		} else if (layer instanceof leaflet.Polygon) {
+// 			layer.setStyle(styles.polygon[styleType]);
+// 		}
+// 	}
+
+// 	if (layer instanceof leaflet.Marker && styleType !== 'delete') {
+// 		const currentIcon = layer.getIcon();
+// 		const newIcon = new leaflet.Icon({
+// 			...currentIcon.options,
+// 			...styles.marker[styleType]
+// 		});
+// 		layer.setIcon(newIcon);
+// 	}
+// }
+
 export function applyGeometryStyle(
 	leaflet: typeof L,
 	layer: L.Layer,
 	styleType: 'hover' | 'selected' | 'delete'
 ) {
 	const styles = {
-		...editingStyles,
-		marker: {
-			...editingStyles.marker,
-			delete: { className: 'delete-marker' }
-		},
 		point: {
-			...editingStyles.point,
-			delete: { color: '#ff0000', weight: 2 }
+			selected: { color: '#3388ff', weight: 3, fillOpacity: 0.2 },
+			delete: { color: '#ff0000', weight: 3, fillOpacity: 0.2 },
+			hover: { color: '#3388ff', weight: 3, fillOpacity: 0.2 }
 		},
 		line: {
-			...editingStyles.line,
-			delete: { color: '#ff0000', weight: 2 }
+			selected: { color: '#3388ff', weight: 3 },
+			delete: { color: '#ff0000', weight: 3 },
+			hover: { color: '#3388ff', weight: 3 }
 		},
 		polygon: {
-			...editingStyles.polygon,
-			delete: { color: '#ff0000', weight: 2 }
+			selected: { color: '#3388ff', weight: 3, fillOpacity: 0.2 },
+			delete: { color: '#ff0000', weight: 3, fillOpacity: 0.2 },
+			hover: { color: '#3388ff', weight: 3, fillOpacity: 0.2 }
 		}
 	};
 
-	if ('setStyle' in layer) {
+	if (layer instanceof leaflet.Marker) {
+		const element = layer.getElement();
+		if (element) {
+			element.classList.add(styleType);
+		}
+	} else if ('setStyle' in layer) {
 		if (layer instanceof leaflet.CircleMarker) {
 			layer.setStyle(styles.point[styleType]);
 		} else if (layer instanceof leaflet.Polyline && !(layer instanceof leaflet.Polygon)) {
@@ -109,15 +157,6 @@ export function applyGeometryStyle(
 		} else if (layer instanceof leaflet.Polygon) {
 			layer.setStyle(styles.polygon[styleType]);
 		}
-	}
-
-	if (layer instanceof leaflet.Marker && styleType !== 'delete') {
-		const currentIcon = layer.getIcon();
-		const newIcon = new leaflet.Icon({
-			...currentIcon.options,
-			...styles.marker[styleType]
-		});
-		layer.setIcon(newIcon);
 	}
 }
 
@@ -136,18 +175,15 @@ export function getLegendSymbol(layer: LayerInfo, template_name?: string): strin
 			}
 		});
 	}
-
 	const firstItem = layer.legendInfo?.items[0];
 	if (!firstItem) return undefined;
 
 	if ('symbol' in firstItem) {
 		return firstItem.symbol;
 	}
-
 	if ('items' in firstItem && firstItem.items.length > 0) {
 		return firstItem.items[0].symbol;
 	}
-
 	return undefined;
 }
 

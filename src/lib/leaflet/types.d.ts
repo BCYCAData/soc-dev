@@ -56,6 +56,7 @@ interface PointSymbologyOptions {
 interface CustomMarkerOptions {
 	markerShape?: MarkerShape;
 	fillColour?: string;
+	color?: string;
 	fillOpacity?: number;
 	size?: number;
 	strokeColour?: string;

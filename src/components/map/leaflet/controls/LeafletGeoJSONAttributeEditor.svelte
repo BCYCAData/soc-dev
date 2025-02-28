@@ -4,6 +4,7 @@
 	import { browser } from '$app/environment';
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
+	import { SelectionBoxControl } from '$lib/leaflet/leafletselectionboxcontrol';
 	import {
 		editingState,
 		setEditingMode,
@@ -13,6 +14,11 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { LayerInfo } from '$lib/leaflet/types';
 	import type { GeoJSON } from 'leaflet';
+	import {
+		applyLayerStyle,
+		captureLayerStyle,
+		generateEditStyle
+	} from '$lib/leaflet/symbol/leafletstylemanagement';
 	interface Props {
 		currentPropertyId: string;
 	}
@@ -29,6 +35,8 @@
 	let updateStatus = $state('');
 	let hasConflict = $state(false);
 	let isTransitioning = $state(false);
+
+	let selectionBox = $state<SelectionBoxControl | null>(null);
 
 	let feature = $derived(editingState.activeFeature);
 	let template = $derived(feature ? featureTemplates[feature.template_id] : null);
@@ -111,7 +119,11 @@
 					if (layer.feature.properties.id === feature.id) {
 						layer.feature.properties = feature.properties;
 						updateStatus = 'Changes pending...';
-						layer.setStyle({ weight: 3, color: '#ffa500' });
+						if (!layer.originalStyle) {
+							layer.originalStyle = captureLayerStyle(layer);
+						}
+						const editStyle = generateEditStyle(layer.originalStyle);
+						applyLayerStyle(layer, editStyle);
 					}
 				});
 			}
@@ -141,14 +153,12 @@
 	const handleSubmit: SubmitFunction = () => {
 		return async ({ result }) => {
 			if (hasConflict) {
-				return false;
+				return;
 			}
-
 			if (result.type === 'success') {
 				if (browser) {
 					sessionStorage.removeItem('lastFeatureState');
 				}
-
 				updateStatus = '';
 				const layers = get(layersStore);
 				const currentLayer = layers[feature?.template_id || ''];
@@ -190,20 +200,33 @@
 				return 'input-text';
 		}
 	}
-
 	function cleanup() {
 		persistState();
 		updateStatus = '';
 		const layers = get(layersStore);
 		const currentLayer = layers[feature?.template_id || ''];
+
+		// Disable selection box if active
+		if (selectionBox) {
+			selectionBox.disable();
+			selectionBox = null;
+		}
+
 		if (currentLayer?.layer) {
-			(currentLayer.layer as GeoJSON).eachLayer((layer: any) => {
+			(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
 				if (layer.feature.properties.id === feature?.id) {
-					layer.setStyle(layer.originalStyle);
+					if (layer.editor) {
+						layer.editor.disable();
+					}
+					if (layer.originalStyle && typeof layer.setStyle === 'function') {
+						layer.setStyle(layer.originalStyle);
+					}
 				}
 			});
 		}
-		setEditingMode(null);
+		if (!template) {
+			setEditingMode(null);
+		}
 		setActiveFeature(null);
 	}
 
@@ -312,6 +335,7 @@
 		{/if}
 
 		<div class="actions">
+			<button type="button" class="cancel-button" onclick={cleanup}> Cancel </button>
 			<button type="submit">
 				{editingState.mode === 'create' ? 'Create' : 'Update'}
 			</button>
@@ -350,7 +374,19 @@
 	.actions {
 		margin-top: 1rem;
 		text-align: right;
+		display: flex;
+		gap: 0.5rem;
+		justify-content: flex-end;
 	}
+
+	.cancel-button {
+		background: #666;
+	}
+
+	.cancel-button:hover {
+		background: #555;
+	}
+
 	button {
 		padding: 0.5rem 1rem;
 		background: #4a90e2;

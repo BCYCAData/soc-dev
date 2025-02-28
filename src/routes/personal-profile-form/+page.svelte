@@ -2,6 +2,8 @@
 	import PersonalProfileFormContainer from '$components/form/personal-emergency-profile/PersonalProfileFormContainer.svelte';
 	import ProgressBar from '$components/form/ProgressBar.svelte';
 
+	import { Loader } from 'lucide-svelte';
+
 	import type { ActionData, PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
 
@@ -18,6 +20,9 @@
 	// let { data = $bindable(), form }: Props = $props();
 	let { data = $bindable() }: Props = $props();
 	let currentActive = $state(1);
+	let isPrevLoading = $state(false);
+	let isNextLoading = $state(false);
+
 	let progressBar: ProgressBarInstance;
 
 	const propertyWasRented = data.userProfile.property_profile.property_rented || false;
@@ -49,6 +54,12 @@
 	// 	progressBar?.handleProgress(stepIncrement);
 	// };
 	const handleProgress = async (stepIncrement: number) => {
+		if (stepIncrement === 1) {
+			isNextLoading = true;
+		} else {
+			isPrevLoading = true;
+		}
+
 		const formElement = document.querySelector('#personalProfileForm');
 		if (formElement instanceof HTMLFormElement) {
 			const formData = new FormData(formElement);
@@ -66,8 +77,12 @@
 		} else {
 			progressBar?.handleProgress(stepIncrement);
 		}
+		if (stepIncrement === 1) {
+			isNextLoading = false;
+		} else {
+			isPrevLoading = false;
+		}
 	};
-
 	// const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
 	// 	progressBar?.skipTo(e);
 	// };
@@ -121,20 +136,41 @@
 			<ProgressBar {steps} bind:currentActive bind:this={progressBar} onStepClick={skipTo} />
 			<div class="mt-1 text-center">
 				<button
-					class="scale 98 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
 					onclick={() => handleProgress(-1)}
 					disabled={currentActive === 1}
 				>
-					Prev
+					{#if isPrevLoading}
+						<Loader class="animate-spin-reverse h-4 w-4" />
+					{/if}
+					<span>Prev</span>
 				</button>
 				<button
-					class="scale 98 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
 					onclick={() => handleProgress(1)}
 					hidden={currentActive === steps?.length}
 				>
-					Next
+					<span>Next</span>
+					{#if isNextLoading}
+						<Loader class="h-4 w-4 animate-spin" />
+					{/if}
 				</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	@keyframes spin-reverse {
+		from {
+			transform: rotate(360deg);
+		}
+		to {
+			transform: rotate(0deg);
+		}
+	}
+
+	:global(.animate-spin-reverse) {
+		animation: spin-reverse 1s linear infinite;
+	}
+</style>

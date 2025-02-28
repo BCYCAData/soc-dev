@@ -111,6 +111,12 @@ export const pointTemplateStyles: Record<string, Partial<CustomMarkerOptions>> =
 		size: 16,
 		fillColour: '#00ffff',
 		strokeWidth: 1.5
+	},
+	Building: {
+		markerShape: 'concentric-square',
+		fillColour: '#00ffff',
+		size: 16,
+		strokeWidth: 2.5
 	}
 };
 
@@ -134,13 +140,13 @@ const lineTemplateStyles: Record<string, Partial<LineSymbologyOptions>> = {
 };
 
 const polygonTemplateStyles: Record<string, Partial<PolygonSymbologyOptions>> = {
-	Building: {
-		fillColor: '#00ffff',
-		color: '#ffffff',
-		fillOpacity: 0.3,
-		weight: 1,
-		fillPattern: 'solid'
-	},
+	// Building: {
+	// 	fillColor: '#00ffff',
+	// 	color: '#ffffff',
+	// 	fillOpacity: 0.3,
+	// 	weight: 1,
+	// 	fillPattern: 'solid'
+	// },
 	'Staging Area': {
 		fillColor: '#0077ff',
 		color: '#0055dd',
@@ -173,7 +179,6 @@ export function getPointSymbology(
 	if (!template_id || !pointTemplateStyles[template_id]) {
 		return baseStyle;
 	}
-
 	return {
 		type: 'custom',
 		options: {

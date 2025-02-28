@@ -24,7 +24,6 @@
 
 <div class="max-h-[600px] overflow-y-auto rounded bg-white p-4 shadow">
 	<h2 class="mb-4 text-lg font-semibold">Property Features</h2>
-
 	{#each Object.entries(spatialFeatures) as [id, feature]}
 		{@const template = featureTemplates[feature.template_id]}
 		<div class="border-b border-gray-200 py-2 last:border-0">

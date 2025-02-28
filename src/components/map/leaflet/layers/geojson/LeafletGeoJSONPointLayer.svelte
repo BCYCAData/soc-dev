@@ -13,8 +13,20 @@
 		LegendInfo,
 		LayerInfo,
 		CustomDivIconOptions,
-		ExtendedPointSymbologyOptions
+		ExtendedPointSymbologyOptions,
+		ExtendedPolygonSymbologyOptions,
+		LineSymbologyOptions,
+		PolygonSymbologyOptions
 	} from '$lib/leaflet/types';
+
+	type LayerStyle =
+		| L.PathOptions
+		| CustomMarkerOptions
+		| LeafletMarkerOptions
+		| ExtendedPointSymbologyOptions
+		| ExtendedPolygonSymbologyOptions
+		| LineSymbologyOptions
+		| PolygonSymbologyOptions;
 
 	import '../../css/leaflet-popup.css';
 
@@ -95,8 +107,33 @@
 	function createShapedMarker(latlng: L.LatLng, options: LeafletMarkerOptions): L.Marker | null {
 		if (!leaflet) return null;
 
-		const markerHtml = generateMarkerHtml(options);
-		const divIconOptions = options?.options as CustomDivIconOptions;
+		const markerStyle: LayerStyle = {
+			type: 'custom',
+			options: {
+				type: 'divIcon',
+				options: {
+					fillColor: options.color,
+					color: '#000',
+					radius: (options.options as CustomDivIconOptions).iconSize?.[0] / 2,
+					weight: 1,
+					fillOpacity: 0.8,
+					iconSize: [
+						(options.options as CustomDivIconOptions).iconSize?.[0] || 10,
+						(options.options as CustomDivIconOptions).iconSize?.[1] || 10
+					]
+				},
+				markerShape: options.markerShape,
+				color: options.color
+			}
+		};
+
+		const markerHtml = generateMarkerHtml(markerStyle);
+		const divIconOptions = options.options as CustomDivIconOptions;
+		console.log('Creating shaped marker:', {
+			options,
+			markerStyle,
+			markerHtml
+		});
 
 		return leaflet.marker(latlng, {
 			icon: leaflet.divIcon({
@@ -107,38 +144,6 @@
 			})
 		});
 	}
-
-	// function generateMarkerHtml(options: LeafletMarkerOptions): string {
-	// 	if (!options) return '';
-
-	// 	const divIconOptions = options.options as CustomDivIconOptions;
-	// 	const shape = (options.markerShape || 'circle') as MarkerShape;
-	// 	const color = options.color || '#3388ff';
-	// 	const size = (divIconOptions?.iconSize?.[0] || 10) + 'px';
-
-	// 	const shapeStyles: Record<MarkerShape, string> = {
-	// 		text: '',
-	// 		circle: 'border-radius: 50%;',
-	// 		square: '',
-	// 		star: 'clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);',
-	// 		triangle: 'clip-path: polygon(50% 0%, 0% 100%, 100% 100%);',
-	// 		'triangle-down': 'clip-path: polygon(0% 0%, 100% 0%, 50% 100%);',
-	// 		wye: 'clip-path: polygon(50% 0%, 15% 100%, 85% 100%);',
-	// 		diamond: 'transform: rotate(45deg);',
-	// 		'concentric-circle': `border-radius: 50%; box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-	// 		'concentric-square': `box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-	// 		'concentric-triangle': `clip-path: polygon(50% 0%, 0% 100%, 100% 100%); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`,
-	// 		'concentric-diamond': `transform: rotate(45deg); box-shadow: 0 0 0 2px white, 0 0 0 3px ${color};`
-	// 	};
-
-	// 	return `<div style="
-	//         width: ${size};
-	//         height: ${size};
-	//         background-color: ${color};
-	//         border: 1px solid #000;
-	//         ${shapeStyles[shape] || ''}
-	//     "></div>`;
-	// }
 
 	function createTextLabel(
 		feature: GeoJSON.Feature,
@@ -159,10 +164,18 @@
 	}
 
 	function createPointLayer(feature: GeoJSON.Feature, latlng: L.LatLng): L.Layer | null {
+		console.log('Creating point with symbology:', {
+			templateId: template_id,
+			providedSymbology: symbology,
+			featureProps: feature.properties
+		});
 		if (!symbology) return null;
-
 		let layer: L.Layer | null = null;
 
+		// Use template_id from props if it exists
+		// if (template_id && feature.properties?.id) {
+		// 	layer = createSymbolizedLayer(symbology, feature, latlng);
+		// } else
 		if ('propertyField' in symbology && symbology.groups) {
 			const value = feature.properties?.[symbology.propertyField];
 			const groupSymbol =
@@ -171,6 +184,7 @@
 		} else {
 			layer = createSymbolizedLayer(symbology, feature, latlng);
 		}
+
 		if (layer && feature.properties && tooltipTemplate && !editable) {
 			layer.bindTooltip(tooltipTemplate(feature), {
 				permanent: false,
@@ -185,6 +199,7 @@
 				className: 'editable-feature-tooltip'
 			});
 		}
+
 		if (layer) {
 			layer.on('click', (e: L.LeafletMouseEvent) => {
 				const nearbyFeatures = findNearbyFeatures(e.latlng, 10);
@@ -214,6 +229,10 @@
 
 		if (symbolOptions.type === 'custom') {
 			const customOptions = symbolOptions.options as CustomMarkerOptions;
+			console.log('Applying symbol:', {
+				symbolOptions,
+				resultingStyle: customOptions // inside the if (symbolOptions.type === 'custom') block
+			});
 			if (customOptions.markerShape) {
 				return createShapedMarker(latlng, {
 					type: 'divIcon',
@@ -326,19 +345,6 @@
 			}
 		});
 
-		const markerStyle: PointSymbologyOptions = {
-			type: 'custom',
-			options: {
-				markerShape: (symbology.options as CustomMarkerOptions).markerShape,
-				fillColour: (symbology.options as CustomMarkerOptions).fillColour,
-				strokeColour: (symbology.options as CustomMarkerOptions).strokeColour,
-				size: (symbology.options as CustomMarkerOptions).size || 8,
-				fillOpacity: (symbology.options as CustomMarkerOptions).fillOpacity,
-				strokeWidth: (symbology.options as CustomMarkerOptions).strokeWidth,
-				strokeOpacity: (symbology.options as CustomMarkerOptions).strokeOpacity
-			}
-		};
-
 		geoJSONLayer.addTo(map);
 		if (symbology && layersStore) {
 			const legendInfo = createLegendInfo();
@@ -351,7 +357,7 @@
 					showInLegend,
 					legendInfo,
 					template_id,
-					originalStyle: markerStyle,
+					originalStyle: symbology, // Use the original symbology directly
 					order
 				}
 			}));
@@ -367,16 +373,6 @@
 		if (!visible) {
 			map.removeLayer(geoJSONLayer);
 		}
-
-		$effect(() => {
-			if (!geoJSONLayer || !map) return;
-
-			if (visible) {
-				geoJSONLayer.addTo(map);
-			} else {
-				map.removeLayer(geoJSONLayer);
-			}
-		});
 	}
 
 	onMount(() => {

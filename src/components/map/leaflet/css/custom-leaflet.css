@@ -111,3 +111,19 @@
 .leaflet-control-scale {
 	order: 2;
 }
+
+.leaflet-container {
+	cursor: inherit !important;
+}
+
+.leaflet-layer {
+	cursor: inherit !important;
+}
+
+.leaflet-editable {
+	cursor: crosshair !important;
+}
+
+.leaflet-editable:not(.leaflet-editing) {
+	cursor: inherit !important;
+}
