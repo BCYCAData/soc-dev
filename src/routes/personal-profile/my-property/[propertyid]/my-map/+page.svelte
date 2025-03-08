@@ -106,6 +106,7 @@
 		data: ExtendedPageData;
 	}
 	let { data }: Props = $props();
+
 	const propertyGeometryData = data.propertyGeometryData[0];
 
 	let LeafletMap = $state<Component<MapProps>>();
@@ -316,19 +317,6 @@
                                     `}
 									/>
 								{:else if typedTemplate.geometry_type === 'point'}
-									<!-- {#if featuresByTemplate[typedTemplate.id]}
-										{@const layerData = featuresByTemplate[typedTemplate.id]}
-										{@const symbology = getPointSymbology(
-											typedTemplate.category,
-											typedTemplate.name
-										)}
-										{@const debugData = {
-											templateName: typedTemplate.name,
-											layerData,
-											symbology
-										}}
-										{console.log('Point layer data:', debugData)}
-									{/if} -->
 									<LeafletGeoJSONPointLayer
 										order={getTemplateLayerOrder(category as keyof CategoryOrder, templateIndex)}
 										geojsonData={featuresByTemplate[typedTemplate.id] || {
@@ -378,7 +366,7 @@
 					</LeafletMap>
 				</div>
 				{#if editingState.mode === 'create' || editingState.mode === 'edit'}
-					<div class="absolute right-4 bottom-4 w-96">
+					<div class="absolute bottom-4 right-4 w-96">
 						<FeatureAttributesForm />
 					</div>
 				{/if}
@@ -393,7 +381,7 @@
 
 <style lang="postcss">
 	.map-container {
-		height: 95%;
+		height: 85%;
 		min-height: 400px;
 		position: relative;
 	}

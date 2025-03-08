@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { createPolygonSymbol } from '$lib/leaflet/leafletlegendutility';
+	import { createTooltipContent } from '$lib/leaflet/spatialutilities.svelte';
 
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
@@ -86,7 +87,7 @@
 						...tooltipOptions
 					});
 				} else if (editable && feature.properties) {
-					const tooltipContent = `${layerName}<br>ID: ${feature.properties.id}`;
+					const tooltipContent = createTooltipContent(feature, template_id);
 					layer.bindTooltip(tooltipContent, {
 						permanent: false,
 						direction: 'center',

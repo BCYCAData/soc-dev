@@ -76,51 +76,6 @@ export const editingStyles = {
 	}
 };
 
-// export function applyGeometryStyle(
-// 	leaflet: typeof L,
-// 	layer: L.Layer,
-// 	styleType: 'hover' | 'selected' | 'delete'
-// ) {
-// 	const styles = {
-// 		...editingStyles,
-// 		marker: {
-// 			...editingStyles.marker,
-// 			delete: { className: 'delete-marker' }
-// 		},
-// 		point: {
-// 			...editingStyles.point,
-// 			delete: { color: '#ff0000', weight: 2 }
-// 		},
-// 		line: {
-// 			...editingStyles.line,
-// 			delete: { color: '#ff0000', weight: 2 }
-// 		},
-// 		polygon: {
-// 			...editingStyles.polygon,
-// 			delete: { color: '#ff0000', weight: 2 }
-// 		}
-// 	};
-
-// 	if ('setStyle' in layer) {
-// 		if (layer instanceof leaflet.CircleMarker) {
-// 			layer.setStyle(styles.point[styleType]);
-// 		} else if (layer instanceof leaflet.Polyline && !(layer instanceof leaflet.Polygon)) {
-// 			layer.setStyle(styles.line[styleType]);
-// 		} else if (layer instanceof leaflet.Polygon) {
-// 			layer.setStyle(styles.polygon[styleType]);
-// 		}
-// 	}
-
-// 	if (layer instanceof leaflet.Marker && styleType !== 'delete') {
-// 		const currentIcon = layer.getIcon();
-// 		const newIcon = new leaflet.Icon({
-// 			...currentIcon.options,
-// 			...styles.marker[styleType]
-// 		});
-// 		layer.setIcon(newIcon);
-// 	}
-// }
-
 export function applyGeometryStyle(
 	leaflet: typeof L,
 	layer: L.Layer,

@@ -13,6 +13,7 @@ export class SelectionBoxControl {
 	private box: L.Rectangle | null = null;
 	private onSelection: (bounds: L.LatLngBounds) => void;
 	private selectedFeature: L.Layer | null = null;
+	private tooltipWasEnabled: boolean = false;
 
 	constructor(
 		map: L.Map,
@@ -53,7 +54,11 @@ export class SelectionBoxControl {
 			if (layer.originalStyle && typeof layer.setStyle === 'function') {
 				layer.setStyle(layer.originalStyle);
 			}
+			if (this.tooltipWasEnabled && layer.getTooltip()) {
+				layer.openTooltip();
+			}
 			this.selectedFeature = null;
+			this.tooltipWasEnabled = false;
 		}
 	}
 
@@ -93,8 +98,10 @@ export class SelectionBoxControl {
 		// Pass the bounds to the callback
 		this.onSelection(bounds);
 
-		this.box.remove();
-		this.box = null;
+		if (this.box) {
+			this.box.remove();
+			this.box = null;
+		}
 		this.startPoint = null;
 	}
 
@@ -110,5 +117,11 @@ export class SelectionBoxControl {
 
 	setSelectedFeature(feature: L.Layer) {
 		this.selectedFeature = feature;
+		const layer = feature as any;
+		if (layer.getTooltip()) {
+			this.tooltipWasEnabled = true;
+			layer.closeTooltip();
+		}
+		this.disable();
 	}
 }

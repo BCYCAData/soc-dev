@@ -138,10 +138,6 @@ export function captureLayerStyle(layer: L.Layer): LayerStyle {
 	}
 
 	if (isMarkerLayer(layer)) {
-		console.log('Capturing layer style:', {
-			layer,
-			capturedStyle: captureMarkerStyle(layer)
-		});
 		return captureMarkerStyle(layer);
 	}
 
@@ -180,18 +176,16 @@ export function applyLayerStyle(layer: L.Layer, style: LayerStyle): void {
 	}
 
 	if (isMarkerLayer(layer)) {
-		if ('markerShape' in style) {
+		if ('type' in style && style.type === 'divIcon' && 'options' in style) {
+			const divIconStyle = style as { type: string; options: L.DivIconOptions };
+			const icon = new DivIcon(divIconStyle.options);
+			layer.setIcon(icon);
+		} else if ('markerShape' in style) {
 			const customStyle = style as CustomMarkerOptions;
 			const size = customStyle.size || 12;
 			const markerShape = customStyle.markerShape || 'circle';
 			const fillColour = customStyle.fillColour || '#3388ff';
 			const strokeWidth = customStyle.strokeWidth || 1;
-			console.log('Applying layer style:', {
-				layer,
-				style,
-				isMarker: isMarkerLayer(layer)
-			});
-
 			const icon = new DivIcon({
 				html: `<div style="
                     width: ${size}px;

@@ -5,6 +5,13 @@ import type {
 	FeatureAttribute
 } from '$lib/leaflet/spatial';
 
+interface CustomProperties {
+	template_id: string;
+	[key: string]: any;
+}
+
+export type CustomFeature = GeoJSON.Feature<GeoJSON.Geometry, CustomProperties>;
+
 // Active editing state
 let editingState = $state<EditingState>({
 	activeTemplate: null,
@@ -89,6 +96,26 @@ function transformFeaturesToGeoJSON(
 	return featuresByTemplate;
 }
 
+function createTooltipContent(feature: CustomFeature, template_id: string | undefined): string {
+	if (!feature.properties?.id) return '';
+	if (!template_id) return '';
+
+	const template = featureTemplates[template_id];
+	if (!template) return '';
+	const attributes = template.attributes
+		.map((field) => {
+			const value = feature.properties[field.id] || '';
+			return `<strong>${field.name}:</strong> ${value}`;
+		})
+		.filter((text) => text)
+		.join('<br>');
+	const header = `<div style="display: flex; justify-content: space-between; font-size: 1.2em; margin-bottom: 8px;">
+						<div><strong>${template.name}</strong></div>
+						<div style="margin-left: 20px;">${template.category}</div>
+					</div>`;
+	return `<div>${header}${attributes}</div>`;
+}
+
 export {
 	editingState,
 	spatialFeatures,
@@ -100,5 +127,6 @@ export {
 	addFeature,
 	updateFeature,
 	deleteFeature,
-	transformFeaturesToGeoJSON
+	transformFeaturesToGeoJSON,
+	createTooltipContent
 };

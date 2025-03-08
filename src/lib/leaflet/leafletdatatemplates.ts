@@ -27,7 +27,7 @@ export function gurasPropertyPopUpTemplate(featureProperties: any) {
 }
 
 export function gnafTooltipTemplate(featureProperties: any) {
-	return `<div class="feature-tooltip">
+	return `<div class="editable-feature-tooltip">
                 <div><strong>Address:</strong> ${featureProperties.address}</div>
                 <div><strong>Principal Address Site OID:</strong> ${featureProperties.principaladdresssiteoid}</div>
             </div>`;

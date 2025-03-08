@@ -31,6 +31,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 		throw error(400, 'Error fetching feature data');
 	}
 
+	console.log('features', JSON.stringify(templates));
+
 	return {
 		propertyGeometryData,
 		featureTemplates: templates,

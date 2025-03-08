@@ -5,6 +5,7 @@
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
 	import { SelectionBoxControl } from '$lib/leaflet/leafletselectionboxcontrol';
+
 	import {
 		editingState,
 		setEditingMode,
@@ -19,17 +20,21 @@
 		captureLayerStyle,
 		generateEditStyle
 	} from '$lib/leaflet/symbol/leafletstylemanagement';
+
 	interface Props {
 		currentPropertyId: string;
+		onCleanup: () => void;
 	}
 
-	const { getLeafletLayers } = getContext<{
+	const { getLeafletLayers, getLeafletMap } = getContext<{
 		getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
+		getLeafletMap: () => L.Map;
 	}>('leafletContext');
 
 	const layersStore = getLeafletLayers();
+	const leafletMap = getLeafletMap();
 
-	let { currentPropertyId }: Props = $props();
+	let { currentPropertyId, onCleanup }: Props = $props();
 	let successMessage = $state('');
 	let errorMessage = $state('');
 	let updateStatus = $state('');
@@ -53,7 +58,6 @@
 	}
 
 	function getAttributeValue(fieldId: string) {
-		// Access the property directly by fieldId instead of prefixing with attr_
 		return attributes[fieldId] || '';
 	}
 
@@ -200,13 +204,14 @@
 				return 'input-text';
 		}
 	}
-	function cleanup() {
+	function cleanup(e?: Event) {
+		leafletMap.editTools.stopDrawing();
+		leafletMap.editable = false;
 		persistState();
 		updateStatus = '';
 		const layers = get(layersStore);
 		const currentLayer = layers[feature?.template_id || ''];
 
-		// Disable selection box if active
 		if (selectionBox) {
 			selectionBox.disable();
 			selectionBox = null;
@@ -224,10 +229,10 @@
 				}
 			});
 		}
-		if (!template) {
-			setEditingMode(null);
-		}
+		setEditingMode(null);
 		setActiveFeature(null);
+		onCleanup();
+		invalidateAll();
 	}
 
 	onMount(() => {
@@ -245,10 +250,15 @@
 <div class="attribute-editor" class:transitioning={isTransitioning}>
 	<div class="header">
 		<h3>
-			{editingState.mode === 'create' ? 'Create' : 'Edit'}
-			{template?.name}
+			{editingState.mode === 'create' ? 'Create a ' : 'Edit a '}
+			{editingState.activeTemplate?.name}
 		</h3>
-		<button class="close-button" onclick={cleanup}>×</button>
+		<button
+			class="close-button"
+			onclick={(e) => {
+				cleanup();
+			}}>×</button
+		>
 	</div>
 
 	<form method="POST" action="?/saveFeature" use:enhance={handleSubmit}>
@@ -298,6 +308,38 @@
 					{/if}
 				</div>
 			{/each}
+			{#if editingState.activeTemplate}
+				<div class="geometry-notice">
+					{#if editingState.mode === 'create'}
+						{#if editingState.activeTemplate.geometry_type === 'point'}
+							Click and hold on the point to move it.
+						{:else if editingState.activeTemplate.geometry_type === 'line'}
+							To change the line before you save it<br />you can click and hold on a bend to move
+							it.<br />Single click on a bend to remove it.<br />
+							Click and hold on a mid-point to add a new bend.
+						{:else if editingState.activeTemplate.geometry_type === 'polygon'}
+							To change the boundary before you save it<br />you can click and hold on a bend to
+							move it.<br />Single click on a bend to remove it.<br />
+							Click and hold on a mid-point to add a new bend.
+						{/if}
+					{:else if editingState.mode === 'edit'}
+						{#if editingState.activeTemplate.geometry_type === 'point'}
+							Click and hold on the point to move it to another location.
+						{:else if editingState.activeTemplate.geometry_type === 'line'}
+							To change the {editingState.activeTemplate.name} line you can click and hold on a bend
+							to move it.<br />Single click on a bend to remove it.<br />
+							Click and hold on a mid-point to add a new bend.
+						{:else if editingState.activeTemplate.geometry_type === 'polygon'}
+							To change the boundary you can click and hold on a bend to move it.<br />Single click
+							on a bend to remove it.<br />
+							Click and hold on a mid-point to add a new bend.
+						{/if}
+					{:else if editingState.mode === 'delete'}
+						Drag a box around a {editingState.activeTemplate.name} to select it for deletion. Right click
+						to clear selection
+					{/if}
+				</div>
+			{/if}
 		{/if}
 
 		{#if hasConflict}
@@ -323,7 +365,28 @@
 				</div>
 			</div>
 		{/if}
-
+		{#if editingState.activeTemplate && !feature}
+			<div class="geometry-notice">
+				{#if editingState.mode === 'create'}
+					{#if editingState.activeTemplate.geometry_type === 'point'}
+						Click on the map to create a new {editingState.activeTemplate.name} point
+					{:else if editingState.activeTemplate.geometry_type === 'line'}
+						Click on the map to start drawing a new<br />{editingState.activeTemplate.name} line.<br
+						/>
+						Click again for each bend.<br /> Double-click on the last bend to finish.
+					{:else if editingState.activeTemplate.geometry_type === 'polygon'}
+						Click on the map to draw a new {editingState.activeTemplate.name} area. Click again for each
+						bend. Double-click to finish
+					{/if}
+				{:else if editingState.mode === 'edit'}
+					Drag a box around a {editingState.activeTemplate.name} to select it for editing. Right click
+					to clear selection.
+				{:else if editingState.mode === 'delete'}
+					Drag a box around a {editingState.activeTemplate.name} to select it for deletion. Right click
+					to clear selection
+				{/if}
+			</div>
+		{/if}
 		{#if successMessage}
 			<div class="message success">{successMessage}</div>
 		{/if}
@@ -335,10 +398,22 @@
 		{/if}
 
 		<div class="actions">
-			<button type="button" class="cancel-button" onclick={cleanup}> Cancel </button>
-			<button type="submit">
-				{editingState.mode === 'create' ? 'Create' : 'Update'}
+			<button
+				type="button"
+				class="cancel-button"
+				onclick={(e) => {
+					e.stopPropagation();
+					cleanup();
+				}}
+			>
+				Cancel
 			</button>
+			{#if editingState.mode === 'create' && feature?.geometryComplete && feature?.geom}
+				<button type="submit"> Create </button>
+			{/if}
+			{#if editingState.mode === 'edit' && feature}
+				<button type="submit"> Update </button>
+			{/if}
 		</div>
 	</form>
 </div>
@@ -452,5 +527,16 @@
 		display: flex;
 		justify-content: flex-end;
 		gap: 0.5rem;
+	}
+	.geometry-notice {
+		text-align: center;
+		color: #2c3e50;
+		padding: 0.75rem;
+		font-style: italic;
+		background-color: #f8f9fa;
+		border: 1px solid #e9ecef;
+		border-radius: 4px;
+		margin: 0.5rem 0;
+		line-height: 1.4;
 	}
 </style>

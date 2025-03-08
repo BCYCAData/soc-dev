@@ -55,6 +55,7 @@ export interface SpatialFeature {
 	created_at?: string;
 	last_edited?: string;
 	properties?: Record<string, any>;
+	geometryComplete?: boolean;
 }
 
 export interface FeatureAttribute {

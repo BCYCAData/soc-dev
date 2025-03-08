@@ -54,6 +54,7 @@
 	let previousLayerSelection: string | null = null;
 	let selectionBox = $state<SelectionBoxControl | null>(null);
 	let isSelectionActive = $state(false);
+	let currentDrawnLayer = $state<L.Layer | null>(null);
 
 	const map = getLeafletMap();
 	const leaflet = getLeaflet();
@@ -158,7 +159,6 @@
 		}
 
 		setActiveFeature(null);
-		// setEditingMode(null);
 	}
 
 	function getEditControls(geometryType: GeometryType): EditControl[] {
@@ -374,28 +374,6 @@
 					}
 
 					leaflet.DomEvent.on(button, 'click', leaflet.DomEvent.stop).on(button, 'click', () => {
-						if (tool.mode === 'create') {
-							const geometryType = template.geometry_type;
-							let createInstruction = '';
-
-							switch (geometryType) {
-								case 'point':
-									createInstruction = `Click on the map to create a new ${selectedLayer} point`;
-									break;
-								case 'line':
-									createInstruction = `Click on the map to draw a new ${selectedLayer} line.<br>Click again for each bend.<br>Double-click to finish`;
-									break;
-								case 'polygon':
-									createInstruction = `Click on the map to draw a new ${selectedLayer} area,<br>Click again for each bend.<br>Double-click to finish`;
-									break;
-							}
-							titleDisplay.innerHTML = createInstruction;
-						} else if (tool.mode === 'edit') {
-							titleDisplay.innerHTML = `Drag a box around a ${selectedLayer} to select it for Editing<br>Right click the mouse to clear the selection`;
-						} else if (tool.mode === 'delete') {
-							titleDisplay.innerHTML = `Drag a box around a ${selectedLayer} to select it for Deleting<br>Right click the mouse to clear the selection`;
-						}
-
 						toolContainer
 							.querySelectorAll('.edit-tool-button')
 							.forEach((btn) => btn.classList.remove('active'));
@@ -495,6 +473,7 @@
 			map.addControl(control);
 			map.on('editable:drawing:end', (e: any) => {
 				const layer = e.layer;
+				currentDrawnLayer = layer;
 				const layers = get(layersStore);
 				const currentLayer = layers[selectElement.value];
 
@@ -512,7 +491,8 @@
 					user_id: '',
 					property_id: currentPropertyId,
 					template_id: editingState.activeTemplate?.id || '',
-					geom: layer.toGeoJSON().geometry
+					geom: layer.toGeoJSON().geometry,
+					geometryComplete: true
 				});
 			});
 
@@ -528,14 +508,28 @@
 		}
 	});
 
+	function handleEditorCleanup() {
+		if (currentDrawnLayer && map) {
+			map.removeLayer(currentDrawnLayer);
+			currentDrawnLayer = null;
+		}
+	}
+
 	function cleanup(currentLayer?: LayerInfo) {
 		isSelectionActive = false;
 		if (selectionBox) {
 			selectionBox.disable();
 			selectionBox = null;
 		}
+		handleEditorCleanup();
 		map?.off('contextmenu', () => clearFeatureSelection(currentLayer));
 		clearFeatureSelection(currentLayer);
+
+		if (editToolsContainer) {
+			editToolsContainer
+				.querySelectorAll('.edit-tool-button')
+				.forEach((btn) => btn.classList.remove('active'));
+		}
 	}
 
 	onDestroy(() => {
@@ -558,7 +552,7 @@
 		</div>
 	{:else if ['create', 'edit'].includes(editingState.mode)}
 		<div class="attribute-editor-wrapper">
-			<LeafletGeoJSONAttributeEditor {currentPropertyId} />
+			<LeafletGeoJSONAttributeEditor {currentPropertyId} onCleanup={handleEditorCleanup} />
 		</div>
 	{/if}
 {/if}

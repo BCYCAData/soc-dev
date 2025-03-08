@@ -58,7 +58,6 @@
 	}
 	const handleSubmit: SubmitFunction = () => {
 		return async ({ result }) => {
-			console.log('Form submission result:', result);
 			if (result.type === 'success') {
 				const data = result.data;
 				if (data?.success) {

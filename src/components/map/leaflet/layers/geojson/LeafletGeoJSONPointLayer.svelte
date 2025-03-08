@@ -2,6 +2,7 @@
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { createPointSymbol } from '$lib/leaflet/leafletlegendutility';
 	import { generateMarkerHtml } from '$lib/leaflet/symbol/leafletstylemanagement';
+	import { createTooltipContent, type CustomFeature } from '$lib/leaflet/spatialutilities.svelte';
 
 	import type { Writable } from 'svelte/store';
 	import type L from 'leaflet';
@@ -41,7 +42,8 @@
 		symbology: PointSymbologyOptions | GroupedSymbologyOptions;
 		propertyForSymbol?: string;
 		symbolMap?: Record<string, PointSymbologyOptions>;
-		tooltipTemplate?: (feature: GeoJSON.Feature) => string;
+		tooltipField?: string;
+		tooltipOptions?: L.TooltipOptions;
 		multiFeaturePopupTemplate?: (features: GeoJSON.Feature[]) => string;
 		template_id?: string;
 	}
@@ -55,7 +57,8 @@
 		showInLegend = true,
 		order,
 		symbology,
-		tooltipTemplate,
+		tooltipField,
+		tooltipOptions,
 		multiFeaturePopupTemplate,
 		template_id
 	}: Props = $props();
@@ -129,12 +132,6 @@
 
 		const markerHtml = generateMarkerHtml(markerStyle);
 		const divIconOptions = options.options as CustomDivIconOptions;
-		console.log('Creating shaped marker:', {
-			options,
-			markerStyle,
-			markerHtml
-		});
-
 		return leaflet.marker(latlng, {
 			icon: leaflet.divIcon({
 				html: markerHtml,
@@ -164,18 +161,8 @@
 	}
 
 	function createPointLayer(feature: GeoJSON.Feature, latlng: L.LatLng): L.Layer | null {
-		console.log('Creating point with symbology:', {
-			templateId: template_id,
-			providedSymbology: symbology,
-			featureProps: feature.properties
-		});
 		if (!symbology) return null;
 		let layer: L.Layer | null = null;
-
-		// Use template_id from props if it exists
-		// if (template_id && feature.properties?.id) {
-		// 	layer = createSymbolizedLayer(symbology, feature, latlng);
-		// } else
 		if ('propertyField' in symbology && symbology.groups) {
 			const value = feature.properties?.[symbology.propertyField];
 			const groupSymbol =
@@ -184,26 +171,31 @@
 		} else {
 			layer = createSymbolizedLayer(symbology, feature, latlng);
 		}
-
-		if (layer && feature.properties && tooltipTemplate && !editable) {
-			layer.bindTooltip(tooltipTemplate(feature), {
-				permanent: false,
-				direction: 'top',
-				className: 'gnaf-tooltip'
-			});
-		} else if (layer && editable && feature.properties) {
-			const defaultTooltip = `${layerName} ID: ${feature.properties.name}`;
-			layer.bindTooltip(tooltipTemplate ? tooltipTemplate(feature) : defaultTooltip, {
-				permanent: false,
-				direction: 'top',
-				className: 'editable-feature-tooltip'
-			});
+		if (layer && feature.properties) {
+			if (tooltipField && feature.properties?.[tooltipField]) {
+				layer.bindTooltip(feature.properties[tooltipField].toString(), {
+					permanent: false,
+					direction: 'center',
+					...tooltipOptions
+				});
+			} else if (!editable) {
+				layer.bindTooltip(createTooltipContent(feature as CustomFeature, undefined), {
+					permanent: false,
+					direction: 'top',
+					className: 'gnaf-tooltip'
+				});
+			} else {
+				const tooltipContent = createTooltipContent(feature as CustomFeature, template_id);
+				layer.bindTooltip(tooltipContent, {
+					permanent: false,
+					direction: 'right',
+					className: 'editable-feature-tooltip'
+				});
+			}
 		}
-
 		if (layer) {
 			layer.on('click', (e: L.LeafletMouseEvent) => {
 				const nearbyFeatures = findNearbyFeatures(e.latlng, 10);
-
 				if (nearbyFeatures.length > 1) {
 					const popup = leaflet
 						.popup({
@@ -211,7 +203,6 @@
 						})
 						.setLatLng(e.latlng)
 						.setContent(createPopupContent(nearbyFeatures));
-
 					popup.openOn(map);
 				}
 			});
@@ -229,10 +220,6 @@
 
 		if (symbolOptions.type === 'custom') {
 			const customOptions = symbolOptions.options as CustomMarkerOptions;
-			console.log('Applying symbol:', {
-				symbolOptions,
-				resultingStyle: customOptions // inside the if (symbolOptions.type === 'custom') block
-			});
 			if (customOptions.markerShape) {
 				return createShapedMarker(latlng, {
 					type: 'divIcon',
@@ -334,13 +321,13 @@
 		geoJSONLayer = leaflet.geoJSON(dataToUse, {
 			pointToLayer: (feature, latlng) => {
 				const layer = createPointLayer(feature, latlng);
-				if (layer && feature.properties?.label) {
-					layer.bindTooltip(feature.properties.label, {
-						permanent: true,
-						direction: 'right',
-						className: 'custom-label'
-					});
-				}
+				// if (layer && feature.properties?.label) {
+				// 	layer.bindTooltip(feature.properties.label, {
+				// 		permanent: true,
+				// 		direction: 'right',
+				// 		className: 'custom-label'
+				// 	});
+				// }
 				return layer || new leaflet.Marker(latlng);
 			}
 		});
@@ -378,10 +365,6 @@
 	onMount(() => {
 		if (leaflet && map) {
 			createGeoJSONLayer();
-
-			if (editable) {
-				// setupSnapping();
-			}
 		}
 	});
 

@@ -40,7 +40,6 @@
 	}
 
 	const handleSubmit: SubmitFunction = () => {
-		alert('Deleting feature');
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				const layers = get(layersStore);
