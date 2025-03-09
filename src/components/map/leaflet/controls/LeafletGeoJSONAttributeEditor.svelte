@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { browser } from '$app/environment';
-	import { onMount, onDestroy, getContext } from 'svelte';
+	import { onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
 	import { SelectionBoxControl } from '$lib/leaflet/leafletselectionboxcontrol';
 
@@ -61,52 +60,6 @@
 		return attributes[fieldId] || '';
 	}
 
-	function persistState() {
-		if (browser && feature) {
-			sessionStorage.setItem(
-				'lastFeatureState',
-				JSON.stringify({
-					properties: feature.properties,
-					mode: editingState.mode
-				})
-			);
-		}
-	}
-
-	function restoreState() {
-		if (browser) {
-			const savedState = sessionStorage.getItem('lastFeatureState');
-			if (savedState && feature) {
-				const { properties, mode } = JSON.parse(savedState);
-				feature.properties = properties;
-				setEditingMode(mode);
-			}
-		}
-	}
-
-	function resolveStateConflict() {
-		if (browser && feature && feature.properties) {
-			const savedState = sessionStorage.getItem('lastFeatureState');
-			const currentState = {
-				properties: feature.properties,
-				mode: editingState.mode
-			};
-
-			if (savedState) {
-				const { properties: savedProperties } = JSON.parse(savedState);
-				const differences = Object.keys(savedProperties).filter(
-					(key) => savedProperties[key] !== currentState.properties[key]
-				);
-
-				if (differences.length > 0) {
-					hasConflict = true;
-					return { savedProperties, currentProperties: currentState.properties };
-				}
-			}
-		}
-		return null;
-	}
-
 	function handleFieldChange(fieldId: string, value: string | boolean) {
 		if (feature) {
 			feature.properties = {
@@ -114,8 +67,6 @@
 				[`attr_${fieldId}`]: value
 			};
 			setActiveFeature(feature);
-			persistState();
-
 			const layers = get(layersStore);
 			const currentLayer = layers[feature.template_id];
 			if (currentLayer?.layer) {
@@ -134,46 +85,13 @@
 		}
 	}
 
-	function handleConflictResolution(choice: 'previous' | 'current') {
-		isTransitioning = true;
-		const resolution = resolveStateConflict();
-
-		if (resolution) {
-			const properties =
-				choice === 'previous' ? resolution.savedProperties : resolution.currentProperties;
-
-			setTimeout(() => {
-				if (feature) {
-					feature.properties = properties;
-					setActiveFeature(feature);
-				}
-				hasConflict = false;
-				isTransitioning = false;
-				persistState();
-			}, 300);
-		}
-	}
-
 	const handleSubmit: SubmitFunction = () => {
+		cleanup();
 		return async ({ result }) => {
 			if (hasConflict) {
 				return;
 			}
 			if (result.type === 'success') {
-				if (browser) {
-					sessionStorage.removeItem('lastFeatureState');
-				}
-				updateStatus = '';
-				const layers = get(layersStore);
-				const currentLayer = layers[feature?.template_id || ''];
-				if (currentLayer?.layer) {
-					(currentLayer.layer as GeoJSON).eachLayer((layer: any) => {
-						if (layer.feature.properties.id === feature?.id) {
-							layer.setStyle(layer.originalStyle);
-						}
-					});
-				}
-
 				setSuccessMessage(
 					`Successfully ${editingState.mode === 'create' ? 'created' : 'updated'} feature`
 				);
@@ -189,7 +107,6 @@
 			}
 		};
 	};
-
 	function getFieldComponent(type: string) {
 		switch (type) {
 			case 'select':
@@ -207,16 +124,13 @@
 	function cleanup(e?: Event) {
 		leafletMap.editTools.stopDrawing();
 		leafletMap.editable = false;
-		persistState();
 		updateStatus = '';
 		const layers = get(layersStore);
 		const currentLayer = layers[feature?.template_id || ''];
-
 		if (selectionBox) {
 			selectionBox.disable();
 			selectionBox = null;
 		}
-
 		if (currentLayer?.layer) {
 			(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
 				if (layer.feature.properties.id === feature?.id) {
@@ -234,15 +148,6 @@
 		onCleanup();
 		invalidateAll();
 	}
-
-	onMount(() => {
-		restoreState();
-		return () => {
-			if (browser) {
-				sessionStorage.removeItem('lastFeatureState');
-			}
-		};
-	});
 
 	onDestroy(cleanup);
 </script>
@@ -266,7 +171,6 @@
 		<input type="hidden" name="propertyId" value={currentPropertyId} />
 		<input type="hidden" name="templateId" value={template?.id || undefined} />
 		<input type="hidden" name="geometry" value={JSON.stringify(feature?.geom || null)} />
-
 		{#if template}
 			{#each template.attributes as field}
 				<div class="field">
@@ -312,37 +216,37 @@
 				<div class="geometry-notice">
 					{#if editingState.mode === 'create'}
 						{#if editingState.activeTemplate.geometry_type === 'point'}
-							Click and hold on the point to move it.
+							Using the left mouse button <br /> Click and hold on the point to move it.
 						{:else if editingState.activeTemplate.geometry_type === 'line'}
-							To change the line before you save it<br />you can click and hold on a bend to move
-							it.<br />Single click on a bend to remove it.<br />
-							Click and hold on a mid-point to add a new bend.
+							To change the line before you save it<br />you can left click and hold on a bend to
+							move it.<br />Single left click on a bend to remove it.<br />
+							Using the left mouse button <br /> Click and hold on a mid-point to add a new bend.
 						{:else if editingState.activeTemplate.geometry_type === 'polygon'}
-							To change the boundary before you save it<br />you can click and hold on a bend to
-							move it.<br />Single click on a bend to remove it.<br />
-							Click and hold on a mid-point to add a new bend.
+							To change the boundary before you save it<br />you can left click and hold on a bend
+							to move it.<br />Single left click on a bend to remove it.<br />
+							Using the left mouse button <br /> Click and hold on a mid-point to add a new bend.
 						{/if}
 					{:else if editingState.mode === 'edit'}
 						{#if editingState.activeTemplate.geometry_type === 'point'}
-							Click and hold on the point to move it to another location.
+							Using the left mouse button <br /> Click and hold on the point to move it to another location.
 						{:else if editingState.activeTemplate.geometry_type === 'line'}
-							To change the {editingState.activeTemplate.name} line you can click and hold on a bend
-							to move it.<br />Single click on a bend to remove it.<br />
-							Click and hold on a mid-point to add a new bend.
+							To change the {editingState.activeTemplate.name} line you can left click and hold on a
+							bend to move it.<br />Single left click on a bend to remove it.<br />
+							Using the left mouse button <br /> Click and hold on a mid-point to add a new bend.
 						{:else if editingState.activeTemplate.geometry_type === 'polygon'}
-							To change the boundary you can click and hold on a bend to move it.<br />Single click
-							on a bend to remove it.<br />
-							Click and hold on a mid-point to add a new bend.
+							To change the boundary you can left click and hold on a bend to move it.<br />Single
+							left click on a bend to remove it.<br />
+							Using the left mouse button <br /> Click and hold on a mid-point to add a new bend.
 						{/if}
 					{:else if editingState.mode === 'delete'}
-						Drag a box around a {editingState.activeTemplate.name} to select it for deletion. Right click
-						to clear selection
+						Hold down the left mouse button and drag a box around a {editingState.activeTemplate
+							.name} to select it for deletion. Right click to clear selection
 					{/if}
 				</div>
 			{/if}
 		{/if}
 
-		{#if hasConflict}
+		<!-- {#if hasConflict}
 			<div class="conflict-dialog" class:transitioning={isTransitioning}>
 				<h4>Unsaved Changes Found</h4>
 				<div class="conflict-preview">
@@ -364,26 +268,28 @@
 					</button>
 				</div>
 			</div>
-		{/if}
+		{/if} -->
 		{#if editingState.activeTemplate && !feature}
 			<div class="geometry-notice">
 				{#if editingState.mode === 'create'}
 					{#if editingState.activeTemplate.geometry_type === 'point'}
-						Click on the map to create a new {editingState.activeTemplate.name} point
+						Using the left mouse button <br /> Click on the map to create a new {editingState
+							.activeTemplate.name} point
 					{:else if editingState.activeTemplate.geometry_type === 'line'}
-						Click on the map to start drawing a new<br />{editingState.activeTemplate.name} line.<br
-						/>
-						Click again for each bend.<br /> Double-click on the last bend to finish.
+						Using the left mouse button <br /> Click on the map to start drawing a new<br
+						/>{editingState.activeTemplate.name} line.<br />
+						Using the left mouse button <br /> Click again for each bend.<br /> Double-click on the last
+						bend to finish.
 					{:else if editingState.activeTemplate.geometry_type === 'polygon'}
-						Click on the map to draw a new {editingState.activeTemplate.name} area. Click again for each
-						bend. Double-click to finish
+						Using the left mouse button <br /> Click on the map to draw a new {editingState
+							.activeTemplate.name} area. Click again for each bend. Double-click to finish
 					{/if}
 				{:else if editingState.mode === 'edit'}
-					Drag a box around a {editingState.activeTemplate.name} to select it for editing. Right click
-					to clear selection.
+					Hold down the left mouse button and drag a box around a {editingState.activeTemplate.name}
+					to select it for editing. Right click to clear selection.
 				{:else if editingState.mode === 'delete'}
-					Drag a box around a {editingState.activeTemplate.name} to select it for deletion. Right click
-					to clear selection
+					Hold down the left mouse button and drag a box around a {editingState.activeTemplate.name}
+					to select it for deletion. Right click to clear selection
 				{/if}
 			</div>
 		{/if}
@@ -510,23 +416,6 @@
 	.transitioning {
 		opacity: 0.7;
 		transition: opacity 0.3s ease;
-	}
-	.conflict-dialog {
-		background: white;
-		padding: 1rem;
-		border-radius: 4px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	}
-	.conflict-preview {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
-		margin: 1rem 0;
-	}
-	.conflict-actions {
-		display: flex;
-		justify-content: flex-end;
-		gap: 0.5rem;
 	}
 	.geometry-notice {
 		text-align: center;

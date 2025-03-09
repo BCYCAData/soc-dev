@@ -14,6 +14,13 @@ export class SelectionBoxControl {
 	private onSelection: (bounds: L.LatLngBounds) => void;
 	private selectedFeature: L.Layer | null = null;
 	private tooltipWasEnabled: boolean = false;
+	private isDrawing: boolean = false;
+
+	private preventSelection = (e: Event) => {
+		if (this.isDrawing) {
+			e.preventDefault();
+		}
+	};
 
 	constructor(
 		map: L.Map,
@@ -26,6 +33,8 @@ export class SelectionBoxControl {
 
 	enable() {
 		this.map.dragging.disable();
+		document.addEventListener('selectstart', this.preventSelection);
+		document.addEventListener('dragstart', this.preventSelection);
 		this.map.on('mousedown', this.onMouseDown, this);
 		this.map.on('mousemove', this.onMouseMove, this);
 		this.map.on('mouseup', this.onMouseUp, this);
@@ -34,6 +43,8 @@ export class SelectionBoxControl {
 
 	disable() {
 		this.map.dragging.enable();
+		document.removeEventListener('selectstart', this.preventSelection);
+		document.removeEventListener('dragstart', this.preventSelection);
 		this.map.off('mousedown', this.onMouseDown, this);
 		this.map.off('mousemove', this.onMouseMove, this);
 		this.map.off('mouseup', this.onMouseUp, this);
@@ -63,6 +74,7 @@ export class SelectionBoxControl {
 	}
 
 	private onMouseDown(e: L.LeafletMouseEvent) {
+		this.isDrawing = true;
 		this.startPoint = this.map.latLngToContainerPoint(e.latlng);
 		this.box = rectangle(
 			[
@@ -103,6 +115,7 @@ export class SelectionBoxControl {
 			this.box = null;
 		}
 		this.startPoint = null;
+		this.isDrawing = false;
 	}
 
 	private getBoxBounds(start: L.Point, end: L.Point): L.LatLngBounds {
