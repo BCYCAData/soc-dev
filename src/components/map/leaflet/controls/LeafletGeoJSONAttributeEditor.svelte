@@ -148,7 +148,6 @@
 		onCleanup();
 		invalidateAll();
 	}
-
 	onDestroy(cleanup);
 </script>
 
@@ -245,30 +244,6 @@
 				</div>
 			{/if}
 		{/if}
-
-		<!-- {#if hasConflict}
-			<div class="conflict-dialog" class:transitioning={isTransitioning}>
-				<h4>Unsaved Changes Found</h4>
-				<div class="conflict-preview">
-					<div class="previous">
-						<h5>Previous Version</h5>
-						<pre>{JSON.stringify(resolveStateConflict()?.savedProperties, null, 2)}</pre>
-					</div>
-					<div class="current">
-						<h5>Current Version</h5>
-						<pre>{JSON.stringify(resolveStateConflict()?.currentProperties, null, 2)}</pre>
-					</div>
-				</div>
-				<div class="conflict-actions">
-					<button type="button" onclick={() => handleConflictResolution('previous')}>
-						Restore Previous
-					</button>
-					<button type="button" onclick={() => handleConflictResolution('current')}>
-						Keep Current
-					</button>
-				</div>
-			</div>
-		{/if} -->
 		{#if editingState.activeTemplate && !feature}
 			<div class="geometry-notice">
 				{#if editingState.mode === 'create'}
@@ -302,7 +277,6 @@
 		{#if updateStatus}
 			<div class="update-status">{updateStatus}</div>
 		{/if}
-
 		<div class="actions">
 			<button
 				type="button"
@@ -327,7 +301,7 @@
 <style>
 	.attribute-editor {
 		background: white;
-		padding: 1rem;
+		padding: 0.5rem;
 		border-radius: 4px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	}
@@ -335,7 +309,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 1rem;
+		margin-bottom: 0.5rem;
 	}
 	.field {
 		margin-bottom: 1rem;
@@ -384,7 +358,7 @@
 		border: none;
 		font-size: 1.5rem;
 		cursor: pointer;
-		padding: 0.25rem 0.5rem;
+		padding: 0.25rem 0.25rem;
 		color: #666;
 	}
 	.close-button:hover {

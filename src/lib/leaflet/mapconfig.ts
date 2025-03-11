@@ -68,8 +68,8 @@ export const waypointOptions: PointSymbologyOptions = {
 };
 
 export const propertyOptions: PolygonSymbologyOptions = {
-	fillColor: '#3388ff',
-	fillOpacity: 0.7,
+	fillColor: '#eee908f0',
+	fillOpacity: 0.2,
 	color: '#000',
 	weight: 1,
 	opacity: 1

@@ -9,20 +9,25 @@
 		setActiveFeature,
 		featureTemplates
 	} from '$lib/leaflet/spatialutilities.svelte';
+	import { applyLayerStyle } from '$lib/leaflet/symbol/leafletstylemanagement';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { LayerInfo } from '$lib/leaflet/types';
 
 	interface Props {
 		currentPropertyId: string;
+		featuresByTemplate: Record<string, GeoJSON.FeatureCollection>;
 	}
 
+	// const { getLeafletLayers, getLeafletMap } = getContext<{
 	const { getLeafletLayers } = getContext<{
 		getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
+		// getLeafletMap: () => L.Map;
 	}>('leafletContext');
 
 	const layersStore = getLeafletLayers();
+	// const leafletMap = getLeafletMap();
 
-	let { currentPropertyId }: Props = $props();
+	let { currentPropertyId, featuresByTemplate }: Props = $props();
 	let successMessage = $state('');
 	let errorMessage = $state('');
 
@@ -45,13 +50,15 @@
 				const layers = get(layersStore);
 				const currentLayer = layers[feature?.template_id || ''];
 				if (currentLayer?.layer) {
-					(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
-						if (layer.feature.properties.id === feature?.id) {
-							layer.remove();
-						}
-					});
-				}
+					// Clear the GeoJSON data
+					(currentLayer.layer as L.GeoJSON).clearLayers();
 
+					// Update featuresByTemplate with empty feature collection
+					featuresByTemplate[feature?.template_id || ''] = {
+						type: 'FeatureCollection',
+						features: []
+					};
+				}
 				setSuccessMessage('Feature successfully deleted');
 				setEditingMode(null);
 				setActiveFeature(null);
@@ -68,12 +75,18 @@
 		if (currentLayer?.layer) {
 			(currentLayer.layer as L.GeoJSON).eachLayer((layer: any) => {
 				if (layer.feature.properties.id === feature?.id) {
-					layer.setStyle(layer.originalStyle);
+					if (layer.editor) {
+						layer.editor.disable();
+					}
+					if (layer.originalStyle) {
+						applyLayerStyle(layer, layer.originalStyle);
+					}
 				}
 			});
 		}
 		setEditingMode(null);
 		setActiveFeature(null);
+		invalidateAll();
 	}
 
 	onDestroy(cleanup);
@@ -81,7 +94,7 @@
 
 <div class="delete-editor">
 	<div class="header">
-		<h3>Delete {template?.name}</h3>
+		<h3>Delete {editingState.activeTemplate?.name}</h3>
 		<button class="close-button" onclick={cleanup}>×</button>
 	</div>
 
@@ -90,7 +103,16 @@
 		<input type="hidden" name="propertyId" value={currentPropertyId} />
 		<input type="hidden" name="templateId" value={template?.id} />
 
-		<p class="warning">Are you sure you want to delete this {template?.name}?</p>
+		{#if editingState.activeTemplate && !feature}
+			<div class="geometry-notice">
+				{#if editingState.mode === 'delete'}
+					Hold down the left mouse button and drag a box around a {editingState.activeTemplate.name}
+					to select it for deletion. Right click to clear selection
+				{/if}
+			</div>
+		{:else}
+			<p class="warning">Are you sure you want to delete this {template?.name}?</p>
+		{/if}
 
 		{#if successMessage}
 			<div class="message success">{successMessage}</div>
@@ -101,12 +123,25 @@
 
 		<div class="actions">
 			<button type="button" class="cancel" onclick={cleanup}>Cancel</button>
-			<button type="submit" class="delete">Delete</button>
+			{#if feature}
+				<button type="submit" class="delete">Delete</button>
+			{/if}
 		</div>
 	</form>
 </div>
 
 <style>
+	.close-button {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		padding: 0.25rem 0.25rem;
+		color: #666;
+	}
+	.close-button:hover {
+		color: #000;
+	}
 	.delete-editor {
 		background: white;
 		padding: 1rem;

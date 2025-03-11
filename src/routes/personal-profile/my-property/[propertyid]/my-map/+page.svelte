@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Spinner from '$components/page/Spinner.svelte';
-	import FeatureAttributesForm from '$components/map/leaflet/FeatureAttributesForm.svelte';
-	import { featureTemplates, editingState } from '$lib/leaflet/spatialutilities.svelte';
+	import { featureTemplates } from '$lib/leaflet/spatialutilities.svelte';
 	import {
 		addresspointOptions,
 		myPropertyMapConfig,
@@ -160,7 +159,6 @@
 			return {};
 		}
 		const featuresByTemplate: Record<string, GeoJSON.FeatureCollection> = {};
-
 		Object.values(features).forEach((feature) => {
 			if (!featuresByTemplate[feature.template_id]) {
 				featuresByTemplate[feature.template_id] = {
@@ -196,21 +194,17 @@
 	$effect(() => {
 		const spatialFeatures = data?.spatialFeatures;
 		const featureAttributes = data?.featureAttributes;
-
 		if (spatialFeatures && featureAttributes) {
 			featuresByTemplate = transformFeaturesToGeoJSON(spatialFeatures, featureAttributes);
+		} else {
+			featuresByTemplate = {};
 		}
 	});
 
 	let mapLoaded = $state(false);
-	let leafletMapInstance = $state<L.Map>();
 
 	function handleMapLoaded() {
 		mapLoaded = true;
-	}
-
-	function handleMapInstance(map: L.Map) {
-		leafletMapInstance = map;
 	}
 
 	onMount(async () => {
@@ -236,23 +230,14 @@
 			import('$components/map/leaflet/controls/LeafletLegendControl.svelte').then((m) => m.default)
 		]);
 	});
-
-	$effect(() => {
-		if (mapLoaded && leafletMapInstance) {
-			setTimeout(() => {
-				leafletMapInstance?.invalidateSize();
-			}, 100);
-		}
-	});
-
 	$effect(() => {
 		Object.assign(featureTemplates, data.featureTemplates);
 	});
 </script>
 
-<div class="flex h-full">
-	<div class="relative flex-1">
-		<div class="map-container">
+<div class="flex h-full overflow-hidden">
+	<div class="relative flex-grow">
+		<div class="h-full">
 			{#if LeafletMap && LeafletGeoJSONPolygonLayer && LeafletGeoJSONLineLayer && LeafletGeoJSONPointLayer}
 				{#if !mapLoaded}
 					<div class="spinner-overlay">
@@ -263,7 +248,6 @@
 					<LeafletMap
 						{...myPropertyMapConfig(propertyGeometryData.centre, propertyGeometryData.bounds)}
 						onMapReady={handleMapLoaded}
-						onMapInstance={handleMapInstance}
 					>
 						<LeafletGeoJSONPolygonLayer
 							geojsonData={propertyGeometryData.property}
@@ -339,7 +323,6 @@
 								{/if}
 							{/each}
 						{/each}
-
 						<LeafletGeoJSONPointLayer
 							geojsonData={propertyGeometryData.address_point}
 							layerName="Addresspoint Layer"
@@ -365,11 +348,6 @@
 						<LeafletLegendControl position="bottomright" />
 					</LeafletMap>
 				</div>
-				{#if editingState.mode === 'create' || editingState.mode === 'edit'}
-					<div class="absolute bottom-4 right-4 w-96">
-						<FeatureAttributesForm />
-					</div>
-				{/if}
 			{:else}
 				<div class="spinner-overlay">
 					<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
@@ -380,12 +358,10 @@
 </div>
 
 <style lang="postcss">
-	.map-container {
-		height: 85%;
-		min-height: 400px;
+	.h-full {
+		height: 93%;
 		position: relative;
 	}
-
 	.spinner-overlay {
 		position: absolute;
 		top: 0;

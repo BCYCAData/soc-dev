@@ -78,7 +78,14 @@
 		>
 			<div class="flex w-full flex-col p-1">
 				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
-					<MenuToggleIcon isMenuCollapsed={isSidebarCollapsed} color="#FAFAF9" size={20} />
+					<div
+						class="flex text-sm text-orange-800 {!isSidebarCollapsed
+							? 'flex-row items-center gap-2'
+							: 'flex-col items-center'}"
+					>
+						{!isSidebarCollapsed ? 'Hide menu' : ''}
+						<MenuToggleIcon isMenuCollapsed={isSidebarCollapsed} color="#FAFAF9" size={20} />
+					</div>
 				</button>
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Profile Menu{/if}
@@ -107,8 +114,10 @@
 			</div>
 		</div>
 
-		<div class="app-shell-content mx-4 flex-grow">
-			{@render children?.()}
+		<div class="app-shell-content mx-4 flex flex-grow">
+			<div class="w-full">
+				{@render children?.()}
+			</div>
 		</div>
 
 		<HelpPanel isCollapsed={isHelpbarCollapsed} />
@@ -134,8 +143,8 @@
 	}
 
 	.app-shell-content {
-		flex: 1 1 auto;
-		overflow-y: auto;
-		width: 0;
+		display: flex;
+		flex: 1;
+		min-width: 0;
 	}
 </style>

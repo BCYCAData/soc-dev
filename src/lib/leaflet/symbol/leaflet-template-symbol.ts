@@ -122,7 +122,7 @@ export const pointTemplateStyles: Record<string, Partial<CustomMarkerOptions>> =
 
 const lineTemplateStyles: Record<string, Partial<LineSymbologyOptions>> = {
 	Powerline: {
-		color: '#00ffff',
+		color: '#ff00ff',
 		width: 4,
 		pattern: 'dashed',
 		arrowheads: true
@@ -140,13 +140,6 @@ const lineTemplateStyles: Record<string, Partial<LineSymbologyOptions>> = {
 };
 
 const polygonTemplateStyles: Record<string, Partial<PolygonSymbologyOptions>> = {
-	// Building: {
-	// 	fillColor: '#00ffff',
-	// 	color: '#ffffff',
-	// 	fillOpacity: 0.3,
-	// 	weight: 1,
-	// 	fillPattern: 'solid'
-	// },
 	'Staging Area': {
 		fillColor: '#0077ff',
 		color: '#0055dd',

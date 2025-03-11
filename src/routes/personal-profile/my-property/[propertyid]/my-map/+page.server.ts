@@ -30,9 +30,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 		console.log('Spatial Feature Attributes Error:', attributesError);
 		throw error(400, 'Error fetching feature data');
 	}
-
-	console.log('features', JSON.stringify(templates));
-
+	console.log('propertyGeometryData');
 	return {
 		propertyGeometryData,
 		featureTemplates: templates,
@@ -108,13 +106,11 @@ export const actions: Actions = {
 		if (!featureId || !propertyId) {
 			throw error(400, 'Missing required fields');
 		}
-		console.log('p_feature_id: ', featureId, 'p_user_id: ', user.id, 'p_property_id: ', propertyId);
 		const { data: deleteResult, error: rpcError } = await supabase.rpc('delete_spatial_feature', {
 			p_feature_id: featureId,
 			p_user_id: user.id,
 			p_property_id: propertyId
 		});
-
 		if (rpcError) {
 			console.log('deleteSpatialFeatureError', rpcError.message);
 			throw error(400, rpcError.message);

@@ -34,10 +34,11 @@
 
 	interface Props {
 		position?: L.ControlPosition;
+		featuresByTemplate: Record<string, GeoJSON.FeatureCollection>;
 		onSelectLayer: (layer: string) => void;
 	}
 
-	let { position = 'topleft', onSelectLayer }: Props = $props();
+	let { position = 'topleft', featuresByTemplate, onSelectLayer }: Props = $props();
 
 	const { getLeaflet, getLeafletMap, getLeafletLayers } = getContext<{
 		getLeaflet: () => typeof L;
@@ -509,6 +510,7 @@
 	});
 
 	function handleEditorCleanup() {
+		editingState.activeFeature = null;
 		if (currentDrawnLayer && map) {
 			map.removeLayer(currentDrawnLayer);
 			currentDrawnLayer = null;
@@ -546,9 +548,9 @@
 </script>
 
 {#if editingState.mode && editingState.activeTemplate}
-	{#if editingState.mode === 'delete' && editingState.activeFeature}
+	{#if editingState.mode === 'delete'}
 		<div class="delete-editor-wrapper">
-			<LeafletGeoJSONDeleteEditor {currentPropertyId} />
+			<LeafletGeoJSONDeleteEditor {currentPropertyId} {featuresByTemplate} />
 		</div>
 	{:else if ['create', 'edit'].includes(editingState.mode)}
 		<div class="attribute-editor-wrapper">
@@ -558,13 +560,18 @@
 {/if}
 
 <style>
-	:global(.delete-marker) {
-		filter: hue-rotate(140deg) saturate(200%);
+	:global(.leaflet-marker-icon.delete) {
+		filter: brightness(0) invert(30%) sepia(100%) saturate(10000%) hue-rotate(354deg);
 	}
 
-	:global(.leaflet-marker-icon.delete) {
-		border: 2px solid #ff0000;
-		border-radius: 50%;
+	:global(.leaflet-marker-icon.selected) {
+		filter: brightness(0) invert(30%) sepia(100%) saturate(10000%) hue-rotate(354deg);
+	}
+
+	:global(.leaflet-interactive.selected) {
+		stroke: #ff0000;
+		stroke-width: 3px;
+		fill-opacity: 0.3;
 	}
 
 	:global(.leaflet-interactive.delete) {
@@ -577,7 +584,7 @@
 		position: absolute;
 		top: 10px;
 		right: 10px;
-		z-index: 1000;
+		z-index: 1001;
 		max-width: 300px;
 		width: 100%;
 	}

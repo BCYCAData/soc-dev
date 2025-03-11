@@ -103,13 +103,8 @@ export class SelectionBoxControl {
 
 		const endPoint = this.map.latLngToContainerPoint(e.latlng);
 		const bounds = this.getBoxBounds(this.startPoint, endPoint);
-
-		// Clear any existing selection before making a new one
 		this.clearCurrentSelection();
-
-		// Pass the bounds to the callback
 		this.onSelection(bounds);
-
 		if (this.box) {
 			this.box.remove();
 			this.box = null;
@@ -127,7 +122,6 @@ export class SelectionBoxControl {
 		);
 		return new LatLngBounds(sw, ne);
 	}
-
 	setSelectedFeature(feature: L.Layer) {
 		this.selectedFeature = feature;
 		const layer = feature as any;

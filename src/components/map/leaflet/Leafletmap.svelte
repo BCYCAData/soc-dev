@@ -26,6 +26,7 @@
 		width?: string;
 		height?: string;
 		baseLayers?: Array<{ name: string; url: string; attribution: string }>;
+		featuresByTemplate?: Record<string, GeoJSON.FeatureCollection>;
 		children?: import('svelte').Snippet;
 	}
 
@@ -52,6 +53,7 @@
 		width = '100%',
 		height = '98%',
 		baseLayers,
+		featuresByTemplate = {},
 		children
 	}: Props = $props();
 
@@ -209,7 +211,7 @@
 		{#if editControl.present}
 			{#if editControl.present}
 				{#await import('$components/map/leaflet/controls/LeafletSelectEditLayerControl.svelte') then { default: LeafletSelectEditLayerControl }}
-					<LeafletSelectEditLayerControl onSelectLayer={selectLayer} />
+					<LeafletSelectEditLayerControl onSelectLayer={selectLayer} {featuresByTemplate} />
 				{/await}
 			{/if}
 		{/if}

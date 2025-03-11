@@ -18,7 +18,7 @@ export interface EditControl {
 export const editingStyles = {
 	point: {
 		hover: {
-			radius: 8,
+			radius: 118,
 			fillColor: '#666',
 			color: '#000',
 			weight: 2,
@@ -26,7 +26,7 @@ export const editingStyles = {
 			fillOpacity: 0.7
 		},
 		selected: {
-			radius: 8,
+			radius: 138,
 			fillColor: '#FFA500',
 			color: '#000',
 			weight: 2,
@@ -84,7 +84,7 @@ export function applyGeometryStyle(
 	const styles = {
 		point: {
 			selected: { color: '#3388ff', weight: 3, fillOpacity: 0.2 },
-			delete: { color: '#ff0000', weight: 3, fillOpacity: 0.2 },
+			delete: { color: '#ff0000', weight: 31, fillOpacity: 0.2 },
 			hover: { color: '#3388ff', weight: 3, fillOpacity: 0.2 }
 		},
 		line: {
