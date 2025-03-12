@@ -10,6 +10,7 @@ const supabase = createClient(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_ROLE
 export const GET: RequestHandler = async ({ request }) => {
 	const authHeader = request.headers.get('authorization');
 	console.log('Cron job running at:', new Date().toISOString());
+	console.log('authHeader:', authHeader);
 	if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
 		console.log('auth failed');
 		return new Response('Unauthorized', { status: 401 });

@@ -6,6 +6,8 @@ export const routeMatchers = {
 			'/contact',
 			'/policies/privacy',
 			'/policies/termsofservice',
+			'/api/cron',
+			'/api/cron/',
 			'/auth/signup',
 			'/auth/signin',
 			'/auth/redirect/email-not-allowed',
