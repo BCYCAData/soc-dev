@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 		.select('*')
 		.order('role');
 
-	const { data: userRoles, error: urError } = await supabase.rpc('get_user_roles');
+	const { data: userRole, error: urError } = await supabase.rpc('get_user_roles');
 
 	if (rpError || urError) {
 		throw error(500, 'Failed to load roles data');
@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 	return {
 		rolePermissions,
-		userRoles,
+		userRole,
 		permissionTree
 	};
 };

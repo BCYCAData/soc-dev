@@ -51,7 +51,7 @@
 	<title>Users Admin-NewUsers</title>
 </svelte:head>
 
-<Tabs bind:value={tabSet} fluid>
+<Tabs value={tabSet} fluid>
 	{#snippet list()}
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"

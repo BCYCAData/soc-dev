@@ -73,7 +73,7 @@
 							<div class="relative">
 								<button
 									type="button"
-									class="badge inline-flex items-center gap-1"
+									class="ring-opacity-5 absolute z-50 mt-2 inline-flex w-64 items-center gap-1 rounded-md bg-white p-4 shadow-lg ring-1 ring-black"
 									onclick={() => toggleEmailPopup(property.id)}
 									onkeydown={(e) => e.key === 'Enter' && toggleEmailPopup(property.id)}
 									aria-expanded={showEmailPopup === property.id}
@@ -100,7 +100,11 @@
 									</svg>
 								</button>
 								{#if showEmailPopup === property.id}
-									<div class="popup" role="dialog" aria-label="Linked users">
+									<div
+										class="ring-opacity-5 absolute z-50 mt-2 w-64 rounded-md bg-white p-4 shadow-lg ring-1 ring-black"
+										role="dialog"
+										aria-label="Linked users"
+									>
 										<button
 											type="button"
 											class="w-full text-left"
@@ -123,7 +127,7 @@
 					</div>
 
 					<button
-						class="hover:bg-ertiary-600 rounded bg-error-500 px-4 py-2 text-white"
+						class="hover:bg-ertiary-600 bg-error-500 rounded px-4 py-2 text-white"
 						onclick={() => handleRemoveClick(property)}
 					>
 						Remove Property
@@ -166,13 +170,3 @@
 		Add New Property
 	</button>
 </div>
-
-<style>
-	.badge {
-		@apply inline-flex cursor-pointer items-center rounded-full bg-blue-100 px-2.5 py-2 text-sm font-medium text-blue-800;
-	}
-
-	.popup {
-		@apply absolute z-50 mt-2 w-64 rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5;
-	}
-</style>

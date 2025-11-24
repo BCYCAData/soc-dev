@@ -82,10 +82,8 @@ export const actions: Actions = {
 			};
 		}
 	},
-	addproperty: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	addproperty: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
-
 		const { error } = await supabase.rpc('create_property_for_user', {
 			user_id: user.id,
 			var_principaladdresssiteoid: Number(formData.get('principaladdresssiteoid')),

@@ -8,7 +8,7 @@
 	<title>Users Admin-Kits</title>
 </svelte:head>
 
-<Tabs listMargin="mb-0" bind:value={tabSet} fluid>
+<Tabs listMargin="mb-0" value={tabSet} fluid>
 	{#snippet list()}
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"

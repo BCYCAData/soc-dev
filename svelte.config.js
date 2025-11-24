@@ -19,6 +19,9 @@ const config = {
 			$stores: './src/stores'
 		}
 	},
+	vitePlugin: {
+		inspector: true
+	},
 	compilerOptions: {
 		sourcemap: process.env.NODE_ENV === 'development' ? true : false
 	}

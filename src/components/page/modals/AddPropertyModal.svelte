@@ -80,12 +80,12 @@
 	aria-labelledby="modal-title"
 	class="fixed inset-0 z-50 flex items-center justify-center"
 >
-	<button class="fixed inset-0 bg-black bg-opacity-50" onclick={onClose} aria-label="Close modal"
+	<button class="bg-opacity-50 fixed inset-0 bg-black" onclick={onClose} aria-label="Close modal"
 	></button>
 	<div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
 		<button
 			type="button"
-			class="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+			class="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
 			onclick={onClose}
 		>
 			✕
@@ -94,7 +94,7 @@
 		<h2 id="modal-title" class="mb-4 text-xl font-semibold">Add New Property</h2>
 
 		{#if loading}
-			<div class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
+			<div class="bg-opacity-75 absolute inset-0 flex items-center justify-center bg-white">
 				<Spinner />
 			</div>
 		{/if}
@@ -110,7 +110,12 @@
 				<p>{error}</p>
 				{#if error.includes('could not find this address')}
 					<div class="mt-5">
-						<a href={mailtoUrl} class="contact-button"> Tap here to send us an email </a>
+						<a
+							href={mailtoUrl}
+							class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
+						>
+							Tap here to send us an email
+						</a>
 					</div>
 				{/if}
 			</div>
@@ -178,13 +183,13 @@
 			<div class="mt-6 flex justify-end space-x-3">
 				<button
 					type="button"
-					class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+					class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none"
 					onclick={onClose}
 				>
 					Cancel
 				</button>
 				<button
-					class="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+					class="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none"
 					type="submit"
 					disabled={!canGo}
 				>
@@ -194,9 +199,3 @@
 		</form>
 	</div>
 </div>
-
-<style lang="postcss">
-	.contact-button {
-		@apply mt-5 inline-block rounded-xl bg-secondary-500 p-2 font-medium text-secondary-50 hover:underline;
-	}
-</style>

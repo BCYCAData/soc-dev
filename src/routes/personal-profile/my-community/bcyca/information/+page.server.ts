@@ -2,7 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityBCYCAInformationFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const myBCYCACommunityInformationFormData = getMyCommunityBCYCAInformationFormData(formData);
 		const bcycaId = formData.get('community_bcyca_profile_id');

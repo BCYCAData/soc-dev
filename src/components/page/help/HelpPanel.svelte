@@ -48,7 +48,7 @@
 	{/if}
 </div>
 
-<style lang="postcss">
+<style>
 	.help-panel {
 		overflow-y: auto;
 	}

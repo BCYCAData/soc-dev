@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/state';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 </script>
 
@@ -9,9 +8,7 @@
 >
 	{#snippet lead()}
 		<a
-			class="btn btn-sm mb-2 w-full bg-tertiary-400 font-semibold text-surface-50 sm:mb-0 sm:w-auto"
-			class:active={page.url.pathname.endsWith('/policies/termsofservice')}
-			data-sveltekit-preload-data="hover"
+			class="btn btn-sm preset-tonal-primary mb-2 w-full font-semibold sm:mb-0 sm:w-auto"
 			href="/policies/termsofservice"
 		>
 			Terms of Service
@@ -20,9 +17,7 @@
 	Prepare Connect Rebound
 	{#snippet trail()}
 		<a
-			class="btn btn-sm mb-2 w-full bg-tertiary-400 font-semibold text-surface-50 sm:mb-0 sm:w-auto"
-			class:active={page.url.pathname.endsWith('/policies/privacy')}
-			data-sveltekit-preload-data="hover"
+			class="btn btn-sm preset-tonal-primary mb-2 w-full font-semibold sm:mb-0 sm:w-auto"
 			href="/policies/privacy"
 		>
 			Privacy Policy

@@ -1,8 +1,7 @@
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser }, params }) => {
-	const { user } = await getSessionAndUser();
+export const load: PageServerLoad = async ({ locals: { supabase, user }, params }) => {
 	const propertyId = params.propertyid;
 	const [
 		{ data: propertyGeometryData, error: propertyGeometryError },
@@ -35,12 +34,12 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUs
 		propertyGeometryData,
 		featureTemplates: templates,
 		spatialFeatures: features,
-		featureAttributes: attributes
+		featureAttributes: attributes,
+		userRole: ''
 	};
 };
 export const actions: Actions = {
-	saveFeature: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	saveFeature: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
 		const propertyId = formData.get('propertyId');
 		const templateId = formData.get('templateId');
@@ -97,8 +96,7 @@ export const actions: Actions = {
 
 		return { success: true, featureId: featureData };
 	},
-	deleteFeature: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	deleteFeature: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
 		const featureId = formData.get('featureId');
 		const propertyId = formData.get('propertyId');

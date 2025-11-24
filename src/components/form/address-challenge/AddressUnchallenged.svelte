@@ -56,7 +56,7 @@
 				placeholder="STREET ADDRESS"
 				autocomplete="street-address"
 				required={true}
-				className="mb-4 w-full rounded !border !border-secondary-700 py-3"
+				className="mb-4 w-full rounded border! border-secondary-700! py-3"
 				bind:value={streetaddress}
 			/>
 
@@ -73,7 +73,7 @@
 					placeholder="SUBURB"
 					autocomplete="address-level2"
 					required={true}
-					className="w-2/3 rounded !border !border-secondary-700 py-3"
+					className="w-2/3 rounded border! border-secondary-700! py-3"
 					bind:value={suburb}
 				/>
 

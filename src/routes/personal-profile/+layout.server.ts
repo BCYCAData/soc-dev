@@ -1,44 +1,68 @@
 import { error } from '@sveltejs/kit';
-
 import type { LayoutServerLoad } from './$types';
+import { getCommunityOptions, type CommunityRequestOption } from '$lib/profile-options';
 
 const emptyOptionsData = {
 	object_names: [] as { object_name: string; options: { value: string; lable: string }[] }[]
 };
 
-export const load: LayoutServerLoad = async ({
-	locals: { supabase, getSessionAndUser, getCommunityRequestOptions }
-}) => {
-	const { user, session, userRoles, coordinatesKYNG, propertyIds, userProfile } =
-		await getSessionAndUser();
+export const load: LayoutServerLoad = async ({ locals: { supabase, user } }) => {
+	if (!user) {
+		error(401, 'Unauthorized');
+	}
 
-	const optionsDataArray = await getCommunityRequestOptions();
+	// Fetch user profile data
+	const { data: userProfile, error: profileError } = await supabase.rpc('get_profile_for_user', {
+		id_input: user.id
+	});
 
-	// Transform array into object structure
-	const optionsData = optionsDataArray.reduce(
-		(acc, item) => {
-			if (item.table_name === 'user_profile') {
-				acc.userOptionsData = item;
-			} else if (item.table_name === 'community_bcyca_profile') {
-				acc.communityBCYCAOptionsData = item;
-			} else if (item.table_name === 'community_external_profile') {
-				acc.communityExternalOptionsData = item;
-			} else if (item.table_name === 'community_tinonee_profile') {
-				acc.communityTinoneeOptionsData = item;
-			} else if (item.table_name === 'community_mondrook_profile') {
-				acc.communityMondrookOptionsData = item;
-			}
-			return acc;
-		},
-		{} as Record<string, any>
-	);
+	if (profileError) {
+		console.error('Error fetching user profile:', profileError);
+		error(500, 'Failed to load user profile');
+	}
+
+	// Fetch community request options
+	const { data, error: requestError } = await supabase.from('community_request_options_lut')
+		.select(`
+                index_value,
+                lable,
+                community_request_options_concordance!public_community_request_options_lut_concordance_fkey (
+                    table_name,
+                    object_name,
+                    field_name
+                )
+            `);
+
+	if (requestError) {
+		console.error('Failed to fetch community request options:', requestError);
+		throw error(400, `Failed to fetch community request options: ${requestError.message}`);
+	}
+	const optionsDataArray = getCommunityOptions(data as CommunityRequestOption[]);
+	const optionsData = {
+		userOptionsData:
+			optionsDataArray.find((item) => item.table_name === 'user_profile') ?? emptyOptionsData,
+		communityBCYCAOptionsData:
+			optionsDataArray.find((item) => item.table_name === 'community_bcyca_profile') ??
+			emptyOptionsData,
+		communityExternalOptionsData:
+			optionsDataArray.find((item) => item.table_name === 'community_external_profile') ??
+			emptyOptionsData,
+		communityTinoneeOptionsData:
+			optionsDataArray.find((item) => item.table_name === 'community_tinonee_profile') ??
+			emptyOptionsData,
+		communityMondrookOptionsData:
+			optionsDataArray.find((item) => item.table_name === 'community_mondrook_profile') ??
+			emptyOptionsData
+	};
+
+	// Fetch profile messages
 	const { data: profileMessages, error: profileMessagesError } = await supabase.rpc(
 		'get_profile_messages_for_user',
 		{ id_input: user.id }
 	);
 
 	if (profileMessagesError) {
-		console.log('error get Profile Messages for User:', profileMessagesError);
+		console.error('Error fetching profile messages:', profileMessagesError);
 		error(400, profileMessagesError.message);
 	}
 
@@ -54,21 +78,10 @@ export const load: LayoutServerLoad = async ({
 	};
 
 	return {
-		session,
-		user,
-		userRoles,
-		coordinatesKYNG,
-		propertyIds,
 		userProfile,
 		profileMessages,
 		hadUserPostalAddress,
 		communityProfiles,
-		optionsData: {
-			userOptionsData: optionsData.userOptionsData ?? emptyOptionsData,
-			communityBCYCAOptionsData: optionsData.communityBCYCAOptionsData ?? emptyOptionsData,
-			communityExternalOptionsData: optionsData.communityExternalOptionsData ?? emptyOptionsData,
-			communityTinoneeOptionsData: optionsData.communityTinoneeOptionsData ?? emptyOptionsData,
-			communityMondrookOptionsData: optionsData.communityMondrookOptionsData ?? emptyOptionsData
-		}
+		optionsData
 	};
 };

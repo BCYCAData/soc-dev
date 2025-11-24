@@ -93,7 +93,7 @@
 				{selectedValue}
 				<button
 					type="button"
-					class="ml-1.5 flex-shrink-0 rounded-full p-1.5 text-orange-700 hover:text-tertiary-400 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2"
+					class="ml-1.5 shrink-0 rounded-full p-1.5 text-orange-700 hover:text-tertiary-400 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2"
 					onclick={() => removeValue(selectedValue)}
 					aria-label="Remove {selectedValue}"
 				>

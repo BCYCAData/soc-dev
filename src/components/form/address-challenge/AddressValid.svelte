@@ -46,7 +46,7 @@
 	</div>
 
 	<div class="max-w-container mx-auto flex flex-col items-center justify-center">
-		<div class="w-5/6 rounded bg-secondary-50 p-6 text-surface-950 shadow-md sm:ml-0 sm:w-full">
+		<div class="bg-secondary-50 text-surface-950 w-5/6 rounded p-6 shadow-md sm:ml-0 sm:w-full">
 			<h1 class="h1 mb-6 text-center text-2xl">
 				Please enter your email address and a password to complete the registration process.
 			</h1>
@@ -67,13 +67,23 @@
 				<SetEmail bind:email bind:validEmail />
 				<SetPassword bind:password bind:validPassword />
 
-				<button type="submit" class="btn-primary" disabled={!canGo}> Create Account </button>
+				<button
+					type="submit"
+					class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-4 w-full rounded-full py-2 text-center focus:outline-none disabled:opacity-25"
+					disabled={!canGo}
+				>
+					Create Account
+				</button>
 
-				<div class="text-center text-surface-950">
+				<div class="text-surface-950 text-center">
 					By signing up, you agree to the
-					<a class="link" href="/policies/termsofservice">Terms of Service</a>
+					<a class="text-orange-600 no-underline hover:underline" href="/policies/termsofservice"
+						>Terms of Service</a
+					>
 					and
-					<a class="link" href="/policies/privacy">Privacy Policy</a>
+					<a class="text-orange-600 no-underline hover:underline" href="/policies/privacy"
+						>Privacy Policy</a
+					>
 				</div>
 			</form>
 		</div>
@@ -81,21 +91,15 @@
 		{#if form?.error}
 			<AuthErrorMessage errorMessage={form?.message ?? ''} />
 		{/if}
-		<div class="text-center text-surface-950">
+		<div class="text-surface-950 text-center">
 			By signing up, you agree to the
-			<a class="link" href="/policies/termsofservice">Terms of Service</a>
+			<a class="text-orange-600 no-underline hover:underline" href="/policies/termsofservice"
+				>Terms of Service</a
+			>
 			and
-			<a class="link" href="/policies/privacy">Privacy Policy</a>
+			<a class="text-orange-600 no-underline hover:underline" href="/policies/privacy"
+				>Privacy Policy</a
+			>
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	.btn-primary {
-		@apply my-4 w-full rounded-full bg-secondary-500 py-2 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none disabled:opacity-25;
-	}
-
-	.link {
-		@apply text-orange-600 no-underline hover:underline;
-	}
-</style>

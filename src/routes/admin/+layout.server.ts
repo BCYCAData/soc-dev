@@ -2,16 +2,11 @@ import { error } from '@sveltejs/kit';
 
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({
-	locals: { supabase, getSessionAndUser },
-	parent
-}) => {
-	const parentData = await parent();
-
+export const load: LayoutServerLoad = async ({ locals: { supabase, user, userRole }, parent }) => {
 	const { data: adminMessagesData, error: adminMessagesError } = await supabase.rpc(
 		'get_admin_messages_for_user',
 		{
-			id_input: (await getSessionAndUser()).user?.id
+			id_input: user?.id
 		}
 	);
 
@@ -22,11 +17,7 @@ export const load: LayoutServerLoad = async ({
 
 	return {
 		adminMessages: adminMessagesData || [],
-		session: parentData.session,
-		user: parentData.user,
-		userRoles: null,
-		permissions: parentData.permissions,
-		coordinatesKYNG: parentData.coordinatesKYNG,
+		userRole,
 		propertyIds: null,
 		userProfile: null,
 		optionsData: {

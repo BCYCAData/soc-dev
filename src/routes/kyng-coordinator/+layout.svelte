@@ -59,9 +59,9 @@
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
 <div class="app-shell bg-orange-200">
-	<header class="mx-auto flex w-full items-center justify-center bg-orange-100">
+	<!-- <header class="mx-auto flex w-full items-center justify-center bg-orange-100">
 		<h3 class="font-bold text-orange-900">Burrell Creek Youth & Community Association Inc.</h3>
-	</header>
+	</header> -->
 
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={kyngSidebarPathLables} coordinatesKYNG={safeCoordinatesKYNG} />
@@ -99,7 +99,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	.app-shell {
 		display: flex;
 		flex-direction: column;

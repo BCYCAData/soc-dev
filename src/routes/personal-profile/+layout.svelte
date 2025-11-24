@@ -62,10 +62,6 @@
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
 <div class="app-shell bg-orange-200">
-	<header class="mx-auto flex w-full items-center justify-center bg-orange-100">
-		<h2 class="h2 font-bold text-primary-600">Strengthen OUR Community</h2>
-	</header>
-
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={profileSidebarPathLables} properties={propertyProfiles} />
 	</div>
@@ -114,7 +110,7 @@
 			</div>
 		</div>
 
-		<div class="app-shell-content mx-4 flex flex-grow">
+		<div class="app-shell-content mx-4 flex grow">
 			<div class="w-full">
 				{@render children?.()}
 			</div>
@@ -124,7 +120,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	.app-shell {
 		display: flex;
 		flex-direction: column;

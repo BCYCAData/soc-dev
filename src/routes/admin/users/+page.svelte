@@ -11,6 +11,8 @@
 	}
 
 	function hasFeaturePermission(feature: string): boolean {
+		console.log('Checking feature permission for:', feature);
+		console.log('Current permissions:', permissions);
 		return permissions.some((p) => p.includes(feature));
 	}
 </script>
@@ -49,12 +51,12 @@
 						Manage KYNG Coordinators
 					</a>
 				{/if}
-				{#if hasPermission('users.newusers')}
+				{#if hasPermission('site.data')}
 					<a
-						href="/admin/users/new"
+						href="/admin/site/data/kyng-boundaries"
 						class=" flex items-center justify-center rounded bg-orange-500 p-4 text-center text-white transition hover:bg-orange-600"
 					>
-						Generate Reports on New Users
+						Manage KYNG Area Boundaries
 					</a>
 				{/if}
 			</div>
@@ -87,11 +89,11 @@
 						</dd>
 					</span>
 				{/if}
-				{#if hasFeaturePermission('newusers')}
+				{#if hasFeaturePermission('kyng-boundaries')}
 					<span class="flex-auto">
-						<dt class="font-bold">Generate Reports on New Users</dt>
+						<dt class="font-bold">Manage KYNG Area Boundaries</dt>
 						<dd class="text-sm opacity-90">
-							Reports can be generated for all registered users and their information completeness.
+							Change KYNG Area boundaries. Create new KYNG Areas as needed.
 						</dd>
 					</span>
 				{/if}

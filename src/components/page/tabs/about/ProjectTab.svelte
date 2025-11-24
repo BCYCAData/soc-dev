@@ -49,22 +49,22 @@
 	/>
 </svelte:head>
 
-<article class="project-container">
-	<header class="project-header">
-		<h1>Strengthen OUR Community</h1>
+<article class="grid h-full grid-rows-[auto_auto_auto_1fr] gap-4 overflow-hidden">
+	<header class="text-center">
+		<h1 class="h1 text-primary-600">Strengthen OUR Community</h1>
 		<p class="text-xl">
 			This project empowers our community to take responsibility for being prepared and <br /> working
 			together to make a difference.
 		</p>
 	</header>
 
-	<section class="project-mission">
-		<h2>Our aim: Prepare, Connect and Rebound</h2>
+	<section class="text-center">
+		<h2 class="h2 text-primary-600">Our aim: Prepare, Connect and Rebound</h2>
 	</section>
 
-	<section class="project-areas">
+	<section class="mx-auto max-w-3xl">
 		<strong>The project focuses on four areas:</strong>
-		<ol>
+		<ol class="mt-0 space-y-1">
 			{#each focusAreas as area}
 				<li>
 					<strong>{area.title}</strong> - {area.description}
@@ -72,16 +72,18 @@
 			{/each}
 		</ol>
 
-		<p class="map-description">
+		<p class="h4 my-3 text-center font-semibold">
 			This map shows the <span class="text-primary">properties</span> that have participated
 		</p>
 	</section>
 
-	<section class="project-map">
+	<section
+		class="mx-auto flex h-[calc(100vh-400px)] w-full max-w-3xl flex-col overflow-hidden px-4"
+	>
 		{#if addressPointsGeoJSON}
 			{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
 				{#if !mapLoaded}
-					<div class="spinner-container">
+					<div class="flex items-center justify-center">
 						<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
 					</div>
 				{/if}
@@ -119,55 +121,7 @@
 				</LeafletMap>
 			{/await}
 		{:else}
-			<p class="error-message">Unable to load map data</p>
+			<p class="text-surface-500 mt-4 text-center">Unable to load map data</p>
 		{/if}
 	</section>
 </article>
-
-<style lang="postcss">
-	.project-container {
-		@apply grid h-full grid-rows-[auto_auto_auto_1fr] gap-4 overflow-hidden;
-	}
-
-	.project-header {
-		@apply text-center;
-		h1 {
-			@apply h1 text-primary-600;
-		}
-	}
-
-	.project-mission {
-		@apply text-center;
-		h2 {
-			@apply h2 text-primary-600;
-		}
-	}
-
-	.project-areas {
-		@apply mx-auto max-w-3xl;
-		ol {
-			@apply mt-0 space-y-1;
-		}
-	}
-
-	.project-map {
-		@apply mx-auto flex w-full max-w-3xl flex-col overflow-hidden px-4;
-		height: calc(100vh - 400px); /* Dynamic height calculation */
-	}
-
-	:global(.project-map > *) {
-		@apply h-full w-full flex-1;
-	}
-
-	.map-description {
-		@apply h4 my-3 text-center font-semibold;
-	}
-
-	.spinner-container {
-		@apply flex items-center justify-center;
-	}
-
-	.error-message {
-		@apply mt-4 text-center text-surface-500;
-	}
-</style>

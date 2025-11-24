@@ -2,7 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityMondrookWorkshopsFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const myMondrookCommunityWorkshopsFormData = getMyCommunityMondrookWorkshopsFormData(formData);
 		const mondrookId = formData.get('community_mondrook_profile_id');

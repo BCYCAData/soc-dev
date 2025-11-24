@@ -26,14 +26,13 @@
 				Please contact our support team who will help guide you through the next steps.
 			</p>
 			<div class="mt-5">
-				<a href={mailtoUrl} class="contact-button"> Tap here to send us an email </a>
+				<a
+					href={mailtoUrl}
+					class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
+				>
+					Tap here to send us an email
+				</a>
 			</div>
 		</div>
 	{/if}
 </section>
-
-<style lang="postcss">
-	.contact-button {
-		@apply mt-5 inline-block rounded-xl bg-secondary-500 p-2 font-medium text-secondary-50 hover:underline;
-	}
-</style>

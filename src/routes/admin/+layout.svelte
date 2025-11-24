@@ -54,9 +54,9 @@
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
 <div class="app-shell bg-orange-200">
-	<header class="mx-auto flex w-full items-center justify-center bg-orange-100">
-		<h2 class="h2 font-bold text-primary-600">Admin Dashboard</h2>
-	</header>
+	<!-- <header class="mx-auto flex w-full items-center justify-center bg-orange-100">
+		<h2 class="h2 text-primary-600 font-bold">Admin Dashboard</h2>
+	</header> -->
 
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={adminSidebarPathLables} />
@@ -100,7 +100,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	.app-shell {
 		display: flex;
 		flex-direction: column;

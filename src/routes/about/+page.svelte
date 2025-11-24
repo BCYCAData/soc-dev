@@ -59,43 +59,38 @@
 
 <main class="flex min-h-full flex-col">
 	<Tabs items={tabItems} />
-
 	<footer class="mt-auto">
-		<div class="footer-content">
+		<div class="flex items-center justify-between px-2 md:px-24">
 			<picture>
 				<source srcset="/images/ag.webp" type="image/webp" />
 				<img
-					class="footer-logo"
+					class="mb-2 h-10"
 					src="/images/ag.png"
 					alt="Australian Government logo"
-					width="auto"
+					width="120"
 					height="40"
+					loading="lazy"
+					decoding="async"
 				/>
 			</picture>
 
-			<p class="footer-text">
+			<small class="text-center md:text-sm">
 				This is a Bushfire Community Recovery &amp; Resilience Fund project through the joint
 				Commonwealth/State Disaster Recovery Funding Arrangements
-			</p>
+			</small>
 
 			<picture>
 				<source srcset="/images/nswg.webp" type="image/webp" />
-				<img class="footer-logo" src="/images/nswg.jpg" alt="NSW Government logo" loading="lazy" />
+				<img
+					class="mb-2 h-10"
+					src="/images/nswg.png"
+					alt="NSW Government logo"
+					width="40"
+					height="40"
+					loading="lazy"
+					decoding="async"
+				/>
 			</picture>
 		</div>
 	</footer>
 </main>
-
-<style lang="postcss">
-	.footer-content {
-		@apply flex items-center justify-between px-2 md:px-24;
-	}
-
-	.footer-logo {
-		@apply mb-2 h-10;
-	}
-
-	.footer-text {
-		@apply max-w-md p-0 text-center text-[0.6rem] leading-3 md:text-sm;
-	}
-</style>

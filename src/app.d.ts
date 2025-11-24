@@ -3,20 +3,17 @@ declare global {
 	namespace App {
 		interface Locals {
 			supabase: SupabaseClient;
-			getSessionAndUser: () => Promise<{
-				session: Session | null;
-				user: User | null;
-				userRoles: string[] | null;
-				coordinatesKYNG: KYNGArea[] | null;
-				propertyIds: string[] | null;
-				userProfile: UserProfile | null;
-			}>;
-			getCommunityRequestOptions: () => Promise<TransformedOptionsData[]>;
+			safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
+			getSession: () => Promise<{ session: Session | null; user: User | null }>;
+			session: Session | null;
 			user: User | null;
-			permissions: string | null;
+			userRole: string | null;
+			permissions: string[];
+			propertyIds: string[] | null;
+			communities: string[];
+			getCommunityRequestOptions: () => Promise<TransformedOptionsData[]>;
 			coordinatesKYNG: KYNGArea[] | null;
 			userProfile: UserProfile | null;
-			propertyIds: string[] | null;
 			userOptionsData: {
 				table_name: string;
 				object_names: Array<{
@@ -32,7 +29,7 @@ declare global {
 		interface PageData {
 			session: Session | null;
 			user: User | null;
-			userRoles: string[] | null;
+			userRole: string | null;
 			permissions: string | null;
 			coordinatesKYNG: KYNGArea[] | null;
 			steps?: { index: number; text: string; page: string }[];
@@ -102,6 +99,11 @@ declare module '@fontsource/poppins' {
 }
 
 declare module '@fontsource/open-sans' {
+	const content: any;
+	export default content;
+}
+
+declare module '@fontsource/raleway' {
 	const content: any;
 	export default content;
 }

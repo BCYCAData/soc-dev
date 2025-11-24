@@ -13,7 +13,7 @@
 	let tabSet = $state('0');
 </script>
 
-<Tabs bind:value={tabSet} fluid>
+<Tabs value={tabSet} fluid>
 	{#snippet list()}
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"

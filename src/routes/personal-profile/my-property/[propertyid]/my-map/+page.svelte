@@ -236,7 +236,7 @@
 </script>
 
 <div class="flex h-full overflow-hidden">
-	<div class="relative flex-grow">
+	<div class="relative grow">
 		<div class="h-full">
 			{#if LeafletMap && LeafletGeoJSONPolygonLayer && LeafletGeoJSONLineLayer && LeafletGeoJSONPointLayer}
 				{#if !mapLoaded}
@@ -357,7 +357,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	.h-full {
 		height: 93%;
 		position: relative;

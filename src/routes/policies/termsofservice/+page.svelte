@@ -117,82 +117,32 @@
 	<meta name="description" content="Terms of Service for Strengthen OUR Community" />
 </svelte:head>
 
-<main class="terms-container">
+<main class="mx-auto max-w-3xl">
 	<h1 class="main-title">Strengthen OUR Community</h1>
 
-	<article class="terms-content">
-		<header class="terms-header">
-			<h2>Terms of Use</h2>
-			<p><time datetime="2022-06">Last updated: June 2022</time></p>
+	<article class="text-surface-950">
+		<header class="space-y-2 text-center">
+			<h2 class="text-gray-950 sm:mt-4 sm:text-3xl">Terms of Use</h2>
+			<p><time class="text-sm text-gray-600" datetime="2022-06">Last updated: June 2022</time></p>
 		</header>
 
 		{#each sections as section}
-			<section class="terms-section" aria-labelledby={section.id}>
-				<h3 id={section.id} class="section-title">{section.title}</h3>
+			<section class="mt-6 space-y-4" aria-labelledby={section.id}>
+				<h3 id={section.id} class="text-primary-600 text-xl font-semibold">{section.title}</h3>
 
 				{#if section.definitions}
-					<dl class="definitions-list">
+					<dl class="mx-5 space-y-4">
 						{#each section.definitions as { term, description }}
-							<dt class="definition-term">{term}</dt>
-							<dd class="definition-description">{description}</dd>
+							<dt class="font-bold">{term}</dt>
+							<dd class="text-surface-700 ml-4">{description}</dd>
 						{/each}
 					</dl>
 				{:else}
 					{#each section.content as paragraph}
-						<p class="section-paragraph">{paragraph}</p>
+						<p class="text-surface-700">{paragraph}</p>
 					{/each}
 				{/if}
 			</section>
 		{/each}
 	</article>
 </main>
-
-<style lang="postcss">
-	.terms-container {
-		@apply mx-auto max-w-3xl;
-	}
-
-	.main-title {
-		@apply text-center font-bold text-primary-600 sm:mt-4 sm:text-4xl;
-	}
-
-	.terms-content {
-		@apply text-surface-950;
-	}
-
-	.terms-header {
-		@apply space-y-2 text-center;
-
-		h2 {
-			@apply text-surface-950 sm:mt-4 sm:text-3xl;
-		}
-
-		time {
-			@apply text-sm text-surface-600;
-		}
-	}
-
-	.terms-section {
-		@apply mt-6 space-y-4;
-	}
-
-	.section-title {
-		@apply text-xl font-semibold text-primary-600;
-	}
-
-	.section-paragraph {
-		@apply text-surface-700;
-	}
-
-	.definitions-list {
-		@apply mx-5 space-y-4;
-	}
-
-	.definition-term {
-		@apply font-bold;
-	}
-
-	.definition-description {
-		@apply ml-4 text-surface-700;
-	}
-</style>

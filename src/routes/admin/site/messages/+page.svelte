@@ -108,7 +108,7 @@
 	<title>Site Messages</title>
 </svelte:head>
 
-<Tabs bind:value={tabSet} fluid>
+<Tabs value={tabSet} fluid>
 	{#snippet list()}
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
@@ -209,13 +209,3 @@
 		</Tabs.Panel>
 	{/snippet}
 </Tabs>
-
-<style lang="postcss">
-	:global(.tabulator) {
-		@apply font-sans;
-	}
-
-	:global(.tabulator-row.tabulator-selected) {
-		@apply bg-orange-100;
-	}
-</style>

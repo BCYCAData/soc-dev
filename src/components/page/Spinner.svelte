@@ -15,8 +15,8 @@
 		unit = 'px',
 		ballTopLeft = '#006400',
 		ballTopRight = '#FF3E00',
-		ballBottomLeft = '#44444',
-		ballBottomRight = '#F46524',
+		ballBottomLeft = '#C94B5E',
+		ballBottomRight = '#3DB6EC',
 		duration = '1.5s',
 		message = ''
 	}: Props = $props();
@@ -32,7 +32,10 @@
     `);
 </script>
 
-<div class="spinner-container mt-4 whitespace-nowrap rounded-md bg-surface-200 p-2" {style}>
+<div
+	class="mt-4 flex flex-col items-center justify-center rounded-md p-2 whitespace-nowrap"
+	{style}
+>
 	<div class="spinner" role="status" aria-label="Loading">
 		<div class="spinner-inner">
 			<div class="ball-container">
@@ -44,19 +47,14 @@
 		</div>
 	</div>
 	{#if message}
-		<div class="message text-center font-medium text-gray-700">
+		<div class="message mt-4 text-center font-medium text-gray-700">
 			{message}
 		</div>
 	{/if}
 </div>
 
-<style lang="postcss">
-	.spinner-container {
-		@apply flex flex-col items-center justify-center;
-	}
-
+<style>
 	.message {
-		@apply mt-4 text-center font-medium text-gray-700;
 		background-color: surface-200;
 		white-space: nowrap;
 		background-color: var(--surface-200);
@@ -65,7 +63,9 @@
 	}
 
 	.spinner {
-		@apply flex items-center justify-center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		width: var(--size);
 		height: var(--size);
 	}
@@ -75,14 +75,15 @@
 	}
 
 	.ball-container {
-		@apply relative;
+		position: relative;
 		width: 44px;
 		height: 44px;
 		animation: container-spin var(--duration) infinite;
 	}
 
 	.ball {
-		@apply absolute rounded-full;
+		position: absolute;
+		border-radius: 9999px;
 		width: 20px;
 		height: 20px;
 		animation: ball-squeeze var(--duration) infinite ease;
@@ -114,7 +115,7 @@
 
 	@keyframes ball-squeeze {
 		50% {
-			@apply opacity-50;
+			opacity: 50%;
 			top: 12px;
 			left: 12px;
 		}

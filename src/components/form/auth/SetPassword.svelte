@@ -46,8 +46,8 @@
 	}
 </script>
 
-<div class="password-container">
-	<div class="password-form">
+<div class="flex flex-1 flex-col items-center justify-center px-3">
+	<div class="text-surface-950 w-full rounded px-3 shadow-md">
 		<PasswordInput
 			id="password"
 			label="Password:"
@@ -68,13 +68,3 @@
 		<PasswordValidationList {validations} />
 	</div>
 </div>
-
-<style lang="postcss">
-	.password-container {
-		@apply flex flex-1 flex-col items-center justify-center px-3;
-	}
-
-	.password-form {
-		@apply w-full rounded px-3 text-surface-950 shadow-md;
-	}
-</style>

@@ -95,66 +95,28 @@
 	<meta name="description" content="Privacy Policy for Strengthen OUR Community" />
 </svelte:head>
 
-<main class="privacy-container">
-	<h1 class="main-title">Strengthen OUR Community</h1>
+<main class="text-surface-950 mx-auto max-w-3xl">
+	<h1 class="text-primary-600 hidden text-center font-bold sm:mt-4 sm:block sm:text-4xl">
+		Strengthen OUR Community
+	</h1>
 
-	<article class="privacy-content">
-		<header class="privacy-header">
-			<h2>Privacy Policy</h2>
-			<p><time datetime="2022-07-01">Last updated: 1/7/22</time></p>
+	<article class="space-y-6">
+		<header class="space-y-2 text-center">
+			<h2 class="text-surface-950 sm:mt-4 sm:text-3xl">Privacy Policy</h2>
+			<p>
+				<time class="text-surface-600 text-sm" datetime="2022-07-01">Last updated: 1/7/22</time>
+			</p>
 		</header>
 
 		{#each sections as section}
-			<section class="privacy-section" aria-labelledby={section.id}>
-				<h3 id={section.id} class="section-title">{section.title}</h3>
-				<div class="section-content">
+			<section class="space-y-4" aria-labelledby={section.id}>
+				<h3 id={section.id} class="text-xl font-semibold text-orange-600">{section.title}</h3>
+				<div class="mx-5 space-y-2">
 					{#each section.content as paragraph}
-						<p>{paragraph}</p>
+						<p class="text-surface-700">{paragraph}</p>
 					{/each}
 				</div>
 			</section>
 		{/each}
 	</article>
 </main>
-
-<style lang="postcss">
-	.privacy-container {
-		@apply mx-auto max-w-3xl text-surface-950;
-	}
-
-	.main-title {
-		@apply hidden text-center font-bold text-primary-600 sm:mt-4 sm:block sm:text-4xl;
-	}
-
-	.privacy-content {
-		@apply space-y-6;
-	}
-
-	.privacy-header {
-		@apply space-y-2 text-center;
-
-		h2 {
-			@apply text-surface-950 sm:mt-4 sm:text-3xl;
-		}
-
-		time {
-			@apply text-sm text-surface-600;
-		}
-	}
-
-	.privacy-section {
-		@apply space-y-4;
-	}
-
-	.section-title {
-		@apply text-xl font-semibold text-orange-600;
-	}
-
-	.section-content {
-		@apply mx-5 space-y-2;
-
-		p {
-			@apply text-surface-700;
-		}
-	}
-</style>

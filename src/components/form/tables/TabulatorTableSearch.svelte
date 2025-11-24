@@ -71,7 +71,7 @@
 			{/each}
 		</select>
 	</span>
-	<div class="relative flex-grow">
+	<div class="relative grow">
 		<div class="flex">
 			<input
 				class="mx-2 h-9 w-full rounded border border-gray-400 bg-surface-100 px-2 py-1"

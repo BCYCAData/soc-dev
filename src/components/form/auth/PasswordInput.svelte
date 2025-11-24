@@ -21,7 +21,7 @@
 
 <input
     {id}
-    class="form-input mb-4 w-full rounded !border !border-secondary-700 py-3"
+    class="form-input mb-4 w-full rounded border! border-secondary-700! py-3"
     type={showPassword ? 'text' : 'password'}
     name={id}
     required

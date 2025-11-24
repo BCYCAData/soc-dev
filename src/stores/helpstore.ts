@@ -1,4 +1,3 @@
-// src/stores/helpstore.ts
 import { writable } from 'svelte/store';
 import type { HelpContent } from '$lib/types';
 

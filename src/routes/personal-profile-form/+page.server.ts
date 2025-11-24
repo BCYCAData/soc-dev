@@ -14,10 +14,9 @@ function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof Prope
 		: (propertyData.profiles[0][key] as T);
 }
 
-export const load = (async ({
-	locals: { supabase, getSessionAndUser, getCommunityRequestOptions }
+export const load: PageServerLoad = (async ({
+	locals: { supabase, user, getCommunityRequestOptions }
 }) => {
-	const { user } = await getSessionAndUser();
 	if (!user) {
 		throw redirect(303, '/auth/signin');
 	}
@@ -145,8 +144,7 @@ export const load = (async ({
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	saveData: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	saveData: async ({ request, locals: { supabase, user } }) => {
 		if (!user) {
 			throw redirect(303, '/auth/signin');
 		}

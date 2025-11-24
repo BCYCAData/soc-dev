@@ -44,6 +44,7 @@
 		symbolMap?: Record<string, PointSymbologyOptions>;
 		tooltipField?: string;
 		tooltipOptions?: L.TooltipOptions;
+		tooltipTemplate?: (feature: GeoJSON.Feature) => string;
 		multiFeaturePopupTemplate?: (features: GeoJSON.Feature[]) => string;
 		template_id?: string;
 	}

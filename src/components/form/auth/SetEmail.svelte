@@ -22,13 +22,13 @@
 	}
 </script>
 
-<div class="email-container">
-	<div class="email-form">
-		<label class="email-label" for="email">Email:</label>
+<div class="flex flex-1 flex-col items-center justify-center px-3">
+	<div class="text-surface-950 w-full rounded px-3 shadow-md">
+		<label class="py-2 text-xs font-bold text-orange-900 uppercase" for="email">Email:</label>
 		<input
 			id="email"
 			type="email"
-			class="email-input"
+			class="email-input border-secondary-700 invalid:border-error-500 mb-4 w-full rounded border px-3 py-3"
 			class:invalid={touched && !validEmail}
 			name="email"
 			required
@@ -38,33 +38,7 @@
 			oninput={handleInput}
 		/>
 		{#if touched && !validEmail}
-			<span class="error-message">Please enter a valid email address</span>
+			<span class="text-error-500 text-sm">Please enter a valid email address</span>
 		{/if}
 	</div>
 </div>
-
-<style lang="postcss">
-	.email-container {
-		@apply flex flex-1 flex-col items-center justify-center px-3;
-	}
-
-	.email-form {
-		@apply w-full rounded px-3 text-surface-950 shadow-md;
-	}
-
-	.email-label {
-		@apply py-2 text-xs font-bold uppercase text-orange-900;
-	}
-
-	.email-input {
-		@apply mb-4 w-full rounded border border-secondary-700 px-3 py-3;
-
-		&.invalid {
-			@apply border-error-500;
-		}
-	}
-
-	.error-message {
-		@apply text-sm text-error-500;
-	}
-</style>

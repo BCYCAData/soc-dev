@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser }, parent }) => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: externalInformationData, error: externalInformationError } = await supabase.rpc(
 		'get_user_external_information_data',
 		{}

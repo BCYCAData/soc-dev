@@ -71,7 +71,7 @@ export async function generateRfsPropertyReport({
 	});
 }
 const compactMargin: [number, number, number, number] = [0, 3, 0, 3];
-const headerMargin = [5, 2, 5, 2];
+const headerMargin: [number, number, number, number] = [5, 2, 5, 2];
 
 function getReportStyles(): StyleDictionary {
 	return {

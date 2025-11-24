@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: bcycaEventsData, error: bcycaEventsError } = await supabase.rpc(
 		'get_user_bcyca_events_data',
 		{}

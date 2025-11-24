@@ -7,7 +7,7 @@ export async function guardRoute({
 	path,
 	session,
 	user,
-	userRoles,
+	userRole,
 	coordinatesKYNG,
 	permissions,
 	propertyIds
@@ -15,7 +15,7 @@ export async function guardRoute({
 	path: string;
 	session: Session | null;
 	user: User | null;
-	userRoles: string[] | null;
+	userRole: string | null;
 	coordinatesKYNG: KYNGArea[] | null;
 	permissions?: string | null;
 	propertyIds?: string[];

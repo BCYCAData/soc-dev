@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@import '@fontsource/open-sans';
+@import '@fontsource/inter';
+@import '@fontsource/raleway';
+@import '@fontsource/poppins';
+
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+@import '@skeletonlabs/skeleton/themes/sahara';
+@import '@skeletonlabs/skeleton/themes/cerberus';
+@import '../soc-theme.css';
+
+
+/* External CSS imports */
+@import 'leaflet/dist/leaflet.css';
+@import '../src/components/map/leaflet/css/custom-leaflet.css';
+
+
+@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+
+.tabulator {
+	font-family: var(--font-sans)
+}
+
+.tabulator-row.tabulator-selected {
+	background-color: var(--color-primary-100)
+}
+
+[data-theme='socTheme'] body {
+
+	--heading-font-family: 'Raleway', sans-serif;
+	--base-font-family: 'Open Sans', sans-serif;
+	--anchor-font-family: 'Poppins', sans-serif;
+}

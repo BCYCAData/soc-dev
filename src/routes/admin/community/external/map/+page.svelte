@@ -84,7 +84,7 @@
 	</div>
 {:else}
 	<div class="main-map mx-auto flex h-full w-5/6 flex-col">
-		<p class="mt-4 text-center text-surface-500">Bugger!</p>
+		<p class="text-surface-500 mt-4 text-center">Bugger!</p>
 	</div>
 {/if}
 

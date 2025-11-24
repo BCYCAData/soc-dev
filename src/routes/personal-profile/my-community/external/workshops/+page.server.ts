@@ -2,7 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityExternalWorkshopsFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const myExternalCommunityWorkshopsFormData = getMyCommunityExternalWorkshopsFormData(formData);
 		const externalId = formData.get('community_external_profile_id');

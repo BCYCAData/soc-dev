@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser }, parent }) => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: tinoneeEventsData, error: tinoneeEventsError } = await supabase.rpc(
 		'get_user_tinonee_events_data',
 		{}

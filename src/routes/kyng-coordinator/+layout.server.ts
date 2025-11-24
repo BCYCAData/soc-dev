@@ -19,11 +19,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) =
 
 	return {
 		kyngMessages: kyngMessagesData || [],
-		session: parentData.session,
-		user: parentData.user,
-		userRoles: null,
-		permissions: parentData.permissions,
-		coordinatesKYNG: parentData.coordinatesKYNG,
+		userRole: null,
 		propertyIds: null,
 		userProfile: null,
 		optionsData: {

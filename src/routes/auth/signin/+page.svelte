@@ -23,7 +23,7 @@
 			<input
 				id="email"
 				type="email"
-				class="form-input mb-4 w-full rounded !border !border-secondary-700 py-3"
+				class="form-input mb-4 w-full rounded border! border-secondary-700! py-3"
 				name="email"
 				required={true}
 				placeholder="Email"
@@ -34,7 +34,7 @@
 				<input
 					id="password"
 					type={showPassword ? 'text' : 'password'}
-					class="form-input w-full rounded !border !border-secondary-700 py-3"
+					class="form-input w-full rounded border! border-secondary-700! py-3"
 					name="password"
 					required={true}
 					placeholder="Password"

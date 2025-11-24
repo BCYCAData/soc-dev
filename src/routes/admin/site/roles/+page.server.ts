@@ -1,8 +1,7 @@
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { getSessionAndUser } }) => {
-	const { user } = await getSessionAndUser();
+export const load: PageServerLoad = async ({ locals: { user } }) => {
 	return {
-		siteAdminRolesData: user?.app_metadata?.roles
+		siteAdminRolesData: user?.roles
 	};
 };

@@ -2,7 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityTinoneeWorkshopsFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	default: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const myCommunityTinoneeWorkshopsFormData = getMyCommunityTinoneeWorkshopsFormData(formData);
 		const tinoneeId = formData.get('community_tinonee_profile_id');

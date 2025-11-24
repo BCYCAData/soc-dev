@@ -114,8 +114,8 @@
 
 						setActiveFeature({
 							id: featureId,
-							user_id: layer.feature.properties.user_id || currentPropertyId,
-							property_id: currentPropertyId,
+							user_id: layer.feature.properties.user_id || currentPropertyId || '',
+							property_id: currentPropertyId || '',
 							template_id: currentLayer.template_id || '',
 							geom: layer.toGeoJSON().geometry,
 							properties: layer.feature.properties
@@ -204,8 +204,8 @@
 									invalidateAll();
 									setActiveFeature({
 										id: featureId,
-										user_id: layer.feature.properties.user_id || currentPropertyId,
-										property_id: currentPropertyId,
+										user_id: layer.feature.properties.user_id || currentPropertyId || '',
+										property_id: currentPropertyId || '',
 										template_id: currentLayer.template_id || '',
 										geom: layer.toGeoJSON().geometry,
 										properties: layer.feature.properties
@@ -271,7 +271,7 @@
 									if (featureId && templateId) {
 										setActiveFeature({
 											id: featureId,
-											property_id: currentPropertyId,
+											property_id: currentPropertyId || '',
 											template_id: templateId,
 											geom: layer.toGeoJSON().geometry,
 											properties: layer.feature.properties
@@ -490,7 +490,7 @@
 				setActiveFeature({
 					id: crypto.randomUUID(),
 					user_id: '',
-					property_id: currentPropertyId,
+					property_id: currentPropertyId || '',
 					template_id: editingState.activeTemplate?.id || '',
 					geom: layer.toGeoJSON().geometry,
 					geometryComplete: true
@@ -550,11 +550,11 @@
 {#if editingState.mode && editingState.activeTemplate}
 	{#if editingState.mode === 'delete'}
 		<div class="delete-editor-wrapper">
-			<LeafletGeoJSONDeleteEditor {currentPropertyId} {featuresByTemplate} />
+			<LeafletGeoJSONDeleteEditor currentPropertyId={currentPropertyId || ''} {featuresByTemplate} />
 		</div>
 	{:else if ['create', 'edit'].includes(editingState.mode)}
 		<div class="attribute-editor-wrapper">
-			<LeafletGeoJSONAttributeEditor {currentPropertyId} onCleanup={handleEditorCleanup} />
+			<LeafletGeoJSONAttributeEditor currentPropertyId={currentPropertyId || ''} onCleanup={handleEditorCleanup} />
 		</div>
 	{/if}
 {/if}

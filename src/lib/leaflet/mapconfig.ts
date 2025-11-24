@@ -284,6 +284,21 @@ export const aboutMapConfig = (initialExtent: [[number, number], [number, number
 	baseLayers: streetBaseLayer
 });
 
+//KYNG Area Boundary map
+export const kyngAreasMapConfig = (initialExtent: [[number, number], [number, number]]) => ({
+	initialExtent,
+	zoomable: false,
+	zoomSnap: 0.25,
+	scaleControl: { present: true, position: 'bottomleft' as L.ControlPosition },
+	attributionControl: { present: true },
+	layersControl: { present: true, position: 'topright' as L.ControlPosition },
+	legend: { present: false, position: 'bottomright' as L.ControlPosition },
+	editControl: { present: false },
+	width: '100%',
+	height: '99%',
+	baseLayers: streetBaseLayer
+});
+
 //admin/site/data/addresses map
 export const customAddressesMapConfig = (centre: [number, number]) => ({
 	centre,

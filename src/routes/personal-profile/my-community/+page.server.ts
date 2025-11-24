@@ -2,8 +2,7 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
 		const hadUserPostalAddress = formData.get('had_user_postal_address') as string;
 		const profileMyCommunityFormData = getMyCommunityFormData(formData);

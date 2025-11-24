@@ -30,7 +30,7 @@ async function sendMessage(supabase: any, message: string, context?: MessageCont
 	return response;
 }
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSessionAndUser } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	try {
 		const [listsResponse, messagesResponse] = await Promise.all([
 			supabase.rpc('get_lists'),
@@ -69,7 +69,7 @@ export const actions: Actions = {
 			throw error(500, 'Failed to send message to all users');
 		}
 	},
-	sendMessageToEmailList: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	sendMessageToEmailList: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const message = formData.get('inputMessage')?.toString();
@@ -103,7 +103,7 @@ export const actions: Actions = {
 			};
 		}
 	},
-	sendMessageToAllUsersAtAddress: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	sendMessageToAllUsersAtAddress: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const message = formData.get('inputMessage')?.toString();
@@ -122,7 +122,7 @@ export const actions: Actions = {
 			throw error(500, 'Failed to send message to selected users');
 		}
 	},
-	sendMessageToAllUsersInStreet: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	sendMessageToAllUsersInStreet: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const message = formData.get('inputMessage')?.toString();
@@ -141,10 +141,7 @@ export const actions: Actions = {
 			throw error(500, 'Failed to send message to selected users');
 		}
 	},
-	sendMessageToAllUsersInCommunity: async ({
-		request,
-		locals: { supabase, getSessionAndUser }
-	}) => {
+	sendMessageToAllUsersInCommunity: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const message = formData.get('inputMessage')?.toString();
@@ -163,7 +160,7 @@ export const actions: Actions = {
 			throw error(500, 'Failed to send message to selected users');
 		}
 	},
-	sendMessageToAllUsersInSuburb: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	sendMessageToAllUsersInSuburb: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const message = formData.get('inputMessage')?.toString();
@@ -182,7 +179,7 @@ export const actions: Actions = {
 			throw error(500, 'Failed to send message to selected users');
 		}
 	},
-	revokeMessages: async ({ request, locals: { supabase, getSessionAndUser } }) => {
+	revokeMessages: async ({ request, locals: { supabase } }) => {
 		try {
 			const formData = await request.formData();
 			const idInput = formData.get('revoke_ids')?.toString();

@@ -3,8 +3,7 @@ import { getAboutMeFormData } from '$lib/server/form.utilities';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, getSessionAndUser } }) => {
-		const { user } = await getSessionAndUser();
+	default: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
 		const profileAboutMeFormData = getAboutMeFormData(formData);
 		const { error: aboutMeDataError } = await supabase

@@ -1,36 +1,29 @@
-import { getUserPermissions } from '$lib/server/auth/utility';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({
-	locals: { supabase, getSessionAndUser },
-	cookies
-}) => {
-	const { session, user, userRoles, coordinatesKYNG } = await getSessionAndUser();
-	let permissions;
-
+export const load: LayoutServerLoad = async ({ locals, cookies }) => {
+	const { session, user, userRole, permissions, propertyIds, communities, coordinatesKYNG } =
+		locals;
 	if (!session) {
 		return {
 			session: null,
+			cookies: null,
 			user: null,
-			userRoles: null,
+			userRole: null,
 			permissions: null,
+			propertyIds: null,
+			communities: null,
 			coordinatesKYNG: null
 		};
-	}
-
-	if (session && user && userRoles) {
-		permissions = await getUserPermissions(supabase, user.id, userRoles);
-		if (coordinatesKYNG && coordinatesKYNG.length > 0) {
-			permissions = `${permissions},kyng`;
-		}
 	}
 
 	return {
 		session,
 		cookies: cookies.getAll(),
 		user,
-		userRoles,
+		userRole,
 		permissions,
+		propertyIds,
+		communities,
 		coordinatesKYNG
 	};
 };

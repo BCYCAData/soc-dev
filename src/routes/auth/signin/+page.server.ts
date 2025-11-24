@@ -4,14 +4,13 @@ import { AuthError } from '@supabase/supabase-js';
 import { logSignUpSignInError } from '$lib/server/errorLogging';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const session = await locals.getSessionAndUser();
-	if (session.user) {
+	if (locals.user) {
 		redirect(303, '/');
 	}
 	return {
-		session: session,
+		session: locals.session,
 		user: null,
-		userRoles: null,
+		userRole: null,
 		permissions: null,
 		coordinatesKYNG: null,
 		propertyIds: null,
