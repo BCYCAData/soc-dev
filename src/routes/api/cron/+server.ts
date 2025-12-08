@@ -16,12 +16,18 @@ export const GET: RequestHandler = async ({ request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 
-	const { data, error } = await supabase.rpc('health_check');
+	// Call refresh_spatial_data to update NSW spatial data
+	const { data, error } = await supabase.rpc('refresh_spatial_data', {
+		p_regenerate_area: true
+	});
 
 	if (error) {
-		console.error('Health check failed:', error);
+		console.error('Spatial data refresh failed:', error);
 		return json({ success: false, error }, { status: 500 });
 	}
+
+	// Log success
+	console.log('Spatial data refresh completed:', data);
 
 	return json({ success: true, data });
 };

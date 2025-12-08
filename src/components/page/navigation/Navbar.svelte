@@ -2,12 +2,11 @@
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import Logo from '$components/page/navigation/Logo.svelte';
+	import { usePermissions } from '$lib/permissions.svelte';
 
 	let user = $derived(page.data.user);
-	let permissions = $derived(page.data.permissions);
 	let coordinatesKYNG = $derived(page.data.coordinatesKYNG);
-	let isAdmin = $derived(page.data.userRole === 'admin' || permissions?.includes('admin'));
-
+	const { isAdmin } = usePermissions();
 	let isHomeActive = $derived(page.url.pathname.endsWith('/'));
 	let isAboutActive = $derived(page.url.pathname.endsWith('/about'));
 	let isContactActive = $derived(page.url.pathname.endsWith('/contact'));
@@ -44,7 +43,7 @@
 {#snippet trail()}
 	<div class="flex h-full items-center">
 		{#if user}
-			{#if isAdmin}
+			{#if isAdmin()}
 				{#if coordinatesKYNG && coordinatesKYNG.length > 0}
 					<a
 						class:active={isKyngCoordinatorActive}

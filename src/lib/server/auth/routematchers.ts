@@ -39,13 +39,12 @@ export const routeMatchers = {
 		return path.startsWith('/personal-profile');
 	},
 
-	isPropertyRoute: (path: string): string | null => {
-		const match = path.match(/\/property\/([^/]+)/);
-		return match ? match[1] : null;
+	isPropertyRoute: (path: string): boolean => {
+		return path.startsWith('/personal-profile/my-property/');
 	},
 
 	getPropertyId: (path: string): string | null => {
-		const match = path.match(/\/property\/([^/]+)/);
+		const match = path.match(/\/personal-profile\/my-property\/([^/]+)/);
 		return match ? match[1] : null;
 	},
 

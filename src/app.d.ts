@@ -25,15 +25,26 @@ declare global {
 				}>;
 			}[];
 		}
-
 		interface PageData {
 			session: Session | null;
 			user: User | null;
 			userRole: string | null;
-			permissions: string | null;
+			permissions: string[];
 			coordinatesKYNG: KYNGArea[] | null;
+			propertyIds: string[] | null;
 			steps?: { index: number; text: string; page: string }[];
-			optionsData: {
+
+			// Admin-specific
+			messages?: AdminMessage[];
+
+			// KYNG-specific
+			kyngMessages?: KYNGMessage[];
+
+			// Profile-specific
+			userProfile: UserProfile | null;
+			profileMessages?: ProfileMessage[];
+			hadUserPostalAddress?: boolean;
+			optionsData?: {
 				userOptionsData: {
 					object_names: Array<{
 						object_name: string;
@@ -80,8 +91,6 @@ declare global {
 					}>;
 				};
 			};
-			propertyIds: string[] | null;
-			userProfile: UserProfile | null;
 		}
 	}
 }

@@ -15,6 +15,7 @@
 		isSelectionEmpty?: boolean;
 		selectedRows: any[];
 		downloadFileName: string;
+		showDownloadButton?: boolean;
 	}
 
 	let {
@@ -25,7 +26,8 @@
 		isSelectionEmpty = $bindable(true),
 		//@ts-ignore
 		selectedRows = $bindable(),
-		downloadFileName
+		downloadFileName,
+		showDownloadButton = true
 	}: Props = $props();
 
 	let table: Tabulator;
@@ -119,13 +121,15 @@
 </script>
 
 <div bind:this={tableElement}></div>
-<div class="flex justify-end">
-	<button
-		type="button"
-		class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-		disabled={isSelectionEmpty}
-		onclick={downloadSelected}
-	>
-		Download Selected
-	</button>
-</div>
+{#if showDownloadButton}
+	<div class="flex justify-end">
+		<button
+			type="button"
+			class="mt-4 rounded-full bg-tertiary-400 px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			disabled={isSelectionEmpty}
+			onclick={downloadSelected}
+		>
+			Download Selected
+		</button>
+	</div>
+{/if}

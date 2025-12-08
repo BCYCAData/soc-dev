@@ -66,13 +66,12 @@
 	const listId = `autocomplete-${Math.random().toString(36).slice(2)}`;
 </script>
 
-// AutoCompleteSelect.svelte
 <div>
 	<div class="relative mt-1.5">
 		<input
 			type="text"
 			list={listId}
-			class="mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+			class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 			{placeholder}
 			bind:value={inputValue}
 			onchange={handleSelection}
@@ -88,12 +87,12 @@
 	<div class="mt-2">
 		{#each selectedValues as selectedValue}
 			<span
-				class="mb-2 mr-2 inline-flex items-center rounded-full bg-orange-300 px-3 py-0.5 text-sm font-medium text-orange-900"
+				class="mr-2 mb-2 inline-flex items-center rounded-full bg-orange-300 px-3 py-0.5 text-sm font-medium text-orange-900"
 			>
 				{selectedValue}
 				<button
 					type="button"
-					class="ml-1.5 shrink-0 rounded-full p-1.5 text-orange-700 hover:text-tertiary-400 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2"
+					class="hover:text-tertiary-400 focus:ring-tertiary-500 ml-1.5 shrink-0 rounded-full p-1.5 text-orange-700 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					onclick={() => removeValue(selectedValue)}
 					aria-label="Remove {selectedValue}"
 				>

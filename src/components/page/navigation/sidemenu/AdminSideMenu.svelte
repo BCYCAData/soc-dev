@@ -13,11 +13,14 @@
 
 	const { isSidebarCollapsed }: Props = $props();
 
-	let permissions = $derived(
-		typeof page.data.permissions === 'string' ? page.data.permissions.split(',') : []
+	let permissions = $derived(page.data.permissions || []);
+	const flatPermissions = $derived(
+		permissions
+			?.flatMap((p) => p.split(','))
+			.map((p) => p.trim())
+			.filter(Boolean)
 	);
-
-	const menuItems = $derived(adminSidebarMenuItems(permissions));
+	const menuItems = $derived(adminSidebarMenuItems(flatPermissions));
 	let activeSubmenus = $state<string[]>([]);
 	let activeSubSubmenus = $state<Record<string, string[]>>({});
 	let currentPath = $state(page.url.pathname);

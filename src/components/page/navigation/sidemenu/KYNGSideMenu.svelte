@@ -15,7 +15,7 @@
 
 	const { kyngArea, isSidebarCollapsed }: Props = $props();
 
-	let permissions = $derived(page.data.permissions ? page.data.permissions.split(',') : []);
+	let permissions = $derived(page.data.permissions || []);
 	const menuItems = $derived(kyngSidebarMenuItems(permissions, kyngArea));
 
 	let activeSubmenus = $state<string[]>([]);

@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       address_response: {
@@ -884,19 +859,61 @@ export type Database = {
       }
       project_area: {
         Row: {
-          last_updated: string | null
-          ogc_fid: number
-          wkb_geometry: unknown
+          area_sqkm: number | null
+          geom: unknown
+          id: number
+          kyng_count: number
+          last_generated: string | null
+          rings_text: string
         }
         Insert: {
-          last_updated?: string | null
-          ogc_fid?: number
-          wkb_geometry?: unknown
+          area_sqkm?: number | null
+          geom: unknown
+          id?: number
+          kyng_count: number
+          last_generated?: string | null
+          rings_text: string
         }
         Update: {
-          last_updated?: string | null
-          ogc_fid?: number
-          wkb_geometry?: unknown
+          area_sqkm?: number | null
+          geom?: unknown
+          id?: number
+          kyng_count?: number
+          last_generated?: string | null
+          rings_text?: string
+        }
+        Relationships: []
+      }
+      project_area_log: {
+        Row: {
+          area_sqkm: number | null
+          error: string | null
+          error_detail: string | null
+          generated_at: string | null
+          id: number
+          kyng_areas_count: number | null
+          rings_geometry: string | null
+          success: boolean
+        }
+        Insert: {
+          area_sqkm?: number | null
+          error?: string | null
+          error_detail?: string | null
+          generated_at?: string | null
+          id?: number
+          kyng_areas_count?: number | null
+          rings_geometry?: string | null
+          success: boolean
+        }
+        Update: {
+          area_sqkm?: number | null
+          error?: string | null
+          error_detail?: string | null
+          generated_at?: string | null
+          id?: number
+          kyng_areas_count?: number | null
+          rings_geometry?: string | null
+          success?: boolean
         }
         Relationships: []
       }
@@ -1399,6 +1416,48 @@ export type Database = {
         }
         Relationships: []
       }
+      spatial_data_audit: {
+        Row: {
+          application_name: string | null
+          changed_at: string
+          client_ip: unknown
+          db_user: string | null
+          id: number
+          new_data: Json | null
+          old_data: Json | null
+          operation: string
+          table_name: string
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          application_name?: string | null
+          changed_at?: string
+          client_ip?: unknown
+          db_user?: string | null
+          id?: number
+          new_data?: Json | null
+          old_data?: Json | null
+          operation: string
+          table_name: string
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          application_name?: string | null
+          changed_at?: string
+          client_ip?: unknown
+          db_user?: string | null
+          id?: number
+          new_data?: Json | null
+          old_data?: Json | null
+          operation?: string
+          table_name?: string
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       spatial_features: {
         Row: {
           created_at: string | null
@@ -1457,6 +1516,42 @@ export type Database = {
             referencedColumns: ["user_id", "property_id"]
           },
         ]
+      }
+      spatial_refresh_log: {
+        Row: {
+          completed_at: string | null
+          duration_seconds: number | null
+          error_message: string | null
+          id: number
+          record_counts: Json | null
+          result: Json | null
+          started_at: string
+          success: boolean | null
+          triggered_by: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          duration_seconds?: number | null
+          error_message?: string | null
+          id?: number
+          record_counts?: Json | null
+          result?: Json | null
+          started_at?: string
+          success?: boolean | null
+          triggered_by?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          duration_seconds?: number | null
+          error_message?: string | null
+          id?: number
+          record_counts?: Json | null
+          result?: Json | null
+          started_at?: string
+          success?: boolean | null
+          triggered_by?: string | null
+        }
+        Relationships: []
       }
       street_list: {
         Row: {
@@ -1962,6 +2057,24 @@ export type Database = {
         Update: {
           role?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      x_project_area: {
+        Row: {
+          last_updated: string | null
+          ogc_fid: number
+          wkb_geometry: unknown
+        }
+        Insert: {
+          last_updated?: string | null
+          ogc_fid?: number
+          wkb_geometry?: unknown
+        }
+        Update: {
+          last_updated?: string | null
+          ogc_fid?: number
+          wkb_geometry?: unknown
         }
         Relationships: []
       }
@@ -4232,6 +4345,8 @@ export type Database = {
         Returns: undefined
       }
       custom_access_token_hook: { Args: { event: Json }; Returns: Json }
+      debug_jwt_claims: { Args: never; Returns: Json }
+      debug_user_access: { Args: never; Returns: Json }
       delete_claim_for_email_array: {
         Args: { claim: string; emails: string[] }
         Returns: string
@@ -4244,6 +4359,7 @@ export type Database = {
         Args: { p_feature_id: string; p_property_id: string; p_user_id: string }
         Returns: boolean
       }
+      dev_process_downloads: { Args: never; Returns: undefined }
       dev_process_kyng_areas: {
         Args: never
         Returns: {
@@ -4265,17 +4381,37 @@ export type Database = {
         Returns: string
       }
       extract_addresspoints: {
-        Args: { rings_geometry: string }
-        Returns: undefined
+        Args: {
+          initial_backoff?: number
+          max_retries?: number
+          rings_geometry: string
+        }
+        Returns: number
       }
+      extract_addresspoints_wgs1984: { Args: never; Returns: undefined }
       extract_properties: {
-        Args: { rings_geometry: string }
-        Returns: undefined
+        Args: {
+          initial_backoff?: number
+          max_retries?: number
+          rings_geometry: string
+        }
+        Returns: number
       }
-      extract_proways: { Args: { rings_geometry: string }; Returns: undefined }
+      extract_proways: {
+        Args: {
+          initial_backoff?: number
+          max_retries?: number
+          rings_geometry: string
+        }
+        Returns: number
+      }
       extract_waypoints: {
-        Args: { rings_geometry: string }
-        Returns: undefined
+        Args: {
+          initial_backoff?: number
+          max_retries?: number
+          rings_geometry: string
+        }
+        Returns: number
       }
       find_functions_with_string: {
         Args: { search_string: string }
@@ -4675,6 +4811,7 @@ export type Database = {
           workshop_choices: number[]
         }[]
       }
+      get_user_communities: { Args: never; Returns: string[] }
       get_user_external_events_data: {
         Args: never
         Returns: {
@@ -4709,6 +4846,7 @@ export type Database = {
           workshop_choices: number[]
         }[]
       }
+      get_user_kyng_area: { Args: never; Returns: string }
       get_user_mondrook_events_data: {
         Args: never
         Returns: {
@@ -4743,6 +4881,8 @@ export type Database = {
           workshop_choices: number[]
         }[]
       }
+      get_user_property_ids: { Args: never; Returns: string[] }
+      get_user_role: { Args: never; Returns: string }
       get_user_roles: {
         Args: never
         Returns: {
@@ -4846,6 +4986,12 @@ export type Database = {
           validaddresssuburb: string
         }[]
       }
+      has_all_permissions: { Args: { permissions: string[] }; Returns: boolean }
+      has_any_permission: { Args: { permissions: string[] }; Returns: boolean }
+      has_permission: {
+        Args: { required_permission: string }
+        Returns: boolean
+      }
       health_check: { Args: never; Returns: Json }
       insert_message: {
         Args: {
@@ -4855,6 +5001,8 @@ export type Database = {
         }
         Returns: number
       }
+      is_admin: { Args: never; Returns: boolean }
+      is_kyng_coordinator: { Args: never; Returns: boolean }
       jsonb_array_to_smallint_array: { Args: { _js: Json }; Returns: number[] }
       log_auth_failure:
         | {
@@ -4888,8 +5036,21 @@ export type Database = {
         Returns: Json
       }
       process_kyng_areas: { Args: never; Returns: undefined }
+      property_in_kyng_area: {
+        Args: { property_kyng_area: string }
+        Returns: boolean
+      }
       raise_log: { Args: { message: string }; Returns: undefined }
       read_secret: { Args: { secret_name: string }; Returns: string }
+      refresh_spatial_data: {
+        Args: {
+          initial_backoff?: number
+          max_retries?: number
+          p_regenerate_area?: boolean
+        }
+        Returns: Json
+      }
+      regenerate_project_area: { Args: never; Returns: Json }
       revoke_app_messages: { Args: { revoked_ids: string[] }; Returns: number }
       save_first_function: { Args: never; Returns: undefined }
       trim_address_suburb: { Args: { given_suburb: string }; Returns: string }
@@ -4929,6 +5090,8 @@ export type Database = {
         }
         Returns: string
       }
+      user_in_community: { Args: { community_slug: string }; Returns: boolean }
+      user_owns_property: { Args: { property_id: string }; Returns: boolean }
       validate_street_address: {
         Args: { input_address: string }
         Returns: string
@@ -5131,9 +5294,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       app_role: [

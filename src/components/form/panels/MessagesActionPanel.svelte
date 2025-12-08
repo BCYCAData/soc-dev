@@ -75,24 +75,34 @@
 			bind:selectedRows
 			bind:this={currentMessages}
 			downloadFileName="current_messages_report"
+			showDownloadButton={false}
 		/>
 	</div>
 
-	<div class="flex justify-end gap-4">
+	<div class="mt-4 flex justify-end gap-4">
 		<input type="hidden" name="revoke_ids" value={selectedIDs.join(',')} />
 
 		{#if successMessage}
-			<div class="mt-2 text-green-600">{successMessage}</div>
+			<div class="text-green-600">{successMessage}</div>
 		{/if}
 
 		{#if errorMessage}
-			<div class="mt-2 text-red-600">{errorMessage}</div>
+			<div class="text-red-600">{errorMessage}</div>
 		{/if}
+
+		<button
+			type="button"
+			class="bg-tertiary-400 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			disabled={isSelectionEmpty}
+			onclick={() => currentMessages?.downloadSelected()}
+		>
+			Download Selected
+		</button>
 
 		<button
 			type="submit"
 			formaction="?/revokeMessages"
-			class="mt-4 rounded-full bg-tertiary-400 px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			class="bg-tertiary-400 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			disabled={isSelectionEmpty}
 		>
 			Revoke Selected

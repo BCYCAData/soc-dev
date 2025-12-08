@@ -11,7 +11,7 @@
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
         "format": "prettier --write .",
         "lint": "prettier --check . && eslint .",
-        "update-db-types": "npx supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" > src/lib/db.types.ts",
+        "update-db-types": "npx --yes supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" > src/lib/db.types.ts",
         "vercel-build": "ls -la src/lib/server/pdf/fonts && vite build"
     },
     "devDependencies": {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { invalidate, beforeNavigate, afterNavigate } from '$app/navigation';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import { getLoading } from '$stores/loadingstore';
 
 	import Spinner from '$components/page/Spinner.svelte';
@@ -10,6 +10,7 @@
 	import '../app.css';
 
 	import type { LayoutData } from './$types';
+	import { initSession } from '$stores/auth';
 
 	interface Props {
 		data: LayoutData;
@@ -34,7 +35,6 @@
 			loadTimeout = null;
 		}
 	});
-	let { session, supabase } = data;
 
 	function initDarkMode() {
 		const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -49,20 +49,13 @@
 			prefersDarkScheme.removeEventListener('change', updateDarkMode);
 		};
 	}
+	$effect(() => {
+		// Update store when server data changes
+		initSession(data.session);
+	});
 
 	onMount(() => {
-		const darkModeCleanup = initDarkMode();
-
-		const { data: authData } = supabase.auth.onAuthStateChange((_: any, newSession: any) => {
-			if (newSession?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
-
-		return () => {
-			darkModeCleanup();
-			authData.subscription.unsubscribe();
-		};
+		return initDarkMode();
 	});
 </script>
 
