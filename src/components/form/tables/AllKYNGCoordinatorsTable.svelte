@@ -29,8 +29,10 @@
 	let table: Tabulator;
 	let tableElement: HTMLElement;
 
-	const allCoordinators = data.kyngCoordinators.filter(
-		(isKYNGCoordinator: KYNGCoordinator) => isKYNGCoordinator.kyng_area_id !== null
+	const allCoordinators = $derived(
+		data.kyngCoordinators.filter(
+			(isKYNGCoordinator: KYNGCoordinator) => isKYNGCoordinator.kyng_area_id !== null
+		)
 	);
 
 	onMount(() => {

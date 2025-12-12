@@ -37,7 +37,7 @@
 		<form class="pt-2" method="POST" use:enhance={handleSubmit}>
 			<SetEmail bind:email bind:validEmail />
 
-			{#if form?.error}
+			{#if form && !form.success}
 				<AuthErrorMessage errorMessage={form.message} />
 			{/if}
 

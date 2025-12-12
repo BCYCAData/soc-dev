@@ -3,6 +3,8 @@
 	import { invalidateAll } from '$app/navigation';
 	import { onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
+	import { toast } from '$stores/toaststore';
+	import Spinner from '$components/page/Spinner.svelte';
 	import { SelectionBoxControl } from '$lib/leaflet/leafletselectionboxcontrol';
 
 	import {
@@ -39,6 +41,7 @@
 	let updateStatus = $state('');
 	let hasConflict = $state(false);
 	let isTransitioning = $state(false);
+	let isSubmitting = $state(false);
 
 	let selectionBox = $state<SelectionBoxControl | null>(null);
 
@@ -86,25 +89,30 @@
 	}
 
 	const handleSubmit: SubmitFunction = () => {
+		isSubmitting = true;
 		cleanup();
 		return async ({ result }) => {
 			if (hasConflict) {
+				isSubmitting = false;
 				return;
 			}
 			if (result.type === 'success') {
-				setSuccessMessage(
-					`Successfully ${editingState.mode === 'create' ? 'created' : 'updated'} feature`
-				);
+				const action = editingState.mode === 'create' ? 'created' : 'updated';
+				setSuccessMessage(`Successfully ${action} feature`);
+				toast.success(`Attribute ${action} successfully`);
 				setEditingMode(null);
 				setActiveFeature(null);
 				await invalidateAll();
-			} else {
-				setErrorMessage(
-					result.type === 'failure'
-						? result.data?.message || 'Failed to save feature'
-						: 'Failed to save feature'
-				);
+			} else if (result.type === 'error') {
+				const action = editingState.mode === 'create' ? 'create' : 'update';
+				setErrorMessage('Failed to save feature');
+				toast.error(result.error?.message || `Failed to ${action} GeoJSON feature. Please try again.`);
+			} else if (result.type === 'failure') {
+				const action = editingState.mode === 'create' ? 'create' : 'update';
+				setErrorMessage(result.data?.message || 'Failed to save feature');
+				toast.error(result.data?.message || `Failed to ${action} GeoJSON feature. Please try again.`);
 			}
+			isSubmitting = false;
 		};
 	};
 	function getFieldComponent(type: string) {
@@ -289,10 +297,28 @@
 				Cancel
 			</button>
 			{#if editingState.mode === 'create' && feature?.geometryComplete && feature?.geom}
-				<button type="submit"> Create </button>
+				<button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+					{#if isSubmitting}
+						<span class="flex items-center gap-2">
+							<Spinner size="16" />
+							Creating...
+						</span>
+					{:else}
+						Create
+					{/if}
+				</button>
 			{/if}
 			{#if editingState.mode === 'edit' && feature}
-				<button type="submit"> Update </button>
+				<button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+					{#if isSubmitting}
+						<span class="flex items-center gap-2">
+							<Spinner size="16" />
+							Updating...
+						</span>
+					{:else}
+						Update
+					{/if}
+				</button>
 			{/if}
 		</div>
 	</form>
@@ -350,8 +376,12 @@
 		border-radius: 4px;
 		cursor: pointer;
 	}
-	button:hover {
+	button:hover:not(:disabled) {
 		background: #357abd;
+	}
+	button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 	.close-button {
 		background: none;
@@ -401,5 +431,14 @@
 		border-radius: 4px;
 		margin: 0.5rem 0;
 		line-height: 1.4;
+	}
+	.flex {
+		display: flex;
+	}
+	.items-center {
+		align-items: center;
+	}
+	.gap-2 {
+		gap: 0.5rem;
 	}
 </style>

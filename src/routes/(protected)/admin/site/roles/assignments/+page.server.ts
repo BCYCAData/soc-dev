@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { PageServerLoad, Actions } from './$types';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -47,7 +47,10 @@ export const actions: Actions = {
 		const formData = await request.formData();
 		const target_data = formData.get('target_data');
 		if (!target_data) {
-			throw error(400, 'Target data is missing');
+			return fail(400, {
+				success: false,
+				message: 'Target data is missing'
+			});
 		}
 		const user_id = JSON.parse(target_data as string)[0];
 		const role = formData.get('role');
@@ -56,10 +59,17 @@ export const actions: Actions = {
 
 		if (assignError) {
 			console.log('assignError', assignError);
-			throw error(400, assignError.details);
+			return fail(400, {
+				success: false,
+				message: 'Failed to assign role',
+				errors: { role: assignError.details }
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'Role assigned successfully'
+		};
 	},
 	removeRole: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_ROLES_ASSIGNMENTS)) {
@@ -71,10 +81,16 @@ export const actions: Actions = {
 		const { error: removeError } = await supabase.from('user_roles').delete().eq('id', roleId);
 
 		if (removeError) {
-			throw error(400, 'Failed to remove role');
+			return fail(400, {
+				success: false,
+				message: 'Failed to remove role'
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'Role removed successfully'
+		};
 	},
 	updatePermissions: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_ROLES_PERMISSIONS)) {
@@ -89,9 +105,15 @@ export const actions: Actions = {
 			.upsert({ role, permission: rolePermissions });
 
 		if (updateError) {
-			throw error(400, 'Failed to update permissions');
+			return fail(400, {
+				success: false,
+				message: 'Failed to update permissions'
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'Permissions updated successfully'
+		};
 	}
 };

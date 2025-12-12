@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
 	import { getLoading } from '$stores/loadingstore';
-
+	import Toasts from '$components/page/Toasts.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import Footer from '$components/page/Footer.svelte';
 	import Navbar from '$components/page/navigation/Navbar.svelte';
@@ -59,6 +59,7 @@
 	});
 </script>
 
+<Toasts />
 {#if showSpinner}
 	<div class="fixed inset-0 flex items-center justify-center">
 		<Spinner />

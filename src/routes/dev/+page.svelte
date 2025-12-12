@@ -19,8 +19,8 @@
 		data: PageData;
 	}
 
-	const { data }: Props = $props();
-	const { projectAddressPointData } = data;
+	let { data }: Props = $props();
+	let projectAddressPointData = $derived(data?.projectAddressPointData);
 
 	const baseLayers: BaseLayerConfig[] = [
 		{
@@ -45,7 +45,7 @@
 
 	let activeLayerId = $state('carto');
 
-	const centre: [number, number] = projectAddressPointData.centre as [number, number];
+	let centre = $derived(projectAddressPointData?.centre as [number, number]);
 
 	let overlays = $state<OverlayLayerConfig[]>([]);
 

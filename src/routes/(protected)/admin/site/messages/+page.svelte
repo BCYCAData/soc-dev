@@ -41,8 +41,6 @@
 	//@ts-ignore
 	let haveMessage = $state(false);
 	let selectedValues: string[] = $state([]);
-	let selectedIDs: string[] = $state([]);
-	let selectedRows: any[] = $state([]);
 	let isSelectionEmpty = $state(true);
 
 	// Derived values
@@ -71,16 +69,29 @@
 		}
 	});
 
+	// Component references with proper types
+	interface MessagesActionPanelComponent {
+		clearForm: () => void;
+		setSuccessMessage: (msg: string) => void;
+		setErrorMessage: (msg: string) => void;
+	}
+
 	let individualUsersPanel: any = $state(null);
 	let allUsersPanel: any = $state(null);
-	let currentMessages = $state();
-	let revokedMessages = $state();
+	let currentMessages: MessagesActionPanelComponent | null = $state(null);
+	let revokedMessages: any | null = $state(null);
+	let revokedSelectedIDs = $state([]);
+	let revokedSelectedRows = $state([]);
 
 	const handleSubmit: SubmitFunction = () => {
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				individualUsersPanel?.clearForm();
 				allUsersPanel?.clearForm();
+				// Reset isSending state in panels
+				if (individualUsersPanel) individualUsersPanel.isSending = false;
+				if (allUsersPanel) allUsersPanel.isSending = false;
+
 				if (result.data?.message) {
 					individualUsersPanel?.setSuccessMessage(result.data.message);
 					allUsersPanel?.setSuccessMessage(result.data.message);
@@ -91,6 +102,10 @@
 				await invalidateAll();
 				await update();
 			} else if (result.type === 'failure') {
+				// Reset isSending state in panels
+				if (individualUsersPanel) individualUsersPanel.isSending = false;
+				if (allUsersPanel) allUsersPanel.isSending = false;
+
 				if (result.data?.message) {
 					individualUsersPanel?.setErrorMessage(result.data.message);
 					allUsersPanel?.setErrorMessage(result.data.message);
@@ -201,8 +216,8 @@
 				{appMessagesColumns}
 				appMessagesData={revokedMessagesData}
 				bind:isSelectionEmpty
-				bind:selectedIDs
-				bind:selectedRows
+				bind:selectedIDs={revokedSelectedIDs}
+				bind:selectedRows={revokedSelectedRows}
 				bind:this={revokedMessages}
 			/>
 		</Tabs.Panel>

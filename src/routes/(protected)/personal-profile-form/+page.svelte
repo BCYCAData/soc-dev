@@ -136,7 +136,7 @@
 			<ProgressBar {steps} bind:currentActive bind:this={progressBar} onStepClick={skipTo} />
 			<div class="mt-1 text-center">
 				<button
-					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-5 py-1.5 text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
 					onclick={() => handleProgress(-1)}
 					disabled={currentActive === 1}
 				>
@@ -146,7 +146,7 @@
 					<span>Prev</span>
 				</button>
 				<button
-					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-[20px] py-[6px] text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-5 py-1.5 text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
 					onclick={() => handleProgress(1)}
 					hidden={currentActive === steps?.length}
 				>

@@ -17,10 +17,10 @@
 	let { form }: Props = $props();
 
 	let unsaved = $state(false);
-	let formError = $state(form?.error || false);
-	let formErrorMessage = $state(form?.errorMessage || '');
-	let formSuccess = $state(form?.success || false);
-
+	let isSubmitting = $state(false);
+	let formError = $derived(form?.error || false);
+	let formErrorMessage = $derived(form?.errorMessage || '');
+	let formSuccess = $derived(form?.success || false);
 	const propertyId = page.params.propertyid;
 	const currentProperty = $state(
 		page.data.userProfile.property_profile.find(
@@ -166,5 +166,5 @@
 		bind:inputValue={other_essential_assets}
 	/>
 	<input type="hidden" name="property_key" value={currentProperty.id} />
-	<FormActions onReset={handleReset} isUnsaved={unsaved} />
+	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>

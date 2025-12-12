@@ -11,13 +11,14 @@ export const actions: Actions = {
 
 		if (error) {
 			return fail(400, {
-				error: true,
+				success: false,
 				message: error.message
 			});
 		}
 
 		return {
-			success: true
+			success: true,
+			message: 'Email change confirmation sent successfully'
 		};
 	}
 };

@@ -1,5 +1,5 @@
 import type { PolygonStyle } from '../schemas/layer-config.types';
-import { interpolateColor, getColorFromPalette } from '$lib/map/layers/styles/index';
+import { interpolateColor } from '$lib/map/layers/styles/index';
 
 /**
  * Choropleth styling functions for data-driven color mapping

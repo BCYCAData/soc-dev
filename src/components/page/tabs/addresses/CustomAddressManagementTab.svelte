@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-
+	import Spinner from '$components/page/Spinner.svelte';
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import CustomAddressesTable from '$components/form/tables/CustomAddressesTable.svelte';
 	import CustomAddressValidationForm from '$components/form/custom-addresses/CustomAddressValidationForm.svelte';
@@ -12,6 +12,7 @@
 	import { admimHelpMessages } from '$lib/constants';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
+	import { toast } from '$stores/toaststore';
 
 	const { searhAddressHelp, validatedAddressHelp, gnafAddressHelp } =
 		admimHelpMessages.site.data.addresses;
@@ -26,6 +27,7 @@
 	let validatedData = $state<any>(null);
 	let formMessage = $state('');
 	let formStatus = $state<'success' | 'error' | ''>('');
+	let isSubmitting = $state(false);
 	let validatedAddress = $derived(
 		validatedData
 			? {
@@ -57,22 +59,31 @@
 		validatedData = data;
 	}
 	const handleSubmit: SubmitFunction = () => {
+		isSubmitting = true;
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				const data = result.data;
 				if (data?.success) {
 					formStatus = 'success';
 					formMessage = 'Address successfully added';
+					toast.success('Custom address added successfully');
 					validatedData = null;
 					await invalidateAll();
 				} else {
 					formStatus = 'error';
 					formMessage = data?.message || 'Failed to add address';
+					toast.error(data?.message || 'Failed to add address. Please try again.');
 				}
-			} else {
+			} else if (result.type === 'error') {
 				formStatus = 'error';
 				formMessage = 'An unexpected error occurred';
+				toast.error(result.error?.message || 'Failed to add address. Please try again.');
+			} else if (result.type === 'failure') {
+				formStatus = 'error';
+				formMessage = result.data?.message || 'Failed to add address';
+				toast.error(result.data?.message || 'Failed to add address. Please try again.');
 			}
+			isSubmitting = false;
 		};
 	};
 </script>
@@ -234,9 +245,18 @@
 								{:else}
 									<button
 										type="submit"
-										class="rounded-md border border-transparent bg-tertiary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2 sm:text-sm"
+										class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+										disabled={isSubmitting}
+										aria-busy={isSubmitting}
 									>
-										Add Validated Address
+										{#if isSubmitting}
+											<span class="flex items-center gap-2">
+												<Spinner size="16" />
+												Adding...
+											</span>
+										{:else}
+											Add Validated Address
+										{/if}
 									</button>
 								{/if}
 							</form>

@@ -9,8 +9,8 @@
 
 	let { userProfile }: Props = $props();
 
-	// Create reactive state for the form data
-	let formData = $state({
+	// Create reactive derived state for the form data
+	let formData = $derived({
 		residency_profile: userProfile.residency_profile,
 		property_profile: {
 			mobile_reception: userProfile.property_profile.mobile_reception,
@@ -21,23 +21,14 @@
 			vulnerable_residents: userProfile.property_profile.vulnerable_residents
 		}
 	});
-
-	// Sync formData back to parent
-	$effect(() => {
-		userProfile.residency_profile = formData.residency_profile;
-		userProfile.property_profile = {
-			...userProfile.property_profile,
-			...formData.property_profile
-		};
-	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	What is the quality of your mobile reception at the property?
 </h2>
-<div class="rounded-lg bg-secondary-200 p-1">
+<div class="bg-secondary-200 rounded-lg p-1">
 	<ul class="text-scale-3 my-0 flex list-none items-center sm:mx-auto sm:w-1/2">
-		<div class="flex-auto font-semibold text-primary-700">Poor</div>
+		<div class="text-primary-700 flex-auto font-semibold">Poor</div>
 		{#each Array(5) as _, i}
 			<li class="flex-auto">
 				<input
@@ -47,17 +38,17 @@
 					bind:group={formData.property_profile.mobile_reception}
 					value={i + 1}
 				/>
-				<label class="ml-1 inline-block text-primary-700" for="mobile_reception">
+				<label class="text-primary-700 ml-1 inline-block" for="mobile_reception">
 					{i + 1}
 				</label>
 			</li>
 		{/each}
-		<div class="flex-auto font-semibold text-primary-700">Excellent</div>
+		<div class="text-primary-700 flex-auto font-semibold">Excellent</div>
 	</ul>
 </div>
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">Are you:</h2>
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Are you:</h2>
 <div
-	class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 >
 	{#each residencyOptions as { value, lable }}
 		<div class="col-span-1 flex items-center">
@@ -76,10 +67,10 @@
 		</div>
 	{/each}
 </div>
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Please record the number of people who usually live at this property:
 </h2>
-<div class="rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 rounded-lg p-2">
 	<ul class="sm:text-scale-5 my-0 flex list-none justify-around pl-0">
 		<NumberInput
 			name="residents0_18"
@@ -112,10 +103,10 @@
 	</ul>
 </div>
 <div>
-	<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 		Do you consider any person on the property to be vulnerable?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 		{#each yesNoOptions as { value, lable }}
 			<div class="flex items-center">
 				<input

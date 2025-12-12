@@ -11,7 +11,7 @@
 	}
 
 	let { data }: Props = $props();
-	let externalWorkshopsData = data?.externalWorkshopsData;
+	let externalWorkshopsData = $derived(data?.externalWorkshopsData);
 
 	let externalWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },

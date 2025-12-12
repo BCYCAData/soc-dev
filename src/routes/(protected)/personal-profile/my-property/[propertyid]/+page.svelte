@@ -20,9 +20,10 @@
 	let { form }: Props = $props();
 
 	let unsaved = $state(false);
-	let formError = $state(form?.error || false);
-	let formErrorMessage = $state(form?.errorMessage || '');
-	let formSuccess = $state(form?.success || false);
+	let isSubmitting = $state(false);
+	let formError = $derived(form?.error || false);
+	let formErrorMessage = $derived(form?.errorMessage || '');
+	let formSuccess = $derived(form?.success || false);
 
 	const propertyId = page.params.propertyid;
 
@@ -97,7 +98,7 @@
 			<input
 				type="text"
 				name="property_address_street"
-				class="col-span-6 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+				class="focus:border-primary-600 focus:ring-primary-600 col-span-6 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 				placeholder="Street Address"
 				disabled
 				bind:value={currentProperty.property_address_street}
@@ -105,7 +106,7 @@
 			<input
 				type="text"
 				name="property_address_suburb"
-				class="col-span-3 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+				class="focus:border-primary-600 focus:ring-primary-600 col-span-3 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 				placeholder="SUBURB"
 				autocomplete="address-level2"
 				use:setUpperCase
@@ -116,7 +117,7 @@
 			<input
 				type="text"
 				name="property_address_postcode"
-				class="col-span-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+				class="focus:border-primary-600 focus:ring-primary-600 col-span-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 				placeholder="Postcode"
 				autocomplete="postal-code"
 				disabled
@@ -137,7 +138,7 @@
 								bind:group={currentProperty.property_rented}
 								{value}
 							/>
-							<label class="ml-2 text-base font-medium text-primary-900" for="property_rented"
+							<label class="text-primary-900 ml-2 text-base font-medium" for="property_rented"
 								>{lable}</label
 							>
 						</div>
@@ -151,7 +152,7 @@
 								bind:group={currentProperty.property_rented}
 								{value}
 							/>
-							<label class="ml-2 text-base font-medium text-primary-900" for="property_rented"
+							<label class="text-primary-900 ml-2 text-base font-medium" for="property_rented"
 								>{lable}</label
 							>
 						</div>
@@ -161,13 +162,13 @@
 			<div class="mt-4 grid grid-cols-11 gap-2">
 				<div class="col-span-5 flex flex-col">
 					<label
-						class="flex-initial px-3 text-base text-primary-900"
+						class="text-primary-900 flex-initial px-3 text-base"
 						for="agent_name"
 						hidden={!currentProperty.property_rented}>Agent</label
 					>
 					<input
 						type="text"
-						class="rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 						id="agent_name"
 						name="agent_name"
 						autocomplete="off"
@@ -177,13 +178,13 @@
 				</div>
 				<div class="col-span-3 flex flex-col">
 					<label
-						class="flex-initial px-3 text-base text-primary-900"
+						class="text-primary-900 flex-initial px-3 text-base"
 						for="agent_mobile"
 						hidden={!currentProperty.property_rented}>Mobile</label
 					>
 					<input
 						type="text"
-						class="rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 						id="agent_mobile"
 						name="agent_mobile"
 						hidden={!currentProperty.property_rented}
@@ -205,13 +206,13 @@
 				</div>
 				<div class="col-span-3 flex flex-col">
 					<label
-						class="flex-initial px-3 text-base text-primary-900"
+						class="text-primary-900 flex-initial px-3 text-base"
 						for="agent_phone"
 						hidden={!currentProperty.property_rented}>Landline</label
 					>
 					<input
 						type="text"
-						class="rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 						id="agent_phone"
 						name="agent_phone"
 						hidden={!currentProperty.property_rented}
@@ -358,7 +359,7 @@
 					}}
 					type="tel"
 					name="phone"
-					class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+					class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 					placeholder="Landline XXXX XXXX"
 					onkeydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -381,7 +382,7 @@
 			</h2>
 			<div class="ml-4 rounded-lg bg-orange-300 p-1">
 				<div class="my-0 flex list-none items-center text-base sm:mx-auto sm:w-full">
-					<div class="mx-4 flex-auto font-semibold text-primary-900">Poor</div>
+					<div class="text-primary-900 mx-4 flex-auto font-semibold">Poor</div>
 					{#each Array(5) as _, i}
 						<li class="mx-3 flex-auto">
 							<input
@@ -391,17 +392,17 @@
 								bind:group={currentProperty.mobile_reception}
 								value={i + 1}
 							/>
-							<label class="ml-1 inline-block text-primary-900" for="mobile_reception">
+							<label class="text-primary-900 ml-1 inline-block" for="mobile_reception">
 								{i + 1}
 							</label>
 						</li>
 					{/each}
-					<div class="mx-4 flex-auto font-semibold text-primary-900">Excellent</div>
+					<div class="text-primary-900 mx-4 flex-auto font-semibold">Excellent</div>
 				</div>
 			</div>
 		</div>
 		<input type="hidden" name="property_key" value={currentProperty.id} />
 		<input type="hidden" name="property_was_rented" bind:value={$propertyWasRented} />
-		<FormActions onReset={handleReset} isUnsaved={unsaved} />
+		<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 	</form>
 </section>

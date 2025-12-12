@@ -52,14 +52,14 @@
 	let layersControl = $state<L.Control.Layers>();
 	let layersStore: Writable<Record<string, LayerInfo>>;
 
-	const defaultLegendInfo: LegendInfo = {
+	const getDefaultLegendInfo = (): LegendInfo => ({
 		items: [
 			{
 				symbol: '#000000',
 				description: name
 			}
 		]
-	};
+	});
 
 	let offset = 0;
 	const pageSize = 100;
@@ -235,7 +235,7 @@
 				visible,
 				editable: false,
 				showInLegend: true,
-				legendInfo: defaultLegendInfo
+				legendInfo: getDefaultLegendInfo()
 			}
 		}));
 	});

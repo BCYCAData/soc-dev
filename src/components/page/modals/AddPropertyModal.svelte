@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
+	import { toast } from '$stores/toaststore';
 	import Spinner from '$components/page/Spinner.svelte';
 	import AddressInput from '$components/form/auth/AddressInput.svelte';
 	import ValidationMessage from '$components/form/auth/ValidationMessage.svelte';
@@ -49,14 +50,18 @@
 				error = null;
 				if (responseData.status === 200) {
 					step = 'add';
+					toast.success('Address validated successfully');
 				} else if (responseData.status === 403) {
 					error = 'Unfortunately we could not find this address.';
+					toast.error('Address not found. Please check and try again.');
 				} else if (responseData.status === 404) {
 					error =
 						'Unfortunately this address is not part of any of the communities we are engaging with at the moment.';
+					toast.warning('Address is not part of our service communities');
 				}
 			} else {
 				successMessage = 'Property added successfully!';
+				toast.success('Property added successfully');
 				await invalidateAll();
 				await goto('/personal-profile/my-property', { invalidateAll: true });
 				setTimeout(() => {
@@ -65,6 +70,7 @@
 			}
 		} else if ('error' in result) {
 			error = String(result.error);
+			toast.error('Failed to add property. Please check the form and try again.');
 			validationData = null;
 		}
 	}
@@ -189,11 +195,19 @@
 					Cancel
 				</button>
 				<button
-					class="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none"
+					class="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 					type="submit"
-					disabled={!canGo}
+					disabled={!canGo || loading}
+					aria-busy={loading}
 				>
-					{step === 'validate' ? 'Validate Address' : 'Add Property'}
+					{#if loading}
+						<span class="flex items-center gap-2">
+							<Spinner size="16" />
+							{step === 'validate' ? 'Validating...' : 'Adding...'}
+						</span>
+					{:else}
+						{step === 'validate' ? 'Validate Address' : 'Add Property'}
+					{/if}
 				</button>
 			</div>
 		</form>

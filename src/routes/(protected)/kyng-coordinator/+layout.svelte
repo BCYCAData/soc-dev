@@ -20,8 +20,8 @@
 	let { data, children }: Props = $props();
 
 	// let { kyngMessages, coordinatesKYNG } = data;
-	let { coordinatesKYNG } = data;
-	const safeCoordinatesKYNG = coordinatesKYNG ?? ([] as KYNGArea[]);
+	const coordinatesKYNG = $derived(data.coordinatesKYNG);
+	const safeCoordinatesKYNG = $derived(coordinatesKYNG ?? ([] as KYNGArea[]));
 
 	let isSidebarCollapsed = $state(
 		browser ? localStorage.getItem('sidebarCollapsed') === 'true' : false

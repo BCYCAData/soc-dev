@@ -54,7 +54,8 @@ export const actions: Actions = {
 					table: 'signin_errors'
 				});
 				return fail(400, {
-					error: 'Email and password are required'
+					success: false,
+				message: 'Email and password are required'
 				});
 			}
 
@@ -78,7 +79,8 @@ export const actions: Actions = {
 							table: 'signin_errors'
 						});
 						return fail(400, {
-							error: 'Invalid credentials'
+							success: false,
+				message: 'Invalid credentials'
 						});
 					} else if (signInError.status === 429) {
 						console;
@@ -93,7 +95,8 @@ export const actions: Actions = {
 							table: 'signin_errors'
 						});
 						return fail(429, {
-							error: 'Too many requests. Please try again later.'
+							success: false,
+				message: 'Too many requests. Please try again later.'
 						});
 					}
 				}
@@ -109,7 +112,8 @@ export const actions: Actions = {
 					table: 'signin_errors'
 				});
 				return fail(500, {
-					error: 'An unexpected error occurred. Please try again.'
+					success: false,
+				message: 'An unexpected error occurred. Please try again.'
 				});
 			}
 
@@ -126,7 +130,8 @@ export const actions: Actions = {
 					table: 'signin_errors'
 				});
 				return fail(500, {
-					error: 'Failed to establish session. Please try again.'
+					success: false,
+				message: 'Failed to establish session. Please try again.'
 				});
 			}
 		} catch (error) {
@@ -143,7 +148,8 @@ export const actions: Actions = {
 				table: 'signin_errors'
 			});
 			return fail(500, {
-				error: 'An unexpected error occurred. Please try again.'
+				success: false,
+				message: 'An unexpected error occurred. Please try again.'
 			});
 		}
 		throw redirect(303, '/personal-profile');

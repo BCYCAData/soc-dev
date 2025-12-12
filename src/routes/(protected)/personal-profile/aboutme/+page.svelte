@@ -23,9 +23,10 @@
 	let { data = $bindable(), form }: Props = $props();
 
 	let unsaved = $state(false);
-	let formError = $state(form?.error || false);
-	let formErrorMessage = $state(form?.errorMessage || '');
-	let formSuccess = $state(form?.success || false);
+	let formError = $derived(form?.success === false);
+	let formErrorMessage = $derived(form?.message || '');
+	let formSuccess = $derived(form?.success || false);
+	let isSubmitting = $state(false);
 
 	let family_name = $state(data.userProfile.family_name);
 	//@ts-ignore
@@ -83,7 +84,7 @@
 				type="text"
 				id="first_name"
 				name="first_name"
-				class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+				class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 				autocomplete="given-name"
 				style="text-transform:capitalize"
 				placeholder="First Name "
@@ -95,7 +96,7 @@
 				id="family_name"
 				name="family_name"
 				autocomplete="off"
-				class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+				class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 				style="text-transform:capitalize"
 				placeholder="Family Name"
 				use:setTitleCase
@@ -131,7 +132,7 @@
 					}}
 					type="tel"
 					name="mobile"
-					class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900 focus:border-primary-600 focus:ring-primary-600"
+					class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
 					placeholder="Mobile 0XXX XXX XXX"
 					onkeydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -252,7 +253,7 @@
 					>
 				</div>
 			{/each}
+			<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 		</div>
-		<FormActions onReset={handleReset} isUnsaved={unsaved} />
 	</form>
 </section>

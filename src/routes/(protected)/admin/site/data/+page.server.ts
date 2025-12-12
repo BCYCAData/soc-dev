@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { hasAnyPermission } from '$lib/server/permissions';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -39,7 +39,18 @@ export const actions: Actions = {
 			.insert(template)
 			.select();
 
-		return { success: !insertError, template: data?.[0] };
+		if (insertError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to create template'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template created successfully',
+			data: data?.[0]
+		};
 	},
 
 	updateTemplate: async ({ request, locals: { supabase } }) => {
@@ -59,7 +70,18 @@ export const actions: Actions = {
 			.eq('id', templateId)
 			.select();
 
-		return { success: !updateError, template: data?.[0] };
+		if (updateError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to update template'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template updated successfully',
+			data: data?.[0]
+		};
 	},
 
 	manageFields: async ({ request, locals: { supabase } }) => {
@@ -74,6 +96,16 @@ export const actions: Actions = {
 			}))
 		);
 
-		return { success: !fieldsError };
+		if (fieldsError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to manage template fields'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template fields updated successfully'
+		};
 	}
 };

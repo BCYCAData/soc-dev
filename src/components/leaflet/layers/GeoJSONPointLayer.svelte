@@ -32,7 +32,7 @@
 	let layer = $state<GeoJSON | null>(null);
 
 	// Default point style
-	const defaultStyle: CircleMarkerOptions = {
+	const defaultStyle: CircleMarkerOptions = $derived({
 		radius: 6,
 		fillColor: '#3388ff',
 		fillOpacity: 0.7,
@@ -40,7 +40,7 @@
 		weight: 2,
 		opacity: 1,
 		...style
-	};
+	});
 
 	// Create GeoJSON options with point-to-layer styling
 	const geoJsonOptions: GeoJSONOptions = {

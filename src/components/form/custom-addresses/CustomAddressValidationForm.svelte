@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { toast } from '$stores/toaststore';
+	import Spinner from '$components/page/Spinner.svelte';
 
 	interface Props {
 		onValidatedAddress: (validatedData: any) => void;
@@ -24,19 +26,23 @@
 
 			if (data.found_in_custom) {
 				successMessage = 'Address found in custom addresses';
+				toast.info('Address found in custom addresses');
 				validationResult = null;
 			} else if (data.found_in_project) {
 				successMessage = 'Address found in project addresses';
+				toast.info('Address found in project addresses');
 				validationResult = null;
 			} else {
 				validationResult = result.data.validatedAddressData;
 				successMessage = '';
+				toast.success('Address validated successfully');
 			}
 
 			onValidatedAddress(result.data.validatedAddressData);
 			error = '';
 		} else {
 			error = result.data.message || 'Validation failed';
+			toast.error(result.data.message || 'Failed to validate address. Please try again.');
 			validationResult = null;
 			successMessage = '';
 		}
@@ -46,7 +52,7 @@
 <form
 	method="POST"
 	action="?/validateAddress"
-	use:enhance={({ formElement, formData, action, cancel }) => {
+	use:enhance={() => {
 		isLoading = true;
 		error = '';
 		successMessage = '';
@@ -86,11 +92,15 @@
 
 		<button
 			type="submit"
-			class="rounded-md border border-transparent bg-tertiary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2 sm:text-sm"
+			class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
 			disabled={isLoading}
+			aria-busy={isLoading}
 		>
 			{#if isLoading}
-				Validating...
+				<span class="flex items-center gap-2">
+					<Spinner size="16" />
+					Validating...
+				</span>
 			{:else}
 				Validate Address
 			{/if}
@@ -98,13 +108,13 @@
 	</div>
 
 	{#if error}
-		<div class="mt-1 rounded bg-error-500/20 p-2 text-error-800">
+		<div class="bg-error-500/20 text-error-800 mt-1 rounded p-2">
 			{error}
 		</div>
 	{/if}
 
 	{#if successMessage}
-		<div class="mt-1 rounded bg-success-500/20 p-2 text-success-800">
+		<div class="bg-success-500/20 text-success-800 mt-1 rounded p-2">
 			{successMessage}
 		</div>
 	{/if}

@@ -9,10 +9,18 @@ export const handle = async ({ event, resolve }) => {
 	// 1. Create Supabase client for SSR
 	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		cookies: {
-			getAll: () => event.cookies.getAll(),
-			setAll: (cookiesToSet) =>
-				cookiesToSet.forEach(({ name, value, options }) =>
-					event.cookies.set(name, value, { ...options, path: '/' })
+			getAll: (): { name: string; value: string }[] => event.cookies.getAll(),
+			setAll: (cookiesToSet: { name: string; value: string; options: Record<string, any> }[]) =>
+				cookiesToSet.forEach(
+					({
+						name,
+						value,
+						options
+					}: {
+						name: string;
+						value: string;
+						options: Record<string, any>;
+					}) => event.cookies.set(name, value, { ...options, path: '/' })
 				)
 		}
 	});

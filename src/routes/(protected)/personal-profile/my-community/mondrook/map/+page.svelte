@@ -15,12 +15,10 @@
 
 	let { data }: Props = $props();
 
-	const { community, mapExtent, addressPoints, registeredPoints } = data;
-
-	const initialExtent = mapExtent;
-	const mondrookAddressPoints = addressPoints;
-	const mondrookRegisteredPoints = registeredPoints;
-	const mondrookCommunityArea = community;
+	const initialExtent = $derived(data.mapExtent);
+	const mondrookAddressPoints = $derived(data.addressPoints);
+	const mondrookRegisteredPoints = $derived(data.registeredPoints);
+	const mondrookCommunityArea = $derived(data.community);
 
 	let mapLoaded = $state(false);
 
@@ -84,7 +82,7 @@
 	</div>
 {:else}
 	<div class="main-map mx-auto flex h-full w-5/6 flex-col">
-		<p class="mt-4 text-center text-surface-500">Bugger!</p>
+		<p class="text-surface-500 mt-4 text-center">Bugger!</p>
 	</div>
 {/if}
 

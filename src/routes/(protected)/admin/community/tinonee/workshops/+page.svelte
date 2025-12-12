@@ -11,7 +11,7 @@
 	}
 
 	let { data }: Props = $props();
-	let tinoneeWorkshopsData = data?.tinoneeWorkshopsData;
+	let tinoneeWorkshopsData = $derived(data?.tinoneeWorkshopsData);
 
 	let tinoneeWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },

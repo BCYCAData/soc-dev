@@ -66,12 +66,13 @@
 		);
 	}
 
-	const communityProfileId =
+	const communityProfileId = $derived(
 		userProfile.community_bcyca_profile?.bcyca_profile_id ||
-		userProfile.community_tinonee_profile?.tinonee_profile_id ||
-		userProfile.community_mondrook_profile?.mondrook_profile_id ||
-		userProfile.community_external_profile?.external_profile_id ||
-		'';
+			userProfile.community_tinonee_profile?.tinonee_profile_id ||
+			userProfile.community_mondrook_profile?.mondrook_profile_id ||
+			userProfile.community_external_profile?.external_profile_id ||
+			''
+	);
 
 	const communityBCYCAWorkshopOptions = extractOptionsData(
 		COMMUNITY_TYPES.BCYCA,
@@ -145,10 +146,12 @@
 		'stayInTouchOptions'
 	);
 
-	const userProfileStayInTouchOptionsData = optionsData?.userOptionsData?.object_names.find(
-		(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+	const userProfileStayInTouchOptionsData = $derived(
+		optionsData?.userOptionsData?.object_names.find(
+			(item: { object_name: string }) => item.object_name === 'stayInTouchOptions'
+		)
 	);
-	const userProfileStayInTouchOptions = userProfileStayInTouchOptionsData?.options;
+	const userProfileStayInTouchOptions = $derived(userProfileStayInTouchOptionsData?.options);
 
 	const handleSubmit: SubmitFunction = () => {
 		isLoading = true;
@@ -198,7 +201,7 @@
 	>
 		Please complete all steps and tap
 		<span
-			class="text-scale-3 rounded-lg border border-purple-700 bg-[#0099E8] p-1 font-semibold text-secondary-50"
+			class="text-scale-3 text-secondary-50 rounded-lg border border-purple-700 bg-[#0099E8] p-1 font-semibold"
 		>
 			Save My Answers
 		</span>
@@ -327,7 +330,7 @@
 
 		<div class="sm:text-scale-5 flex flex-col items-center justify-center">
 			<button
-				class="text-scale-3 mx-3 mb-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] font-semibold text-secondary-50"
+				class="text-scale-3 text-secondary-50 mx-3 mb-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] font-semibold"
 				hidden={active_step != steps.length}
 				type="submit"
 				form="personalProfileForm"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
+	import Spinner from '$components/page/Spinner.svelte';
 	import type { ActionData } from './$types';
 
 	interface Props {
@@ -8,8 +9,9 @@
 	let { form }: Props = $props();
 	let email = $state();
 	let password = $state();
-	let errorMessage = form?.error ?? '';
+	let errorMessage = $derived(form?.message ?? '');
 	let showPassword = $state(false);
+	let isSubmitting = $state(false);
 </script>
 
 <svelte:head>
@@ -60,9 +62,15 @@
 			{/if}
 			<button
 				type="submit"
+				disabled={isSubmitting}
+  				aria-busy={isSubmitting}
 				class="text-scale-6 w-full rounded-full bg-secondary-500 py-2 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none"
 			>
+			{#if isSubmitting}
+				<Spinner size="sm" /> Signing in...
+			{:else}
 				Sign In
+			{/if}
 			</button>
 		</form>
 	</div>

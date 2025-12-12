@@ -11,7 +11,7 @@
 	}
 
 	let { data }: Props = $props();
-	let bcycaWorkshopsData = data?.bcycaWorkshopsData;
+	let bcycaWorkshopsData = $derived(data?.bcycaWorkshopsData);
 
 	let bcycaWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },

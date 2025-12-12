@@ -40,7 +40,7 @@
 	});
 
 	let { data }: Props = $props();
-	const kyngGeoJsonData = data.kyngGeoJsonData;
+	const kyngGeoJsonData = $derived(data.kyngGeoJsonData);
 
 	let existingColors: Color[] = [];
 

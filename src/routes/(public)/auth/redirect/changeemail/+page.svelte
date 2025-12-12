@@ -42,7 +42,7 @@
 				<div class="mt-4">
 					<AuthSuccessMessage message={successMessage} />
 				</div>
-			{:else if form?.error}
+			{:else if form && !form.success}
 				<div class="mt-4">
 					<AuthErrorMessage {errorMessage} />
 				</div>

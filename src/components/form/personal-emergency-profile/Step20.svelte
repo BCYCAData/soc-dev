@@ -11,7 +11,7 @@
 
 	let { userProfile, communityName = '', userProfileStayInTouchOptions = [] }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		stay_in_touch_choices: userProfile.stay_in_touch_choices ?? [],
 		other_comments: userProfile.other_comments ?? '',
 		user_postal_address: {
@@ -21,30 +21,29 @@
 		}
 	});
 
-	let postalChecked = $state(formState.stay_in_touch_choices.includes(5));
-	let postalWasChecked = $state(formState.stay_in_touch_choices.includes(5));
+	let postalChecked = $derived(formState.stay_in_touch_choices.includes(5));
+	let postalWasChecked = $derived(formState.stay_in_touch_choices.includes(5));
 
 	$effect(() => {
 		userProfile.stay_in_touch_choices = formState.stay_in_touch_choices;
 		userProfile.other_comments = formState.other_comments;
 		userProfile.user_postal_address = formState.user_postal_address;
-		postalChecked = formState.stay_in_touch_choices.includes(5);
 	});
 </script>
 
-<h2 class="h2 mb-1 mt-2 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mt-2 mb-1 text-lg font-semibold">
 	How would you prefer to stay in touch with the <span class="text-orange-600"
 		>Strengthen OUR Community</span
 	>
 	project team? <br />
-	<span class="text-scale-3 ml-2 text-surface-500"> (Check all that apply) </span>
-	<span class="text-scale-3 ml-2 italic text-surface-500"
+	<span class="text-scale-3 text-surface-500 ml-2"> (Check all that apply) </span>
+	<span class="text-scale-3 text-surface-500 ml-2 italic"
 		>(These options will also be used in your {communityName} Community profile. You can change them
 		later if needed.)</span
 	>
 </h2>
 <div
-	class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
 	{#each userProfileStayInTouchOptions as { value, lable }}
 		<div class="col-span-1 flex items-center">
@@ -66,15 +65,15 @@
 	{/each}
 </div>
 <input type="text" name="postal_was_checked" value={postalWasChecked} hidden />
-<h2 hidden={!postalChecked} class="text-scale-6 mb-1 font-semibold text-surface-950">
+<h2 hidden={!postalChecked} class="text-scale-6 text-surface-950 mb-1 font-semibold">
 	Please enter your postal address:
 </h2>
-<div hidden={!postalChecked} class="rounded-lg bg-secondary-200 p-2">
+<div hidden={!postalChecked} class="bg-secondary-200 rounded-lg p-2">
 	<div class="grid gap-0 sm:grid-cols-12">
 		<div class="flex items-center">
 			<label
 				hidden={!postalChecked}
-				class="px-3 text-lg font-semibold text-primary-700"
+				class="text-primary-700 px-3 text-lg font-semibold"
 				for="postal_address_street">ADDRESS</label
 			>
 		</div>
@@ -84,7 +83,7 @@
 				type="text"
 				id="postal_address_street"
 				name="postal_address_street"
-				class="text-scale-5 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-surface-950 focus:border-primary-600 focus:ring-primary-600"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
 				placeholder="STREET ADDRESS"
 				autocomplete="street-address"
 				use:setUpperCase
@@ -94,12 +93,12 @@
 		</div>
 	</div>
 
-	<div class="rounded-lg bg-secondary-200 p-2">
+	<div class="bg-secondary-200 rounded-lg p-2">
 		<div class="grid gap-0 sm:grid-cols-12">
 			<div class="flex items-center">
 				<label
 					hidden={!postalChecked}
-					class="px-3 pl-2 text-lg font-semibold text-primary-700"
+					class="text-primary-700 px-3 pl-2 text-lg font-semibold"
 					for="property_address_suburb">SUBURB</label
 				>
 			</div>
@@ -109,7 +108,7 @@
 					type="text"
 					id="postal_address_suburb"
 					name="postal_address_suburb"
-					class="text-scale-5 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-surface-950 focus:border-primary-600 focus:ring-primary-600"
+					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
 					placeholder="SUBURB"
 					autocomplete="address-level2"
 					use:setUpperCase
@@ -120,7 +119,7 @@
 			<div class="col-span-2 flex items-center">
 				<label
 					hidden={!postalChecked}
-					class="px-3 text-lg font-semibold text-primary-700 sm:pl-16"
+					class="text-primary-700 px-3 text-lg font-semibold sm:pl-16"
 					for="postal_address_postcode">POSTCODE</label
 				>
 			</div>
@@ -130,7 +129,7 @@
 					type="text"
 					id="postal_address_postcode"
 					name="property_address_postcode"
-					class="text-scale-5 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-surface-950 focus:border-primary-600 focus:ring-primary-600"
+					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
 					placeholder="POSTCODE"
 					autocomplete="postal-code"
 					style="text-transform:uppercase"

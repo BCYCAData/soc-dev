@@ -1,4 +1,4 @@
-import { error, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -19,7 +19,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	validateAddress: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_ADDRESSES)) {
-			throw error(403, 'Insufficient permissions to validate addresses');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to validate addresses'
+			});
 		}
 		const formData = await request.formData();
 		const address = formData.get('address');
@@ -37,19 +40,29 @@ export const actions: Actions = {
 		if (validatedAddressDataError) {
 			console.error('validatedAddressDataError', validatedAddressDataError);
 			if (validatedAddressDataError.message === 'canceling statement due to statement timeout') {
-				return {
+				return fail(400, {
 					success: false,
 					message: 'The network is slow. Please tap `Validate Address` again.'
-				};
+				});
 			}
-			return { success: false, message: 'Failed to validate address' };
+			return fail(400, {
+				success: false,
+				message: 'Failed to validate address'
+			});
 		}
-		return { success: true, validatedAddressData };
+		return {
+			success: true,
+			message: 'Address validated successfully',
+			data: validatedAddressData
+		};
 	},
 
 	checkGNAFAddress: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_ADDRESSES)) {
-			throw error(403, 'Insufficient permissions to check an addresses');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to check addresses'
+			});
 		}
 		const formData = await request.formData();
 		const { data: checkedAddressData, error: checkedAddressError } = await supabase.rpc(
@@ -64,14 +77,24 @@ export const actions: Actions = {
 		);
 
 		if (checkedAddressError) {
-			return { success: false, message: 'Failed to check address' };
+			return fail(400, {
+				success: false,
+				message: 'Failed to check address'
+			});
 		}
 
-		return { success: true, checkedAddressData };
+		return {
+			success: true,
+			message: 'Address checked successfully',
+			data: checkedAddressData
+		};
 	},
 	upsertAddress: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_ADDRESSES)) {
-			throw error(403, 'Insufficient permissions to add an addresses');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to add addresses'
+			});
 		}
 		const formData = await request.formData();
 		const addressData = {
@@ -93,9 +116,16 @@ export const actions: Actions = {
 				.eq('id', id);
 			if (updateAddressDataError) {
 				console.error('validatedAddressDataError', updateAddressDataError);
-				return { success: false, message: 'Failed to add address' };
+				return fail(400, {
+					success: false,
+					message: 'Failed to update address'
+				});
 			}
-			return { success: true, updatedAddressData };
+			return {
+				success: true,
+				message: 'Address updated successfully',
+				data: updatedAddressData
+			};
 		} else {
 			// Insert new address
 			const { data: insertedAddressData, error: insertAddressDataError } = await supabase
@@ -103,9 +133,16 @@ export const actions: Actions = {
 				.insert(addressData);
 			if (insertAddressDataError) {
 				console.error('insertAddressDataError', insertAddressDataError);
-				return { success: false, message: 'Failed to add address' };
+				return fail(400, {
+					success: false,
+					message: 'Failed to add address'
+				});
 			}
-			return { success: true, insertedAddressData };
+			return {
+				success: true,
+				message: 'Address added successfully',
+				data: insertedAddressData
+			};
 		}
 	}
 };

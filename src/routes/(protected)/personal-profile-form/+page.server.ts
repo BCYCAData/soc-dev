@@ -1,4 +1,4 @@
-import { error, redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 import type { PageServerLoad } from './$types';
 import type {
@@ -26,11 +26,11 @@ export const load: PageServerLoad = (async ({
 	});
 	if (userProfileError) {
 		console.log('GET data error Personal Profile:', userProfileError);
-		error(400, `GET data error Personal Profile:  Error ${userProfileError.message}`);
+		throw redirect(303, '/auth/signin?error=profile_load_failed');
 	}
 
 	if (!user_profile) {
-		error(404, 'Personal profile data not found');
+		throw redirect(303, '/auth/signin?error=profile_not_found');
 	}
 
 	const personalProfileFormData = {
@@ -163,7 +163,11 @@ export const actions: Actions = {
 					agent_phone: bodyObject.agentData?.agent_phone
 				});
 				if (agentUpsertError) {
-					error(400, `upsert Agent Data Error ${agentUpsertError.message}`);
+					console.log('error Personal Profile Form upsert agent: ', agentUpsertError);
+					return fail(400, {
+						success: false,
+						message: `Failed to save agent data: ${agentUpsertError.message}`
+					});
 				}
 			} else {
 				const { error: deleteAgentError } = await supabase
@@ -172,7 +176,10 @@ export const actions: Actions = {
 					.eq('property_id', bodyObject.propertyId);
 				if (deleteAgentError) {
 					console.log('error Personal Profile Form delete agent: ', deleteAgentError);
-					error(400, `error delete delete agent: ${deleteAgentError.message}`);
+					return fail(400, {
+						success: false,
+						message: `Failed to delete agent data: ${deleteAgentError.message}`
+					});
 				}
 			}
 		}
@@ -190,10 +197,10 @@ export const actions: Actions = {
 					'error Personal Profile Form upsert User Postal Address Data Error: ',
 					userPostalAddressUpsertError
 				);
-				error(
-					400,
-					`error Personal Profile Form upsert User Postal Address Data Error: ${userPostalAddressUpsertError.message}`
-				);
+				return fail(400, {
+					success: false,
+					message: `Failed to save postal address: ${userPostalAddressUpsertError.message}`
+				});
 			}
 		}
 		const { error: userProfileUpdateError } = await supabase
@@ -214,7 +221,10 @@ export const actions: Actions = {
 			.eq('id', user.id);
 		if (userProfileUpdateError) {
 			console.log('userProfileUpdateError', userProfileUpdateError);
-			error(400, `update User Profile Data Error ${userProfileUpdateError.message}`);
+			return fail(400, {
+				success: false,
+				message: `Failed to update user profile: ${userProfileUpdateError.message}`
+			});
 		}
 		if (bodyObject.userBCYCAProfileData) {
 			const { error: userBCYCAProfileUpdateError } = await supabase
@@ -231,7 +241,10 @@ export const actions: Actions = {
 				.eq('bcyca_profile_id', bodyObject.communityProfileId);
 			if (userBCYCAProfileUpdateError) {
 				console.log('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
-				error(400, `update User BCYCA Profile Data Error ${userBCYCAProfileUpdateError.message}`);
+				return fail(400, {
+					success: false,
+					message: `Failed to update BCYCA profile: ${userBCYCAProfileUpdateError.message}`
+				});
 			}
 		}
 		if (bodyObject.userTinoneeProfileData) {
@@ -250,10 +263,10 @@ export const actions: Actions = {
 				.eq('tinonee_profile_id', bodyObject.communityProfileId);
 			if (userTinoneeProfileUpdateError) {
 				console.log('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
-				error(
-					400,
-					`update User Tinonee Profile Data Error ${userTinoneeProfileUpdateError.message}`
-				);
+				return fail(400, {
+					success: false,
+					message: `Failed to update Tinonee profile: ${userTinoneeProfileUpdateError.message}`
+				});
 			}
 		}
 		if (bodyObject.userMondrookProfileData) {
@@ -272,10 +285,10 @@ export const actions: Actions = {
 				.eq('mondrook_profile_id', bodyObject.communityProfileId);
 			if (userMondrookProfileUpdateError) {
 				console.log('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
-				error(
-					400,
-					`update User Mondrook Profile Data Error ${userMondrookProfileUpdateError.message}`
-				);
+				return fail(400, {
+					success: false,
+					message: `Failed to update Mondrook profile: ${userMondrookProfileUpdateError.message}`
+				});
 			}
 		}
 		if (bodyObject.userExternalProfileData) {
@@ -294,10 +307,10 @@ export const actions: Actions = {
 				.eq('external_profile_id', bodyObject.communityProfileId);
 			if (userExternalProfileUpdateError) {
 				console.log('userExternalProfileUpdateError', userExternalProfileUpdateError);
-				error(
-					400,
-					`update User External Profile Data Error ${userExternalProfileUpdateError.message}`
-				);
+				return fail(400, {
+					success: false,
+					message: `Failed to update External profile: ${userExternalProfileUpdateError.message}`
+				});
 			}
 		}
 		const { error: propertyProfileUpdateError } = await supabase
@@ -402,7 +415,10 @@ export const actions: Actions = {
 
 		if (propertyProfileUpdateError) {
 			console.log('propertyProfileUpdateError', propertyProfileUpdateError);
-			error(400, `update Property Profile Data Error ${propertyProfileUpdateError.message}`);
+			return fail(400, {
+				success: false,
+				message: `Failed to update property profile: ${propertyProfileUpdateError.message}`
+			});
 		}
 		if (!isFinalSubmission) {
 			return {

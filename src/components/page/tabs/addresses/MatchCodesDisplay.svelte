@@ -27,13 +27,15 @@
 
 	type OrderedKey = (typeof baseOrderedKeys)[number] | 'streetNumber2';
 
-	const orderedKeys = matchcodes.streetNumber2
-		? ([
-				...baseOrderedKeys.slice(0, 1),
-				'streetNumber2',
-				...baseOrderedKeys.slice(1)
-			] as OrderedKey[])
-		: baseOrderedKeys;
+	const orderedKeys = $derived(
+		matchcodes.streetNumber2
+			? ([
+					...baseOrderedKeys.slice(0, 1),
+					'streetNumber2',
+					...baseOrderedKeys.slice(1)
+				] as OrderedKey[])
+			: baseOrderedKeys
+	);
 
 	function getBackgroundColor(value: string | null | undefined): string {
 		if (!value) return 'bg-warning-100';
@@ -79,21 +81,21 @@
 		<div class="flex flex-col" style="width: fit-content">
 			<h3 class="mb-2 text-xs font-semibold">Match Quality</h3>
 			<div class="inline-grid grid-cols-[min-content_min-content] gap-x-2">
-				<div class="whitespace-nowrap border-b bg-slate-100 py-1 pl-3 text-xs font-medium">
+				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Type:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchTypeBackground(matchType)}">
 					<span class="px-2 text-xs text-gray-600">{matchType}</span>
 				</div>
 
-				<div class="whitespace-nowrap border-b bg-slate-100 py-1 pl-3 text-xs font-medium">
+				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Quality:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchQualityBackground(matchQuality)}">
 					<span class="px-2 text-xs text-gray-600">{matchQuality}</span>
 				</div>
 
-				<div class="whitespace-nowrap border-b bg-slate-100 py-1 pl-3 text-xs font-medium">
+				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Score:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchScoreBackground(matchScore)}">
@@ -105,7 +107,7 @@
 
 			<div class="inline-grid grid-cols-[min-content_min-content] gap-x-2">
 				{#each orderedKeys as key}
-					<div class="whitespace-nowrap border-b bg-slate-100 py-1 pl-3 text-xs font-medium">
+					<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
 						{displayLabels[key]}
 					</div>
 					<div class="flex items-center whitespace-nowrap {getBackgroundColor(matchcodes[key])}">

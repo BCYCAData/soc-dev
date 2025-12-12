@@ -13,7 +13,7 @@
 
 	let { propertyProfile }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		static_water_available: propertyProfile.static_water_available ?? [],
 		fire_fighting_resources: propertyProfile.fire_fighting_resources ?? [],
 		have_stortz: propertyProfile.have_stortz,
@@ -21,7 +21,7 @@
 	});
 
 	let noneChecked = $state(false);
-	let have_stortzChecked = $state(formState.have_stortz === 'Y');
+	let have_stortzChecked = $derived(formState.have_stortz === 'Y');
 	let selectedStaticSources = $state(new Set<EventTarget & HTMLInputElement>());
 
 	$effect(() => {
@@ -54,14 +54,14 @@
 	};
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Are there any static water supplies on the property?<span
-		class="text-scale-3 ml-2 text-surface-500"
+		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
-<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	{#each staticWaterOptions as { value, lable }}
 		{#if value < 5}
 			<div class="flex items-center">
@@ -101,10 +101,10 @@
 	{/each}
 </div>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Do you have a Stortz fitting attached to a water tank?
 </h2>
-<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	{#each yesNoMaybeOptions as { value, lable }}
 		<div class="flex items-center">
 			<input
@@ -126,8 +126,8 @@
 </div>
 
 {#if have_stortzChecked}
-	<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">Please include the size</h2>
-	<div class="flex flex-wrap justify-between rounded-lg bg-secondary-200 p-2">
+	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Please include the size</h2>
+	<div class="bg-secondary-200 flex flex-wrap justify-between rounded-lg p-2">
 		<div class="flex items-center">
 			<NumberInput
 				name="stortz_size"
@@ -141,14 +141,14 @@
 	</div>
 {/if}
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Do you have any of the following at this property?<span
-		class="text-scale-3 ml-2 text-surface-500"
+		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
-<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	{#each fireFightingResourceOptions as { value, lable }}
 		<div class="flex items-center">
 			<input

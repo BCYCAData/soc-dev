@@ -3,6 +3,9 @@
 	import { invalidateAll } from '$app/navigation';
 	import { onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
+	import { toast } from '$stores/toaststore';
+	import Spinner from '$components/page/Spinner.svelte';
+	import ConfirmDialogue from '$components/page/modals/ConfirmDialogue.svelte';
 	import {
 		editingState,
 		setEditingMode,
@@ -30,6 +33,9 @@
 	let { currentPropertyId, featuresByTemplate }: Props = $props();
 	let successMessage = $state('');
 	let errorMessage = $state('');
+	let isDeleting = $state(false);
+	let showConfirmDialog = $state(false);
+	let pendingDeleteForm: HTMLFormElement | null = $state(null);
 
 	let feature = $derived(editingState.activeFeature);
 	let template = $derived(feature ? featureTemplates[feature.template_id] : null);
@@ -45,6 +51,7 @@
 	}
 
 	const handleSubmit: SubmitFunction = () => {
+		isDeleting = true;
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				const layers = get(layersStore);
@@ -60,14 +67,39 @@
 					};
 				}
 				setSuccessMessage('Feature successfully deleted');
+				toast.success('GeoJSON feature deleted successfully');
 				setEditingMode(null);
 				setActiveFeature(null);
 				await invalidateAll();
-			} else {
+			} else if (result.type === 'error') {
 				setErrorMessage('Failed to delete feature');
+				toast.error(result.error?.message || 'Failed to delete GeoJSON feature. Please try again.');
+			} else if (result.type === 'failure') {
+				setErrorMessage('Failed to delete feature');
+				toast.error(result.data?.message || 'Failed to delete GeoJSON feature. Please try again.');
 			}
+			isDeleting = false;
 		};
 	};
+
+	function handleDeleteClick(e: Event) {
+		e.preventDefault();
+		pendingDeleteForm = (e.target as HTMLButtonElement).closest('form');
+		showConfirmDialog = true;
+	}
+
+	function handleConfirmDelete() {
+		showConfirmDialog = false;
+		if (pendingDeleteForm) {
+			pendingDeleteForm.requestSubmit();
+			pendingDeleteForm = null;
+		}
+	}
+
+	function handleCancelDelete() {
+		showConfirmDialog = false;
+		pendingDeleteForm = null;
+	}
 
 	function cleanup() {
 		const layers = get(layersStore);
@@ -91,6 +123,17 @@
 
 	onDestroy(cleanup);
 </script>
+
+<ConfirmDialogue
+	bind:open={showConfirmDialog}
+	title="Confirm Delete"
+	message="Are you sure you want to permanently delete this {template?.name}? This action cannot be undone."
+	confirmText="Delete"
+	cancelText="Cancel"
+	variant="danger"
+	onConfirm={handleConfirmDelete}
+	onCancel={handleCancelDelete}
+/>
 
 <div class="delete-editor">
 	<div class="header">
@@ -124,7 +167,22 @@
 		<div class="actions">
 			<button type="button" class="cancel" onclick={cleanup}>Cancel</button>
 			{#if feature}
-				<button type="submit" class="delete">Delete</button>
+				<button
+					type="button"
+					class="delete"
+					onclick={handleDeleteClick}
+					disabled={isDeleting}
+					aria-busy={isDeleting}
+				>
+					{#if isDeleting}
+						<span class="flex items-center gap-2">
+							<Spinner size="16" />
+							Deleting...
+						</span>
+					{:else}
+						Delete
+					{/if}
+				</button>
 			{/if}
 		</div>
 	</form>
@@ -171,6 +229,10 @@
 	.delete {
 		background: #c62828;
 	}
+	.delete:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 	button {
 		padding: 0.5rem 1rem;
 		color: white;
@@ -178,7 +240,7 @@
 		border-radius: 4px;
 		cursor: pointer;
 	}
-	button:hover {
+	button:hover:not(:disabled) {
 		opacity: 0.9;
 	}
 	.message {
@@ -193,5 +255,14 @@
 	.error {
 		background-color: #ffebee;
 		color: #c62828;
+	}
+	.flex {
+		display: flex;
+	}
+	.items-center {
+		align-items: center;
+	}
+	.gap-2 {
+		gap: 0.5rem;
 	}
 </style>

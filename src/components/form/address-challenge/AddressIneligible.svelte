@@ -8,8 +8,8 @@
 
 	let { streetaddress, suburb }: Props = $props();
 
-	const searchAddress = `${streetaddress}, ${suburb}`;
-	const encodedRef = encodeURIComponent(`SOC Address not eligible: '${searchAddress}'`);
+	let searchAddress = $derived(`${streetaddress}, ${suburb}`);
+	let encodedRef = $derived(encodeURIComponent(`SOC Address not eligible: '${searchAddress}'`));
 	let subjectUrl = $derived(`mailto:${PUBLIC_CONTACT_EMAIL}?subject=${encodedRef}`);
 </script>
 

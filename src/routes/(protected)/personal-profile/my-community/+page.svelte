@@ -23,9 +23,10 @@
 	let { data = $bindable(), form }: Props = $props();
 
 	let unsaved = $state(false);
-	let formError = $state(form?.error || false);
-	let formErrorMessage = $state(form?.errorMessage || '');
-	let formSuccess = $state(form?.success || false);
+	let isSubmitting = $state(false);
+	let formError = $derived(form?.error || false);
+	let formErrorMessage = $derived(form?.errorMessage || '');
+	let formSuccess = $derived(form?.success || false);
 
 	let otherComments: string | null = $state(data.userProfile.other_comments);
 	let stayInTouchChoices: number[] | null = $state(data.userProfile.stay_in_touch_choices);
@@ -152,7 +153,7 @@
 		bind:inputValue={otherComments}
 	/>
 	<input type="text" name="had_user_postal_address" value={hadUserPostalAddress} hidden />
-	<FormActions onReset={handleReset} isUnsaved={unsaved} />
+	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>
 <!-- <pre>Community: {JSON.stringify(data.userProfile, null, 2)}</pre> -->
 <h2 class="h2 pt-2 text-center text-base font-semibold text-gray-900">

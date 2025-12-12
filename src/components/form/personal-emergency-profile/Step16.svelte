@@ -9,44 +9,42 @@
 
 	let { communityMondrookProfile, communityMondrookMeetingOptions = [] }: Props = $props();
 
-	let formState = $state({
-		community_meeting_choices: communityMondrookProfile?.community_meeting_choices ?? [],
-		other_community_meeting: communityMondrookProfile?.other_community_meeting ?? ''
-	});
+	let community_meeting_choices = $derived(
+		communityMondrookProfile?.community_meeting_choices ?? []
+	);
+	let other_community_meeting = $derived(communityMondrookProfile?.other_community_meeting ?? '');
 
 	$effect(() => {
 		if (communityMondrookProfile) {
-			communityMondrookProfile.community_meeting_choices = formState.community_meeting_choices;
-			communityMondrookProfile.other_community_meeting = formState.other_community_meeting;
+			communityMondrookProfile.community_meeting_choices = community_meeting_choices;
+			communityMondrookProfile.other_community_meeting = other_community_meeting;
 		}
 	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	What Mondrook Community Events are you interested in?<span
-		class="text-scale-3 ml-2 text-surface-500"
+		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
 {#if communityMondrookProfile}
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
+		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
 		{#each communityMondrookMeetingOptions as { value, lable }}
-			<div class="col-span-1 flex items-center">
+			<label class="col-span-1 flex items-center">
 				<input
 					class="ml-8 h-6 w-6"
 					name="community_meeting_choices"
 					type="checkbox"
-					bind:group={formState.community_meeting_choices}
+					bind:group={community_meeting_choices}
 					value={Number(value)}
-					checked={formState.community_meeting_choices.includes(Number(value))}
+					checked={community_meeting_choices.includes(Number(value))}
 				/>
-				<label class="text-scale-6 ml-2 font-medium text-orange-900" for="community_meeting_choices"
-					>{lable}</label
-				>
-			</div>
+				<span class="ml-2">{lable}</span>
+			</label>
 		{/each}
 	</div>
 
@@ -58,6 +56,6 @@
 		divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
 		nameText="other_community_meeting"
 		textAreaClass="w-full resize-y sm:text-scale-5"
-		bind:inputValue={formState.other_community_meeting}
+		bind:inputValue={other_community_meeting}
 	/>
 {/if}

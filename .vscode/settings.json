@@ -25,6 +25,9 @@
         "**/routes/**/*/+server.[tj]s": "${dirname} ❱ API",
         "**/routes/+server.[tj]s": "/ ❱ API"
     },
+    "terminal.integrated.env.linux": {
+        "EDITOR": "code"
+    },
     "explorer.sortOrder": "filesFirst",
     // updated 2025-09-10 05:03
     // https://github.com/antfu/vscode-file-nesting-config

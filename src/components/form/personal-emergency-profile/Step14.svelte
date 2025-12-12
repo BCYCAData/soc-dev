@@ -9,7 +9,7 @@
 
 	let { communityMondrookProfile, communityMondrookWorkshopOptions = [] }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		community_workshop_choices: communityMondrookProfile?.community_workshop_choices ?? [],
 		other_community_workshop: communityMondrookProfile?.other_community_workshop ?? '',
 		will_run_community_workshops: communityMondrookProfile?.will_run_community_workshops ?? ''
@@ -24,7 +24,8 @@
 		}
 	});
 </script>
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Which of these Mondrook Community initiated workshops would be useful to you?<span
 		class="text-scale-3 text-surface-700"
 	>
@@ -33,7 +34,7 @@
 </h2>
 {#if communityMondrookProfile}
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
 		{#each communityMondrookWorkshopOptions as { value, lable }}
 			<div class="col-span-1 flex items-center">

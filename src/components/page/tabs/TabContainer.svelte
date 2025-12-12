@@ -7,7 +7,11 @@
 	}
 
 	let { items = [], initialTab = 1 }: Props = $props();
-	let activeTabValue = $state(initialTab);
+	let activeTabValue = $state(1);
+
+	$effect(() => {
+		activeTabValue = initialTab;
+	});
 
 	const handleTabChange = (tabValue: number) => () => {
 		activeTabValue = tabValue;

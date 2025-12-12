@@ -28,11 +28,13 @@
 		browser ? localStorage.getItem('helpbarCollapsed') === 'true' : false
 	);
 
-	const propertyProfiles: PropertyProfile[] = Array.isArray(data.userProfile.property_profile)
-		? data.userProfile.property_profile
-		: [data.userProfile.property_profile];
+	const propertyProfiles: PropertyProfile[] = $derived(
+		Array.isArray(data.userProfile.property_profile)
+			? data.userProfile.property_profile
+			: [data.userProfile.property_profile]
+	);
 
-	const communityProfiles = data.communityProfiles;
+	const communityProfiles = $derived(data.communityProfiles);
 
 	function toggleSidebar() {
 		isSidebarCollapsed = !isSidebarCollapsed;

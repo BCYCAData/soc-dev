@@ -9,7 +9,7 @@
 
 	let { communityBCYCAProfile, communityBCYCAWorkshopOptions = [] }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		community_workshop_choices: communityBCYCAProfile?.community_workshop_choices ?? [],
 		other_community_workshop: communityBCYCAProfile?.other_community_workshop ?? '',
 		will_run_community_workshops: communityBCYCAProfile?.will_run_community_workshops ?? ''
@@ -24,7 +24,7 @@
 	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Which of these BCYCA Community initiated workshops would be useful to you?<span
 		class="text-scale-3 text-surface-700"
 	>
@@ -33,7 +33,7 @@
 </h2>
 {#if communityBCYCAProfile}
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
 		{#each communityBCYCAWorkshopOptions as { value, lable }}
 			<div class="col-span-1 flex items-center">

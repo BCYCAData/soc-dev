@@ -16,12 +16,10 @@
 
 	let { data }: Props = $props();
 
-	const { community, mapExtent, addressPoints, registeredPoints } = data;
-
-	const initialExtent = mapExtent;
-	const bcycaAddressPoints = addressPoints;
-	const bcycaRegisteredPoints = registeredPoints;
-	const bcycaCommunityArea = community;
+	const initialExtent = $derived(data.mapExtent);
+	const bcycaAddressPoints = $derived(data.addressPoints);
+	const bcycaRegisteredPoints = $derived(data.registeredPoints);
+	const bcycaCommunityArea = $derived(data.community);
 
 	let mapLoaded = $state(false);
 

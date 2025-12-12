@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { toast } from '$stores/toaststore';
+	import Spinner from '$components/page/Spinner.svelte';
 
 	let { onAddressChecked } = $props<{
 		onAddressChecked: (data: any) => void;
@@ -23,6 +25,16 @@
 			if (actionResult.type === 'success') {
 				result = actionResult.data?.checkedAddressData;
 				onAddressChecked(result);
+
+				if (result?.is_match) {
+					toast.success('Address found in GNAF database');
+				} else {
+					toast.warning('Address not found in GNAF database');
+				}
+			} else if (actionResult.type === 'error') {
+				toast.error(actionResult.error?.message || 'Failed to check address. Please try again.');
+			} else if (actionResult.type === 'failure') {
+				toast.error(actionResult.data?.message || 'Failed to check address. Please try again.');
 			}
 		};
 	};
@@ -66,10 +78,18 @@
 
 		<button
 			type="submit"
-			class="rounded-md border border-transparent bg-tertiary-600 px-4 py-1 text-base font-medium text-white shadow-sm hover:bg-tertiary-700 focus:outline-none focus:ring-2 focus:ring-tertiary-500 focus:ring-offset-2 sm:text-sm"
+			class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-1 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
 			disabled={checking}
+			aria-busy={checking}
 		>
-			{checking ? 'Checking...' : 'Check'}
+			{#if checking}
+				<span class="flex items-center gap-2">
+					<Spinner size="16" />
+					Checking...
+				</span>
+			{:else}
+				Check
+			{/if}
 		</button>
 	</div>
 	{#if result}

@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -31,7 +31,10 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions: Actions = {
 	createTemplate: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_SPATIAL)) {
-			throw error(403, 'Insufficient permissions to create a template');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to create a template'
+			});
 		}
 		const formData = await request.formData();
 		const template = {
@@ -47,12 +50,26 @@ export const actions: Actions = {
 			.insert(template)
 			.select();
 
-		return { success: !insertError, template: data?.[0] };
+		if (insertError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to create template'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template created successfully',
+			data: data?.[0]
+		};
 	},
 
 	updateTemplate: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_SPATIAL)) {
-			throw error(403, 'Insufficient permissions to update a template');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to update a template'
+			});
 		}
 		const formData = await request.formData();
 		const templateId = formData.get('id');
@@ -70,12 +87,26 @@ export const actions: Actions = {
 			.eq('id', templateId)
 			.select();
 
-		return { success: !updateError, template: data?.[0] };
+		if (updateError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to update template'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template updated successfully',
+			data: data?.[0]
+		};
 	},
 
 	manageFields: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_DATA_SPATIAL)) {
-			throw error(403, 'Insufficient permissions to manage a fields');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to manage fields'
+			});
 		}
 		const formData = await request.formData();
 		const fields = JSON.parse(formData.get('fields') as string);
@@ -88,6 +119,16 @@ export const actions: Actions = {
 			}))
 		);
 
-		return { success: !fieldsError };
+		if (fieldsError) {
+			return fail(400, {
+				success: false,
+				message: 'Failed to manage template fields'
+			});
+		}
+
+		return {
+			success: true,
+			message: 'Template fields updated successfully'
+		};
 	}
 };

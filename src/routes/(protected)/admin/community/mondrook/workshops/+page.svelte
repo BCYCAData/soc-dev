@@ -11,7 +11,7 @@
 	}
 
 	let { data }: Props = $props();
-	let mondrookWorkshopsData = data?.mondrookWorkshopsData;
+	let mondrookWorkshopsData = $derived(data?.mondrookWorkshopsData);
 
 	let mondrookWorkshopsColumns = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },

@@ -57,14 +57,14 @@
 		children
 	}: Props = $props();
 
-	const boxZoom = zoomable;
-	const doubleClickZoom = zoomable;
-	const touchZoom = zoomable;
-	const dragging = zoomable;
-	const zoomDelta = zoomSnap;
-	const scrollWheelZoom = zoomable;
-	const keyboard = zoomable;
-	const zoomControl = zoomable;
+	const boxZoom = $derived(zoomable);
+	const doubleClickZoom = $derived(zoomable);
+	const touchZoom = $derived(zoomable);
+	const dragging = $derived(zoomable);
+	const zoomDelta = $derived(zoomSnap);
+	const scrollWheelZoom = $derived(zoomable);
+	const keyboard = $derived(zoomable);
+	const zoomControl = $derived(zoomable);
 
 	let style = $derived(`width:${width};height:${height};`);
 

@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -28,7 +28,10 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 export const actions: Actions = {
 	revokeCoordinator: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)) {
-			throw error(403, 'Insufficient permissions to revoke KYNG coordinator role');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to revoke KYNG coordinator role'
+			});
 		}
 		const formData = await request.formData();
 		const userId = formData.get('userId') as string;
@@ -41,14 +44,24 @@ export const actions: Actions = {
 
 		if (revokeError) {
 			console.log('revokeError', revokeError);
-			error(400, 'Failed to remove role');
+
+			return fail(500, {
+				success: false,
+				message: 'Failed to remove KYNG coordinator role'
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'KYNG coordinator role revoked successfully'
+		};
 	},
 	assignCoordinator: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)) {
-			throw error(403, 'Insufficient permissions to assign KYNG coordinator role');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to assign KYNG coordinator role'
+			});
 		}
 		const formData = await request.formData();
 		const userId = formData.get('userId') as string;
@@ -61,14 +74,23 @@ export const actions: Actions = {
 
 		if (rpcError) {
 			console.log('assignKYNGCoordinatorError', rpcError);
-			throw error(500, 'Failed to assign coordinator');
+			return fail(400, {
+				success: false,
+				message: 'Failed to assign KYNG coordinator role'
+			});
 		}
 		console.log('assignKYNGCoordinatorSuccess', { userId, kyngAreaId });
-		return { success: true };
+		return {
+			success: true,
+			message: 'KYNG Coordinator assigned successfully'
+		};
 	},
 	updateCoordinator: async ({ request, locals: { supabase, permissions } }) => {
 		if (!hasPermission(permissions, PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)) {
-			throw error(403, 'Insufficient permissions to change KYNG coordinator role');
+			return fail(403, {
+				success: false,
+				message: 'Insufficient permissions to change KYNG coordinator role'
+			});
 		}
 		const formData = await request.formData();
 		const userId = formData.get('user_id') as string;
@@ -85,9 +107,15 @@ export const actions: Actions = {
 
 		if (updateKYNGCoordinatorError) {
 			console.log('updateKYNGCoordinatorError', updateKYNGCoordinatorError);
-			throw error(500, 'Failed to update coordinator details');
+			return fail(400, {
+				success: false,
+				message: 'Failed to change KYNG coordinator role'
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'KYNG coordinator role updated successfully'
+		};
 	}
 };

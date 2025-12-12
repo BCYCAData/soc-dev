@@ -106,7 +106,7 @@
 	}
 	let { data }: Props = $props();
 
-	const propertyGeometryData = data.propertyGeometryData[0];
+	const propertyGeometryData = $derived(data.propertyGeometryData[0]);
 
 	let LeafletMap = $state<Component<MapProps>>();
 	let LeafletGeoJSONPolygonLayer = $state<Component<PolygonLayerProps>>();
@@ -139,16 +139,15 @@
 		return CATEGORY_BASE_ORDERS[category] + indexInCategory;
 	}
 
-	const templatesByCategory = Object.values(data.featureTemplates).reduce<CategoryGroups>(
-		(acc, template) => {
+	const templatesByCategory = $derived(
+		Object.values(data.featureTemplates).reduce<CategoryGroups>((acc, template) => {
 			const typedTemplate = template as FeatureTemplate;
 			if (!acc[typedTemplate.category]) {
 				acc[typedTemplate.category] = [];
 			}
 			acc[typedTemplate.category].push(typedTemplate);
 			return acc;
-		},
-		{}
+		}, {})
 	);
 
 	function transformFeaturesToGeoJSON(

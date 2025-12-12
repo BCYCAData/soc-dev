@@ -1,4 +1,4 @@
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 
 import type { PageServerLoad, Actions } from './$types';
 import { PERMISSIONS } from '$lib/constants/permissions';
@@ -65,7 +65,10 @@ export const actions: Actions = {
 		});
 
 		if (enumError) {
-			throw error(400, 'Failed to update role enum type');
+			return fail(400, {
+				success: false,
+				message: 'Failed to update role enum type'
+			});
 		}
 
 		// Then insert into role_permissions
@@ -74,10 +77,16 @@ export const actions: Actions = {
 			.insert({ role, permission: rolePermissions });
 
 		if (insertError) {
-			throw error(400, 'Failed to add role');
+			return fail(400, {
+				success: false,
+				message: 'Failed to add role'
+			});
 		}
 
-		return { success: true };
+		return {
+			success: true,
+			message: 'Role added successfully'
+		};
 	},
 
 	deleteRole: async ({ request, locals: { supabase, permissions } }) => {
@@ -93,9 +102,15 @@ export const actions: Actions = {
 			.eq('role', role);
 
 		if (deleteError) {
-			throw error(400, 'Failed to delete role');
+			return fail(400, {
+				success: false,
+				message: 'Failed to delete role'
+			});
 		}
-		return { success: true };
+		return {
+			success: true,
+			message: 'Role deleted successfully'
+		};
 	},
 
 	updatePermissions: async ({ request, locals: { supabase, permissions } }) => {
@@ -111,8 +126,14 @@ export const actions: Actions = {
 			.eq('role', role);
 
 		if (updateError) {
-			throw error(400, 'Failed to update permissions');
+			return fail(400, {
+				success: false,
+				message: 'Failed to update role permissions'
+			});
 		}
-		return { success: true };
+		return {
+			success: true,
+			message: 'Role permissions updated successfully'
+		};
 	}
 };

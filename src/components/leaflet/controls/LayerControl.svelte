@@ -20,7 +20,7 @@
 	let controlContainer: HTMLDivElement = $state()!;
 	let leafletControl: LeafletControl | null = null;
 	let L: typeof import('leaflet') | null = null;
-	let isExpanded = $state(!collapsible);
+	let isExpanded = $derived(!collapsible);
 
 	function switchBaseLayer(layerId: string) {
 		const map = getMap();

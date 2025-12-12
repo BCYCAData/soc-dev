@@ -16,7 +16,10 @@
 
 	let { data }: Props = $props();
 
-	const { community, mapExtent, addressPoints, registeredPoints } = data;
+	const community = $derived(data.community);
+	const mapExtent = $derived(data.mapExtent);
+	const addressPoints = $derived(data.addressPoints);
+	const registeredPoints = $derived(data.registeredPoints);
 
 	let mapLoaded = $state(false);
 
@@ -24,10 +27,10 @@
 		mapLoaded = true;
 	}
 
-	const initialExtent = mapExtent;
-	const mondrookAddressPoints = addressPoints;
-	const mondrookRegisteredPoints = registeredPoints;
-	const mondrookCommunityArea = community;
+	const initialExtent = $derived(mapExtent);
+	const mondrookAddressPoints = $derived(addressPoints);
+	const mondrookRegisteredPoints = $derived(registeredPoints);
+	const mondrookCommunityArea = $derived(community);
 </script>
 
 <svelte:head>
@@ -85,7 +88,7 @@
 	</div>
 {:else}
 	<div class="main-map mx-auto flex h-full w-5/6 flex-col">
-		<p class="mt-4 text-center text-surface-500">Bugger!</p>
+		<p class="text-surface-500 mt-4 text-center">Bugger!</p>
 	</div>
 {/if}
 

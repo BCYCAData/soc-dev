@@ -12,9 +12,10 @@
 
 	let { data = $bindable(), form }: Props = $props();
 	let unsaved = $state(false);
-	let formError = $state(form?.error || false);
-	let formErrorMessage = $state(form?.errorMessage || '');
-	let formSuccess = $state(form?.success || false);
+	let isSubmitting = $state(false);
+	let formError = $derived(form?.error || false);
+	let formErrorMessage = $derived(form?.errorMessage || '');
+	let formSuccess = $derived(form?.success || false);
 
 	let communityMeetingChoices = $state(
 		data.userProfile?.community_bcyca_profile?.community_meeting_choices
@@ -94,5 +95,5 @@
 		name="community_bcyca_profile_id"
 		value={data.communityProfiles.community_bcyca_profile_id}
 	/>
-	<FormActions onReset={handleReset} isUnsaved={unsaved} />
+	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>

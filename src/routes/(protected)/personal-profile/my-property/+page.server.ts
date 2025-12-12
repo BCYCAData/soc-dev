@@ -1,4 +1,5 @@
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
+import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 interface PropertyProfile {
@@ -58,28 +59,29 @@ export const actions: Actions = {
 			);
 
 			if (validationError) {
-				return {
-					type: 'error',
-					error: 'Failed to validate address'
-				};
+				return fail(400, {
+					success: false,
+					message: 'Failed to validate address'
+				});
 			}
 
 			if (!validationData) {
-				return {
-					type: 'error',
-					error: 'Address not found'
-				};
+				return fail(404, {
+					success: false,
+					message: 'Address not found'
+				});
 			}
 
 			return {
-				type: 'success',
+				success: true,
+				message: 'Address validated successfully',
 				data: validationData
 			};
 		} catch (error) {
-			return {
-				type: 'error',
-				error: 'Network or server error occurred'
-			};
+			return fail(500, {
+				success: false,
+				message: 'Network or server error occurred'
+			});
 		}
 	},
 	addproperty: async ({ request, locals: { supabase, user } }) => {
@@ -96,15 +98,15 @@ export const actions: Actions = {
 
 		if (error) {
 			console.log('error', error);
-			return {
-				type: 'error',
-				error: 'Failed to add property'
-			};
+			return fail(400, {
+				success: false,
+				message: 'Failed to add property'
+			});
 		}
 
 		return {
-			type: 'success',
-			data: { message: 'Property added successfully' }
+			success: true,
+			message: 'Property added successfully'
 		};
 	}
 };

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { toast } from '$stores/toaststore';
 	import SetPassword from '$components/form/auth/SetPassword.svelte';
 	import SetEmail from '$components/form/auth/SetEmail.svelte';
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
@@ -17,6 +18,7 @@
 	let validEmail = $state(false);
 	//@ts-ignore
 	let loading = $state(false);
+	let isSubmitting = $state(false);
 
 	let canGo = $derived(validPassword && validEmail);
 	let searchAddress = $derived(`${apiData.searchaddressstreet} ${apiData.searchaddresssuburb}`);
@@ -54,12 +56,20 @@
 			<form
 				action="/auth/signup?/signup"
 				method="POST"
-				class="flex flex-col gap-4"
 				use:enhance={() => {
 					loading = true;
-					return async ({ update }) => {
+					isSubmitting = true;
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							toast.success('Account created successfully! Please check your email to verify.');
+						} else if (result.type === 'error') {
+							toast.error(result.error?.message || 'Failed to create account. Please try again.');
+						} else if (result.type === 'failure') {
+							toast.error('Failed to create account. Please check the form and try again.');
+						}
 						await update();
 						loading = false;
+						isSubmitting = false;
 					};
 				}}
 			>
@@ -70,7 +80,8 @@
 				<button
 					type="submit"
 					class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-4 w-full rounded-full py-2 text-center focus:outline-none disabled:opacity-25"
-					disabled={!canGo}
+					disabled={!canGo || loading || isSubmitting}
+					aria-busy={isSubmitting}
 				>
 					Create Account
 				</button>

@@ -11,7 +11,7 @@
 	let { data }: Props = $props();
 	// let siteSuburbsData = data?.siteSuburbsData;
 	// let siteRoadsData = data?.siteRoadsData;
-	let projectBoundary = data?.siteBoundaryData; // GeoJSON polygon
+	let projectBoundary = $derived(data?.siteBoundaryData); // GeoJSON polygon
 
 	let mapLoaded = $state(false);
 

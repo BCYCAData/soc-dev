@@ -4,6 +4,9 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import type { PageData } from './$types';
+	import { toast } from '$stores/toaststore';
+	import Spinner from '$components/page/Spinner.svelte';
+	import ConfirmDialogue from '$components/page/modals/ConfirmDialogue.svelte';
 
 	interface RolePermission {
 		role: string;
@@ -21,6 +24,12 @@
 	let selectedPermissions = $state<string[]>([]);
 	let newPermission = $state('');
 	let customPermissions = $state<string[]>([]);
+	let isAssigning = $state(false);
+	let isUpdating = $state(false);
+	let isDeleting = $state(false);
+	let showDeleteConfirm = $state(false);
+	let roleToDelete = $state('');
+	let pendingDeleteForm = $state<HTMLFormElement | null>(null);
 
 	function flattenPermissions(tree: object, prefix = ''): string[] {
 		return Object.entries(tree).flatMap(([key, value]) => {
@@ -32,7 +41,12 @@
 		});
 	}
 
-	const allPermissions = flattenPermissions(data.permissionTree);
+	const allPermissions = $derived(flattenPermissions(data.permissionTree));
+
+	$effect(() => {
+		const roleData = data.rolePermissions.find((r: RolePermission) => r.role === selectedRole);
+		selectedPermissions = roleData?.permission.split(',') || [];
+	});
 
 	function handleRoleSelect(role: string) {
 		selectedRole = role;
@@ -53,22 +67,56 @@
 		selectedPermissions = selectedPermissions.filter((p) => p !== permission);
 	}
 
-	$effect(() => {
-		const roleData = data.rolePermissions.find((r: RolePermission) => r.role === selectedRole);
-		selectedPermissions = roleData?.permission.split(',') || [];
-	});
-
-	const handleSubmit: SubmitFunction = () => {
+	const handleDeleteSubmit: SubmitFunction = () => {
+		isDeleting = true;
 		return async ({ result }) => {
 			if (result.type === 'success') {
-				isLoading = true;
+				toast.success(result.data?.message || `Role '${roleToDelete}' deleted successfully`);
 				await invalidateAll();
-				isLoading = false;
+			} else if (result.type === 'error') {
+				toast.error(result.error?.message || 'Failed to delete role. Please try again.');
+			} else if (result.type === 'failure') {
+				toast.error(result.data?.message || 'Failed to delete role. Please try again.');
 			}
+			isDeleting = false;
+			showDeleteConfirm = false;
+			pendingDeleteForm = null;
 		};
 	};
 
-	let isLoading = $state(false);
+	const handleUpdateSubmit: SubmitFunction = () => {
+		isUpdating = true;
+		return async ({ result }) => {
+			if (result.type === 'success') {
+				toast.success(result.data?.message || `Permissions updated for '${selectedRole}'`);
+				await invalidateAll();
+			} else if (result.type === 'error') {
+				toast.error(result.error?.message || 'Failed to update permissions. Please try again.');
+			} else if (result.type === 'failure') {
+				toast.error(result.data?.message || 'Failed to update permissions. Please try again.');
+			}
+			isUpdating = false;
+		};
+	};
+
+	const handleAddSubmit: SubmitFunction = () => {
+		isAssigning = true;
+		return async ({ result }) => {
+			if (result.type === 'success') {
+				toast.success(result.data?.message || `New role '${newRole}' created successfully`);
+				await invalidateAll();
+				newRole = '';
+				selectedPermissions = [];
+				customPermissions = [];
+			} else if (result.type === 'error') {
+				toast.error(result.error?.message || 'Failed to create role. Please try again.');
+			} else if (result.type === 'failure') {
+				toast.error(result.data?.message || 'Failed to create role. Please try again.');
+			}
+			isAssigning = false;
+		};
+	};
+
 	const value = $state(['']);
 </script>
 
@@ -89,16 +137,38 @@
 						>
 							{role}
 						</button>
-						<form method="POST" action="?/deleteRole" use:enhance={handleSubmit}>
+						<form method="POST" action="?/deleteRole" use:enhance={handleDeleteSubmit}>
 							<input type="hidden" name="role" value={role} />
-							<button type="submit" class="text-red-600 hover:text-red-800">Delete</button>
+							<button
+								type="button"
+								class="text-red-600 hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+								disabled={isDeleting}
+								onclick={(e) => {
+									roleToDelete = role;
+									pendingDeleteForm = e.currentTarget.closest('form');
+									showDeleteConfirm = true;
+								}}
+							>
+								{#if isDeleting}
+									<span class="inline-flex items-center gap-1">
+										<Spinner size="12" /> Deleting...
+									</span>
+								{:else}
+									Delete
+								{/if}
+							</button>
 						</form>
 					</div>
 
 					{#if selectedRole === role}
 						<div class="card bg-orange-50 p-4">
 							<h2 class="mb-4 text-xl font-bold">Edit Permissions for {selectedRole}</h2>
-							<form method="POST" action="?/updatePermissions" use:enhance class="space-y-4">
+							<form
+								method="POST"
+								action="?/updatePermissions"
+								use:enhance={handleUpdateSubmit}
+								class="space-y-4"
+							>
 								<input type="hidden" name="role" value={selectedRole} />
 								<div class="max-h-96 space-y-2 overflow-y-auto">
 									{#each allPermissions as permission}
@@ -116,11 +186,14 @@
 								<div class="flex justify-end">
 									<button
 										type="submit"
-										class="mt-4 rounded-full bg-tertiary-400 px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-										disabled={isLoading}
+										class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+										disabled={isUpdating}
+										aria-busy={isUpdating}
 									>
-										{#if isLoading}
-											<span class="spinner">🔄</span>
+										{#if isUpdating}
+											<span class="inline-flex items-center gap-2">
+												<Spinner size="16" /> Updating...
+											</span>
 										{:else}
 											Update Permissions
 										{/if}
@@ -141,7 +214,7 @@
 	>
 		{#snippet control()}Add New Role{/snippet}
 		{#snippet panel()}
-			<form method="POST" action="?/addRole" use:enhance class="space-y-4">
+			<form method="POST" action="?/addRole" use:enhance={handleAddSubmit} class="space-y-4">
 				<div>
 					<label for="role">Role Name</label>
 					<input
@@ -166,7 +239,7 @@
 						/>
 						<button
 							type="button"
-							class="rounded-full bg-tertiary-400 px-4 py-2 text-center hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50"
+							class="bg-tertiary-400 rounded-full px-4 py-2 text-center hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50"
 							onclick={addCustomPermission}
 							disabled={!newPermission}
 						>
@@ -217,10 +290,17 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="mt-4 rounded-full bg-tertiary-400 px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-						disabled={!selectedPermissions.length || !newRole}
+						class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						disabled={isAssigning || !(selectedPermissions.length && newRole)}
+						aria-busy={isAssigning}
 					>
-						Add Role
+						{#if isAssigning}
+							<span class="inline-flex items-center gap-2">
+								<Spinner size="16" /> Adding...
+							</span>
+						{:else}
+							Add Role
+						{/if}
 					</button>
 				</div>
 			</form>
@@ -228,18 +308,17 @@
 	</Accordion.Item>
 </Accordion>
 
-<style>
-	.spinner {
-		display: inline-block;
-		animation: spin 1s linear infinite;
-	}
-
-	@keyframes spin {
-		from {
-			transform: rotate(0deg);
-		}
-		to {
-			transform: rotate(360deg);
-		}
-	}
-</style>
+<ConfirmDialogue
+	bind:open={showDeleteConfirm}
+	title="Delete Role"
+	message={`Are you sure you want to delete the role "${roleToDelete}"? This action cannot be undone.`}
+	confirmText="Delete Role"
+	variant="danger"
+	onConfirm={() => {
+		pendingDeleteForm?.requestSubmit();
+	}}
+	onCancel={() => {
+		showDeleteConfirm = false;
+		pendingDeleteForm = null;
+	}}
+/>

@@ -14,11 +14,19 @@
 	let { propertyProfile }: Props = $props();
 
 	let formState = $state({
-		site_hazards: propertyProfile.site_hazards ?? [],
-		fire_hazard_reduction: propertyProfile.fire_hazard_reduction ?? [],
-		other_site_hazards: propertyProfile.other_site_hazards ?? '',
-		other_hazards: propertyProfile.other_hazards ?? '',
-		land_adjacent_hazard: propertyProfile.land_adjacent_hazard
+		site_hazards: [] as number[],
+		fire_hazard_reduction: [] as number[],
+		other_site_hazards: '',
+		other_hazards: '',
+		land_adjacent_hazard: undefined as string | undefined
+	});
+
+	$effect(() => {
+		formState.site_hazards = propertyProfile.site_hazards ?? [];
+		formState.fire_hazard_reduction = propertyProfile.fire_hazard_reduction ?? [];
+		formState.other_site_hazards = propertyProfile.other_site_hazards ?? '';
+		formState.other_hazards = propertyProfile.other_hazards ?? '';
+		formState.land_adjacent_hazard = propertyProfile.land_adjacent_hazard ?? undefined;
 	});
 
 	$effect(() => {
@@ -26,15 +34,15 @@
 		propertyProfile.fire_hazard_reduction = formState.fire_hazard_reduction;
 		propertyProfile.other_site_hazards = formState.other_site_hazards;
 		propertyProfile.other_hazards = formState.other_hazards;
-		propertyProfile.land_adjacent_hazard = formState.land_adjacent_hazard;
+		propertyProfile.land_adjacent_hazard = formState.land_adjacent_hazard ?? null;
 	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Do you have any of the following on your property?
 </h2>
 <div
-	class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2"
+	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2"
 >
 	{#each siteHazardsOptions as { value, lable }}
 		<div class="col-span-1 flex items-center">
@@ -62,11 +70,11 @@
 	bind:inputValue={formState.other_site_hazards}
 />
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Does your property have:<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
 </h2>
 <div
-	class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
 	{#each fireHazardReductionOptions as { value, lable }}
 		<div class="col-span-1 flex items-center">
@@ -83,10 +91,10 @@
 		</div>
 	{/each}
 </div>
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Does any adjoining land represent a hazard?
 </h2>
-<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	{#each yesNoMaybeOptions as { value, lable }}
 		<div class="flex items-center">
 			<input

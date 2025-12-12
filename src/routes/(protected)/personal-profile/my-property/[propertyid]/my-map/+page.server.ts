@@ -1,4 +1,4 @@
-import { error, type Actions } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user }, params }) => {
@@ -47,7 +47,10 @@ export const actions: Actions = {
 		const featureId = formData.get('featureId');
 
 		if (!propertyId || !templateId || !geometryStr) {
-			throw error(400, 'Missing required fields');
+			return fail(400, {
+				success: false,
+				message: 'Missing required fields'
+			});
 		}
 
 		const geometry = JSON.parse(geometryStr.toString());
@@ -66,7 +69,10 @@ export const actions: Actions = {
 
 		if (featureError) {
 			console.log('featureError', featureError.message);
-			throw error(400, featureError.message);
+			return fail(400, {
+				success: false,
+				message: 'Failed to save spatial feature'
+			});
 		}
 
 		// Then update any provided attribute values
@@ -88,13 +94,25 @@ export const actions: Actions = {
 
 			if (attributeError) {
 				console.log('attributeError', attributeError.message);
-				throw error(400, attributeError.message);
+				return fail(400, {
+					success: false,
+					message: 'Failed to save feature attribute'
+				});
 			}
 
-			return { success: true, featureId: featureData, attributeIds: attributeData };
+			return {
+				success: true,
+				message: 'Spatial feature and attrubutes successfully updated',
+				featureId: featureData,
+				attributeIds: attributeData
+			};
 		}
 
-		return { success: true, featureId: featureData };
+		return {
+			success: true,
+			message: 'Spatial feature successfully updated',
+			featureId: featureData
+		};
 	},
 	deleteFeature: async ({ request, locals: { supabase, user } }) => {
 		const formData = await request.formData();
@@ -102,7 +120,10 @@ export const actions: Actions = {
 		const propertyId = formData.get('propertyId');
 
 		if (!featureId || !propertyId) {
-			throw error(400, 'Missing required fields');
+			return fail(400, {
+				success: false,
+				message: 'Missing required fields'
+			});
 		}
 		const { data: deleteResult, error: rpcError } = await supabase.rpc('delete_spatial_feature', {
 			p_feature_id: featureId,
@@ -111,9 +132,16 @@ export const actions: Actions = {
 		});
 		if (rpcError) {
 			console.log('deleteSpatialFeatureError', rpcError.message);
-			throw error(400, rpcError.message);
+			return fail(400, {
+				success: false,
+				message: 'Failed to delete spatial feature'
+			});
 		}
 
-		return { success: true, deleteResult };
+		return {
+			success: true,
+			message: 'Spatial feature successfully deleted',
+			deleteResult
+		};
 	}
 };

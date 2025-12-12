@@ -2,10 +2,12 @@
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { toast } from '$stores/toaststore';
 	import CurrentKYNGCoordinatorsTable from '$components/form/tables/CurrentKYNGCoordinatorsTable.svelte';
 	import AllKYNGCoordinatorsTable from '$components/form/tables/AllKYNGCoordinatorsTable.svelte';
 	import AutocompleteSelectWithCurrent from '$components/form/inputs/AutocompleteSelectWithCurrent.svelte';
 	import AutocompleteSingleItemInput from '$components/form/inputs/AutocompleteSingleItemInput.svelte';
+	import Spinner from '$components/page/Spinner.svelte';
 	import type { PageData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 
@@ -17,6 +19,7 @@
 	let selectedKyngArea = $state('');
 	let selectedCoordinator = $state<EditableCoordinator | null>(null);
 	let editMode = $state(false);
+	let isAssigning = $state(false);
 
 	interface KyngListItem {
 		item_id: string;
@@ -45,27 +48,39 @@
 		phone_number: string;
 	}
 
-	const usersListData = data.kyngCoordinators
-		.filter((coord: Coordinator) => coord.email)
-		.map((coord: Coordinator) => ({
-			item_id: coord.user_id,
-			lut_text: coord.email || '',
-			current_value: coord.kyng || 'No KYNG Area'
-		}));
+	const usersListData = $derived(
+		data.kyngCoordinators
+			.filter((coord: Coordinator) => coord.email)
+			.map((coord: Coordinator) => ({
+				item_id: coord.user_id,
+				lut_text: coord.email || '',
+				current_value: coord.kyng || 'No KYNG Area'
+			}))
+	);
 
-	const kyngListData = data.kyngAreas.map((area: KyngArea) => ({
-		item_id: area.kyng_area_id,
-		lut_text: area.kyng_area_name,
-		current_value: ''
-	}));
+	const kyngListData = $derived(
+		data.kyngAreas.map((area: KyngArea) => ({
+			item_id: area.kyng_area_id,
+			lut_text: area.kyng_area_name,
+			current_value: ''
+		}))
+	);
 
 	const handleSubmit: SubmitFunction = () => {
+		isAssigning = true;
+
 		return async ({ result }) => {
 			if (result.type === 'success') {
+				toast.success(result.data?.message || 'KYNG Coordinator assigned successfully');
 				await invalidateAll();
 				selectedKYNG = '';
 				selectedUser = [];
+			} else if (result.type === 'error') {
+				toast.error(result.error?.message || 'Failed to assign coordinator. Please try again.');
+			} else if (result.type === 'failure') {
+				toast.error(result.data?.message || 'Failed to assign coordinator. Please try again.');
 			}
+			isAssigning = false;
 		};
 	};
 
@@ -88,11 +103,16 @@
 	const handleEditSubmit: SubmitFunction = () => {
 		return async ({ result }) => {
 			if (result.type === 'success') {
+				toast.success(result.data?.message || 'Coordinator details updated successfully');
 				await invalidateAll();
 				selectedCoordinator = null;
 				editMode = false;
 				selectedUserEmail = '';
 				selectedKyngArea = '';
+			} else if (result.type === 'error') {
+				toast.error(result.error?.message || 'Failed to update coordinator. Please try again.');
+			} else if (result.type === 'failure') {
+				toast.error(result.data?.message || 'Failed to update coordinator. Please try again.');
 			}
 		};
 	};
@@ -170,10 +190,17 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="mt-4 rounded-full bg-tertiary-400 px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-						disabled={!(selectedUser && selectedKYNG)}
+						class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						disabled={isAssigning || !(selectedUser && selectedKYNG)}
+						aria-busy={isAssigning}
 					>
-						Assign Coordinator
+						{#if isAssigning}
+							<span class="inline-flex items-center gap-2">
+								<Spinner size="16" /> Assigning...
+							</span>
+						{:else}
+							Assign Coordinator
+						{/if}
 					</button>
 				</div>
 			</form>
@@ -288,7 +315,7 @@
 					<div class="flex justify-end gap-2">
 						<button
 							type="button"
-							class="rounded-md bg-surface-300 px-4 py-2 text-red-600 hover:text-red-800"
+							class="bg-surface-300 rounded-md px-4 py-2 text-red-600 hover:text-red-800"
 							onclick={() => {
 								selectedCoordinator = null;
 								editMode = false;

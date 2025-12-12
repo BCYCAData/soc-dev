@@ -10,7 +10,7 @@
 
 	let { propertyProfile }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		number_dogs: propertyProfile.number_dogs,
 		number_cats: propertyProfile.number_cats,
 		number_birds: propertyProfile.number_birds,
@@ -33,10 +33,10 @@
 	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	Please record the number of pets you have on this property:
 </h2>
-<div class="rounded-lg bg-secondary-200 p-2">
+<div class="bg-secondary-200 rounded-lg p-2">
 	<ul class="sm:text-scale-5 my-0 flex list-none justify-around pl-0">
 		<NumberInput
 			name="number_dogs"
@@ -68,8 +68,8 @@
 		/>
 	</ul>
 </div>
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">Do you have livestock?</h2>
-<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Do you have livestock?</h2>
+<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	{#each yesNoOptions as { value, lable }}
 		<div class="flex items-center">
 			<input
@@ -92,10 +92,10 @@
 </div>
 
 {#if formState.live_stock_present === true}
-	<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 		Do you have an area which would be safe for stock in the event of a bushfire or flood?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<div class="flex items-center">
 				<input
@@ -117,11 +117,11 @@
 		{/each}
 	</div>
 	{#if formState.live_stock_present && formState.live_stock_safe_area != 'N'}
-		<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+		<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 			Would you be happy for other people to leave their stock on your property, in your safe area,
 			for a short period in an emergency?
 		</h2>
-		<div class="flex justify-start rounded-lg bg-secondary-200 p-2">
+		<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 			{#each yesNoMaybeOptions as { value, lable }}
 				<div class="flex items-center">
 					<input

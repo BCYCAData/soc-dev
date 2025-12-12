@@ -7,7 +7,7 @@
 	}
 
 	let { data }: Props = $props();
-	const emergencyReportsAdminServiceMapData = data.emergencyReportsAdminServiceMapData;
+	const emergencyReportsAdminServiceMapData = $derived(data.emergencyReportsAdminServiceMapData);
 </script>
 
 <svelte:head>

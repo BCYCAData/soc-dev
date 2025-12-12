@@ -1,4 +1,5 @@
 import { getAboutMeFormData } from '$lib/server/form.utilities';
+import { fail } from '@sveltejs/kit';
 
 import type { Actions } from './$types';
 
@@ -12,13 +13,14 @@ export const actions: Actions = {
 			.eq('id', user?.id);
 		if (aboutMeDataError) {
 			console.log('error profileAboutMe update user_profile: ', aboutMeDataError);
-			return {
-				profileAboutMeFormData,
+			return fail(400, {
 				success: false,
-				error: true,
-				errorMessage: `${aboutMeDataError?.message}`
-			};
+				message: `Failed to update profile: ${aboutMeDataError?.message}`
+			});
 		}
-		return { profileAboutMeFormData, success: true, error: false, errorMessage: '' };
+		return {
+			success: true,
+			message: 'Profile updated successfully'
+		};
 	}
 };

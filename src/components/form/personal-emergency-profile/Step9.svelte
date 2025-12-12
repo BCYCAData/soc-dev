@@ -9,7 +9,7 @@
 
 	let { communityBCYCAProfile, communityBCYCAInformationOptions = [] }: Props = $props();
 
-	let formState = $state({
+	let formState = $derived({
 		information_sheet_choices: communityBCYCAProfile?.information_sheet_choices ?? [],
 		other_information_sheet: communityBCYCAProfile?.other_information_sheet ?? ''
 	});
@@ -22,16 +22,16 @@
 	});
 </script>
 
-<h2 class="h2 mb-1 text-lg font-semibold text-surface-950">
+<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
 	What BCYCA Community information would be useful to you?<span
-		class="text-scale-3 ml-2 text-surface-500"
+		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
 {#if communityBCYCAProfile}
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-secondary-200 p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
 		{#each communityBCYCAInformationOptions as { value, lable }}
 			<div class="col-span-1 flex items-center">

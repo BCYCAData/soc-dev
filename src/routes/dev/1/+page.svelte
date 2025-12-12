@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { error } from '@sveltejs/kit';
 	import NewMap from '$components/leaflet/NewMap.svelte';
 	import BaseLayerGroup from '$components/leaflet/layers/BaseLayerGroup.svelte';
 	import OverlayLayerGroup from '$components/leaflet/layers/OverlayLayerGroup.svelte';
@@ -156,9 +157,8 @@
 			'filtered-cities',
 			(L: any) => {
 				if (!L.esri) {
-					throw new Error('ESRI not available');
+					throw error(500, 'ESRI not available');
 				}
-
 				return L.esri.featureLayer({
 					url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3',
 					where: 'POP2000 > 100000', // Server-side filter

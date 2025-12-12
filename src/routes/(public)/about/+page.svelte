@@ -19,7 +19,7 @@
 
 	let { data }: Props = $props();
 
-	const tabItems: TabItem[] = [
+	const tabItems: TabItem[] = $derived([
 		{
 			label: 'SOC Project',
 			value: 1,
@@ -46,7 +46,7 @@
 			component: WorkshopsTab,
 			props: {}
 		}
-	];
+	]);
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 import { AuthApiError } from '@supabase/supabase-js';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { isEmailAllowed } from '$lib/server/auth/dev-config';
 
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
@@ -7,13 +7,12 @@ import { logSignUpSignInError } from '$lib/server/errorLogging';
 import { SITE_URL } from '$lib/constants';
 
 interface ValidateActionResponse {
-	apiData?: AddressValidationResponse;
-	error: boolean;
-	message?: string;
 	success: boolean;
-	formInputs?: {
-		streetaddress: string;
-		suburb: string;
+	message?: string;
+	data?: AddressValidationResponse;
+	errors?: {
+		streetaddress?: string;
+		suburb?: string;
 	};
 }
 
@@ -60,17 +59,20 @@ export const actions: Actions = {
 				table: 'address_validation_errors'
 			});
 			return {
-				error: true,
-				message: 'Failed to validate address',
 				success: false,
-				formInputs: {
+				message: 'Failed to validate address',
+				errors: {
 					streetaddress: searchaddressstreet,
 					suburb: searchaddresssuburb
 				}
 			};
 		}
 		const apiData = validationData[0] as AddressValidationResponse;
-		return { apiData, error: false, success: true };
+		return {
+			success: true,
+			message: 'Address validated successfully',
+			data: apiData
+		};
 	},
 
 	signup: async ({ url, request, locals: { supabase } }) => {
@@ -95,12 +97,11 @@ export const actions: Actions = {
 					metadata: { email: email || 'not_provided', userMetadata },
 					table: 'signup_errors'
 				});
-				return {
-					error: true,
-					message: 'Email and password are required',
+				return fail(400, {
 					success: false,
-					apiData: userMetadata
-				};
+					message: 'Email and password are required',
+					data: userMetadata
+				});
 			}
 
 			const allowed = await isEmailAllowed(email);
@@ -148,12 +149,11 @@ export const actions: Actions = {
 						metadata: { email, userMetadata },
 						table: 'signup_errors'
 					});
-					return {
-						error: true,
-						message: 'Invalid email or password',
+					return fail(400, {
 						success: false,
-						apiData: userMetadata
-					};
+						message: 'Invalid email or password',
+						data: userMetadata
+					});
 				}
 				await logSignUpSignInError(supabase, {
 					errorType: 'SERVER_ERROR',
@@ -165,12 +165,11 @@ export const actions: Actions = {
 					metadata: { email, userMetadata },
 					table: 'signup_errors'
 				});
-				return {
-					error: true,
-					message: 'Server error. Please try again later.',
+				return fail(500, {
 					success: false,
-					apiData: userMetadata
-				};
+					message: 'Server error. Please try again later.',
+					data: userMetadata
+				});
 			}
 			if (signupData?.user?.identities?.length === 0) {
 				await logSignUpSignInError(supabase, {
@@ -200,12 +199,11 @@ export const actions: Actions = {
 				},
 				table: 'signup_errors'
 			});
-			return {
-				error: true,
-				message: 'Server error. Please try again later.',
+			return fail(500, {
 				success: false,
-				apiData: userMetadata
-			};
+				message: 'Server error. Please try again later.',
+				data: userMetadata
+			});
 		}
 		throw redirect(303, `/auth/redirect/signup/respond/?redirectType=${redirectType}`);
 	}
