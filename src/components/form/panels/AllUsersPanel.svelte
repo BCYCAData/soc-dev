@@ -12,10 +12,18 @@
 
 	let { message = $bindable(), messageContext = $bindable() }: Props = $props();
 
+	let touched = $state(false);
+
 	let haveMessage = $derived(() => {
 		const words = message.trim().split(/\s+/);
 		return message.length > 4 && words.length > 1;
 	});
+
+	const messageError = $derived(
+		touched && !haveMessage()
+			? 'Message must be at least 5 characters and contain multiple words'
+			: undefined
+	);
 
 	let successMessage = $state('');
 	let errorMessage = $state('');
@@ -49,12 +57,23 @@
 	<label class="flex grow flex-col items-start">
 		<p>Enter the message here:</p>
 		<input
-			class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+			id="all-users-message"
+			class="focus:ring-primary-500 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+			class:border-gray-300={!messageError}
+			class:border-error-500={!!messageError}
 			name="inputMessage"
 			type="text"
 			placeholder="Message"
+			aria-invalid={!!messageError}
+			aria-describedby={messageError ? 'all-users-message-error' : undefined}
 			bind:value={message}
+			oninput={() => (touched = true)}
 		/>
+		{#if messageError}
+			<span id="all-users-message-error" class="text-error-500 mt-1 block text-sm" role="alert">
+				{messageError}
+			</span>
+		{/if}
 	</label>
 	<EnumOptionSelect bind:messageContext header="Pick a context:" />
 </div>

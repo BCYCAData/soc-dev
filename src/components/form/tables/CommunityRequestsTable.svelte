@@ -7,9 +7,10 @@
 	interface Props {
 		columns: any[];
 		tableData: any[];
+		isLoading?: boolean;
 	}
 
-	let { columns, tableData }: Props = $props();
+	let { columns, tableData, isLoading = false }: Props = $props();
 
 	const fieldOptions: ComparisonOption[] = [
 		{ value: 'email', lable: 'Email' },
@@ -19,5 +20,12 @@
 	];
 </script>
 
-<TabulatorTable {columns} {tableData} />
+<TabulatorTable
+	{columns}
+	{tableData}
+	{isLoading}
+	emptyStateTitle="No Community Requests"
+	emptyStateMessage="There are currently no community membership requests"
+	emptyStateIcon="users"
+/>
 <TabulatorTableSearch searchField="email" comparisonType="like" searchValue="" {fieldOptions} />

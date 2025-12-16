@@ -21,6 +21,11 @@
 	let isSending = $state(false);
 	let showSendConfirm = $state(false);
 	let pendingSendForm = $state<HTMLFormElement | null>(null);
+	let touched = $state(false);
+
+	const messageError = $derived(
+		touched && message.trim().length < 5 ? 'Message must be at least 5 characters' : undefined
+	);
 
 	export function clearForm() {
 		message = '';
@@ -41,12 +46,23 @@
 <label class="flex grow flex-col items-start">
 	<p>Enter the message here:</p>
 	<input
-		class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+		id="individual-message"
+		class="focus:ring-primary-500 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+		class:border-gray-300={!messageError}
+		class:border-error-500={!!messageError}
 		name="inputMessage"
 		type="text"
 		placeholder="Message"
+		aria-invalid={!!messageError}
+		aria-describedby={messageError ? 'individual-message-error' : undefined}
 		bind:value={message}
+		oninput={() => (touched = true)}
 	/>
+	{#if messageError}
+		<span id="individual-message-error" class="text-error-500 mt-1 text-sm" role="alert">
+			{messageError}
+		</span>
+	{/if}
 </label>
 
 <AutoCompleteSelect

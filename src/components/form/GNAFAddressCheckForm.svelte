@@ -10,6 +10,7 @@
 
 	let checking = $state(false);
 	let result = $state<{ is_match: boolean; geojson: any } | null>(null);
+	let touched = $state(false);
 
 	let formData = $state({
 		number: '',
@@ -45,12 +46,28 @@
 		<div class="flex flex-row items-center gap-4">
 			<label class="label flex flex-row items-center gap-2">
 				<span class="whitespace-nowrap">Number</span>
-				<input class="input w-12" name="number" type="text" bind:value={formData.number} required />
+				<input
+					class="input w-12"
+					name="number"
+					type="text"
+					bind:value={formData.number}
+					aria-invalid={touched && !formData.number}
+					onfocus={() => (touched = true)}
+					required
+				/>
 			</label>
 
 			<label class="label flex flex-row items-center gap-2">
 				<span class="whitespace-nowrap">Street</span>
-				<input class="input w-48" name="street" type="text" bind:value={formData.street} required />
+				<input
+					class="input w-48"
+					name="street"
+					type="text"
+					bind:value={formData.street}
+					aria-invalid={touched && !formData.street}
+					onfocus={() => (touched = true)}
+					required
+				/>
 			</label>
 
 			<label class="label flex flex-row items-center gap-2">
@@ -60,6 +77,8 @@
 					name="streetType"
 					type="text"
 					bind:value={formData.streetType}
+					aria-invalid={touched && !formData.streetType}
+					onfocus={() => (touched = true)}
 					required
 				/>
 			</label>
@@ -71,6 +90,8 @@
 					name="locality"
 					type="text"
 					bind:value={formData.locality}
+					aria-invalid={touched && !formData.locality}
+					onfocus={() => (touched = true)}
 					required
 				/>
 			</label>

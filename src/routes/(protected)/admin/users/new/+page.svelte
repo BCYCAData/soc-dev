@@ -70,7 +70,7 @@
 	{/snippet}
 	{#snippet content()}
 		<Tabs.Panel value="0">
-			<NewUsersTable {newUserColumns} {usersAdminNewUsersData} />
+			<NewUsersTable {newUserColumns} {usersAdminNewUsersData} isLoading={false} />
 		</Tabs.Panel>
 		<Tabs.Panel value="1">
 			<div>Okay</div>

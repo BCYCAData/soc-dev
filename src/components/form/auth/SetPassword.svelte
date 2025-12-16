@@ -18,6 +18,9 @@
 	// let password = $state('');
 	let confirmPassword = $state('');
 
+	let passwordTouched = $state(false);
+	let confirmPasswordTouched = $state(false);
+
 	let isPasswordValid = $derived(strength === PASSWORD_VALIDATIONS.length);
 
 	$effect(() => {
@@ -26,11 +29,13 @@
 
 	function handlePasswordInput(e: Event) {
 		password = (e.target as HTMLInputElement).value;
+		passwordTouched = true;
 		updateValidations();
 	}
 
 	function handleConfirmPasswordInput(e: Event) {
 		confirmPassword = (e.target as HTMLInputElement).value;
+		confirmPasswordTouched = true;
 		updateValidations();
 	}
 
@@ -44,6 +49,16 @@
 		];
 		strength = validations.filter(Boolean).length;
 	}
+
+	const passwordError = $derived(
+		passwordTouched && !isPasswordValid && password.length > 0
+			? 'Password does not meet all requirements'
+			: undefined
+	);
+
+	const confirmPasswordError = $derived(
+		confirmPasswordTouched && password !== confirmPassword ? 'Passwords do not match' : undefined
+	);
 </script>
 
 <div class="flex flex-1 flex-col items-center justify-center px-3">
@@ -53,6 +68,8 @@
 			label="Password:"
 			{showPassword}
 			{password}
+			error={passwordError}
+			touched={passwordTouched}
 			on:input={handlePasswordInput}
 		/>
 
@@ -61,6 +78,8 @@
 			label="Confirm Password:"
 			{showPassword}
 			password={confirmPassword}
+			error={confirmPasswordError}
+			touched={confirmPasswordTouched}
 			on:input={handleConfirmPasswordInput}
 		/>
 

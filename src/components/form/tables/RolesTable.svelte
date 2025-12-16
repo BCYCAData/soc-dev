@@ -22,7 +22,7 @@
 	}>();
 
 	let table: Tabulator;
-	let tableElement: HTMLElement;
+	let tableElement: HTMLElement = $state()!;
 	let showRemoveConfirm = $state(false);
 	let roleToRemove = $state<{ id: bigint; email: string; role: string } | null>(null);
 	let pendingForm = $state<HTMLFormElement | null>(null);
@@ -62,7 +62,17 @@
 		}
 	}
 
-	onMount(() => {
+	let isLoading = $state(false);
+
+	$effect(() => {
+		if (tableElement && !table) {
+			createTable();
+		} else if (table) {
+			table.setData(filteredRoles);
+		}
+	});
+
+	function createTable() {
 		table = new Tabulator(tableElement, {
 			data: filteredRoles,
 			columns: [
@@ -99,9 +109,11 @@
 		});
 
 		setContext('rolesTable', table);
+	}
 
+	onMount(() => {
 		// Add event delegation for remove buttons
-		tableElement.addEventListener('click', (e) => {
+		tableElement?.addEventListener('click', (e) => {
 			const target = e.target as HTMLElement;
 			if (target.classList.contains('remove-role-btn')) {
 				e.preventDefault();
@@ -120,7 +132,41 @@
 	});
 </script>
 
-<div bind:this={tableElement}></div>
+{#if isLoading}
+	<div class="flex items-center justify-center p-8">
+		<div class="text-surface-600 dark:text-surface-400" role="status" aria-label="Loading roles">
+			Loading roles...
+		</div>
+	</div>
+{:else if filteredRoles.length === 0}
+	<div
+		class="border-surface-200 bg-surface-50 dark:border-surface-700 dark:bg-surface-800 border p-8 text-center shadow-sm"
+		style="border-radius: var(--radius-container, 0.75rem);"
+		role="status"
+	>
+		<div class="text-tertiary-400 dark:text-tertiary-600 mb-3">
+			<svg class="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+				/>
+			</svg>
+		</div>
+		<h3
+			class="text-surface-900 dark:text-surface-100 mb-1 text-lg font-semibold"
+			style="font-family: var(--heading-font-family, 'Raleway', sans-serif);"
+		>
+			No Role Assignments
+		</h3>
+		<p class="text-surface-600 dark:text-surface-400 text-sm">
+			Use the form above to assign roles to users
+		</p>
+	</div>
+{:else}
+	<div bind:this={tableElement}></div>
+{/if}
 
 <ConfirmDialogue
 	bind:open={showRemoveConfirm}

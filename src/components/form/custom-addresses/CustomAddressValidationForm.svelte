@@ -14,10 +14,17 @@
 	let isLoading = $state(false);
 	let error = $state('');
 	let successMessage = $state('');
+	let touched = $state(false);
+
+	const addressError = $derived(
+		touched && !address.trim() ? 'Street address is required' : undefined
+	);
+	const suburbError = $derived(touched && !suburb.trim() ? 'Suburb is required' : undefined);
 
 	function handleInputChange() {
 		onValidatedAddress(null);
 		successMessage = '';
+		touched = true;
 	}
 
 	function handleValidation(result: any) {
@@ -73,8 +80,16 @@
 				bind:value={address}
 				oninput={handleInputChange}
 				class="input w-full pl-2 text-lg"
+				class:border-error-500={!!addressError}
+				aria-invalid={!!addressError}
+				aria-describedby={addressError ? 'address-error' : undefined}
 				required
 			/>
+			{#if addressError}
+				<span id="address-error" class="text-error-500 mt-1 block text-sm" role="alert">
+					{addressError}
+				</span>
+			{/if}
 		</div>
 
 		<div class="form-group" style="width: 200px">
@@ -86,8 +101,16 @@
 				bind:value={suburb}
 				oninput={handleInputChange}
 				class="input w-full pl-2 text-lg"
+				class:border-error-500={!!suburbError}
+				aria-invalid={!!suburbError}
+				aria-describedby={suburbError ? 'suburb-error' : undefined}
 				required
 			/>
+			{#if suburbError}
+				<span id="suburb-error" class="text-error-500 mt-1 block text-sm" role="alert">
+					{suburbError}
+				</span>
+			{/if}
 		</div>
 
 		<button

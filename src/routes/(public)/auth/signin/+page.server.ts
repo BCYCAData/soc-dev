@@ -55,7 +55,7 @@ export const actions: Actions = {
 				});
 				return fail(400, {
 					success: false,
-				message: 'Email and password are required'
+					message: 'Email and password are required'
 				});
 			}
 
@@ -80,7 +80,7 @@ export const actions: Actions = {
 						});
 						return fail(400, {
 							success: false,
-				message: 'Invalid credentials'
+							message: 'Invalid credentials'
 						});
 					} else if (signInError.status === 429) {
 						console;
@@ -96,7 +96,7 @@ export const actions: Actions = {
 						});
 						return fail(429, {
 							success: false,
-				message: 'Too many requests. Please try again later.'
+							message: 'Too many requests. Please try again later.'
 						});
 					}
 				}
@@ -113,7 +113,7 @@ export const actions: Actions = {
 				});
 				return fail(500, {
 					success: false,
-				message: 'An unexpected error occurred. Please try again.'
+					message: 'An unexpected error occurred. Please try again.'
 				});
 			}
 
@@ -131,9 +131,13 @@ export const actions: Actions = {
 				});
 				return fail(500, {
 					success: false,
-				message: 'Failed to establish session. Please try again.'
+					message: 'Failed to establish session. Please try again.'
 				});
 			}
+
+			// Session established successfully
+			// Note: Session expiry is stored in Supabase cookies
+			// The SessionTimeoutWarning component will read it via getSession()
 		} catch (error) {
 			const catchError = error as Error;
 			console.error('Unexpected error:', catchError);

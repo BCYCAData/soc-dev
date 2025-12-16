@@ -10,6 +10,8 @@
 		required?: boolean;
 		value?: string;
 		className?: string;
+		error?: string;
+		touched?: boolean;
 	}
 
 	let {
@@ -19,21 +21,36 @@
 		autocomplete,
 		required = false,
 		value = $bindable(''),
-		className = ''
+		className = '',
+		error = undefined,
+		touched = false
 	}: Props = $props();
+
+	const hasError = $derived(touched && !!error);
+	const errorId = $derived(`${id}-error`);
 </script>
 
-<input
-	{id}
-	{name}
-	{placeholder}
-	{autocomplete}
-	{required}
-	type="text"
-	class="address-input {className}"
-	use:setUpperCase
-	bind:value
-/>
+<div>
+	<input
+		{id}
+		{name}
+		{placeholder}
+		{autocomplete}
+		{required}
+		type="text"
+		class="address-input {className}"
+		class:border-error-500={hasError}
+		aria-invalid={hasError}
+		aria-describedby={hasError ? errorId : undefined}
+		use:setUpperCase
+		bind:value
+	/>
+	{#if hasError}
+		<span id={errorId} class="text-error-500 mt-1 block text-sm" role="alert">
+			{error}
+		</span>
+	{/if}
+</div>
 
 <style>
 	.address-input {
