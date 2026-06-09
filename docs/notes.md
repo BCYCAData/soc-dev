@@ -1,4 +1,5 @@
-Map.svelte
+# Map.svelte
+
 ├── setContext('leaflet-map', map)
 ├── setContext('layer-registry', writable<Record<string, LayerMeta>>)
 │

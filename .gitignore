@@ -1,4 +1,5 @@
 node_modules
+.envrc*
 
 # Output
 .output
@@ -24,3 +25,6 @@ vite.config.ts.timestamp-*
 .supabase
 *:Zone.Identifier
 *Zone.Identifier
+
+# Claude
+.mcp.json
