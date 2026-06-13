@@ -1,21 +1,25 @@
 {
   "servers": {
-    "supabase": {
+    "supabase-dev": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=${env:SUPABASE_DEV_PROJECT_REF}",
       "headers": {
-        "Authorization": "Bearer ${env:SUPABASE_ACCESS_TOKEN}"
+        "Authorization": "Bearer ${env:SUPABASE_DEV_ACCESS_TOKEN}"
       }
     },
-    "supabase-current": {
+    "supabase-prod": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=${env:SUPABASE_PROD_PROJECT_REF}",
       "headers": {
-        "Authorization": "Bearer ${env:SUPABASE_ACCESS_TOKEN}"
+        "Authorization": "Bearer ${env:SUPABASE_PROD_ACCESS_TOKEN}"
       }
     },
     "svelte": {
-      "command": "/home/akeown/.nvm/versions/node/v24.12.0/bin/svelte-mcp"
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sveltejs/mcp"
+      ]
     },
     "core-knowledge": {
       "command": "npx",
