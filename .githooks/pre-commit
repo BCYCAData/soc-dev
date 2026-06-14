@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+# Project-managed git hook. Activated by the "prepare" npm script
+# (git config core.hooksPath .githooks) on npm install.
+#
+# Blocks high-confidence secrets from being committed. We already hit GitHub push
+# protection once on a hardcoded Mailchimp key embedded in a schema dump; this catches
+# it (and Supabase tokens, JWTs, GitHub PATs) before it leaves the machine.
+# Formatting/lint is enforced separately in CI (npm run lint), not here.
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+# ERE patterns: Supabase access token | JWT (anon/service keys) | GitHub PAT | Mailchimp api key.
+secret_re='sbp_[A-Za-z0-9]{20,}|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|[0-9a-f]{32}-us[0-9]{1,2}'
+
+hits=""
+for f in $staged; do
+  case "$f" in
+    *.png|*.jpg|*.jpeg|*.pdf|*.ico|*.woff|*.woff2|package-lock.json|.githooks/pre-commit) continue ;;
+  esac
+  if git show ":$f" 2>/dev/null | grep -nE "$secret_re" >/dev/null 2>&1; then
+    hits="$hits $f"
+  fi
+done
+
+if [ -n "$hits" ]; then
+  echo "pre-commit: possible secret(s) in staged file(s):"
+  for f in $hits; do echo "  $f"; done
+  echo "pre-commit: remove the secret (use Vault / a gitignored .env). If a false positive, commit with --no-verify."
+  exit 1
+fi
+exit 0
