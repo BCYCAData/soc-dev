@@ -43,13 +43,12 @@ monolithic `profile` schema) into the new decomposed schema. Re-runnable; contai
   `community_areas`, **most-specific (smallest) area wins**; unmatched → `external`.
 - `stay_in_touch_choices` / `other_comments` → `user_profile` only.
 - Dropped: `send_rfs_survival_plan`, `other_access_information` (empty).
-- One `property_profile` per profile.
+- One `property_profile` per profile (all 181). Matched users carry their real GNAF
+  `principaladdresssiteoid`; the 44 unmatched carry a **unique negative sentinel** (`-1…-44`) so
+  their typed address still survives (28 have one). Negative = clearly not a real GNAF id.
 
 ## Known gaps (pending)
 
-- **44 unmatched users get no `property_profile`** (the new schema requires a NOT-NULL GNAF
-  `principaladdresssiteoid`; their address didn't resolve). 29 of them typed a street address that
-  is therefore not carried into a property record — decision needed (skip vs sentinel vs manual).
 - **`property_geometry` not populated** — it requires `way_point` + `property` geometries (NOT
   NULL) that legacy lacks; populate after the new spatial reference data (`project_addresspoints`
   etc.) is loaded.

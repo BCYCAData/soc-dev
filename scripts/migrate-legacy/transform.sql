@@ -11,8 +11,10 @@
 
 begin;
 
--- 0) Idempotency: clear everything we own (cascade clears all FK children of these two hubs).
-truncate public.user_profile, public.property_profile restart identity cascade;
+-- 0) Idempotency: clear everything we own. user_profile/property_profile cascade to their FK
+--    children; user_roles is listed explicitly because it FKs to auth.users (not user_profile),
+--    so the cascade would otherwise miss it and re-runs would hit the (user_id,role) unique key.
+truncate public.user_profile, public.property_profile, public.user_roles restart identity cascade;
 
 -- 1) Per-user assignment (community + matched address point) into a temp table.
 create temp table _asg on commit drop as
@@ -47,7 +49,13 @@ spatial as (
 select
   p.id                          as user_id,
   s.geom                        as geom,
-  s.principaladdresssiteoid     as psaoid,
+  -- Real GNAF id when the address resolved; otherwise a unique NEGATIVE sentinel (-1, -2, …)
+  -- so the user's typed property address still gets a property_profile. Negative = clearly not
+  -- a real GNAF principaladdresssiteoid; deterministic across re-runs (ordered by id).
+  case when s.principaladdresssiteoid is not null then s.principaladdresssiteoid
+       else (- row_number() over (partition by (s.principaladdresssiteoid is null) order by p.id))::bigint
+  end                           as psaoid,
+  (s.principaladdresssiteoid is not null) as addr_matched,
   coalesce(s.legacy_comm,'Extended') as legacy_comm,
   case coalesce(s.legacy_comm,'Extended')
        when 'BCYCA' then 'bcyca' when 'Mondrook' then 'mondrook'
@@ -111,11 +119,10 @@ where coalesce(p.postal_address_street,p.postal_address_suburb,p.postal_address_
 insert into public.user_communities (user_id, community_slug)
 select a.user_id, a.slug from _asg a;
 
--- 6) property_profile — ONLY for users whose address resolved to a GNAF address point
---    (137 matched), because principaladdresssiteoid is NOT NULL in the new schema. The 44
---    unmatched users get no property record (see report; pending decision). Address fields are
---    NOT NULL in the target, so coalesce to '' for the rare missing postcode. community/kyng
---    left null until the new spatial reference data is loaded.
+-- 6) property_profile — one per profile (all 181). Matched users carry their real GNAF
+--    principaladdresssiteoid; the 44 unmatched carry a unique negative sentinel so their typed
+--    address still survives. Address fields are NOT NULL in the target, so coalesce to ''.
+--    community/kyng left null until the new spatial reference data is loaded.
 insert into public.property_profile
   (id, property_address_street, property_address_suburb, property_address_postcode, phone, mobile_reception,
    sign_posted, other_essential_assets, residents0_18, residents19_50, residents51_70, residents71_,
@@ -133,26 +140,24 @@ select a.property_id,
    p.have_stortz, p.stortz_size, p.truck_access, p.truck_access_other_information,
    p.fire_fighting_resources, p.fire_hazard_reduction, p.site_hazards, p.other_hazards, p.other_site_hazards,
    p.land_adjacent_hazard, coalesce(p.property_rented,false), a.psaoid
-from _asg a join legacy.profile p on p.id = a.user_id
-where a.psaoid is not null;
+from _asg a join legacy.profile p on p.id = a.user_id;
 
--- 7) property_agent (matched users with agent data).
+-- 7) property_agent (any user with agent data).
 insert into public.property_agent (property_id, agent_name, agent_mobile, agent_phone)
 select a.property_id, p.agent_name, p.agent_mobile, p.agent_phone
 from _asg a join legacy.profile p on p.id = a.user_id
-where a.psaoid is not null and coalesce(p.agent_name,p.agent_mobile,p.agent_phone) is not null;
+where coalesce(p.agent_name,p.agent_mobile,p.agent_phone) is not null;
 
 -- 8) property_geometry intentionally NOT populated: it requires way_point + property geometries
 --    (both NOT NULL) that legacy data does not have. Populated later from the new spatial tables.
 
--- 9) Both user<->property link tables (matched users only; they need a property to link to).
+-- 9) Both user<->property link tables (all users; every profile now has a property).
 insert into public.user_properties (user_id, property_id)
-select a.user_id, a.property_id from _asg a where a.psaoid is not null;
+select a.user_id, a.property_id from _asg a;
 
 insert into public.user_property_profile_join (user_id, property_id, search_address_street, search_address_suburb)
 select a.user_id, a.property_id, p.property_address_street, p.property_address_suburb
-from _asg a join legacy.profile p on p.id = a.user_id
-where a.psaoid is not null;
+from _asg a join legacy.profile p on p.id = a.user_id;
 
 -- 10) Default application role.
 insert into public.user_roles (user_id, role)
