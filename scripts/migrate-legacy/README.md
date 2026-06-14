@@ -47,12 +47,16 @@ monolithic `profile` schema) into the new decomposed schema. Re-runnable; contai
   `principaladdresssiteoid`; the 44 unmatched carry a **unique negative sentinel** (`-1…-44`) so
   their typed address still survives (28 have one). Negative = clearly not a real GNAF id.
 
-## Known gaps (pending)
+## Spatial backfill
 
-- **`property_geometry` not populated** — it requires `way_point` + `property` geometries (NOT
-  NULL) that legacy lacks; populate after the new spatial reference data (`project_addresspoints`
-  etc.) is loaded.
-- `property_profile.community` / `.kyng` left null until the new `community_areas` / `kyng_areas`
-  reference data is loaded (then backfill by `principaladdresssiteoid`).
+After the reference/spatial copy (`../migrate-reference/`) **and** this transform, run
+`backfill_spatial.sql` to fill `property_profile.community` / `.kyng` and build `property_geometry`
+from `project_addresspoints/waypoints/properties` + `community_areas` / `kyng_areas`, keyed by
+`principaladdresssiteoid` (same lookup `private.handle_new_user` uses). On new prod this set
+`community`/`kyng` on 134 properties and created 134 `property_geometry` rows (the rest are the 44
+sentinels + a few whose GNAF id lacked full geometry).
+
+## Known gaps (minor)
+
 - `property_geometry.principaladdresssiteoid` is `int4` in the new schema but `bigint` at source —
-  a schema inconsistency worth fixing before relying on that column.
+  a schema inconsistency worth fixing before relying on that column (real GNAF ids fit int4 today).
