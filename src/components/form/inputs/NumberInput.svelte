@@ -20,5 +20,5 @@
 
 <div class={divClass}>
 	<label class={lableClass} for={name}>{lable}</label>
-	<input type="number" id={name} {name} class={inputClass} value={inputValue} min="0" />
+	<input type="number" id={name} {name} class={inputClass} bind:value={inputValue} min="0" />
 </div>

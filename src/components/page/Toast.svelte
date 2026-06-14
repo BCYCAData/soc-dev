@@ -22,7 +22,7 @@
 	out:fly={{ x: 300, duration: 150, easing: quintOut }}
 >
 	<!-- Icon -->
-	<div class="flex-shrink-0 {styles.icon}" aria-hidden="true">
+	<div class="shrink-0 {styles.icon}" aria-hidden="true">
 		{#if toast.type === 'success'}
 			<!-- Success Check Icon -->
 			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
 	<!-- Close Button -->
 	<button
 		type="button"
-		class="flex-shrink-0 rounded-md p-1.5 transition-colors focus:outline-none focus:ring-2 {styles.closeButton}"
+		class="shrink-0 rounded-md p-1.5 transition-colors focus:outline-none focus:ring-2 {styles.closeButton}"
 		on:click={dismiss}
 		aria-label="Dismiss notification"
 	>

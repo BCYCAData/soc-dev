@@ -84,7 +84,13 @@ export const actions: Actions = {
 			});
 		}
 	},
-	addproperty: async ({ request, locals: { supabase, user } }) => {
+	addproperty: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return fail(401, { success: false, message: 'Authentication required' });
+		}
 		const formData = await request.formData();
 		const { error } = await supabase.rpc('create_property_for_user', {
 			user_id: user.id,

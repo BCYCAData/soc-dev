@@ -69,17 +69,8 @@
 		}
 	});
 
-	// Component references with proper types
-	interface MessagesActionPanelComponent {
-		clearForm: () => void;
-		setSuccessMessage: (msg: string) => void;
-		setErrorMessage: (msg: string) => void;
-	}
-
 	let individualUsersPanel: any = $state(null);
 	let allUsersPanel: any = $state(null);
-	let currentMessages: MessagesActionPanelComponent | null = $state(null);
-	let revokedMessages: any | null = $state(null);
 	let revokedSelectedIDs = $state([]);
 	let revokedSelectedRows = $state([]);
 
@@ -207,7 +198,6 @@
 				appMessagesData={currentMessageData}
 				action="?/revokeMessages"
 				bind:isSelectionEmpty
-				bind:this={currentMessages}
 			/>
 		</Tabs.Panel>
 
@@ -218,7 +208,6 @@
 				bind:isSelectionEmpty
 				bind:selectedIDs={revokedSelectedIDs}
 				bind:selectedRows={revokedSelectedRows}
-				bind:this={revokedMessages}
 			/>
 		</Tabs.Panel>
 	{/snippet}

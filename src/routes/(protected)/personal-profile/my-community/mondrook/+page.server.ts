@@ -2,7 +2,13 @@ import { type Actions } from '@sveltejs/kit';
 import { getMyCommunityMondrookFormData } from '$lib/server/form.utilities';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, user } }) => {
+	default: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return { success: false, error: true, errorMessage: 'Authentication required' };
+		}
 		const formData = await request.formData();
 		const hadUserPostalAddress = formData.get('had_user_postal_address') as string;
 		const profileMondrookMyCommunityFormData = getMyCommunityMondrookFormData(formData);

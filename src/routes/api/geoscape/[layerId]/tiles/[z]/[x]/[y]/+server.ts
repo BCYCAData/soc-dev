@@ -5,9 +5,11 @@ import {
 	getGeometryTypeFromLayer
 } from '$lib/server/services/geoscape.service';
 import type { RequestHandler } from './$types';
+import { requireUser } from '$lib/server/auth/apiGuard';
 
-export const GET: RequestHandler = async ({ params }) => {
-	const { layerId, z, x, y } = params;
+export const GET: RequestHandler = async (event) => {
+	await requireUser(event);
+	const { layerId, z, x, y } = event.params;
 
 	try {
 		const buffer = await fetchVectorTile(layerId, Number(z), Number(x), Number(y));

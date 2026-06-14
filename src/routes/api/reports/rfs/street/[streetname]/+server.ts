@@ -1,12 +1,15 @@
 import { error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { generateRfsStreetReport } from '$lib/server/pdf/templates/rfsStreetReport';
+import { requirePermission } from '$lib/server/auth/apiGuard';
 
 export const GET: RequestHandler = async (event) => {
+	const user = await requirePermission(event, 'admin.emergency.reports');
+
 	const {
 		params,
 		setHeaders,
-		locals: { supabase, user }
+		locals: { supabase }
 	} = event;
 
 	// Validate street name
@@ -34,7 +37,7 @@ export const GET: RequestHandler = async (event) => {
 		const pdf = await generateRfsStreetReport({
 			streetName: params.streetname,
 			propertyData,
-			generatedBy: user.email
+			generatedBy: user.email ?? 'Unknown'
 		});
 		// Set response headers
 		setHeaders({

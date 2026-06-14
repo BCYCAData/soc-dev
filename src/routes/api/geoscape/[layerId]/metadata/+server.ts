@@ -3,9 +3,11 @@ import { json } from '@sveltejs/kit';
 import { getLayerMetadata } from '$lib/server/services/geoscape.service';
 import type { RequestHandler } from './$types';
 import type { GeoscapeLayer } from '$lib/data/spatial/types';
+import { requireUser } from '$lib/server/auth/apiGuard';
 
-export const GET: RequestHandler = async ({ params }) => {
-	const { layerId } = params;
+export const GET: RequestHandler = async (event) => {
+	await requireUser(event);
+	const { layerId } = event.params;
 	try {
 		const metadata = await getLayerMetadata();
 		const layers = Object.values(metadata) as GeoscapeLayer[];

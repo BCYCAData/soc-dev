@@ -4,11 +4,14 @@ import { AuthError } from '@supabase/supabase-js';
 import { logSignUpSignInError } from '$lib/server/errorLogging';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.session) {
+	const {
+		data: { session }
+	} = await locals.supabase.auth.getSession();
+	if (session) {
 		redirect(303, '/');
 	}
 	return {
-		session: locals.session,
+		session,
 		user: null,
 		userRole: null,
 		permissions: [],
@@ -83,7 +86,6 @@ export const actions: Actions = {
 							message: 'Invalid credentials'
 						});
 					} else if (signInError.status === 429) {
-						console;
 						await logSignUpSignInError(supabase, {
 							errorType: 'RATE_LIMIT_ERROR',
 							errorMessage: signInError.message,

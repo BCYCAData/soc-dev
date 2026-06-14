@@ -20,6 +20,6 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		propertyIds: locals.propertyIds,
 		communities: locals.communities,
 		coordinatesKYNG: locals.coordinatesKYNG,
-		userProfile: locals.userProfile
+		userProfile: null
 	};
 };

@@ -1,7 +1,8 @@
 import { error, fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user }, params }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, params, parent }) => {
+	const { user } = await parent();
 	const propertyId = params.propertyid;
 	const [
 		{ data: propertyGeometryData, error: propertyGeometryError },
@@ -29,7 +30,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, user }, params 
 		console.log('Spatial Feature Attributes Error:', attributesError);
 		throw error(400, 'Error fetching feature data');
 	}
-	console.log('propertyGeometryData');
 	return {
 		propertyGeometryData,
 		featureTemplates: templates,
@@ -39,7 +39,13 @@ export const load: PageServerLoad = async ({ locals: { supabase, user }, params 
 	};
 };
 export const actions: Actions = {
-	saveFeature: async ({ request, locals: { supabase, user } }) => {
+	saveFeature: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return fail(401, { success: false, message: 'Authentication required' });
+		}
 		const formData = await request.formData();
 		const propertyId = formData.get('propertyId');
 		const templateId = formData.get('templateId');
@@ -114,7 +120,13 @@ export const actions: Actions = {
 			featureId: featureData
 		};
 	},
-	deleteFeature: async ({ request, locals: { supabase, user } }) => {
+	deleteFeature: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return fail(401, { success: false, message: 'Authentication required' });
+		}
 		const formData = await request.formData();
 		const featureId = formData.get('featureId');
 		const propertyId = formData.get('propertyId');

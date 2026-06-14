@@ -7,6 +7,7 @@ import type {
 	UserPropertyProfile
 } from '$lib/form.types';
 import { getPersonalProfileFormData } from '$lib/server/form.utilities';
+import { getCommunityRequestOptions } from '$lib/server/community-options';
 
 function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof PropertyProfile): T {
 	return propertyData.type === 'single'
@@ -14,9 +15,8 @@ function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof Prope
 		: (propertyData.profiles[0][key] as T);
 }
 
-export const load: PageServerLoad = (async ({
-	locals: { supabase, user, getCommunityRequestOptions }
-}) => {
+export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) => {
+	const { user } = await parent();
 	if (!user) {
 		throw redirect(303, '/auth/signin');
 	}
@@ -38,7 +38,7 @@ export const load: PageServerLoad = (async ({
 		property_profile: user_profile.property_profile[0] // Take first item from array
 	} as PersonalProfileFormData;
 
-	const userOptionsData = await getCommunityRequestOptions();
+	const userOptionsData = await getCommunityRequestOptions(supabase);
 
 	let steps: { index: number; text: string; page: string }[] = [
 		{ index: 1, text: '1', page: 'Step1' },
@@ -144,7 +144,10 @@ export const load: PageServerLoad = (async ({
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	saveData: async ({ request, locals: { supabase, user } }) => {
+	saveData: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
 		if (!user) {
 			throw redirect(303, '/auth/signin');
 		}

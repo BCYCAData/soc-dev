@@ -4,7 +4,13 @@ import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ request, locals: { supabase, user } }) => {
+	default: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return fail(401, { success: false, message: 'Authentication required' });
+		}
 		const formData = await request.formData();
 		const profileAboutMeFormData = getAboutMeFormData(formData);
 		const { error: aboutMeDataError } = await supabase

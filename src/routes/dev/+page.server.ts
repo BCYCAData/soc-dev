@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
+// Access control (dev-only + authenticated) is enforced by dev/+layout.server.ts.
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: projectAddressPointData, error: addressPointError } = await supabase.rpc(
 		'get_addresspoints_geojson'

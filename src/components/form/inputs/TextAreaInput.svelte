@@ -29,5 +29,5 @@
 	{#if lableClass && lableText}
 		<label class={lableClass} for={nameText}>{lableText}</label>
 	{/if}
-	<textarea id={nameText} name={nameText} class={textAreaClass} value={inputValue}></textarea>
+	<textarea id={nameText} name={nameText} class={textAreaClass} bind:value={inputValue}></textarea>
 </div>
