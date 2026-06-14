@@ -15,6 +15,7 @@ begin;
 --    children; user_roles is listed explicitly because it FKs to auth.users (not user_profile),
 --    so the cascade would otherwise miss it and re-runs would hit the (user_id,role) unique key.
 truncate public.user_profile, public.property_profile, public.user_roles restart identity cascade;
+truncate public.survey_responses;  -- anonymous survey data, unrelated to users
 
 -- 1) Per-user assignment (community + matched address point) into a temp table.
 create temp table _asg on commit drop as
@@ -162,5 +163,29 @@ from _asg a join legacy.profile p on p.id = a.user_id;
 -- 10) Default application role.
 insert into public.user_roles (user_id, role)
 select a.user_id, 'user'::public.app_role from _asg a;
+
+-- 11) Anonymous survey responses (old prod -> new). Identical columns; survey_id bigint->integer
+--     is an implicit assignment cast. Not user-linked (keyed by survey_id / invited uuid).
+insert into public.survey_responses (
+  "timestamp", email_address, property_address, suburb, mobile, phone, "mobileReception",
+  "residencyProfile", "signPosted", "truckAccess", "truckAccessOther", residents0_18, residents19_50,
+  residents51_70, residents71_, "vulnerableResidents", "numberDogs", "numberCats", "numberBirds",
+  "numberOtherPets", "liveStockPresent", "liveStockSafeArea", "shareLiveStockSafeArea",
+  "staticWaterAvailable", "fireFightingResources", "haveStortz", "stortzSize", "explosiveHazards",
+  "otherSiteHazards", "fireHazardReduction", "landAdjacentHazard", "otherHazards", "rfsSurvivalPlan",
+  "planToLeaveBeforeFire", "planToLeaveBeforeFlood", "fireFightingExperience", "communityWorkshopChoices",
+  "otherCommunityWorkshop", "willRunCommunityWorkshops", "communityMeetingChoices", "communityMeeting",
+  "informationSheetChoices", "otherInformationSheet", "stayInTouchChoices", "otherComments", survey_id, invited)
+select
+  "timestamp", email_address, property_address, suburb, mobile, phone, "mobileReception",
+  "residencyProfile", "signPosted", "truckAccess", "truckAccessOther", residents0_18, residents19_50,
+  residents51_70, residents71_, "vulnerableResidents", "numberDogs", "numberCats", "numberBirds",
+  "numberOtherPets", "liveStockPresent", "liveStockSafeArea", "shareLiveStockSafeArea",
+  "staticWaterAvailable", "fireFightingResources", "haveStortz", "stortzSize", "explosiveHazards",
+  "otherSiteHazards", "fireHazardReduction", "landAdjacentHazard", "otherHazards", "rfsSurvivalPlan",
+  "planToLeaveBeforeFire", "planToLeaveBeforeFlood", "fireFightingExperience", "communityWorkshopChoices",
+  "otherCommunityWorkshop", "willRunCommunityWorkshops", "communityMeetingChoices", "communityMeeting",
+  "informationSheetChoices", "otherInformationSheet", "stayInTouchChoices", "otherComments", survey_id, invited
+from legacy.survey_responses;
 
 commit;
