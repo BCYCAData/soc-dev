@@ -164,26 +164,6 @@ export interface TransformedOptionsData {
 	}[];
 }
 
-interface CommunityRequestOption {
-	index_value: number;
-	lable: string;
-	community_request_options_concordance: {
-		table_name: string;
-		object_name: string;
-		field_name: string;
-	};
-}
-
-interface SupabaseResponse {
-	index_value: number;
-	lable: string;
-	community_request_options_concordance: {
-		table_name: string;
-		object_name: string;
-		field_name: string;
-	};
-}
-
 export interface APIData {
 	status: number;
 	searchaddressstreet: string;

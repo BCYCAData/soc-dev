@@ -3,19 +3,20 @@
 	import { browser } from '$app/environment';
 	import { toast } from '$stores/toaststore';
 	import { createBrowserClient } from '@supabase/ssr';
+	import type { Database } from '$lib/db.types';
 	import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
 	let showWarning = $state(false);
 	let secondsRemaining = $state(300);
 	let checkInterval: number | null = null;
 	let countdownInterval: number | null = null;
-	let supabase: ReturnType<typeof createBrowserClient> | null = null;
+	let supabase: ReturnType<typeof createBrowserClient<Database>> | null = null;
 
 	onMount(() => {
 		if (!browser) return;
 
 		// Create Supabase client
-		supabase = createBrowserClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+		supabase = createBrowserClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
 
 		checkInterval = window.setInterval(async () => {
 			if (!supabase) return;

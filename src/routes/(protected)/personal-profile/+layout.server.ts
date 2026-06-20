@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { getCommunityOptions, type CommunityRequestOption } from '$lib/profile-options';
+import { getCommunityOptions } from '$lib/profile-options';
 
 const emptyOptionsData = {
 	object_names: [] as { object_name: string; options: { value: string; lable: string }[] }[]
@@ -38,7 +38,7 @@ export const load: LayoutServerLoad = async ({ parent, locals }) => {
 		console.error('Failed to fetch community request options:', requestError);
 		throw error(400, `Failed to fetch community request options: ${requestError.message}`);
 	}
-	const optionsDataArray = getCommunityOptions(data as CommunityRequestOption[]);
+	const optionsDataArray = getCommunityOptions(data ?? []);
 	const optionsData = {
 		userOptionsData:
 			optionsDataArray.find((item) => item.table_name === 'user_profile') ?? emptyOptionsData,

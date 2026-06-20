@@ -5,7 +5,7 @@ declare global {
 			// NOTE: only assign fields here that hooks.server.ts actually populates.
 			// `user`/`session` are intentionally NOT on locals — validate per-request with
 			// locals.supabase.auth.getUser()/getSession() (or read `user` from parent() in loads).
-			supabase: SupabaseClient;
+			supabase: SupabaseClient<import('$lib/db.types').Database>;
 			userRole: string | null;
 			permissions: string[];
 			propertyIds: string[] | null;

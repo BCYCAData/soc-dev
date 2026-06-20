@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { getCommunityOptions, type CommunityRequestOption } from '$lib/profile-options';
+import { getCommunityOptions } from '$lib/profile-options';
+import type { Database } from '$lib/db.types';
 import type { TransformedOptionsData } from '$lib/types';
 
 /**
@@ -11,7 +12,7 @@ import type { TransformedOptionsData } from '$lib/types';
  * personal profile form load.
  */
 export async function getCommunityRequestOptions(
-	supabase: SupabaseClient
+	supabase: SupabaseClient<Database>
 ): Promise<TransformedOptionsData[]> {
 	const { data, error } = await supabase.from('community_request_options_lut').select(`
                 index_value,
@@ -27,5 +28,5 @@ export async function getCommunityRequestOptions(
 		throw new Error(`Failed to fetch community request options: ${error.message}`);
 	}
 
-	return getCommunityOptions((data ?? []) as unknown as CommunityRequestOption[]);
+	return getCommunityOptions(data ?? []);
 }

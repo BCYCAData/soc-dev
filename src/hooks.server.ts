@@ -1,13 +1,14 @@
 // src/hooks.server.ts
 import { createServerClient } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import type { Database } from '$lib/db.types';
 
 // IMPORTANT: No authGuard / guardRoute here.
 // All auth logic happens inside route layouts now.
 
 export const handle = async ({ event, resolve }) => {
 	// 1. Create Supabase client for SSR
-	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+	event.locals.supabase = createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
 		cookies: {
 			getAll: (): { name: string; value: string }[] => event.cookies.getAll(),
 			setAll: (cookiesToSet: { name: string; value: string; options: Record<string, any> }[]) =>

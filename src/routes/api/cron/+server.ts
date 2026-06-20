@@ -4,6 +4,7 @@ import { PRIVATE_SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
 import { env } from '$env/dynamic/private';
 import type { RequestHandler } from './$types';
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from '$lib/db.types';
 
 export const GET: RequestHandler = async ({ request }) => {
 	const cronSecret = env.CRON_SECRET;
@@ -19,7 +20,7 @@ export const GET: RequestHandler = async ({ request }) => {
 
 	// Create the service-role client lazily inside the handler so it is not
 	// instantiated at import/build-analysis time.
-	const supabase = createClient(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_ROLE_KEY);
+	const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, PRIVATE_SUPABASE_SERVICE_ROLE_KEY);
 
 	// Call refresh_spatial_data to update NSW spatial data
 	const { data, error } = await supabase.rpc('refresh_spatial_data', {

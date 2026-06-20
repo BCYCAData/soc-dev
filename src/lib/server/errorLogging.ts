@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '$lib/db.types';
 
 type ErrorLogTable = 'address_validation_errors' | 'signup_errors' | 'signin_errors';
 
@@ -14,7 +15,7 @@ interface ErrorLogParams {
 }
 
 const logSignUpSignInError = async (
-	supabase: SupabaseClient,
+	supabase: SupabaseClient<Database>,
 	{
 		errorType,
 		errorMessage,
