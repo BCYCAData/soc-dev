@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { getCommunityOptions } from '$lib/profile-options';
+import { getCommunityRequestOptions } from '$lib/server/community-options';
 
 const emptyOptionsData = {
 	object_names: [] as { object_name: string; options: { value: string; lable: string }[] }[]
@@ -23,22 +23,7 @@ export const load: LayoutServerLoad = async ({ parent, locals }) => {
 		throw error(500, 'Failed to load user profile');
 	}
 	// Fetch community request options
-	const { data, error: requestError } = await locals.supabase.from('community_request_options_lut')
-		.select(`
-                index_value,
-                lable,
-                community_request_options_concordance!public_community_request_options_lut_concordance_fkey (
-                    table_name,
-                    object_name,
-                    field_name
-                )
-            `);
-
-	if (requestError) {
-		console.error('Failed to fetch community request options:', requestError);
-		throw error(400, `Failed to fetch community request options: ${requestError.message}`);
-	}
-	const optionsDataArray = getCommunityOptions(data ?? []);
+	const optionsDataArray = await getCommunityRequestOptions(locals.supabase);
 	const optionsData = {
 		userOptionsData:
 			optionsDataArray.find((item) => item.table_name === 'user_profile') ?? emptyOptionsData,
