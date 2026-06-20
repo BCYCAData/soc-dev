@@ -14,6 +14,13 @@
         "Authorization": "Bearer ${env:SUPABASE_PROD_ACCESS_TOKEN}"
       }
     },
+    "supabase-newprod": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=${env:SUPABASE_NEWPROD_PROJECT_REF}",
+      "headers": {
+        "Authorization": "Bearer ${env:SUPABASE_NEWPROD_ACCESS_TOKEN}"
+      }
+    },
     "svelte": {
       "command": "npx",
       "args": [

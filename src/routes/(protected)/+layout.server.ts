@@ -3,7 +3,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async (event) => {
 	// Central auth check - validates user and JWT
-	const { session, user, claims } = await authGuard({
+	const { session, user } = await authGuard({
 		event,
 		requireUser: true
 	});
@@ -14,14 +14,17 @@ export const load: LayoutServerLoad = async (event) => {
 	// - Checking route-specific permissions via routeMatchers
 	// - Property ID and KYNG area authorization
 
+	// Claim-derived fields are decoded once in hooks.server.ts and exposed on locals.
+	const { userRole, permissions, propertyIds, communities, coordinatesKYNG } = event.locals;
+
 	// Return auth data to all protected routes
 	return {
 		session,
 		user,
-		userRole: claims.user_role ?? 'user',
-		permissions: Array.isArray(claims.permissions) ? claims.permissions : [],
-		propertyIds: claims.property_ids ?? [],
-		communities: claims.community_slugs ?? [],
-		coordinatesKYNG: claims.coordinates_kyng ?? null
+		userRole: userRole ?? 'user',
+		permissions: permissions ?? [],
+		propertyIds: propertyIds ?? [],
+		communities: communities ?? [],
+		coordinatesKYNG: coordinatesKYNG ?? null
 	};
 };

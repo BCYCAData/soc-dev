@@ -6,7 +6,8 @@
  *
  * 1. **Session Validation**: Verifies Supabase session state (fast, local)
  * 2. **User Verification**: Validates user against Supabase auth (network call)
- * 3. **JWT Claims Extraction**: Decodes permissions, roles, and access rights from JWT
+ * 3. **Authorization Claims**: Reads permissions, roles, and access rights from `locals`
+ *    (decoded once in `hooks.server.ts` via `supabase.auth.getClaims()`)
  * 4. **Route-Based Authorization**: Enforces access rules for different route types:
  *    - KYNG coordinator routes
  *    - Personal property routes
@@ -44,7 +45,7 @@ import type { RequestEvent } from '@sveltejs/kit';
  * 1. Reads session from Supabase (local, fast)
  * 2. Skips validation for public routes
  * 3. Validates user identity if `requireUser` is true (network call)
- * 4. Decodes JWT claims (permissions, property_ids, coordinates_kyng)
+ * 4. Reads authorization claims (permissions, property_ids, coordinates_kyng) from `locals`
  * 5. Enforces route-specific access rules:
  *    - KYNG routes: Requires `coordinates_kyng` array with matching area
  *    - Property routes: Requires property ID in `property_ids` claim
@@ -71,7 +72,9 @@ import type { RequestEvent } from '@sveltejs/kit';
  * @returns {Promise<Object>} Authentication result
  * @returns {Session | null} returns.session - Supabase session object (null for public routes)
  * @returns {User | null} returns.user - Validated Supabase user object (null if not required)
- * @returns {Object} returns.claims - Decoded JWT claims containing permissions and access rights
+ *
+ * Authorization claims (permissions, property_ids, coordinates_kyng) are NOT returned;
+ * read them from `event.locals` (populated by `hooks.server.ts`).
  *
  * @throws {Redirect} 303 to `/auth/signin` - When user validation fails or user not found
  * @throws {Error} 403 'Not authorized as KYNG coordinator' - When KYNG route accessed without coordinator role
@@ -82,14 +85,14 @@ import type { RequestEvent } from '@sveltejs/kit';
  * @example
  * // Basic usage in protected layout
  * export const load = async (event) => {
- *   const { session, user, claims } = await authGuard({ event });
- *   return { session, user };
+ *   const { session, user } = await authGuard({ event });
+ *   return { session, user, permissions: event.locals.permissions };
  * };
  *
  * @example
  * // Skip user validation for faster performance (session-only check)
  * export const load = async (event) => {
- *   const { session, claims } = await authGuard({
+ *   const { session } = await authGuard({
  *     event,
  *     requireUser: false
  *   });
@@ -97,11 +100,11 @@ import type { RequestEvent } from '@sveltejs/kit';
  * };
  *
  * @example
- * // Access permissions from claims in server actions
+ * // Access permissions in server actions (claims are on locals, set by hooks)
  * export const actions = {
  *   default: async (event) => {
- *     const { claims } = await authGuard({ event });
- *     const permissions = claims.permissions || [];
+ *     await authGuard({ event });
+ *     const permissions = event.locals.permissions ?? [];
  *
  *     if (!hasPermission(permissions, 'admin.site.messages')) {
  *       throw error(403, 'Insufficient permissions');
@@ -127,7 +130,7 @@ export async function authGuard({
 
 	// 2. If route is public → skip checks
 	if (routeMatchers.isPublicRoute(event.url.pathname)) {
-		return { session: null, user: null, claims: {} };
+		return { session: null, user: null };
 	}
 
 	// 3. If user required → validate against Supabase (network call)
@@ -144,31 +147,19 @@ export async function authGuard({
 		user = validatedUser;
 	}
 
-	// 4. Decode JWT claims from access token (fast, local)
-	let claims: any = {};
-	if (session?.access_token) {
-		try {
-			const payload = session.access_token.split('.')[1];
-			claims = JSON.parse(Buffer.from(payload, 'base64').toString());
-		} catch (e) {
-			console.error('Failed to decode JWT:', e);
-		}
-	}
-
-	const permissions = Array.isArray(claims.permissions) ? claims.permissions.join(',') : '';
+	// 4. Authorization claims are decoded once in hooks.server.ts and exposed on
+	//    locals — reuse them here instead of re-decoding the token.
 
 	// ---------- MATCHERS & RULES ----------
 
 	// KYNG route
 	if (routeMatchers.isKYNGRoute(event.url.pathname)) {
-		if (!claims.coordinates_kyng?.length) {
+		const coordinatesKYNG = event.locals.coordinatesKYNG ?? [];
+		if (!coordinatesKYNG.length) {
 			throw error(403, 'Not authorized as KYNG coordinator');
 		}
 		const kyngArea = routeMatchers.getKYNGArea(event.url.pathname);
-		if (
-			kyngArea &&
-			!claims.coordinates_kyng.some((area: KYNGArea) => area.kyngAreaId === kyngArea)
-		) {
+		if (kyngArea && !coordinatesKYNG.some((area: KYNGArea) => area.kyngAreaId === kyngArea)) {
 			throw error(403, 'Not authorized for this KYNG area');
 		}
 	}
@@ -176,7 +167,7 @@ export async function authGuard({
 	// Property route
 	if (routeMatchers.isPropertyRoute(event.url.pathname)) {
 		const routePropertyId = routeMatchers.getPropertyId(event.url.pathname);
-		const propertyIds: string[] = Array.isArray(claims.property_ids) ? claims.property_ids : [];
+		const propertyIds = event.locals.propertyIds ?? [];
 		if (routePropertyId && !propertyIds.includes(routePropertyId)) {
 			throw error(403, 'Not authorized to view this property');
 		}
@@ -185,12 +176,11 @@ export async function authGuard({
 	// Permission-based route
 	const requiredPermission = routeMatchers.getRequiredPermission(event.url.pathname);
 	if (requiredPermission) {
-		const permissionArray = permissions ? permissions.split(',') : [];
-		if (!hasPermission(permissionArray, requiredPermission)) {
+		if (!hasPermission(event.locals.permissions ?? [], requiredPermission)) {
 			throw error(403, 'Insufficient permissions');
 		}
 	}
 
 	// Everything passed
-	return { session, user, claims };
+	return { session, user };
 }

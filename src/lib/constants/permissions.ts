@@ -1,8 +1,18 @@
 /**
- * Permission constants for type-safe permission checking.
- * These should match the permissions defined in the database.
+ * Canonical permissions module: the `PERMISSIONS` name constants AND the pure,
+ * environment-agnostic matching helpers (`hasPermission`, `isAdmin`, …).
  *
- * @module permissions-constants
+ * Permission layering (the single source of truth lives here):
+ * - `$lib/constants/permissions` (this file) — constants + pure matching logic;
+ *   safe to import from both server and client.
+ * - `$lib/server/permissions` — server-facing re-export of the helpers (back-compat
+ *   import path for server guards/loads).
+ * - `$lib/permissions.svelte` — reactive Svelte wrapper that feeds `page.data` into
+ *   these helpers for UI gating.
+ *
+ * Constants should match the permissions defined in the database.
+ *
+ * @module permissions
  */
 
 export const PERMISSIONS = {
@@ -80,3 +90,39 @@ export const COMMUNITY_FEATURES = {
 } as const;
 
 export type CommunityFeature = (typeof COMMUNITY_FEATURES)[keyof typeof COMMUNITY_FEATURES];
+
+/**
+ * Hierarchical permission check (dot-notation). A user permission grants a required
+ * permission when they are equal, when the user holds a parent (`admin.site` grants
+ * `admin.site.messages`), or when the user holds a child (`admin.site.messages` grants
+ * `admin.site`). Pass an array of alternatives to require any one of them.
+ *
+ * Canonical implementation shared by the server guards and the client UI store.
+ */
+export function hasPermission(userPermissions: string[], required: string | string[]): boolean {
+	if (!userPermissions || userPermissions.length === 0) return false;
+
+	const requiredPerms = Array.isArray(required) ? required : [required];
+
+	return requiredPerms.some((req) =>
+		userPermissions.some(
+			(userPerm) =>
+				userPerm === req || req.startsWith(userPerm + '.') || userPerm.startsWith(req + '.')
+		)
+	);
+}
+
+/** True if the user has the admin role or the root `admin` permission. */
+export function isAdmin(userRole: string | null, permissions: string[]): boolean {
+	return userRole === 'admin' || permissions.includes('admin');
+}
+
+/** True if any permission ends with `.{feature}` (e.g. `events`, `workshops`). */
+export function hasAnyFeature(permissions: string[], feature: string): boolean {
+	return permissions.some((p) => p.endsWith(`.${feature}`));
+}
+
+/** Convenience variadic form of {@link hasPermission} (any of the listed permissions). */
+export function hasAnyPermission(userPermissions: string[], ...required: string[]): boolean {
+	return hasPermission(userPermissions, required);
+}

@@ -30,28 +30,33 @@ export const handle = async ({ event, resolve }) => {
 		data: { user }
 	} = await event.locals.supabase.auth.getUser();
 
-	let claims: any = {};
+	let claims: Record<string, any> = {};
 
-	// Decode JWT claims from the authenticated user's access token
+	// Read verified JWT claims via getClaims() rather than a manual base64 decode
+	// of the cookie token. NOTE: this project signs JWTs with a symmetric secret,
+	// so getClaims() makes a server round-trip — gate it on `user` so anonymous
+	// requests stay cheap.
 	if (user) {
-		// Get the session to access the validated access_token
-		const {
-			data: { session }
-		} = await event.locals.supabase.auth.getSession();
-
-		if (session?.access_token) {
-			try {
-				const payload = session.access_token.split('.')[1];
-				claims = JSON.parse(Buffer.from(payload, 'base64').toString());
-			} catch (e) {
-				console.error('Failed to decode JWT:', e);
-			}
+		const { data: claimsData, error: claimsError } =
+			await event.locals.supabase.auth.getClaims();
+		if (claimsError) {
+			console.error('Failed to read JWT claims:', claimsError);
+		} else if (claimsData) {
+			claims = claimsData.claims;
 		}
 	}
 
-	// 3. Make claims available to layouts/routes
+	// 3. Make claims available to layouts/routes.
+	// `permissions` arrives as an array of comma-joined bundles (e.g.
+	// ["admin,admin.site,...", "kyng"]); flatten to individual dot-notation tokens
+	// so hasPermission() works for authGuard, apiGuard, and the client UI.
 	event.locals.userRole = claims.user_role ?? 'user';
-	event.locals.permissions = Array.isArray(claims.permissions) ? claims.permissions : [];
+	event.locals.permissions = Array.isArray(claims.permissions)
+		? (claims.permissions as unknown[])
+				.flatMap((p) => (typeof p === 'string' ? p.split(',') : []))
+				.map((s) => s.trim())
+				.filter(Boolean)
+		: [];
 	event.locals.propertyIds = claims.property_ids ?? [];
 	event.locals.communities = claims.community_slugs ?? [];
 	event.locals.coordinatesKYNG = claims.coordinates_kyng ?? null;

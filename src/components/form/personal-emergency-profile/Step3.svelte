@@ -35,10 +35,11 @@
 					name="mobile_reception"
 					type="radio"
 					class="h-4 w-4 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
+					id={`mobile_reception-${i + 1}`}
 					bind:group={formData.property_profile.mobile_reception}
 					value={i + 1}
 				/>
-				<label class="text-primary-700 ml-1 inline-block" for="mobile_reception">
+				<label class="text-primary-700 ml-1 inline-block" for={`mobile_reception-${i + 1}`}>
 					{i + 1}
 				</label>
 			</li>
@@ -54,14 +55,14 @@
 		<div class="col-span-1 flex items-center">
 			<input
 				class="ml-8 h-6 w-6 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
-				id="residency_profile"
+				id={`residency_profile-${value}`}
 				type="radio"
 				name="residency_profile"
 				bind:group={formData.residency_profile}
 				value={Number(value)}
 				checked={value != null}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-700" for="residency_profile"
+			<label class="text-scale-6 ml-2 font-medium text-orange-700" for={`residency_profile-${value}`}
 				>{lable}</label
 			>
 		</div>
@@ -111,13 +112,13 @@
 			<div class="flex items-center">
 				<input
 					class="ml-8 h-6 w-6 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
-					id="vulnerable_residents"
+					id={`vulnerable_residents-${value}`}
 					type="radio"
 					name="vulnerable_residents"
 					bind:group={formData.property_profile.vulnerable_residents}
 					{value}
 				/>
-				<label class="text-scale-6 ml-2 font-medium text-orange-700" for="vulnerable_residents"
+				<label class="text-scale-6 ml-2 font-medium text-orange-700" for={`vulnerable_residents-${value}`}
 					>{lable}</label
 				>
 			</div>

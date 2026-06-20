@@ -6,6 +6,11 @@
  */
 
 import { page } from '$app/state';
+import {
+	hasPermission as hasPermissionCore,
+	isAdmin as isAdminCore,
+	hasAnyFeature
+} from '$lib/constants/permissions';
 
 /**
  * Reactive permission utilities for Svelte components.
@@ -31,32 +36,22 @@ export function usePermissions() {
 	const permissions = $derived((page.data.permissions as string[]) || []);
 	const userRole = $derived(page.data.userRole as string | null);
 
+	// Delegate to the canonical helpers in $lib/constants/permissions so the UI gating
+	// matches the server guards exactly (reactive values are read at call time).
 	function hasPermission(perm: string | string[]): boolean {
-		// Access reactive values inside the function
-		const perms = permissions;
-		if (!perms || perms.length === 0) return false;
-
-		const required = Array.isArray(perm) ? perm : [perm];
-		return required.some((p) =>
-			perms.some((userPerm) => userPerm === p || userPerm.startsWith(p + '.'))
-		);
+		return hasPermissionCore(permissions, perm);
 	}
 
 	function hasAnyPermission(...perms: string[]): boolean {
-		return hasPermission(perms);
+		return hasPermissionCore(permissions, perms);
 	}
 
 	function isAdmin(): boolean {
-		// Access reactive values inside the function
-		const role = userRole;
-		const perms = permissions;
-		return role === 'admin' || perms.includes('admin');
+		return isAdminCore(userRole, permissions);
 	}
 
 	function hasFeature(feature: string): boolean {
-		// Access reactive values inside the function
-		const perms = permissions;
-		return perms.some((p) => p.endsWith(`.${feature}`));
+		return hasAnyFeature(permissions, feature);
 	}
 
 	return {

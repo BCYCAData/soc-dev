@@ -10,6 +10,13 @@ export default defineConfig({
 		}
 	},
 	plugins: [tailwindcss(), sveltekit()],
+	esbuild: {
+		// Strip debug logging from production bundles (client + server): minification
+		// in `vite build` drops these side-effect-free `pure` calls. console.warn and
+		// console.error are intentionally kept for real error logging, and dev builds
+		// (unminified) keep all console output.
+		pure: ['console.log', 'console.debug', 'console.info']
+	},
 	build: {
 		sourcemap: true
 	},
