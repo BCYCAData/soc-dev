@@ -41,28 +41,28 @@
 		<NumberInput
 			name="number_dogs"
 			lable="Dogs"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-900 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_other_pets}
 		/>
@@ -84,7 +84,7 @@
 				bind:group={formState.live_stock_present}
 				{value}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="live_stock_present"
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="live_stock_present"
 				>{lable}</label
 			>
 		</div>
@@ -110,7 +110,7 @@
 					bind:group={formState.live_stock_safe_area}
 					{value}
 				/>
-				<label class="text-scale-6 ml-2 font-medium text-orange-900" for="live_stock_safe_area"
+				<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="live_stock_safe_area"
 					>{lable}</label
 				>
 			</div>
@@ -134,7 +134,7 @@
 						{value}
 					/>
 					<label
-						class="text-scale-6 ml-2 font-medium text-orange-900"
+						class="text-scale-6 text-secondary-900 ml-2 font-medium"
 						for="share_livestock_safe_area">{lable}</label
 					>
 				</div>

@@ -64,16 +64,16 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">Resources At My Place</h1>
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Resources At My Place</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="unstyled text-base font-semibold text-gray-900">
-		Are there any static water supplies on the property?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
+		Are there any static water supplies on the property?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each staticWaterOptions as { value, lable }}
 			{#if value < 5}
 				<input
@@ -96,38 +96,38 @@
 				/>
 			{/if}
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="static_water_available">{lable}</label
 			>
 		{/each}
 	</div>
-	<h2 class="unstyled text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Do you have a Stortz fitting attached to a water tank?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input class="ml-8 h-4 w-4" name="have_stortz" type="radio" bind:group={haveStortz} {value} />
-			<label class="font-Poppins ml-2 text-base font-medium text-orange-900" for="have_stortz"
+			<label class="font-Poppins text-secondary-900 ml-2 text-base font-medium" for="have_stortz"
 				>{lable}</label
 			>
 		{/each}
 	</div>
 	{#if haveStortz === 'Y'}
-		<h2 class="unstyled text-base font-semibold text-gray-900">Please include the size (mm)</h2>
+		<h2 class="unstyled text-surface-900 text-base font-semibold">Please include the size (mm)</h2>
 		<input
 			type="number"
 			id="stortz_size"
 			name="stortz_size"
-			class="ml-4 w-20 rounded border border-orange-700 py-1 text-center sm:text-lg"
+			class="border-secondary-700 ml-4 w-20 rounded border py-1 text-center sm:text-lg"
 			bind:value={stortzSize}
 		/>
 	{/if}
-	<h2 class="unstyled text-base font-semibold text-gray-900">
-		Do you have any of the following at this property?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
+		Do you have any of the following at this property?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each fireFightingResourceOptions as { value, lable }}
 			<input
 				class="ml-8 h-4 w-4"
@@ -138,16 +138,18 @@
 				checked={fireFightingResources?.includes(Number(value))}
 			/>
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="fire_fighting_resources">{lable}</label
 			>
 		{/each}
 	</div>
-	<h2 class="unstyled text-base font-semibold text-gray-900">
-		Does your property have?<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
+		Does your property have?<span class="text-surface-500 ml-2 text-sm">
+			(Check all that apply)</span
+		>
 	</h2>
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-orange-300 p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
 		{#each fireHazardReductionOptions as { value, lable }}
 			<div class="col-span-1 flex items-center">
@@ -160,7 +162,7 @@
 					checked={fireHazardReduction?.includes(Number(value))}
 				/>
 				<label
-					class="font-Poppins ml-2 text-base font-medium text-orange-900"
+					class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 					for="fire_hazard_reduction">{lable}</label
 				>
 			</div>

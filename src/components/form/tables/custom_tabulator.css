@@ -1,6 +1,6 @@
 .tabulator-page-size {
 	width: 60px;
-	border: 1px solid #e0e0e0;
+	border: 1px solid var(--color-surface-300);
 	border-radius: 4px;
 	outline: none;
 	line-height: 24px;
@@ -21,21 +21,21 @@
 }
 
 .tabulator-header-contents {
-	background-color: #38bdf8;
+	background-color: var(--color-tertiary-300);
 }
 
 .tabulator-col-content {
-	color: #7c2d12;
+	color: var(--color-secondary-900);
 	font-weight: 500;
-	background-color: #38bdf8;
+	background-color: var(--color-tertiary-300);
 }
 
 .tabulator-row.tabulator-selected {
-	background-color: #fed7aa;
+	background-color: var(--color-secondary-200);
 }
 
 div.tabulator-col-title input[type='checkbox'] {
-	background-color: #e0f2fe;
+	background-color: var(--color-tertiary-100);
 }
 
 /* Sorter */
@@ -45,14 +45,14 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col-content
 	.tabulator-col-sorter
 	.tabulator-arrow {
-	border-bottom: 6px solid #7c2d12;
+	border-bottom: 6px solid var(--color-secondary-900);
 }
 
 @media (hover: hover) and (pointer: fine) {
 	.tabulator
 		.tabulator-header
 		.tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
-		background-color: #7c2d12;
+		background-color: var(--color-secondary-900);
 	}
 }
 
@@ -61,7 +61,7 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col.tabulator-sortable[aria-sort='none']
 	.tabulator-col-content
 	.tabulator-col-sorter {
-	color: #7c2d12;
+	color: var(--color-secondary-900);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -71,7 +71,7 @@ div.tabulator-col-title input[type='checkbox'] {
 		.tabulator-col-content
 		.tabulator-col-sorter.tabulator-col-sorter-element
 		.tabulator-arrow:hover {
-		border-bottom: 6px solid #7c2d12;
+		border-bottom: 6px solid var(--color-secondary-900);
 	}
 }
 
@@ -81,7 +81,7 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col-content
 	.tabulator-col-sorter
 	.tabulator-arrow {
-	border-bottom: 6px solid #7c2d12;
+	border-bottom: 6px solid var(--color-secondary-900);
 }
 
 .tabulator
@@ -89,7 +89,7 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col.tabulator-sortable[aria-sort='ascending']
 	.tabulator-col-content
 	.tabulator-col-sorter {
-	color: #7c2d12;
+	color: var(--color-secondary-900);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -99,7 +99,7 @@ div.tabulator-col-title input[type='checkbox'] {
 		.tabulator-col-content
 		.tabulator-col-sorter.tabulator-col-sorter-element
 		.tabulator-arrow:hover {
-		border-bottom: 6px solid #7c2d12;
+		border-bottom: 6px solid var(--color-secondary-900);
 	}
 }
 
@@ -109,7 +109,7 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col-content
 	.tabulator-col-sorter
 	.tabulator-arrow {
-	border-bottom: 6px solid #7c2d12;
+	border-bottom: 6px solid var(--color-secondary-900);
 }
 
 .tabulator
@@ -117,7 +117,7 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col.tabulator-sortable[aria-sort='descending']
 	.tabulator-col-content
 	.tabulator-col-sorter {
-	color: #7c2d12;
+	color: var(--color-secondary-900);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -127,7 +127,7 @@ div.tabulator-col-title input[type='checkbox'] {
 		.tabulator-col-content
 		.tabulator-col-sorter.tabulator-col-sorter-element
 		.tabulator-arrow:hover {
-		border-top: 6px solid #7c2d12;
+		border-top: 6px solid var(--color-secondary-900);
 	}
 }
 
@@ -137,6 +137,6 @@ div.tabulator-col-title input[type='checkbox'] {
 	.tabulator-col-content
 	.tabulator-col-sorter
 	.tabulator-arrow {
-	border-top: 6px solid #7c2d12;
-	color: #7c2d12;
+	border-top: 6px solid var(--color-secondary-900);
+	color: var(--color-secondary-900);
 }

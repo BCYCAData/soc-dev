@@ -122,8 +122,10 @@
 
 	<article class="text-surface-950">
 		<header class="space-y-2 text-center">
-			<h2 class="text-gray-950 sm:mt-4 sm:text-3xl">Terms of Use</h2>
-			<p><time class="text-sm text-gray-600" datetime="2022-06">Last updated: June 2022</time></p>
+			<h2 class="text-surface-950 sm:mt-4 sm:text-3xl">Terms of Use</h2>
+			<p>
+				<time class="text-surface-600 text-sm" datetime="2022-06">Last updated: June 2022</time>
+			</p>
 		</header>
 
 		{#each sections as section}

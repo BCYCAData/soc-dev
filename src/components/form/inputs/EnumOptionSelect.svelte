@@ -21,7 +21,7 @@
 	<span class="mr-2">{header}</span>
 	<select
 		bind:value={messageContext}
-		class="ml-2 min-w-[125px] rounded-md border border-gray-300 px-3 py-1 pr-9 focus:outline-none focus:ring-0 active:outline-none active:ring-0"
+		class="border-surface-300 ml-2 min-w-[125px] rounded-md border px-3 py-1 pr-9 focus:ring-0 focus:outline-none active:ring-0 active:outline-none"
 	>
 		{#each options as option}
 			<option class="option-hover-bg min-w-max" value={option}>{option}</option>

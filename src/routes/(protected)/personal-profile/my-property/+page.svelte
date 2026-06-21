@@ -61,11 +61,11 @@
 	/>
 {/if}
 <div class="mx-auto px-6">
-	<h1 class="mb-6 text-3xl font-bold text-orange-700">{title}</h1>
+	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">{title}</h1>
 
 	<div class="mb-8 grid gap-6">
 		{#each properties as property}
-			<section class="rounded-lg bg-white p-6 shadow">
+			<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 				<div class="mb-4 flex items-center justify-between">
 					<div class="flex items-center gap-3">
 						<h2 class="text-xl font-semibold">{formatAddress(property)}</h2>
@@ -73,7 +73,7 @@
 							<div class="relative">
 								<button
 									type="button"
-									class="ring-opacity-5 absolute z-50 mt-2 inline-flex w-64 items-center gap-1 rounded-md bg-white p-4 shadow-lg ring-1 ring-black"
+									class="bg-surface-50-950 ring-surface-950/5 absolute z-50 mt-2 inline-flex w-64 items-center gap-1 rounded-md p-4 shadow-lg ring-1"
 									onclick={() => toggleEmailPopup(property.id)}
 									onkeydown={(e) => e.key === 'Enter' && toggleEmailPopup(property.id)}
 									aria-expanded={showEmailPopup === property.id}
@@ -101,7 +101,7 @@
 								</button>
 								{#if showEmailPopup === property.id}
 									<div
-										class="ring-opacity-5 absolute z-50 mt-2 w-64 rounded-md bg-white p-4 shadow-lg ring-1 ring-black"
+										class="bg-surface-50-950 ring-surface-950/5 absolute z-50 mt-2 w-64 rounded-md p-4 shadow-lg ring-1"
 										role="dialog"
 										aria-label="Linked users"
 									>
@@ -116,7 +116,7 @@
 											<h3 class="mb-2 text-sm font-medium">Linked Users:</h3>
 											<ul class="space-y-1">
 												{#each property.linked_users as email}
-													<li class="text-sm text-gray-600">{email}</li>
+													<li class="text-surface-600 text-sm">{email}</li>
 												{/each}
 											</ul>
 										</button>
@@ -126,36 +126,21 @@
 						{/if}
 					</div>
 
-					<button
-						class="hover:bg-ertiary-600 bg-error-500 rounded px-4 py-2 text-white"
-						onclick={() => handleRemoveClick(property)}
-					>
+					<button class="btn preset-filled-error-500" onclick={() => handleRemoveClick(property)}>
 						Remove Property
 					</button>
 				</div>
 				<div class="grid grid-cols-2 gap-4">
-					<a
-						href="my-property/{property.id}/assets"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="my-property/{property.id}/assets" class="btn preset-filled-secondary-500">
 						Property Assets
 					</a>
-					<a
-						href="my-property/{property.id}/hazards"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="my-property/{property.id}/hazards" class="btn preset-filled-secondary-500">
 						Property Hazards
 					</a>
-					<a
-						href="my-property/{property.id}/my-map"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="my-property/{property.id}/my-map" class="btn preset-filled-secondary-500">
 						Property Map
 					</a>
-					<a
-						href="my-property/{property.id}/resources"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="my-property/{property.id}/resources" class="btn preset-filled-secondary-500">
 						Property Resources
 					</a>
 				</div>
@@ -163,10 +148,7 @@
 		{/each}
 	</div>
 
-	<button
-		class="rounded bg-orange-500 px-4 py-2 text-white hover:bg-orange-600"
-		onclick={() => (showAddPropertyModal = true)}
-	>
+	<button class="btn preset-filled-secondary-500" onclick={() => (showAddPropertyModal = true)}>
 		Add New Property
 	</button>
 </div>

@@ -65,7 +65,7 @@
 				type="text"
 				id="first_name"
 				name="first_name"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 				autocomplete="given-name"
 				style="text-transform:capitalize"
 				placeholder="First Name "
@@ -79,7 +79,7 @@
 				id="family_name"
 				name="family_name"
 				autocomplete="off"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 				style="text-transform:capitalize"
 				placeholder="Family Name "
 				use:setTitleCase
@@ -100,7 +100,7 @@
 					type="text"
 					id="property_address_street"
 					name="property_address_street"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 					autocomplete="street-address"
 					placeholder="STREET ADDRESS"
 					use:setUpperCase
@@ -124,7 +124,7 @@
 						type="text"
 						id="property_address_suburb"
 						name="property_address_suburb"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 						autocomplete="address-level2"
 						placeholder="SUBURB"
 						use:setUpperCase
@@ -144,7 +144,7 @@
 						type="text"
 						id="property_address_postcode"
 						name="property_address_postcode"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 pr-20"
+						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
 						placeholder="Postcode"
 						autocomplete="postal-code"
 						style="text-transform:uppercase"
@@ -178,7 +178,7 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 ml-2 font-medium text-orange-700" for="property_rented"
+						<label class="text-scale-6 text-secondary-700 ml-2 font-medium" for="property_rented"
 							>{lable}</label
 						>
 					</div>
@@ -195,7 +195,7 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 ml-2 font-medium text-orange-700" for="property_rented"
+						<label class="text-scale-6 text-secondary-700 ml-2 font-medium" for="property_rented"
 							>{lable}</label
 						>
 					</div>
@@ -210,7 +210,7 @@
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 w-3/4 flex-initial rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-3/4 flex-initial rounded-lg border p-0.5"
 				id="agent_name"
 				name="agent_name"
 				autocomplete="off"
@@ -224,7 +224,7 @@
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 w-1/8 flex-auto rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-1/8 flex-auto rounded-lg border p-0.5"
 				id="agent_mobile"
 				name="agent_mobile"
 				autocomplete="off"
@@ -250,7 +250,7 @@
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 w-1/8 flex-auto rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-1/8 flex-auto rounded-lg border p-0.5"
 				id="agent_phone"
 				autocomplete="off"
 				placeholder="Landline XXXX XXXX"
@@ -311,7 +311,7 @@
 					>
 					<input
 						type="text"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 pr-20"
+						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-full rounded-lg border p-0.5 pr-20"
 						id="truck_access_other_information"
 						name="truck_access_other_information"
 						hidden={!otherAccessChecked}
@@ -347,7 +347,7 @@
 			>
 			<input
 				type="tel"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 pr-20"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
 				id="mobile"
 				name="mobile"
 				placeholder="Mobile 0XXX XXX XXX"
@@ -370,7 +370,7 @@
 			>
 			<input
 				type="tel"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 pr-20"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
 				id="phone"
 				name="phone"
 				placeholder="Landline XXXX XXXX"

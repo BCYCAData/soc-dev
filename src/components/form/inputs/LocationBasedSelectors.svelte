@@ -39,20 +39,20 @@
 <Accordion.Item
 	value="2"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-orange-100 font-medium"
+	classes="bg-secondary-100 font-medium"
 >
 	{#snippet control()}Individual Property - (street address){/snippet}
 	{#snippet panel()}
 		<form
 			method="POST"
-			class="card bg-orange-50 p-4"
+			class="card bg-secondary-50 p-4"
 			action="?/sendMessageToAllUsersAtAddress"
 			use:enhance={handleAddressSubmit}
 		>
 			<label class="flex grow flex-col items-start">
 				<p>Enter the message here:</p>
 				<input
-					class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+					class="focus:ring-primary-500 border-surface-300 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					name="inputMessage"
 					type="text"
 					placeholder="Message"
@@ -67,7 +67,7 @@
 				<p class="mr-2">Send this message to all Users at the selected addresses</p>
 				<button
 					type="submit"
-					class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+					class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 					disabled={selectedValues.length === 0 || isSubmittingAddress}
 					aria-busy={isSubmittingAddress}
 				>
@@ -88,20 +88,20 @@
 <Accordion.Item
 	value="3"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-orange-100 font-medium"
+	classes="bg-secondary-100 font-medium"
 >
 	{#snippet control()}All in a Street{/snippet}
 	{#snippet panel()}
 		<form
 			method="POST"
-			class="card bg-orange-50 p-4"
+			class="card bg-secondary-50 p-4"
 			action="?/sendMessageToAllUsersInStreet"
 			use:enhance={handleStreetSubmit}
 		>
 			<label class="flex grow flex-col items-start">
 				<p>Enter the message here:</p>
 				<input
-					class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+					class="focus:ring-primary-500 border-surface-300 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					name="inputMessage"
 					type="text"
 					placeholder="Message"
@@ -116,7 +116,7 @@
 				<p class="mr-2">Send this message to all Users at the selected streets</p>
 				<button
 					type="submit"
-					class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+					class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 					disabled={selectedValues.length === 0 || isSubmittingStreet}
 					aria-busy={isSubmittingStreet}
 				>
@@ -136,20 +136,20 @@
 <Accordion.Item
 	value="4"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-orange-100 font-medium"
+	classes="bg-secondary-100 font-medium"
 >
 	{#snippet control()}All in a Community{/snippet}
 	{#snippet panel()}
 		<form
 			method="POST"
-			class="card bg-orange-50 p-4"
+			class="card bg-secondary-50 p-4"
 			action="?/sendMessageToAllUsersInCommunity"
 			use:enhance={handleCommunitySubmit}
 		>
 			<label class="flex grow flex-col items-start">
 				<p>Enter the message here:</p>
 				<input
-					class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+					class="focus:ring-primary-500 border-surface-300 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					name="inputMessage"
 					type="text"
 					placeholder="Message"
@@ -164,7 +164,7 @@
 				<p class="mr-2">Send this message to all Users at the selected communities</p>
 				<button
 					type="submit"
-					class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+					class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 					disabled={selectedValues.length === 0 || isSubmittingCommunity}
 					aria-busy={isSubmittingCommunity}
 				>
@@ -184,20 +184,20 @@
 <Accordion.Item
 	value="5"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-orange-100 font-medium"
+	classes="bg-secondary-100 font-medium"
 >
 	{#snippet control()}All in a Suburb{/snippet}
 	{#snippet panel()}
 		<form
 			method="POST"
-			class="card bg-orange-50 p-4"
+			class="card bg-secondary-50 p-4"
 			action="?/sendMessageToAllUsersInSuburb"
 			use:enhance={handleSuburbSubmit}
 		>
 			<label class="flex grow flex-col items-start">
 				<p>Enter the message here:</p>
 				<input
-					class="focus:ring-primary-500 mr-2 w-full rounded-md border border-gray-300 px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+					class="focus:ring-primary-500 border-surface-300 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
 					name="inputMessage"
 					type="text"
 					placeholder="Message"
@@ -212,7 +212,7 @@
 				<p class="mr-2">Send this message to all Users at the selected suburbs</p>
 				<button
 					type="submit"
-					class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+					class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 					disabled={selectedValues.length === 0 || isSubmittingSuburb}
 					aria-busy={isSubmittingSuburb}
 				>

@@ -8,7 +8,7 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<a
 			href="/admin/site/roles/assignments"
-			class="card bg-orange-50 p-6 transition-all hover:bg-orange-100"
+			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Role Assignments</h2>
 			<ul class="list-inside list-disc space-y-2">
@@ -21,7 +21,7 @@
 
 		<a
 			href="/admin/site/roles/permissions"
-			class="card bg-orange-50 p-6 transition-all hover:bg-orange-100"
+			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Roles & Permissions</h2>
 			<ul class="list-inside list-disc space-y-2">

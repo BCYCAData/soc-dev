@@ -74,17 +74,17 @@
 		class="mx-auto w-full max-w-5xl space-y-2 py-2"
 		method="POST"
 	>
-		<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">About Me</h1>
+		<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">About Me</h1>
 
 		<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-		<h2 class="h2 text-lg font-semibold text-gray-900">What is your name?</h2>
-		<div class="grid gap-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-2 sm:gap-2">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">What is your name?</h2>
+		<div class="bg-secondary-300 grid gap-2 rounded-lg p-1 sm:grid-cols-2 sm:gap-2">
 			<input
 				type="text"
 				id="first_name"
 				name="first_name"
-				class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+				class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
 				autocomplete="given-name"
 				style="text-transform:capitalize"
 				placeholder="First Name "
@@ -96,16 +96,16 @@
 				id="family_name"
 				name="family_name"
 				autocomplete="off"
-				class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+				class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
 				style="text-transform:capitalize"
 				placeholder="Family Name"
 				use:setTitleCase
 				bind:value={family_name}
 			/>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">Are you:</h2>
+		<h2 class="h2 text-surface-900 text-lg font-semibold">Are you:</h2>
 		<div
-			class="grid grid-flow-col gap-x-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-2 sm:grid-rows-4 sm:gap-x-2"
+			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-4 sm:gap-x-2"
 		>
 			{#each residencyOptions as { value, lable }}
 				<div class="col-span-1 flex items-center">
@@ -117,22 +117,22 @@
 						bind:group={residency_profile}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="residency_profile"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="residency_profile"
 						>{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
 		<div class="flex flex-row items-center justify-start pt-2">
-			<h2 class="h2 text-lg font-semibold text-gray-900">What is your mobile phone number?</h2>
-			<div class="ml-3 rounded-lg bg-orange-300 p-1">
+			<h2 class="h2 text-surface-900 text-lg font-semibold">What is your mobile phone number?</h2>
+			<div class="bg-secondary-300 ml-3 rounded-lg p-1">
 				<input
 					onchange={() => {
 						unsaved = true;
 					}}
 					type="tel"
 					name="mobile"
-					class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+					class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
 					placeholder="Mobile 0XXX XXX XXX"
 					onkeydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -149,10 +149,10 @@
 				/>
 			</div>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Have you completed a RFS Bushfire survival plan?
 		</h2>
-		<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			{#each yesNoSendOptions as { value, lable }}
 				<div class="flex items-center">
 					<input
@@ -163,17 +163,17 @@
 						bind:group={rfs_survival_plan}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="rfs_survival_plan"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="rfs_survival_plan"
 						>{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			What is your level of firefighting experience?
 		</h2>
 		<div
-			class="grid grid-flow-col gap-x-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
+			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
 			{#each fireFightingExperienceOptions as { value, lable }}
 				<div class="flex items-center">
@@ -185,16 +185,17 @@
 						bind:group={fire_fighting_experience}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="fire_fighting_experience"
-						>{lable}</label
+					<label
+						class="text-secondary-900 ml-2 text-base font-medium"
+						for="fire_fighting_experience">{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Have you had unpleasant traumatic experience of bushfire?
 		</h2>
-		<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			{#each yesNoOptions as { value, lable }}
 				<div class="flex items-center">
 					<input
@@ -205,16 +206,17 @@
 						bind:group={fire_trauma}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="fire_trauma">{lable}</label
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="fire_trauma"
+						>{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			If your property is threatened by fire, are you:
 		</h2>
 		<div
-			class="grid grid-flow-col gap-x-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
+			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
 			{#each stayGoOptions as { value, lable }}
 				<div class="flex items-center">
@@ -226,17 +228,18 @@
 						bind:group={plan_to_leave_before_fire}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="plan_to_leave_before_fire"
-						>{lable}</label
+					<label
+						class="text-secondary-900 ml-2 text-base font-medium"
+						for="plan_to_leave_before_fire">{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			If your property is threatened by flood, are you:
 		</h2>
 		<div
-			class="grid grid-flow-col gap-x-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
+			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
 			{#each stayGoOptions as { value, lable }}
 				<div class="flex items-center">
@@ -248,8 +251,9 @@
 						bind:group={plan_to_leave_before_flood}
 						value={Number(value)}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="plan_to_leave_before_flood"
-						>{lable}</label
+					<label
+						class="text-secondary-900 ml-2 text-base font-medium"
+						for="plan_to_leave_before_flood">{lable}</label
 					>
 				</div>
 			{/each}

@@ -90,15 +90,15 @@
 		class="mx-auto w-full max-w-5xl space-y-2 py-2"
 		method="POST"
 	>
-		<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">My Place</h1>
+		<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">My Place</h1>
 
 		<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
-		<h2 class="h2 text-lg font-semibold text-gray-900">What is your address?</h2>
-		<div class="grid gap-2 rounded-lg bg-orange-300 p-1 sm:grid-cols-10 sm:gap-2">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">What is your address?</h2>
+		<div class="bg-secondary-300 grid gap-2 rounded-lg p-1 sm:grid-cols-10 sm:gap-2">
 			<input
 				type="text"
 				name="property_address_street"
-				class="focus:border-primary-600 focus:ring-primary-600 col-span-6 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+				class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 col-span-6 block w-full rounded-lg border p-0.5 text-base"
 				placeholder="Street Address"
 				disabled
 				bind:value={currentProperty.property_address_street}
@@ -106,7 +106,7 @@
 			<input
 				type="text"
 				name="property_address_suburb"
-				class="focus:border-primary-600 focus:ring-primary-600 col-span-3 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+				class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 col-span-3 block w-full rounded-lg border p-0.5 text-base"
 				placeholder="SUBURB"
 				autocomplete="address-level2"
 				use:setUpperCase
@@ -117,15 +117,15 @@
 			<input
 				type="text"
 				name="property_address_postcode"
-				class="focus:border-primary-600 focus:ring-primary-600 col-span-1 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+				class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 col-span-1 block w-full rounded-lg border p-0.5 text-base"
 				placeholder="Postcode"
 				autocomplete="postal-code"
 				disabled
 				bind:value={currentProperty.property_address_postcode}
 			/>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">Are you renting this property?</h2>
-		<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">Are you renting this property?</h2>
+		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			<div class="mr-4 flex items-center">
 				{#each yesNoOptions as { value, lable }}
 					{#if lable === 'Yes'}
@@ -168,7 +168,7 @@
 					>
 					<input
 						type="text"
-						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+						class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 rounded-lg border p-0.5 text-base"
 						id="agent_name"
 						name="agent_name"
 						autocomplete="off"
@@ -184,7 +184,7 @@
 					>
 					<input
 						type="text"
-						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+						class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 rounded-lg border p-0.5 text-base"
 						id="agent_mobile"
 						name="agent_mobile"
 						hidden={!currentProperty.property_rented}
@@ -212,7 +212,7 @@
 					>
 					<input
 						type="text"
-						class="focus:border-primary-600 focus:ring-primary-600 rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+						class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 rounded-lg border p-0.5 text-base"
 						id="agent_phone"
 						name="agent_phone"
 						hidden={!currentProperty.property_rented}
@@ -234,10 +234,10 @@
 				</div>
 			</div>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Is your property well sign posted and numbered clearly from the road?
 		</h2>
-		<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			<div class="mr-4 flex items-center">
 				{#each yesNoOptions as { value, lable }}
 					<input
@@ -247,16 +247,17 @@
 						bind:group={currentProperty.sign_posted}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="sign_posted">{lable}</label
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="sign_posted"
+						>{lable}</label
 					>
 				{/each}
 			</div>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Is there easy truck access to the buildings, boundaries and paddocks?
 		</h2>
 		<div
-			class="grid grid-flow-col gap-2 rounded-lg bg-orange-300 p-2 sm:grid-cols-2 sm:grid-rows-2 sm:gap-2"
+			class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-2 sm:gap-2"
 		>
 			{#each accessOptions as { value, lable }}
 				<div class="col-span-1 flex items-center">
@@ -277,22 +278,25 @@
 							{value}
 						/>
 					{/if}
-					<label class="ml-2 text-base font-medium text-orange-900" for="truck_access"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="truck_access"
 						>{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
-		<h2 class="text-base font-semibold text-gray-900" hidden={currentProperty.truck_access !== 4}>
+		<h2
+			class="text-surface-900 text-base font-semibold"
+			hidden={currentProperty.truck_access !== 4}
+		>
 			Other Access Information:
 		</h2>
 		<div
-			class="rounded-lg bg-orange-300 p-2 sm:text-lg"
+			class="bg-secondary-300 rounded-lg p-2 sm:text-lg"
 			hidden={currentProperty.truck_access !== 4}
 		>
 			<input
 				type="text"
-				class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-base"
+				class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-base"
 				hidden={currentProperty.truck_access !== 4}
 				id="truck_access_other_information"
 				name="truck_access_other_information"
@@ -300,41 +304,41 @@
 				bind:value={currentProperty.truck_access_other_information}
 			/>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">How many people usually live here?</h2>
-		<div class="flex flex-row justify-around rounded-lg bg-orange-300 p-2 sm:text-lg">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">How many people usually live here?</h2>
+		<div class="bg-secondary-300 flex flex-row justify-around rounded-lg p-2 sm:text-lg">
 			<NumberInput
 				name="residents0_18"
 				lable="0-18 yrs "
-				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-				inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+				lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+				inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 				bind:inputValue={currentProperty.residents0_18}
 			/>
 			<NumberInput
 				name="residents19_50"
 				lable="19-50 yrs "
-				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-				inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+				lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+				inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 				bind:inputValue={currentProperty.residents19_50}
 			/>
 			<NumberInput
 				name="residents51_70"
 				lable="51-70 yrs "
-				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-				inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+				lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+				inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 				bind:inputValue={currentProperty.residents51_70}
 			/>
 			<NumberInput
 				name="residents71_"
 				lable="71+ yrs"
-				lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-				inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+				lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+				inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 				bind:inputValue={currentProperty.residents71_}
 			/>
 		</div>
-		<h2 class="h2 text-lg font-semibold text-gray-900">
+		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Do you consider any person on the property to be vulnerable?
 		</h2>
-		<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			{#each yesNoOptions as { value, lable }}
 				<div class="mr-4 flex items-center">
 					<input
@@ -344,22 +348,22 @@
 						bind:group={currentProperty.vulnerable_residents}
 						{value}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="vulnerable_residents"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="vulnerable_residents"
 						>{lable}</label
 					>
 				</div>
 			{/each}
 		</div>
 		<div class="flex flex-row items-center justify-start pt-2">
-			<h2 class="h2 text-lg font-semibold text-gray-900">What is your landline phone number?</h2>
-			<div class="ml-3 rounded-lg bg-orange-300 p-1">
+			<h2 class="h2 text-surface-900 text-lg font-semibold">What is your landline phone number?</h2>
+			<div class="bg-secondary-300 ml-3 rounded-lg p-1">
 				<input
 					onchange={() => {
 						unsaved = true;
 					}}
 					type="tel"
 					name="phone"
-					class="focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5 text-base text-gray-900"
+					class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
 					placeholder="Landline XXXX XXXX"
 					onkeydown={(e) => {
 						if (['Backspace', 'Delete'].includes(e.key)) {
@@ -377,10 +381,10 @@
 			</div>
 		</div>
 		<div class="flex flex-row items-center justify-start pt-2">
-			<h2 class="h2 text-lg font-semibold text-gray-900">
+			<h2 class="h2 text-surface-900 text-lg font-semibold">
 				What is the mobile reception quality at the property?
 			</h2>
-			<div class="ml-4 rounded-lg bg-orange-300 p-1">
+			<div class="bg-secondary-300 ml-4 rounded-lg p-1">
 				<div class="my-0 flex list-none items-center text-base sm:mx-auto sm:w-full">
 					<div class="text-primary-900 mx-4 flex-auto font-semibold">Poor</div>
 					{#each Array(5) as _, i}
@@ -388,7 +392,7 @@
 							<input
 								name="mobile_reception"
 								type="radio"
-								class="h-4 w-4 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
+								class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 h-4 w-4"
 								bind:group={currentProperty.mobile_reception}
 								value={i + 1}
 							/>

@@ -53,7 +53,8 @@
 				bind:group={formState.site_hazards}
 				value={Number(value)}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="site_hazards">{lable}</label
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="site_hazards"
+				>{lable}</label
 			>
 		</div>
 	{/each}
@@ -71,7 +72,7 @@
 />
 
 <h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
-	Does your property have:<span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
+	Does your property have:<span class="text-surface-500 ml-2 text-sm"> (Check all that apply)</span>
 </h2>
 <div
 	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
@@ -85,7 +86,7 @@
 				bind:group={formState.fire_hazard_reduction}
 				value={Number(value)}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="fire_hazard_reduction"
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="fire_hazard_reduction"
 				>{lable}</label
 			>
 		</div>
@@ -105,7 +106,7 @@
 				bind:group={formState.land_adjacent_hazard}
 				{value}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="land_adjacent_hazard"
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="land_adjacent_hazard"
 				>{lable}</label
 			>
 		</div>

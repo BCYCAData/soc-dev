@@ -26,7 +26,7 @@
 
 <div class="flex flex-1 flex-col items-center justify-center px-3">
 	<div class="text-surface-950 w-full rounded px-3 shadow-md">
-		<label class="py-2 text-xs font-bold text-orange-900 uppercase" for="email">Email:</label>
+		<label class="text-secondary-900 py-2 text-xs font-bold uppercase" for="email">Email:</label>
 		<input
 			id="email"
 			type="email"

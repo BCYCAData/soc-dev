@@ -53,18 +53,18 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">
 		Community Information Resources
 	</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="h2 text-lg font-semibold text-gray-900">
-		What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="h2 text-surface-900 text-lg font-semibold">
+		What information would be useful to you?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="grid gap-4 rounded-lg bg-orange-300 p-2 sm:grid-cols-2">
+	<div class="bg-secondary-300 grid gap-4 rounded-lg p-2 sm:grid-cols-2">
 		{#if informationSheetOptions}
 			{#each informationSheetOptions as { value, lable }}
 				<div class="flex items-center space-x-1">
@@ -86,7 +86,7 @@
 	</div>
 
 	<TextAreaInput
-		headingClass="h2 text-lg font-semibold text-gray-900"
+		headingClass="h2 text-lg font-semibold text-surface-900"
 		headingText="Is there other information which you would find useful?"
 		lableClass={null}
 		lableText={null}

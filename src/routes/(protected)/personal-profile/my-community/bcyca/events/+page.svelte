@@ -50,17 +50,17 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">Community Events</h1>
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Community Events</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="h2 text-lg font-semibold text-gray-900">
-		What Community Events are you interested in?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="h2 text-surface-900 text-lg font-semibold">
+		What Community Events are you interested in?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-orange-300 p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
+		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
 		{#if communityMeetingOptions}
 			{#each communityMeetingOptions as { value, lable }}
@@ -73,15 +73,16 @@
 						value={Number(value)}
 						checked={communityMeetingChoices?.includes(Number(value))}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="community_meeting_choices"
-						>{lable}</label
+					<label
+						class="text-secondary-900 ml-2 text-base font-medium"
+						for="community_meeting_choices">{lable}</label
 					>
 				</div>
 			{/each}
 		{/if}
 	</div>
 	<TextAreaInput
-		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
+		headingClass="h2 pt-2 text-lg font-semibold text-surface-900"
 		headingText="If there are other events you would be interested in, please add them below."
 		lableClass={null}
 		lableText={null}

@@ -65,17 +65,17 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">Your Community Profile</h1>
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Your Community Profile</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="h2 pt-2 text-lg font-semibold text-gray-900">
-		How would you prefer to stay in touch with the <span class="text-orange-600"
+	<h2 class="h2 text-surface-900 pt-2 text-lg font-semibold">
+		How would you prefer to stay in touch with the <span class="text-secondary-600"
 			>Strengthen OUR Community</span
 		>
-		project team? <br /> <span class="ml-2 text-sm text-gray-500"> (Check all that apply)</span>
+		project team? <br /> <span class="text-surface-500 ml-2 text-sm"> (Check all that apply)</span>
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#if stayInTouchOptions}
 			{#each stayInTouchOptions as { value, lable }}
 				<div class="flex items-center">
@@ -87,7 +87,7 @@
 						value={Number(value)}
 						checked={stayInTouchChoices?.includes(Number(value))}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="stay_in_touch_choices"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="stay_in_touch_choices"
 						>{lable}</label
 					>
 				</div>
@@ -98,13 +98,13 @@
 	<div class:hidden={!stayInTouchChoices?.includes(5)}>
 		<div class="mx-2 flex flex-row">
 			<div class="mx-2 flex basis-7/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_street">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_street">
 					Postal Address
 				</label>
 				<input
 					type="text"
 					name="postal_address_street"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="POSTAL ADDRESS"
 					autocomplete="street-address"
 					use:setUpperCase
@@ -113,13 +113,13 @@
 				/>
 			</div>
 			<div class="mx-2 flex basis-3/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_suburb">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_suburb">
 					Suburb
 				</label>
 				<input
 					type="text"
 					name="postal_address_suburb"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="SUBURB"
 					autocomplete=""
 					use:setUpperCase
@@ -128,13 +128,13 @@
 				/>
 			</div>
 			<div class="mx-2 flex basis-2/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_postcode">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_postcode">
 					Postcode
 				</label>
 				<input
 					type="text"
 					name="postal_address_postcode"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="Postcode"
 					autocomplete=""
 					value={userPostalAddress?.postal_address_postcode}
@@ -156,8 +156,8 @@
 	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>
 <!-- <pre>Community: {JSON.stringify(data.userProfile, null, 2)}</pre> -->
-<h2 class="h2 pt-2 text-center text-base font-semibold text-gray-900">
-	We have determined that you are part of the <span class="text-orange-600">
+<h2 class="h2 text-surface-900 pt-2 text-center text-base font-semibold">
+	We have determined that you are part of the <span class="text-secondary-600">
 		{intergratedCommunity}
 	</span>
 	Community based on your address.
@@ -181,7 +181,7 @@
 				id="bcyca-button"
 				onclick={() => requestAccess('bcyca')}
 				disabled={data.communityProfiles.community_bcyca_profile_id !== null}
-				class="m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 bg-orange-500 px-4 py-2 text-stone-100 shadow-md transition duration-300 disabled:cursor-not-allowed disabled:bg-orange-100 disabled:text-stone-400"
+				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
 			>
 				BCYCA
 			</button>
@@ -189,7 +189,7 @@
 				id="external-button"
 				onclick={() => requestAccess('external')}
 				disabled={data.communityProfiles.community_external_profile_id !== null}
-				class="m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 bg-orange-500 px-4 py-2 text-stone-100 shadow-md transition duration-300 disabled:cursor-not-allowed disabled:bg-orange-100 disabled:text-stone-400"
+				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
 			>
 				External
 			</button>
@@ -197,7 +197,7 @@
 				id="mondrook-button"
 				onclick={() => requestAccess('mondrook')}
 				disabled={data.communityProfiles.community_mondrook_profile_id !== null}
-				class="m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 bg-orange-500 px-4 py-2 text-stone-100 shadow-md transition duration-300 disabled:cursor-not-allowed disabled:bg-orange-100 disabled:text-stone-400"
+				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
 			>
 				Mondrook
 			</button>
@@ -205,7 +205,7 @@
 				id="tinonee-button"
 				onclick={() => requestAccess('tinonee')}
 				disabled={data.communityProfiles.community_tinonee_profile_id !== null}
-				class="m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 bg-orange-500 px-4 py-2 text-stone-100 shadow-md transition duration-300 disabled:cursor-not-allowed disabled:bg-orange-100 disabled:text-stone-400"
+				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
 			>
 				Tinonee
 			</button>
@@ -234,21 +234,21 @@
 	}
 
 	button:hover {
-		background-color: #38bdf8;
+		background-color: var(--color-tertiary-300);
 	}
 	button:disabled {
-		background-color: #fdba74;
-		color: #7c2d12;
+		background-color: var(--color-secondary-300);
+		color: var(--color-secondary-900);
 		border-width: 2px;
-		border-color: #fafaf9;
+		border-color: var(--color-surface-50);
 	}
 
 	/* .selector-checkbox:not(:disabled):checked + .button-bar button,
 	.selector-checkbox:not(:disabled):not(:checked) + .button-bar button {
-		background-color: #fd310f; 
+		background-color: var(--color-error-500); 
 	}
 
 	.selector-checkbox:not(:disabled):checked + .button-bar button {
-		background-color: #fdba74;
+		background-color: var(--color-secondary-300);
 	} */
 </style>

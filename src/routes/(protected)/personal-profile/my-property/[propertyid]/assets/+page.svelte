@@ -66,45 +66,45 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">Assets At My Place</h1>
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Assets At My Place</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="unstyled text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		How many pets do you usually have at this property?
 	</h2>
-	<div class="flex flex-row justify-around rounded-lg bg-orange-300 p-2 sm:text-lg">
+	<div class="bg-secondary-300 flex flex-row justify-around rounded-lg p-2 sm:text-lg">
 		<NumberInput
 			name="number_dogs"
 			lable="Dogs"
-			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-			inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+			lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+			inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 			bind:inputValue={number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
-			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-			inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+			lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+			inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 			bind:inputValue={number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
-			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-			inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+			lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+			inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 			bind:inputValue={number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
-			lableClass="ml-2 text-base font-medium text-orange-900 font-Poppins"
-			inputClass="border border-orange-700 rounded text-center py-1 sm:text-base"
+			lableClass="ml-2 text-base font-medium text-secondary-900 font-Poppins"
+			inputClass="border border-secondary-700 rounded text-center py-1 sm:text-base"
 			bind:inputValue={number_other_pets}
 		/>
 	</div>
-	<h2 class="unstyled text-base font-semibold text-gray-900">Do you have livestock?</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">Do you have livestock?</h2>
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each yesNoOptions as { value, lable }}
 			<input
 				class="ml-8 h-4 w-4"
@@ -114,15 +114,15 @@
 				{value}
 			/>
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="live_stock_present">{lable}</label
 			>
 		{/each}
 	</div>
-	<h2 class="unstyled text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Do you have a safe area for stock in the event of a bushfire or flood?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				class="ml-8 h-4 w-4"
@@ -132,15 +132,15 @@
 				{value}
 			/>
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="live_stock_safe_area">{lable}</label
 			>
 		{/each}
 	</div>
-	<h2 class="unstyled text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Would you let others leave their stock in your safe area, for a short time, in an emergency?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				class="ml-8 h-4 w-4"
@@ -150,7 +150,7 @@
 				{value}
 			/>
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="share_livestock_safe_area">{lable}</label
 			>
 		{/each}

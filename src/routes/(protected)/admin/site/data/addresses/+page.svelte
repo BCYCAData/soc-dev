@@ -18,14 +18,14 @@
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="0">Maintain Custom Addresses</Tabs.Control
 		>
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="1">Determine Custom Addresses</Tabs.Control
 		>

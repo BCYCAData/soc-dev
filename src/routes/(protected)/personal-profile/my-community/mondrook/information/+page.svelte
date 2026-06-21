@@ -52,19 +52,19 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">
 		Community Information Resources
 	</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="h2 text-lg font-semibold text-gray-900">
-		What information would be useful to you?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="h2 text-surface-900 text-lg font-semibold">
+		What information would be useful to you?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
 	<div
-		class="grid grid-flow-col gap-2 rounded-lg bg-orange-300 p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
 		{#if informationSheetOptions}
 			{#each informationSheetOptions as { value, lable }}
@@ -77,8 +77,9 @@
 						value={Number(value)}
 						checked={informationSheetChoices?.includes(Number(value))}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="information_sheet_choices"
-						>{lable}</label
+					<label
+						class="text-secondary-900 ml-2 text-base font-medium"
+						for="information_sheet_choices">{lable}</label
 					>
 				</div>
 			{/each}
@@ -87,7 +88,7 @@
 
 	<!-- other_information_sheet -->
 	<TextAreaInput
-		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
+		headingClass="h2 pt-2 text-lg font-semibold text-surface-900"
 		headingText="Is there other information which you would find useful?"
 		lableClass={null}
 		lableText={null}

@@ -29,7 +29,7 @@
 </script>
 
 <div class="mx-auto flex max-w-md flex-col items-center justify-center">
-	<div class="w-5/6 rounded bg-orange-100 p-6 text-gray-900 shadow-md sm:ml-0 sm:w-full">
+	<div class="bg-secondary-100 text-surface-900 w-5/6 rounded p-6 shadow-md sm:ml-0 sm:w-full">
 		<h1 class="unstyled text-center text-2xl">Reset Password</h1>
 		<p>Please enter the email address you registered with.</p>
 		<p>If it is validated you will receive an email with a link to enable your password reset.</p>
@@ -42,7 +42,7 @@
 			{/if}
 
 			{#if waiting}
-				<p class="text-orange-700">Please wait while we validate your email address...</p>
+				<p class="text-secondary-700">Please wait while we validate your email address...</p>
 			{/if}
 
 			{#if form?.success}
@@ -53,7 +53,7 @@
 
 			<button
 				type="submit"
-				class="w-full rounded-full bg-orange-500 py-2 text-center text-xl text-stone-100 hover:bg-orange-700 focus:outline-none disabled:opacity-25"
+				class="bg-secondary-500 text-surface-100 hover:bg-secondary-700 w-full rounded-full py-2 text-center text-xl focus:outline-none disabled:opacity-25"
 				disabled={!canGo || waiting}
 			>
 				Request Password Reset

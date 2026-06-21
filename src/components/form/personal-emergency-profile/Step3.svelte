@@ -34,7 +34,7 @@
 				<input
 					name="mobile_reception"
 					type="radio"
-					class="h-4 w-4 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
+					class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 h-4 w-4"
 					id={`mobile_reception-${i + 1}`}
 					bind:group={formData.property_profile.mobile_reception}
 					value={i + 1}
@@ -54,7 +54,7 @@
 	{#each residencyOptions as { value, lable }}
 		<div class="col-span-1 flex items-center">
 			<input
-				class="ml-8 h-6 w-6 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
+				class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"
 				id={`residency_profile-${value}`}
 				type="radio"
 				name="residency_profile"
@@ -62,8 +62,9 @@
 				value={Number(value)}
 				checked={value != null}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-700" for={`residency_profile-${value}`}
-				>{lable}</label
+			<label
+				class="text-scale-6 text-secondary-700 ml-2 font-medium"
+				for={`residency_profile-${value}`}>{lable}</label
 			>
 		</div>
 	{/each}
@@ -76,28 +77,28 @@
 		<NumberInput
 			name="residents0_18"
 			lable="0-18 years"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents0_18}
 		/>
 		<NumberInput
 			name="residents19_50"
 			lable="19-50 years"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents19_50}
 		/>
 		<NumberInput
 			name="residents51_70"
 			lable="51-70 years"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents51_70}
 		/>
 		<NumberInput
 			name="residents71_"
 			lable="71 years +"
-			lableClass="ml-2 text-scale-6 font-medium text-orange-700 font-Poppins"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
 			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents71_}
 		/>
@@ -111,15 +112,16 @@
 		{#each yesNoOptions as { value, lable }}
 			<div class="flex items-center">
 				<input
-					class="ml-8 h-6 w-6 border-gray-300 bg-gray-100 text-orange-700 checked:ring-orange-700 focus:ring-orange-700"
+					class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"
 					id={`vulnerable_residents-${value}`}
 					type="radio"
 					name="vulnerable_residents"
 					bind:group={formData.property_profile.vulnerable_residents}
 					{value}
 				/>
-				<label class="text-scale-6 ml-2 font-medium text-orange-700" for={`vulnerable_residents-${value}`}
-					>{lable}</label
+				<label
+					class="text-scale-6 text-secondary-700 ml-2 font-medium"
+					for={`vulnerable_residents-${value}`}>{lable}</label
 				>
 			</div>
 		{/each}

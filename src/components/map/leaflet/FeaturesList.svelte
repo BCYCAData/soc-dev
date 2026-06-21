@@ -22,21 +22,21 @@
 	}
 </script>
 
-<div class="max-h-[600px] overflow-y-auto rounded bg-white p-4 shadow">
+<div class="bg-surface-50-950 max-h-[600px] overflow-y-auto rounded p-4 shadow">
 	<h2 class="mb-4 text-lg font-semibold">Property Features</h2>
 	{#each Object.entries(spatialFeatures) as [id, feature]}
 		{@const template = featureTemplates[feature.template_id]}
-		<div class="border-b border-gray-200 py-2 last:border-0">
+		<div class="border-surface-200 border-b py-2 last:border-0">
 			<div class="flex items-center justify-between">
 				<div>
 					<span class="font-medium">{template?.name || 'Unknown Feature'}</span>
-					<span class="ml-2 text-sm text-gray-500">{template?.category}</span>
+					<span class="text-surface-500 ml-2 text-sm">{template?.category}</span>
 				</div>
 				<div class="space-x-2">
-					<button class="text-blue-600 hover:text-blue-800" on:click={() => handleEdit(id)}>
+					<button class="text-tertiary-600 hover:text-tertiary-800" on:click={() => handleEdit(id)}>
 						Edit
 					</button>
-					<button class="text-red-600 hover:text-red-800" on:click={() => handleDelete(id)}>
+					<button class="text-error-600 hover:text-error-800" on:click={() => handleDelete(id)}>
 						Delete
 					</button>
 				</div>

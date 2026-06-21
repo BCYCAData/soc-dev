@@ -116,13 +116,13 @@
 </script>
 
 <div bind:this={controlContainer} class="leaflet-control leaflet-bar">
-	<div class="min-w-[200px] rounded bg-white shadow-lg">
+	<div class="bg-surface-50-950 min-w-[200px] rounded shadow-lg">
 		{#if collapsible}
 			<button
 				onclick={() => (isExpanded = !isExpanded)}
-				class="flex w-full items-center justify-between p-3 hover:bg-gray-50"
+				class="hover:bg-surface-50 flex w-full items-center justify-between p-3"
 			>
-				<span class="text-sm font-semibold text-gray-700">Layers</span>
+				<span class="text-surface-700 text-sm font-semibold">Layers</span>
 				<svg
 					class="h-4 w-4 transition-transform {isExpanded ? 'rotate-180' : ''}"
 					fill="none"
@@ -140,14 +140,14 @@
 		{/if}
 
 		{#if isExpanded}
-			<div class="border-t border-gray-200 p-3">
+			<div class="border-surface-200 border-t p-3">
 				{#if baseLayers.length > 0}
 					<div class="mb-3">
-						<h3 class="mb-2 text-xs font-semibold text-gray-500 uppercase">Base Layers</h3>
+						<h3 class="text-surface-500 mb-2 text-xs font-semibold uppercase">Base Layers</h3>
 						<div class="space-y-2">
 							{#each baseLayers as layer}
 								<label
-									class="flex cursor-pointer items-center space-x-2 rounded p-1 hover:bg-gray-50"
+									class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1"
 								>
 									<input
 										type="radio"
@@ -155,9 +155,9 @@
 										value={layer.id}
 										checked={layer.visible}
 										onchange={() => switchBaseLayer(layer.id)}
-										class="h-4 w-4 cursor-pointer text-blue-600"
+										class="text-tertiary-600 h-4 w-4 cursor-pointer"
 									/>
-									<span class="text-sm text-gray-800">{layer.label}</span>
+									<span class="text-surface-800 text-sm">{layer.label}</span>
 								</label>
 							{/each}
 						</div>
@@ -166,20 +166,20 @@
 
 				{#if overlayLayers.length > 0}
 					<div>
-						<h3 class="mb-2 text-xs font-semibold text-gray-500 uppercase">Overlays</h3>
+						<h3 class="text-surface-500 mb-2 text-xs font-semibold uppercase">Overlays</h3>
 						<div class="space-y-2">
 							{#each overlayLayers as layer}
 								<label
-									class="flex cursor-pointer items-center space-x-2 rounded p-1 hover:bg-gray-50"
+									class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1"
 								>
 									<input
 										type="checkbox"
 										value={layer.id}
 										checked={layer.visible}
 										onchange={(e) => toggleOverlay(layer.id, e.currentTarget.checked)}
-										class="h-4 w-4 cursor-pointer text-blue-600"
+										class="text-tertiary-600 h-4 w-4 cursor-pointer"
 									/>
-									<span class="text-sm text-gray-800">{layer.label || layer.id}</span>
+									<span class="text-surface-800 text-sm">{layer.label || layer.id}</span>
 								</label>
 							{/each}
 						</div>
@@ -187,7 +187,7 @@
 				{/if}
 
 				{#if baseLayers.length === 0 && overlayLayers.length === 0}
-					<p class="text-xs text-gray-500">Loading layers...</p>
+					<p class="text-surface-500 text-xs">Loading layers...</p>
 				{/if}
 			</div>
 		{/if}

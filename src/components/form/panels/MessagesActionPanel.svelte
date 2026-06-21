@@ -74,7 +74,7 @@
 	};
 </script>
 
-<form method="POST" class="card bg-orange-50 p-4" {action} use:enhance={handleRevokeSubmit}>
+<form method="POST" class="card bg-secondary-50 p-4" {action} use:enhance={handleRevokeSubmit}>
 	<div class="table-container">
 		<MessagesTable
 			{appMessagesColumns}
@@ -92,16 +92,16 @@
 		<input type="hidden" name="revoke_ids" value={selectedIDs.join(',')} />
 
 		{#if successMessage}
-			<div class="text-green-600">{successMessage}</div>
+			<div class="text-success-600">{successMessage}</div>
 		{/if}
 
 		{#if errorMessage}
-			<div class="text-red-600">{errorMessage}</div>
+			<div class="text-error-600">{errorMessage}</div>
 		{/if}
 
 		<button
 			type="button"
-			class="bg-tertiary-400 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			class="bg-tertiary-400 hover:bg-secondary-700 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			disabled={isSelectionEmpty}
 			onclick={() => currentMessages?.downloadSelected()}
 		>
@@ -111,7 +111,7 @@
 		<button
 			type="button"
 			formaction="?/revokeMessages"
-			class="bg-tertiary-400 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			class="bg-tertiary-400 hover:bg-secondary-700 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 			disabled={isRevoking || isSelectionEmpty}
 			aria-busy={isRevoking}
 			onclick={(e) => {

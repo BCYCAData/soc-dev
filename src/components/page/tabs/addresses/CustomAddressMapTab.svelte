@@ -59,7 +59,7 @@
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: Leafletmap }}
 			{#if !mapLoaded}
 				<div class="spinner-overlay">
-					<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+					<Spinner size="100" />
 				</div>
 			{/if}
 			<Leafletmap

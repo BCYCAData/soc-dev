@@ -69,7 +69,7 @@
 	<div class="map-container mx-auto flex w-5/6 flex-col">
 		{#if !mapLoaded}
 			<div class="spinner-overlay">
-				<Spinner size="50" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+				<Spinner size="50" />
 			</div>
 		{/if}
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}

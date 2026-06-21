@@ -54,9 +54,9 @@
 
 <style>
 	.address-input {
-		border: 1px solid #2d3748; /* Assuming secondary-700 is a Tailwind color, typically around this hex */
+		border: 1px solid var(--color-surface-700);
 		width: 100%;
-		border-radius: 0.25rem; /* Standard rounded value in Tailwind */
+		border-radius: var(--radius-base);
 		padding: 0.25rem; /* p-1 */
 		text-transform: uppercase;
 	}

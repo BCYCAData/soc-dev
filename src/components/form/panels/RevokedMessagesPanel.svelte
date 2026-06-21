@@ -26,7 +26,7 @@
 	}: Props = $props();
 </script>
 
-<div class="card bg-orange-50 p-4">
+<div class="card bg-secondary-50 p-4">
 	<div class="table-container">
 		<MessagesTable
 			{appMessagesColumns}

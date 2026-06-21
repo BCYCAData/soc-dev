@@ -21,7 +21,7 @@
 
 {#snippet icon()}
 	{#if item.icon}
-		<span class="text-stone-50">
+		<span class="text-surface-50">
 			{#key item.icon.icon}
 				<item.icon.icon size={20} letter={item.icon.letter} />
 			{/key}
@@ -30,7 +30,7 @@
 {/snippet}
 
 {#snippet content()}
-	<span class="ml-2 text-stone-50 transition-opacity">
+	<span class="text-surface-50 ml-2 transition-opacity">
 		{item.name}
 	</span>
 {/snippet}
@@ -66,7 +66,7 @@
 		position: fixed;
 		left: 3.75rem;
 		top: calc(var(--tooltip-y, 0));
-		background: #333;
+		background: var(--color-surface-900);
 		color: white;
 		padding: 5px 10px;
 		border-radius: 4px;

@@ -10,16 +10,13 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl p-6">
-	<h1 class="mb-6 text-3xl font-bold text-orange-700">KYNG</h1>
+	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">KYNG</h1>
 	<div class="mb-8 grid gap-6">
-		<section class="rounded-lg bg-white p-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
 				{#each coordinatesKYNG as { kyngAreaId, kyngName }}
-					<a
-						href={`/kyng-coordinator/${kyngAreaId}`}
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href={`/kyng-coordinator/${kyngAreaId}`} class="btn preset-filled-secondary-500">
 						{kyngName}
 					</a>
 				{/each}

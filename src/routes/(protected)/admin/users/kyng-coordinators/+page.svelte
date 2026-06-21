@@ -138,7 +138,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Current KYNG Coordinators{/snippet}
 		{#snippet panel()}
@@ -148,7 +148,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Add KYNG Coordinator{/snippet}
 		{#snippet panel()}
@@ -190,7 +190,7 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						class="bg-tertiary-400 hover:bg-secondary-700 mt-4 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						disabled={isAssigning || !(selectedUser && selectedKYNG)}
 						aria-busy={isAssigning}
 					>
@@ -209,7 +209,7 @@
 	<Accordion.Item
 		value="2"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Edit KYNG Coordinator Details{/snippet}
 		{#snippet panel()}
@@ -315,7 +315,7 @@
 					<div class="flex justify-end gap-2">
 						<button
 							type="button"
-							class="bg-surface-300 rounded-md px-4 py-2 text-red-600 hover:text-red-800"
+							class="bg-surface-300 text-error-600 hover:text-error-800 rounded-md px-4 py-2"
 							onclick={() => {
 								selectedCoordinator = null;
 								editMode = false;
@@ -325,9 +325,7 @@
 						>
 							Cancel
 						</button>
-						<button type="submit" class="rounded-md bg-blue-600 px-4 py-2 text-white"
-							>Save Changes</button
-						>
+						<button type="submit" class="btn preset-filled-tertiary-500">Save Changes</button>
 					</div>
 				</form>
 			{/if}
@@ -336,7 +334,7 @@
 	<Accordion.Item
 		value="3"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}All KYNG Coordinators{/snippet}
 		{#snippet panel()}

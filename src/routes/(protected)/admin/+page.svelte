@@ -31,50 +31,36 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl px-6">
-	<h1 class="mb-6 text-3xl font-bold text-orange-700">SOC Website Administration</h1>
+	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">SOC Website Administration</h1>
 	<div class="mb-8 grid gap-6">
-		<section class="rounded-lg bg-white px-6 pb-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg px-6 pb-6 shadow">
 			<h2 class="mb-2 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
 				{#if canAccessRoute('/admin/site')}
-					<a
-						href="/admin/site"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
-						Manage Site Settings
-					</a>
+					<a href="/admin/site" class="btn preset-filled-secondary-500"> Manage Site Settings </a>
 				{/if}
 
 				{#if canAccessRoute('/admin/users')}
-					<a
-						href="/admin/users"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="/admin/users" class="btn preset-filled-secondary-500">
 						Manage Registered Users
 					</a>
 				{/if}
 
 				{#if canAccessRoute('/admin/emergency')}
-					<a
-						href="/admin/emergency"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="/admin/emergency" class="btn preset-filled-secondary-500">
 						Manage Emergency Services Reports
 					</a>
 				{/if}
 
 				{#if canAccessRoute('/admin/community')}
-					<a
-						href="/admin/community"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="/admin/community" class="btn preset-filled-secondary-500">
 						Manage Community Data Settings
 					</a>
 				{/if}
 			</div>
 		</section>
 
-		<section class="rounded-lg bg-white px-6 py-2 shadow">
+		<section class="bg-surface-50-950 rounded-lg px-6 py-2 shadow">
 			<h2 class="mb-2 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE)}

@@ -13,10 +13,10 @@
 	let {
 		size = '60',
 		unit = 'px',
-		ballTopLeft = '#006400',
-		ballTopRight = '#FF3E00',
-		ballBottomLeft = '#C94B5E',
-		ballBottomRight = '#3DB6EC',
+		ballTopLeft = 'var(--color-success-600)',
+		ballTopRight = 'var(--color-secondary-500)',
+		ballBottomLeft = 'var(--color-primary-500)',
+		ballBottomRight = 'var(--color-tertiary-500)',
 		duration = '1.5s',
 		message = ''
 	}: Props = $props();
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	{#if message}
-		<div class="message mt-4 text-center font-medium text-gray-700">
+		<div class="message text-surface-700 mt-4 text-center font-medium">
 			{message}
 		</div>
 	{/if}
@@ -55,11 +55,10 @@
 
 <style>
 	.message {
-		background-color: surface-200;
 		white-space: nowrap;
-		background-color: var(--surface-200);
+		background-color: var(--color-surface-200);
 		padding: 4px;
-		border-radius: 8px; /* Adjust this value as needed */
+		border-radius: 8px;
 	}
 
 	.spinner {

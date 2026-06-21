@@ -33,7 +33,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<div class="rounded-lg bg-green-100 p-4 text-center">
+	<div class="bg-success-100 rounded-lg p-4 text-center">
 		<p class="text-scale-5 font-semibold">
 			{searchAddress}
 		</p>
@@ -88,11 +88,11 @@
 
 				<div class="text-surface-950 text-center">
 					By signing up, you agree to the
-					<a class="text-orange-600 no-underline hover:underline" href="/policies/termsofservice"
+					<a class="text-secondary-600 no-underline hover:underline" href="/policies/termsofservice"
 						>Terms of Service</a
 					>
 					and
-					<a class="text-orange-600 no-underline hover:underline" href="/policies/privacy"
+					<a class="text-secondary-600 no-underline hover:underline" href="/policies/privacy"
 						>Privacy Policy</a
 					>
 				</div>
@@ -104,11 +104,11 @@
 		{/if}
 		<div class="text-surface-950 text-center">
 			By signing up, you agree to the
-			<a class="text-orange-600 no-underline hover:underline" href="/policies/termsofservice"
+			<a class="text-secondary-600 no-underline hover:underline" href="/policies/termsofservice"
 				>Terms of Service</a
 			>
 			and
-			<a class="text-orange-600 no-underline hover:underline" href="/policies/privacy"
+			<a class="text-secondary-600 no-underline hover:underline" href="/policies/privacy"
 				>Privacy Policy</a
 			>
 		</div>

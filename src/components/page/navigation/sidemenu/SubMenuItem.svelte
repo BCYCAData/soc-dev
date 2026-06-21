@@ -17,7 +17,7 @@
 
 {#snippet icon()}
 	{#if item.icon}
-		<span class="text-stone-50">
+		<span class="text-surface-50">
 			{#key item.icon.icon}
 				<item.icon.icon size={16} letter={item.icon.letter} />
 			{/key}
@@ -26,7 +26,7 @@
 {/snippet}
 
 {#snippet content()}
-	<span class="ml-2 text-stone-50 transition-opacity">
+	<span class="text-surface-50 ml-2 transition-opacity">
 		{item.name}
 	</span>
 {/snippet}
@@ -34,8 +34,8 @@
 <div class="pl-8">
 	<a
 		href={item.link}
-		class="flex items-center gap-2 rounded-lg px-4 py-2 hover:bg-stone-700 {isActive
-			? 'bg-stone-700'
+		class="hover:bg-surface-700 flex items-center gap-2 rounded-lg px-4 py-2 {isActive
+			? 'bg-surface-700'
 			: ''}"
 		onclick={onItemClick}
 		onkeydown={handleKeyDown}

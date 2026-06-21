@@ -114,8 +114,8 @@
 	<title>Personal Profile Form</title>
 </svelte:head>
 
-<div class="mx-auto flex h-full w-full justify-center bg-secondary-50 text-surface-950">
-	<div class="mb-5 bg-secondary-100 sm:w-11/12">
+<div class="bg-secondary-50 text-surface-950 mx-auto flex h-full w-full justify-center">
+	<div class="bg-secondary-100 mb-5 sm:w-11/12">
 		<PersonalProfileFormContainer
 			active_step={steps[currentActive - 1].index}
 			{propertyWasRented}
@@ -136,7 +136,7 @@
 			<ProgressBar {steps} bind:currentActive bind:this={progressBar} onStepClick={skipTo} />
 			<div class="mt-1 text-center">
 				<button
-					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-5 py-1.5 text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 bg-secondary-500 text-secondary-50 disabled:bg-surface-300 inline-flex items-center gap-2 rounded-xl px-5 py-1.5 focus:outline-none active:transform disabled:cursor-not-allowed"
 					onclick={() => handleProgress(-1)}
 					disabled={currentActive === 1}
 				>
@@ -146,7 +146,7 @@
 					<span>Prev</span>
 				</button>
 				<button
-					class="scale 98 inline-flex items-center gap-2 rounded-xl bg-secondary-500 px-5 py-1.5 text-secondary-50 focus:outline-none active:transform disabled:cursor-not-allowed disabled:bg-slate-300"
+					class="scale 98 bg-secondary-500 text-secondary-50 disabled:bg-surface-300 inline-flex items-center gap-2 rounded-xl px-5 py-1.5 focus:outline-none active:transform disabled:cursor-not-allowed"
 					onclick={() => handleProgress(1)}
 					hidden={currentActive === steps?.length}
 				>

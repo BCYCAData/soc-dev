@@ -57,7 +57,7 @@
 <TabulatorTableSearch searchField="email" comparisonType="like" searchValue="" {fieldOptions} />
 
 <button
-	class="bg-tertiary-400 mt-4 w-1/4 rounded-full py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+	class="bg-tertiary-400 hover:bg-secondary-700 mt-4 w-1/4 rounded-full py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 	onclick={downloadSelected}
 	disabled={!table || isLoading}
 >

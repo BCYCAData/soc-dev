@@ -39,7 +39,7 @@
 			community strength. We can make a difference by working together.
 		</p>
 
-		<h2 class="h2 my-2 text-center text-orange-600">
+		<h2 class="h2 text-secondary-600 my-2 text-center">
 			Your Neighbours will always be your first responders!
 		</h2>
 	</div>

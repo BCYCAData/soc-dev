@@ -42,7 +42,7 @@
 		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
 			{#if !mapLoaded}
 				<div class="spinner-overlay">
-					<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+					<Spinner size="100" />
 				</div>
 			{/if}
 			<LeafletMap {...adminCommunityMondrookMapConfig(initialExtent)} onMapReady={handleMapLoaded}>

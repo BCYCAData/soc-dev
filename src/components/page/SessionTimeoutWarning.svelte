@@ -122,13 +122,13 @@
 {#if showWarning}
 	<!-- Modal Overlay -->
 	<div
-		class="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+		class="bg-surface-950/50 fixed inset-0 z-9999 flex items-center justify-center backdrop-blur-sm"
 		role="alertdialog"
 		aria-labelledby="timeout-title"
 		aria-describedby="timeout-description"
 		aria-modal="true"
 	>
-		<div class="dark:bg-surface-800 mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-2xl">
+		<div class="card bg-surface-50-950 mx-4 w-full max-w-md p-6 shadow-2xl">
 			<!-- Warning Icon -->
 			<div class="mb-4 flex justify-center">
 				<svg
@@ -147,36 +147,27 @@
 				</svg>
 			</div>
 
-			<h2
-				id="timeout-title"
-				class="text-surface-900 dark:text-surface-100 mb-2 text-center text-xl font-bold"
-			>
+			<h2 id="timeout-title" class="text-surface-900-100 mb-2 text-center text-xl font-bold">
 				Session Expiring Soon
 			</h2>
 
-			<p id="timeout-description" class="text-surface-700 dark:text-surface-300 mb-4 text-center">
-				Your session will expire in <strong class="text-warning-600 dark:text-warning-400 text-lg"
+			<p id="timeout-description" class="text-surface-700-300 mb-4 text-center">
+				Your session will expire in <strong class="text-warning-600-400 text-lg"
 					>{formatTime(secondsRemaining)}</strong
 				>.
 			</p>
 
-			<p class="text-surface-600 dark:text-surface-400 mb-6 text-center text-sm">
+			<p class="text-surface-600-400 mb-6 text-center text-sm">
 				You'll be logged out automatically to protect your account. Click "Stay Signed In" to
 				continue your session.
 			</p>
 
 			<div class="flex flex-col gap-3 sm:flex-row">
-				<button
-					onclick={extendSession}
-					class="bg-primary-600 hover:bg-primary-700 focus:ring-primary-500 flex-1 rounded-md px-4 py-3 font-semibold text-white transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
-				>
+				<button onclick={extendSession} class="btn preset-filled-primary-500 flex-1 font-semibold">
 					Stay Signed In
 				</button>
 
-				<a
-					href="/auth/signin"
-					class="bg-surface-200 text-surface-900 hover:bg-surface-300 focus:ring-surface-500 dark:bg-surface-700 dark:text-surface-100 dark:hover:bg-surface-600 flex-1 rounded-md px-4 py-3 text-center font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
-				>
+				<a href="/auth/signin" class="btn preset-tonal-surface flex-1 font-semibold">
 					Sign Out Now
 				</a>
 			</div>

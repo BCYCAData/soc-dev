@@ -1,9 +1,9 @@
 <div class="mx-auto mt-5 flex h-full max-w-3xl flex-col items-center text-center sm:mt-1">
-	<h1 class="title-font h1 hidden font-bold text-primary-600 sm:mt-4 sm:block sm:text-4xl">
+	<h1 class="title-font h1 text-primary-600 hidden font-bold sm:mt-4 sm:block sm:text-4xl">
 		Help Protect Yourself and Our Community
 	</h1>
 	<div
-		class="text-scale-4eft mt-2 w-full items-center rounded-lg bg-green-100 p-4 text-surface-950"
+		class="text-scale-4eft bg-success-100 text-surface-950 mt-2 w-full items-center rounded-lg p-4"
 	>
 		<h2 class="text-scale-6 mb-3 text-center font-bold">
 			The First Step Is Your Personal Emergency Information Profile
@@ -23,7 +23,7 @@
 		</ul>
 
 		<div
-			class="mb-3 border-l-4 border-primary-500 bg-primary-100 p-4 text-primary-900"
+			class="border-primary-500 bg-primary-100 text-primary-900 mb-3 border-l-4 p-4"
 			role="alert"
 		>
 			<p class="mb-2 text-center font-bold">Your Privacy is Protected</p>
@@ -38,7 +38,7 @@
 		<div class="text-center">
 			<a
 				href="/personal-profile-form"
-				class="text-scale-3 sm:text-scale-5 btn my-5 inline-flex w-full max-w-md cursor-pointer items-center justify-center rounded-xl bg-secondary-500 px-4 py-3 font-semibold text-secondary-50 hover:bg-secondary-700 focus:outline-none"
+				class="text-scale-3 sm:text-scale-5 btn bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-5 inline-flex w-full max-w-md cursor-pointer items-center justify-center rounded-xl px-4 py-3 font-semibold focus:outline-none"
 			>
 				Complete Your Personal Emergency Profile Now
 			</a>
@@ -46,12 +46,13 @@
 
 		<p class="text-scale-3 sm:text-scale-5 mt-3 text-center">
 			Questions? Contact:
-			<br />Helen: <a href="tel:0424515963" class="text-blue-600 hover:underline">0424 515 963</a>
+			<br />Helen:
+			<a href="tel:0424515963" class="text-tertiary-600 hover:underline">0424 515 963</a>
 			<br />Christine:
-			<a href="tel:0488288661" class="text-blue-600 hover:underline">0488 288 661</a>
+			<a href="tel:0488288661" class="text-tertiary-600 hover:underline">0488 288 661</a>
 		</p>
 	</div>
-	<h2 class="title-font h2 hidden font-bold text-primary-600 sm:mt-4 sm:block sm:text-3xl">
+	<h2 class="title-font h2 text-primary-600 hidden font-bold sm:mt-4 sm:block sm:text-3xl">
 		Thank you for your commitment to community safety.
 	</h2>
 </div>

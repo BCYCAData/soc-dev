@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="my-1 inline-flex w-full items-center rounded-lg bg-green-100 py-3 text-green-700"
+	class="bg-success-100 text-success-700 my-1 inline-flex w-full items-center rounded-lg py-3"
 	role="alert"
 	aria-live="assertive"
 >

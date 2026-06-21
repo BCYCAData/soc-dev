@@ -11,7 +11,7 @@
 </script>
 
 <div class="flex justify-between">
-	<label class="pt-2 text-xs font-bold text-orange-900 uppercase" for={id}>
+	<label class="text-secondary-900 pt-2 text-xs font-bold uppercase" for={id}>
 		{label}
 	</label>
 	<button

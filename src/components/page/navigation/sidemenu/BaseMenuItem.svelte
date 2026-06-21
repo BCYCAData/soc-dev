@@ -16,7 +16,7 @@
 	tabindex="0"
 	{href}
 	class="menu-item relative flex cursor-pointer items-center rounded-full p-2 {isActive
-		? 'bg-orange-700'
+		? 'bg-secondary-700'
 		: ''} {isCollapsed ? 'justify-center' : ''}"
 >
 	{@render icon?.()}

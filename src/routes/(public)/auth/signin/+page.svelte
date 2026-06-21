@@ -19,13 +19,13 @@
 </svelte:head>
 
 <div class="mx-auto flex max-w-md flex-col items-center justify-center">
-	<div class="w-5/6 rounded bg-secondary-100 p-6 text-surface-950 shadow-md sm:ml-0 sm:w-full">
+	<div class="bg-secondary-100 text-surface-950 w-5/6 rounded p-6 shadow-md sm:ml-0 sm:w-full">
 		<h1 class="h1 mb-4 text-center text-2xl">Welcome Back</h1>
 		<form action="?/signin" method="POST">
 			<input
 				id="email"
 				type="email"
-				class="form-input mb-4 w-full rounded border! border-secondary-700! py-3"
+				class="form-input border-secondary-700! mb-4 w-full rounded border! py-3"
 				name="email"
 				required={true}
 				placeholder="Email"
@@ -36,7 +36,7 @@
 				<input
 					id="password"
 					type={showPassword ? 'text' : 'password'}
-					class="form-input w-full rounded border! border-secondary-700! py-3"
+					class="form-input border-secondary-700! w-full rounded border! py-3"
 					name="password"
 					required={true}
 					placeholder="Password"
@@ -45,7 +45,7 @@
 				/>
 				<button
 					type="button"
-					class="absolute right-3 top-1/2 -translate-y-1/2 text-surface-950"
+					class="text-surface-950 absolute top-1/2 right-3 -translate-y-1/2"
 					onmouseenter={() => (showPassword = true)}
 					onmouseleave={() => (showPassword = false)}
 				>
@@ -53,7 +53,10 @@
 				</button>
 			</div>
 			<div class="mb-4 text-center">
-				<a href="/auth/requestresetpassword" class="font-semibold text-orange-900 hover:underline">
+				<a
+					href="/auth/requestresetpassword"
+					class="text-secondary-900 font-semibold hover:underline"
+				>
 					&gt&gt&gt Forgot Your Password ? &lt&lt&lt
 				</a>
 			</div>
@@ -63,22 +66,22 @@
 			<button
 				type="submit"
 				disabled={isSubmitting}
-  				aria-busy={isSubmitting}
-				class="text-scale-6 w-full rounded-full bg-secondary-500 py-2 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none"
+				aria-busy={isSubmitting}
+				class="text-scale-6 bg-secondary-500 text-secondary-50 hover:bg-secondary-700 w-full rounded-full py-2 text-center focus:outline-none"
 			>
-			{#if isSubmitting}
-				<Spinner size="sm" /> Signing in...
-			{:else}
-				Sign In
-			{/if}
+				{#if isSubmitting}
+					<Spinner size="sm" /> Signing in...
+				{:else}
+					Sign In
+				{/if}
 			</button>
 		</form>
 	</div>
-	<div class="mt-6 flex items-center justify-center gap-2 text-surface-950">
+	<div class="text-surface-950 mt-6 flex items-center justify-center gap-2">
 		Not registered?
 		<a
 			href="/auth/signup"
-			class="my-1 rounded-full bg-secondary-500 px-5 py-1 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none"
+			class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-1 rounded-full px-5 py-1 text-center focus:outline-none"
 		>
 			Create an Account
 		</a>

@@ -28,8 +28,8 @@
 		width: 20px;
 		height: 20px;
 		border-radius: 50%;
-		background-color: #007bff;
-		color: white;
+		background-color: var(--color-tertiary-500);
+		color: var(--color-tertiary-contrast-500);
 		font-weight: bold;
 		font-size: 14px;
 		cursor: help;
@@ -41,8 +41,8 @@
 		bottom: 100%;
 		left: 50%;
 		transform: translateX(-50%);
-		background-color: #333;
-		color: white;
+		background-color: var(--color-surface-900);
+		color: var(--color-surface-50);
 		padding: 5px 10px;
 		border-radius: 4px;
 		font-size: 12px;

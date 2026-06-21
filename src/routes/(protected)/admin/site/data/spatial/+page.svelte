@@ -102,7 +102,9 @@
 
 		return async ({ result, update }) => {
 			if (result.type === 'success') {
-				toast.success(result.data?.message || `New template '${templateName}' created successfully`);
+				toast.success(
+					result.data?.message || `New template '${templateName}' created successfully`
+				);
 				await invalidateAll();
 				await update();
 				resetNewTemplate();
@@ -141,7 +143,7 @@
 		<button
 			type="button"
 			onclick={() => (showCreateForm = !showCreateForm)}
-			class="bg-tertiary-400 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none"
+			class="bg-tertiary-400 hover:bg-secondary-700 rounded-full px-6 py-2 text-center text-base focus:outline-none"
 		>
 			{showCreateForm ? 'Cancel' : 'Create New Template'}
 		</button>
@@ -149,7 +151,7 @@
 
 	<!-- Create Template Form -->
 	{#if showCreateForm}
-		<div class="mb-6 rounded-lg border bg-orange-50 p-6">
+		<div class="bg-secondary-50 mb-6 rounded-lg border p-6">
 			<h2 class="mb-4 text-xl font-bold">Create New Template</h2>
 			<form
 				method="POST"
@@ -164,7 +166,7 @@
 						id="new_name"
 						name="name"
 						bind:value={newTemplate.name}
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						required
 					/>
 				</div>
@@ -175,7 +177,7 @@
 						id="new_description"
 						name="description"
 						bind:value={newTemplate.description}
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						rows="3"
 					></textarea>
 				</div>
@@ -186,7 +188,7 @@
 						id="new_geometry_type"
 						name="geometry_type"
 						bind:value={newTemplate.geometry_type}
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
 						{#each geometryTypes as type}
@@ -201,7 +203,7 @@
 						id="new_category"
 						name="category"
 						bind:value={newTemplate.category}
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
 						{#each categories as category}
@@ -216,7 +218,7 @@
 							type="checkbox"
 							name="is_active"
 							bind:checked={newTemplate.is_active}
-							class="rounded border-gray-300"
+							class="border-surface-300 rounded"
 						/>
 						<span class="ml-2 text-sm">Active</span>
 					</label>
@@ -229,13 +231,13 @@
 							showCreateForm = false;
 							resetNewTemplate();
 						}}
-						class="rounded-md bg-gray-200 px-4 py-2 text-gray-800"
+						class="bg-surface-200 text-surface-800 rounded-md px-4 py-2"
 					>
 						Cancel
 					</button>
 					<button
 						type="submit"
-						class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+						class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 						disabled={isCreating}
 						aria-busy={isCreating}
 					>
@@ -255,15 +257,15 @@
 	<!-- Existing Templates Accordion -->
 	<Accordion {value} collapsible={true} spaceY="space-y-1">
 		{#each templates as template}
-			<Accordion.Item controlClasses="bg-amber-100 font-medium" value={template.id.toString()}>
+			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={template.id.toString()}>
 				{#snippet control()}
 					<div class="flex items-center justify-between">
 						<span>{template.name}</span>
 						<div class="flex gap-2">
-							<span class="rounded bg-blue-100 px-2 py-1 text-xs">
+							<span class="bg-tertiary-100 rounded px-2 py-1 text-xs">
 								{template.geometry_type}
 							</span>
-							<span class="rounded bg-green-100 px-2 py-1 text-xs">
+							<span class="bg-success-100 rounded px-2 py-1 text-xs">
 								{template.category}
 							</span>
 						</div>
@@ -286,7 +288,7 @@
 									id="name"
 									name="name"
 									value={template.name}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									required
 								/>
 							</div>
@@ -297,7 +299,7 @@
 									id="description"
 									name="description"
 									value={template.description}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									rows="3"
 								></textarea>
 							</div>
@@ -308,7 +310,7 @@
 									id="geometry_type"
 									name="geometry_type"
 									value={template.geometry_type}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									required
 								>
 									{#each geometryTypes as type}
@@ -323,7 +325,7 @@
 									id="category"
 									name="category"
 									value={template.category}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									required
 								>
 									{#each categories as category}
@@ -338,7 +340,7 @@
 										type="checkbox"
 										name="is_active"
 										checked={template.is_active}
-										class="rounded border-gray-300"
+										class="border-surface-300 rounded"
 									/>
 									<span class="ml-2 text-sm">Active</span>
 								</label>
@@ -347,7 +349,7 @@
 							<div class="flex gap-4">
 								<button
 									type="submit"
-									class="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+									class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 									disabled={isUpdating}
 									aria-busy={isUpdating}
 								>
@@ -363,7 +365,7 @@
 								<button
 									type="button"
 									onclick={() => openFieldsModal(template)}
-									class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+									class="btn preset-filled-success-500"
 								>
 									Manage Fields
 								</button>
@@ -377,8 +379,8 @@
 
 	<!-- Fields Modal -->
 	{#if showFieldsModal && currentTemplate}
-		<div class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-			<div class="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+		<div class="bg-surface-950/50 fixed inset-0 z-50 flex items-center justify-center">
+			<div class="bg-surface-50-950 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg p-6">
 				<h2 class="mb-4 text-xl font-bold">Manage Template Fields for {currentTemplate.name}</h2>
 				<form
 					method="POST"
@@ -409,7 +411,7 @@
 								</select>
 								<button
 									type="button"
-									class="text-red-600 hover:text-red-800"
+									class="text-error-600 hover:text-error-800"
 									onclick={() => removeField(index)}
 								>
 									Remove
@@ -418,11 +420,7 @@
 						{/each}
 					</div>
 
-					<button
-						type="button"
-						onclick={addNewField}
-						class="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-					>
+					<button type="button" onclick={addNewField} class="btn preset-filled-success-500">
 						Add Field
 					</button>
 
@@ -432,13 +430,13 @@
 						<button
 							type="button"
 							onclick={() => (showFieldsModal = false)}
-							class="rounded-md bg-gray-200 px-4 py-2 text-gray-800"
+							class="bg-surface-200 text-surface-800 rounded-md px-4 py-2"
 						>
 							Close
 						</button>
 						<button
 							type="submit"
-							class="rounded-md bg-blue-600 px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+							class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 							disabled={isSavingFields}
 							aria-busy={isSavingFields}
 						>

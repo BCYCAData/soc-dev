@@ -94,7 +94,7 @@
 		<Accordion.Item
 			value={'0'}
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-orange-100 font-medium"
+			classes="bg-secondary-100 font-medium"
 		>
 			{#snippet control()}All Custom Addresses{/snippet}
 			{#snippet panel()}
@@ -107,7 +107,7 @@
 		<Accordion.Item
 			value={'1'}
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-orange-100 font-medium"
+			classes="bg-secondary-100 font-medium"
 		>
 			{#snippet control()}Edit Custom Address Details{/snippet}
 			{#snippet panel()}
@@ -119,7 +119,7 @@
 		<Accordion.Item
 			value={'2'}
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-orange-100 font-medium"
+			classes="bg-secondary-100 font-medium"
 		>
 			{#snippet control()}Add New Custom Address{/snippet}
 			{#snippet panel()}
@@ -127,7 +127,7 @@
 					<CustomAddressValidationForm onValidatedAddress={handleValidatedAddress} />
 					{#if formMessage}
 						<div
-							class={`mt-4 rounded p-2 text-center ${formStatus === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+							class={`mt-4 rounded p-2 text-center ${formStatus === 'success' ? 'bg-success-100 text-success-700' : 'bg-error-100 text-error-700'}`}
 						>
 							{formMessage}
 						</div>
@@ -139,7 +139,7 @@
 									<div class="flex flex-row items-center">
 										<span class="pl-2 text-lg font-semibold">Search Address</span>
 										<span
-											class="mx-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-lg text-gray-600"
+											class="border-surface-200 bg-surface-50 text-surface-600 mx-2 rounded border px-2 py-1 text-lg"
 										>
 											{validatedData[0].searchaddressstreet}, {validatedData[0].searchaddresssuburb}
 										</span>
@@ -149,7 +149,7 @@
 									<div class="flex flex-row items-center">
 										<span class="pl-2 text-lg font-semibold">Validated Address</span>
 										<span
-											class="mx-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-lg text-gray-600"
+											class="border-surface-200 bg-surface-50 text-surface-600 mx-2 rounded border px-2 py-1 text-lg"
 										>
 											{validatedData[0].validaddressstreet}, {validatedData[0].validaddresssuburb}
 											{validatedData[0].validaddresspostcode}
@@ -160,7 +160,7 @@
 									<div class="flex flex-row items-center">
 										<span class="pl-2 text-lg font-semibold">G-NAF Address</span>
 										<span
-											class="mx-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-lg text-gray-600"
+											class="border-surface-200 bg-surface-50 text-surface-600 mx-2 rounded border px-2 py-1 text-lg"
 										>
 											{validatedData[0].geocoder_result.formattedAddress}
 										</span>
@@ -170,7 +170,7 @@
 									<div class="flex flex-row items-center">
 										<span class="pl-2 text-lg font-semibold">Community</span>
 										<span
-											class="ml-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-lg text-gray-600"
+											class="border-surface-200 bg-surface-50 text-surface-600 ml-2 rounded border px-2 py-1 text-lg"
 											>{validatedData[0].community}</span
 										>
 									</div>
@@ -178,7 +178,7 @@
 									<div class="flex flex-row items-center">
 										<span class="pl-2 text-lg font-semibold">KYNG</span>
 										<span
-											class="ml-2 rounded border border-gray-200 bg-gray-50 px-2 py-1 text-lg text-gray-600"
+											class="border-surface-200 bg-surface-50 text-surface-600 ml-2 rounded border px-2 py-1 text-lg"
 											>{validatedData[0].kyng || 'External'}</span
 										>
 									</div>
@@ -219,7 +219,7 @@
 									name="addresspoint_geom"
 									value={`SRID=7844;POINT(${validatedData[0].geojson.coordinates[0]} ${validatedData[0].geojson.coordinates[1]})`}
 								/>
-								<div class="text-xs text-gray-500">
+								<div class="text-surface-500 text-xs">
 									<p>
 										© State Government of NSW and Spatial Services (DCS) {new Date().getFullYear()}.
 									</p>
@@ -231,21 +231,21 @@
 									</p>
 									{@html validatedData[0].geocoder_result.attribution.replace(
 										/(https?:\/\/[^\s]+)/g,
-										'<a href="$1" class="text-blue-600 hover:text-blue-800 underline" target="_blank" rel="noopener noreferrer">$1</a>'
+										'<a href="$1" class="text-tertiary-600 hover:text-tertiary-800 underline" target="_blank" rel="noopener noreferrer">$1</a>'
 									)}
 								</div>
 								{#if validatedData[0].geocoder_result.matchQuality === 'fair' || (validatedData[0].matchcodes.localityName !== 'exact' && validatedData[0].matchcodes.localityName !== 'neighbour')}
 									<button
 										type="button"
 										onclick={() => (validatedData = null)}
-										class="flex items-center justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-base font-medium text-red-500 shadow-sm sm:text-sm"
+										class="bg-error-100 text-error-500 flex items-center justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium shadow-sm sm:text-sm"
 									>
 										This address cannot be validated
 									</button>
 								{:else}
 									<button
 										type="submit"
-										class="bg-tertiary-600 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+										class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 										disabled={isSubmitting}
 										aria-busy={isSubmitting}
 									>

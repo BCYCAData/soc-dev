@@ -171,7 +171,7 @@
 <div>
 	<Accordion {value} collapsible={true} spaceY="space-y-1">
 		{#each accordionItems as item}
-			<Accordion.Item controlClasses="bg-amber-100 font-medium" value={item.id}>
+			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
 				{#snippet control()}{item.summary}{/snippet}
 				{#snippet panel()}
 					<div class="table-container" id={item.id}>
@@ -191,7 +191,7 @@
 									<p class="mr-2">Do something with selected Users</p>
 									<button
 										type="submit"
-										class="bg-tertiary-500 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+										class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 										disabled={isSubmitting}
 										aria-busy={isSubmitting}
 									>

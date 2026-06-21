@@ -130,7 +130,7 @@
 					{value}
 				/>
 				<label
-					class="text-scale-6 ml-2 font-medium text-orange-900"
+					class="text-scale-6 text-secondary-900 ml-2 font-medium"
 					for="plan_to_leave_before_flood_{value}">{lable}</label
 				>
 			</li>

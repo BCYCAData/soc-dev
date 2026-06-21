@@ -124,7 +124,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Current Roles{/snippet}
 		{#snippet panel()}
@@ -141,7 +141,7 @@
 							<input type="hidden" name="role" value={role} />
 							<button
 								type="button"
-								class="text-red-600 hover:text-red-800 disabled:cursor-not-allowed disabled:opacity-50"
+								class="text-error-600 hover:text-error-800 disabled:cursor-not-allowed disabled:opacity-50"
 								disabled={isDeleting}
 								onclick={(e) => {
 									roleToDelete = role;
@@ -161,7 +161,7 @@
 					</div>
 
 					{#if selectedRole === role}
-						<div class="card bg-orange-50 p-4">
+						<div class="card bg-secondary-50 p-4">
 							<h2 class="mb-4 text-xl font-bold">Edit Permissions for {selectedRole}</h2>
 							<form
 								method="POST"
@@ -186,7 +186,7 @@
 								<div class="flex justify-end">
 									<button
 										type="submit"
-										class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+										class="bg-tertiary-400 hover:bg-secondary-700 mt-4 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 										disabled={isUpdating}
 										aria-busy={isUpdating}
 									>
@@ -210,7 +210,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Add New Role{/snippet}
 		{#snippet panel()}
@@ -239,7 +239,7 @@
 						/>
 						<button
 							type="button"
-							class="bg-tertiary-400 rounded-full px-4 py-2 text-center hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-50"
+							class="bg-tertiary-400 hover:bg-secondary-700 rounded-full px-4 py-2 text-center disabled:cursor-not-allowed disabled:opacity-50"
 							onclick={addCustomPermission}
 							disabled={!newPermission}
 						>
@@ -253,11 +253,11 @@
 						<span>Custom Permissions</span>
 						<div class="space-y-1">
 							{#each customPermissions as permission}
-								<div class="flex items-center justify-between rounded bg-orange-50 p-2">
+								<div class="bg-secondary-50 flex items-center justify-between rounded p-2">
 									<span>{permission}</span>
 									<button
 										type="button"
-										class="text-red-600 hover:text-red-800"
+										class="text-error-600 hover:text-error-800"
 										onclick={() => removeCustomPermission(permission)}
 									>
 										Remove
@@ -290,7 +290,7 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						class="bg-tertiary-400 hover:bg-secondary-700 mt-4 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						disabled={isAssigning || !(selectedPermissions.length && newRole)}
 						aria-busy={isAssigning}
 					>

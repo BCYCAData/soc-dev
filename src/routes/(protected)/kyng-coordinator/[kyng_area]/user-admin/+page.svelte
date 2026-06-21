@@ -18,7 +18,7 @@
 				<a
 					href="{baseUrl}?lat={feature.geometry.coordinates[1]}&lng={feature.geometry
 						.coordinates[0]}&zoom=15"
-					class="text-blue-600 hover:text-blue-800 hover:underline"
+					class="text-tertiary-600 hover:text-tertiary-800 hover:underline"
 				>
 					{feature.properties.address}
 				</a>

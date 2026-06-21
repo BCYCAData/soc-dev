@@ -35,7 +35,7 @@
 				<div class="mt-5 space-y-4">
 					{#each contacts as contact}
 						<div class="h3 flex flex-col items-center gap-2">
-							<span class=" font-bold text-orange-600">{contact.name}</span>
+							<span class=" text-secondary-600 font-bold">{contact.name}</span>
 							<span>on</span>
 							<span class="font-medium">{contact.phone}</span>
 						</div>

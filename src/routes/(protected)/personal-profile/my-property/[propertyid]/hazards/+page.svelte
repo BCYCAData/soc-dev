@@ -57,16 +57,16 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">Hazards At My Place</h1>
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Hazards At My Place</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="unstyled text-base font-semibold text-gray-900">
-		Do you have any of the following on your property?<span class="ml-2 text-sm text-gray-500">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
+		Do you have any of the following on your property?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each siteHazardsOptions as { value, lable }}
 			<div class="flex items-center">
 				<input
@@ -76,7 +76,7 @@
 					bind:group={site_hazards}
 					{value}
 				/>
-				<label class="font-Poppins ml-2 text-base font-medium text-orange-900" for="site_hazards"
+				<label class="font-Poppins text-secondary-900 ml-2 text-base font-medium" for="site_hazards"
 					>{lable}</label
 				>
 			</div>
@@ -92,10 +92,10 @@
 		textAreaClass="w-full resize-y sm:text-lg"
 		bind:inputValue={other_site_hazards}
 	/>
-	<h2 class="unstyled text-base font-semibold text-gray-900">
+	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Does any adjoining land represent a hazard?
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#each yesNoMaybeOptions as { value, lable }}
 			<input
 				class="ml-8 h-4 w-4"
@@ -105,7 +105,7 @@
 				{value}
 			/>
 			<label
-				class="font-Poppins ml-2 text-base font-medium text-orange-900"
+				class="font-Poppins text-secondary-900 ml-2 text-base font-medium"
 				for="land_adjacent_hazard">{lable}</label
 			>
 		{/each}

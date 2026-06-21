@@ -76,7 +76,7 @@
 					onchange={setStaticWater}
 				/>
 				<label
-					class="text-scale-6 ml-2 font-medium text-orange-900"
+					class="text-scale-6 text-secondary-900 ml-2 font-medium"
 					for="static_water_available_{value}">{lable}</label
 				>
 			</div>
@@ -93,7 +93,7 @@
 					checked={noneChecked}
 				/>
 				<label
-					class="text-scale-6 ml-2 font-medium text-orange-900"
+					class="text-scale-6 text-secondary-900 ml-2 font-medium"
 					for="static_water_available_{value}">{lable}</label
 				>
 			</div>
@@ -118,7 +118,7 @@
 				bind:group={formState.have_stortz}
 				{value}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="have_stortz_{value}"
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="have_stortz_{value}"
 				>{lable}</label
 			>
 		</div>
@@ -132,7 +132,7 @@
 			<NumberInput
 				name="stortz_size"
 				lable="Size (mm)"
-				lableClass="min-w-fit mr-3 text-scale-6 font-medium text-orange-900 font-Poppins"
+				lableClass="min-w-fit mr-3 text-scale-6 font-medium text-secondary-900 font-Poppins"
 				inputClass="max-w-sm border border-secondary-700 text-center w-20 rounded sm:text-scale-5"
 				divClass="flex items-center"
 				bind:inputValue={formState.stortz_size}
@@ -161,7 +161,7 @@
 				checked={formState.fire_fighting_resources?.includes(Number(value)) ?? false}
 			/>
 			<label
-				class="text-scale-6 ml-2 font-medium text-orange-900"
+				class="text-scale-6 text-secondary-900 ml-2 font-medium"
 				for="fire_fighting_resources_{value}">{lable}</label
 			>
 		</div>

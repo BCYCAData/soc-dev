@@ -19,21 +19,9 @@
 
 <AppBar background="bg-primary-600" padding="0" {lead} {trail}>
 	<div class="flex h-full flex-auto items-center justify-center">
-		<a
-			class:active={isHomeActive}
-			href="/"
-			class="btn-base btn preset-tonal-primary mr-2 rounded-xl py-1 font-semibold">Home</a
-		>
-		<a
-			class:active={isAboutActive}
-			href="/about"
-			class="btn-base btn preset-tonal-primary mr-2 rounded-xl py-1 font-semibold">About</a
-		>
-		<a
-			class:active={isContactActive}
-			href="/contact"
-			class="btn-base sm: btn preset-tonal-primary rounded-xl py-1 font-semibold">Contact Us</a
-		>
+		<a class:active={isHomeActive} href="/" class="preset-nav-link mr-2">Home</a>
+		<a class:active={isAboutActive} href="/about" class="preset-nav-link mr-2">About</a>
+		<a class:active={isContactActive} href="/contact" class="preset-nav-link">Contact Us</a>
 	</div>
 </AppBar>
 
@@ -52,41 +40,23 @@
 					<a
 						class:active={isKyngCoordinatorActive}
 						href="/kyng-coordinator"
-						class="btn-base btn hover:bg-surface-500 mr-2 rounded-xl py-1 font-semibold {isKyngCoordinatorActive
-							? 'bg-surface-100 text-primary-700'
-							: 'preset-filled-surface-500'}">KYNG Coordinator</a
+						class="preset-nav-link-surface mr-2">KYNG Coordinator</a
 					>
 				{/if}
-				<a
-					class:active={isAdminActive}
-					href="/admin"
-					class="btn-base btn hover:bg-surface-500 mr-2 rounded-xl py-1 font-semibold {isAdminActive
-						? 'bg-surface-100 text-primary-700'
-						: 'preset-filled-surface-500'}">Administrator</a
+				<a class:active={isAdminActive} href="/admin" class="preset-nav-link-surface mr-2"
+					>Administrator</a
 				>
 			{/if}
 			<a
 				class:active={isProfileActive}
 				href="/personal-profile"
-				type="button"
-				class="btn-base btn hover:bg-surface-500 mr-2 rounded-xl py-1 font-semibold {isProfileActive
-					? 'bg-surface-100 text-primary-700'
-					: 'preset-filled-surface-500'}">Profile</a
+				class="preset-nav-link-surface mr-2">Profile</a
 			>
 			<form method="POST" action="/auth/signout">
-				<button
-					class="btn-base btn preset-filled-surface-500 hover:bg-surface-500 mr-2 rounded-xl font-semibold"
-					type="submit">Sign Out</button
-				>
+				<button class="preset-nav-link-surface mr-2" type="submit">Sign Out</button>
 			</form>
 		{:else}
-			<a
-				class:active={isSignInActive}
-				href="/auth/signin"
-				class="btn-base btn hover:bg-surface-500 mr-2 rounded-xl py-1 font-semibold {isSignInActive
-					? 'bg-primary-500 text-white'
-					: 'bg-primary-100'}">Sign In</a
-			>
+			<a class:active={isSignInActive} href="/auth/signin" class="preset-nav-link mr-2">Sign In</a>
 		{/if}
 	</div>
 {/snippet}

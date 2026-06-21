@@ -2,28 +2,22 @@
 	<title>Emergency Administration</title>
 </svelte:head>
 <div class="mx-auto max-w-4xl p-6">
-	<h1 class="mb-6 text-3xl font-bold text-orange-700">SOC Emergency Administration</h1>
+	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">SOC Emergency Administration</h1>
 
 	<div class="mb-8 grid gap-6">
-		<section class="rounded-lg bg-white px-6 pb-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg px-6 pb-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
-				<a
-					href="/admin/emergency/reports"
-					class=" flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-				>
+				<a href="/admin/emergency/reports" class=" btn preset-filled-secondary-500">
 					Generate Reports for Emergency Services
 				</a>
-				<a
-					href="/admin/emergency/service-map"
-					class=" flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-				>
+				<a href="/admin/emergency/service-map" class=" btn preset-filled-secondary-500">
 					View Emergency Sevices Map
 				</a>
 			</div>
 		</section>
 
-		<section class="rounded-lg bg-white p-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				<span class="flex-auto">

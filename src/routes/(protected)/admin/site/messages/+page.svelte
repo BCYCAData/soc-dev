@@ -118,7 +118,7 @@
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="add_messages"
 		>
@@ -127,7 +127,7 @@
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="current_messages"
 		>
@@ -136,7 +136,7 @@
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="revoked_messages"
 		>
@@ -150,13 +150,13 @@
 				<Accordion.Item
 					value="0"
 					controlClasses="bg-primary-400 text-xl"
-					classes="bg-orange-100 font-medium"
+					classes="bg-secondary-100 font-medium"
 				>
 					{#snippet control()}All Users{/snippet}
 					{#snippet panel()}
 						<form
 							method="POST"
-							class="card bg-orange-50 p-4"
+							class="card bg-secondary-50 p-4"
 							action="?/sendMessageToAllUsers"
 							use:enhance={handleSubmit}
 						>
@@ -168,13 +168,13 @@
 				<Accordion.Item
 					value="1"
 					controlClasses="bg-primary-400 text-xl"
-					classes="bg-orange-100 font-medium"
+					classes="bg-secondary-100 font-medium"
 				>
 					{#snippet control()}Individual Users{/snippet}
 					{#snippet panel()}
 						<form
 							method="POST"
-							class="card bg-orange-50 p-4"
+							class="card bg-secondary-50 p-4"
 							action="?/sendMessageToEmailList"
 							use:enhance={handleSubmit}
 						>

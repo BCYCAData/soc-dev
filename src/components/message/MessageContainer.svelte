@@ -12,8 +12,8 @@
 <div class="mx-4 my-4 flex flex-col">
 	{#if messagesData}
 		{#each messagesData as profileMessage}
-			<div class="card mt-2 rounded-b-md">
-				<header class="card-header rounded-t-md bg-tertiary-300 px-2 py-1 font-medium">
+			<div class="card mt-2 rounded-[20px]">
+				<header class="card-header bg-tertiary-300 rounded-t-[20px] px-2 py-1 font-medium">
 					Message
 				</header>
 				<div class="bg-primary-50 px-2 text-sm">{profileMessage.message}</div>
@@ -28,12 +28,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.card {
-		border-radius: 20px !important;
-	}
-	.card-header {
-		border-radius: 20px !important;
-	}
-</style>

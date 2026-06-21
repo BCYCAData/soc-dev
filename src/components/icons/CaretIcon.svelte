@@ -6,7 +6,12 @@
 		className?: string;
 	}
 
-	let { isRotated = false, size = 24, color = '#FAFAF9', className = '' }: Props = $props();
+	let {
+		isRotated = false,
+		size = 24,
+		color = 'var(--color-surface-50)',
+		className = ''
+	}: Props = $props();
 </script>
 
 <svg

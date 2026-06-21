@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
+
 	interface Props {
 		open?: boolean;
 		title?: string;
@@ -21,61 +23,48 @@
 		variant = 'warning'
 	}: Props = $props();
 
-	const variantClasses = {
-		danger: 'bg-red-600 hover:bg-red-700',
-		warning: 'bg-orange-600 hover:bg-orange-700',
-		info: 'bg-blue-600 hover:bg-blue-700'
-	};
+	const confirmPreset = {
+		danger: 'preset-filled-error-500',
+		warning: 'preset-filled-warning-500',
+		info: 'preset-filled-primary-500'
+	} as const;
 
-	function handleBackdropClick() {
-		onCancel();
+	function handleConfirm() {
+		onConfirm();
+		open = false;
 	}
 
-	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') {
+	function handleCancel() {
+		onCancel();
+		open = false;
+	}
+
+	// User-initiated dismissals (backdrop click, Escape) are treated as cancel.
+	function handleOpenChange(details: { open: boolean }) {
+		open = details.open;
+		if (!details.open) {
 			onCancel();
 		}
 	}
 </script>
 
-{#if open}
-	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-	<div
-		role="dialog"
-		aria-modal="true"
-		aria-labelledby="dialog-title"
-		tabindex="-1"
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-		onclick={handleBackdropClick}
-		onkeydown={handleKeydown}
-	>
-		<div
-			role="document"
-			class="mx-4 w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
-			onclick={(e) => e.stopPropagation()}
-			onkeydown={(e) => e.stopPropagation()}
-		>
-			<h2 id="dialog-title" class="mb-4 text-xl font-bold">{title}</h2>
-			<p class="mb-6 text-gray-700">{message}</p>
-			<div class="flex justify-end gap-3">
-				<button
-					type="button"
-					class="rounded-md bg-gray-200 px-4 py-2 hover:bg-gray-300"
-					onclick={() => onCancel()}
-				>
-					{cancelText}
-				</button>
-				<button
-					type="button"
-					class="rounded-md px-4 py-2 text-white {variantClasses[variant]}"
-					onclick={() => {
-						onConfirm();
-						open = false;
-					}}
-				>
-					{confirmText}
-				</button>
-			</div>
-		</div>
-	</div>
-{/if}
+<Modal
+	{open}
+	onOpenChange={handleOpenChange}
+	role="alertdialog"
+	backdropBackground="bg-surface-950/50"
+	contentBase="card bg-surface-50-950 w-full max-w-md space-y-4 p-6 shadow-xl"
+>
+	{#snippet content()}
+		<h2 class="text-xl font-bold">{title}</h2>
+		<p class="text-surface-700-300">{message}</p>
+		<footer class="flex justify-end gap-3">
+			<button type="button" class="btn preset-tonal-surface" onclick={handleCancel}>
+				{cancelText}
+			</button>
+			<button type="button" class="btn {confirmPreset[variant]}" onclick={handleConfirm}>
+				{confirmText}
+			</button>
+		</footer>
+	{/snippet}
+</Modal>

@@ -37,7 +37,7 @@
 			<LeafletMap {...myCommunityExternalMapConfig(initialExtent)} onMapReady={handleMapLoaded}>
 				{#if !mapLoaded}
 					<div class="spinner-overlay">
-						<Spinner size="100" ballTopLeft="#006400" ballTopRight="#FF3E00" />
+						<Spinner size="100" />
 					</div>
 				{/if}
 				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte') then { default: LeafletGeoJSONPolygonLayer }}

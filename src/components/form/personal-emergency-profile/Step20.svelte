@@ -32,7 +32,7 @@
 </script>
 
 <h2 class="h2 text-surface-950 mt-2 mb-1 text-lg font-semibold">
-	How would you prefer to stay in touch with the <span class="text-orange-600"
+	How would you prefer to stay in touch with the <span class="text-secondary-600"
 		>Strengthen OUR Community</span
 	>
 	project team? <br />
@@ -58,7 +58,7 @@
 				value={Number(value)}
 				checked={userProfile?.stay_in_touch_choices?.includes(Number(value))}
 			/>
-			<label class="text-scale-6 ml-2 font-medium text-orange-900" for="stay_in_touch_choices"
+			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="stay_in_touch_choices"
 				>{lable}
 			</label>
 		</div>
@@ -83,7 +83,7 @@
 				type="text"
 				id="postal_address_street"
 				name="postal_address_street"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 				placeholder="STREET ADDRESS"
 				autocomplete="street-address"
 				use:setUpperCase
@@ -108,7 +108,7 @@
 					type="text"
 					id="postal_address_suburb"
 					name="postal_address_suburb"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 					placeholder="SUBURB"
 					autocomplete="address-level2"
 					use:setUpperCase
@@ -129,7 +129,7 @@
 					type="text"
 					id="postal_address_postcode"
 					name="property_address_postcode"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-0.5"
+					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
 					placeholder="POSTCODE"
 					autocomplete="postal-code"
 					style="text-transform:uppercase"

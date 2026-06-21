@@ -91,25 +91,25 @@
 </script>
 
 <div bind:this={controlContainer} class="leaflet-control leaflet-bar">
-	<div class="min-w-[200px] rounded bg-white p-3 shadow-lg">
-		<h3 class="mb-2 text-sm font-semibold text-gray-700">Overlays</h3>
+	<div class="bg-surface-50-950 min-w-[200px] rounded p-3 shadow-lg">
+		<h3 class="text-surface-700 mb-2 text-sm font-semibold">Overlays</h3>
 		{#if overlayLayers.length > 0}
 			<div class="space-y-2">
 				{#each overlayLayers as layer}
-					<label class="flex cursor-pointer items-center space-x-2 rounded p-1 hover:bg-gray-50">
+					<label class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1">
 						<input
 							type="checkbox"
 							value={layer.id}
 							checked={layer.visible}
 							onchange={(e) => toggleOverlay(layer.id, e.currentTarget.checked)}
-							class="h-4 w-4 cursor-pointer text-blue-600"
+							class="text-tertiary-600 h-4 w-4 cursor-pointer"
 						/>
-						<span class="text-sm text-gray-800">{layer.label || layer.id}</span>
+						<span class="text-surface-800 text-sm">{layer.label || layer.id}</span>
 					</label>
 				{/each}
 			</div>
 		{:else}
-			<p class="text-xs text-gray-500">Loading overlays...</p>
+			<p class="text-surface-500 text-xs">Loading overlays...</p>
 		{/if}
 	</div>
 </div>

@@ -12,7 +12,7 @@
 	let { data }: Props = $props();
 
 	let classText =
-		'class="border mt-0 w-full border-orange-700 rounded bg-orange-50 py-1 sm:text-lg"';
+		'class="border mt-0 w-full border-secondary-700 rounded bg-secondary-50 py-1 sm:text-lg"';
 	let nameText = 'property_address_street';
 	let requiredValue = true;
 	let { streetList, propertyAddressList } = $derived(data);
@@ -33,14 +33,14 @@
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="0">RFS Street Report</Tabs.Control
 		>
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
-			stateActive="bg-orange-400"
+			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
 			value="1">RFS Property Report</Tabs.Control
 		>
@@ -50,7 +50,7 @@
 		<Tabs.Panel value="0">
 			<form
 				id="reportRFSByStreetForm"
-				class="mx-auto flex w-full flex-col bg-orange-300 py-3 text-orange-900"
+				class="bg-secondary-300 text-secondary-900 mx-auto flex w-full flex-col py-3"
 			>
 				<div class="mx-5 flex basis-full flex-col">
 					<h3 class="mb-2">
@@ -67,7 +67,7 @@
 					<a
 						href={`/api/reports/rfs/street/${selectedStreet}`}
 						download={`${selectedStreet?.toLocaleLowerCase().replaceAll(' ', '_')}_${date.toLocaleDateString()}.pdf`}
-						class="btn m-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] text-base font-semibold text-stone-100"
+						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
 					>
 						Generate Report
 					</a>
@@ -78,7 +78,7 @@
 		<Tabs.Panel value="1">
 			<form
 				id="reportRFSByPropertyForm"
-				class="mx-auto flex w-full flex-col bg-orange-300 py-3 text-orange-900"
+				class="bg-secondary-300 text-secondary-900 mx-auto flex w-full flex-col py-3"
 			>
 				<div class="mx-5 flex basis-full flex-col">
 					<h3 class="mb-2">This report provides detailed information for selected properties.</h3>
@@ -93,7 +93,7 @@
 					<a
 						href={`/api/reports/rfs/properties/${encodeURIComponent(JSON.stringify(selectedPropertyIds))}`}
 						download={`property_report_${date.toLocaleDateString()}.pdf`}
-						class="btn m-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] text-base font-semibold text-stone-100"
+						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
 					>
 						Generate Report
 					</a>

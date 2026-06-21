@@ -10,51 +10,33 @@
 </svelte:head>
 
 <div class="mx-auto max-w-4xl px-6">
-	<h1 class="mb-6 text-3xl font-bold text-orange-700">Community Administration</h1>
+	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">Community Administration</h1>
 
 	<div class="mb-8 grid gap-6">
-		<section class="rounded-lg bg-white p-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Select a Community:</h2>
 			<div class="grid grid-cols-3 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA)}
-					<a
-						href="/admin/community/bcyca/"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
-						BCYCA
-					</a>
+					<a href="/admin/community/bcyca/" class="btn preset-filled-secondary-500"> BCYCA </a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE)}
-					<a
-						href="/admin/community/tinonee/"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
-						Tinonee
-					</a>
+					<a href="/admin/community/tinonee/" class="btn preset-filled-secondary-500"> Tinonee </a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_MONDROOK)}
-					<a
-						href="/admin/community/mondrook"
-						class="flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
-						Mondrook
-					</a>
+					<a href="/admin/community/mondrook" class="btn preset-filled-secondary-500"> Mondrook </a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL)}
-					<a
-						href="/admin/community/external"
-						class="col-start-2 flex items-center justify-center rounded bg-orange-500 p-2 text-center text-white transition hover:bg-orange-600"
-					>
+					<a href="/admin/community/external" class="btn preset-filled-secondary-500 col-start-2">
 						External
 					</a>
 				{/if}
 			</div>
 		</section>
 
-		<section class="rounded-lg bg-white p-6 shadow">
+		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				<ul class="list-disc pl-4">

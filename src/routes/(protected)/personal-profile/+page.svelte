@@ -3,16 +3,16 @@
 </svelte:head>
 
 <h1
-	class="title-font h2 mx-auto hidden text-center font-bold text-primary-600 sm:mt-4 sm:block sm:text-4xl"
+	class="title-font h2 text-primary-600 mx-auto hidden text-center font-bold sm:mt-4 sm:block sm:text-4xl"
 >
 	Strengthen OUR Community
 </h1>
 <h2
-	class="h2 mx-auto mt-2 hidden text-center font-bold text-primary-600 sm:mt-4 sm:block sm:text-2xl"
+	class="h2 text-primary-600 mx-auto mt-2 hidden text-center font-bold sm:mt-4 sm:block sm:text-2xl"
 >
 	Prepare Connect Rebound
 </h2>
-<div class="text-base text-gray-900 sm:text-xl">
+<div class="text-surface-900 text-base sm:text-xl">
 	<p class="pt-2">
 		The project evolved from feedback provided by the community following the 2019 bushfires and is
 		funded through the state and federal Bushfire Community Resilience Recovery Fund. The answers

@@ -59,7 +59,7 @@
 		<input
 			id="all-users-message"
 			class="focus:ring-primary-500 mr-2 w-full rounded-md border px-3 py-1 focus:ring-2 focus:ring-offset-2 focus:outline-none"
-			class:border-gray-300={!messageError}
+			class:border-surface-300={!messageError}
 			class:border-error-500={!!messageError}
 			name="inputMessage"
 			type="text"
@@ -79,18 +79,18 @@
 </div>
 
 {#if successMessage}
-	<div class="mt-2 text-green-600">{successMessage}</div>
+	<div class="text-success-600 mt-2">{successMessage}</div>
 {/if}
 
 {#if errorMessage}
-	<div class="mt-2 text-red-600">{errorMessage}</div>
+	<div class="text-error-600 mt-2">{errorMessage}</div>
 {/if}
 
 <div class="flex items-center justify-end">
 	<p class="mr-2">Send this message to {messageContext} of all users</p>
 	<button
 		type="button"
-		class="bg-tertiary-500 hover:bg-tertiary-700 focus:ring-tertiary-500 rounded-md border border-transparent px-4 py-2 text-base font-medium text-white shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:text-sm"
+		class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
 		disabled={isSending || !haveMessage}
 		aria-busy={isSending}
 		onclick={(e) => {

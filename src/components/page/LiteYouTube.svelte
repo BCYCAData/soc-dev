@@ -24,7 +24,7 @@
 		{/if}
 
 		<button
-			class="group relative cursor-pointer overflow-hidden bg-linear-to-br from-gray-800 to-gray-900 shadow-lg transition-transform hover:scale-105"
+			class="group from-surface-800 to-surface-900 relative cursor-pointer overflow-hidden bg-linear-to-br shadow-lg transition-transform hover:scale-105"
 			style="width: {width}px; height: {height}px;"
 			onclick={activate}
 			aria-label="Play video: {title}"
@@ -65,7 +65,7 @@
 			<!-- Play button overlay -->
 			<div class="absolute inset-0 flex items-center justify-center">
 				<div
-					class="bg-opacity-20 group-hover:bg-opacity-30 rounded-full bg-black p-4 backdrop-blur-sm transition-all group-hover:scale-110"
+					class="rounded-full bg-black/20 p-4 backdrop-blur-sm transition-all group-hover:scale-110 group-hover:bg-black/30"
 				>
 					<svg
 						class="drop-shadow-lg transition-opacity group-hover:opacity-100"
@@ -108,7 +108,7 @@
 
 <style>
 	button:focus-visible {
-		outline: 3px solid #4a9eff;
+		outline: 3px solid var(--color-tertiary-400);
 		outline-offset: 4px;
 		border-radius: 4px;
 	}

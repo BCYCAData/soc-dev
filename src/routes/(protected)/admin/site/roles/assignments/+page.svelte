@@ -73,7 +73,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Current Role Assignments{/snippet}
 		{#snippet panel()}
@@ -84,7 +84,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-orange-100 font-medium"
+		classes="bg-secondary-100 font-medium"
 	>
 		{#snippet control()}Assign New Role{/snippet}
 		{#snippet panel()}
@@ -115,7 +115,7 @@
 				<div class="flex justify-end">
 					<button
 						type="submit"
-						class="bg-tertiary-400 mt-4 rounded-full px-6 py-2 text-center text-base hover:bg-orange-700 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+						class="bg-tertiary-400 hover:bg-secondary-700 mt-4 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
 						disabled={isAssigning || !(selectedUser && selectedRole)}
 						aria-busy={isAssigning}
 					>

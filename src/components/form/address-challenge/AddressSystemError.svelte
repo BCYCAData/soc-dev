@@ -9,15 +9,18 @@
 
 	<h2 class="h2 text-error-700 mb-2">Network Error</h2>
 
-	<p class="mb-4 text-neutral-600">
+	<p class="text-surface-600 mb-4">
 		Unfortunately, there was a problem processing your request. Our system is currently experiencing
 		technical difficulties.
 	</p>
 
 	<div class="mb-4">
-		<p class="mb-2 text-neutral-700">
+		<p class="text-surface-700 mb-2">
 			Please try again later or
-			<a href="../contact/" class="text-blue-600 underline transition-colors hover:text-blue-800">
+			<a
+				href="../contact/"
+				class="text-tertiary-600 hover:text-tertiary-800 underline transition-colors"
+			>
 				contact our support team
 			</a>
 			for assistance.

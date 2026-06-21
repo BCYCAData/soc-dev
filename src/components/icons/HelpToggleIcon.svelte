@@ -5,7 +5,7 @@
 		className?: string;
 	}
 
-	let { size = 36, color = '#FAFAF9', className = '' }: Props = $props();
+	let { size = 36, color = 'var(--color-surface-50)', className = '' }: Props = $props();
 </script>
 
 <svg

@@ -55,20 +55,20 @@
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
 >
-	<h1 class="mb-2 text-right text-2xl font-semibold text-gray-600">
+	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">
 		Stay In Touch With Your External Community
 	</h1>
 
 	<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
-	<h2 class="h2 text-lg font-semibold text-gray-900">
+	<h2 class="h2 text-surface-900 text-lg font-semibold">
 		How would you prefer to stay in touch with the Community team? <br /><span
-			class="ml-2 text-sm text-gray-500"
+			class="text-surface-500 ml-2 text-sm"
 		>
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="flex justify-start rounded-lg bg-orange-300 p-1">
+	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#if stayInTouchOptions}
 			{#each stayInTouchOptions as { value, lable }}
 				<div class="flex items-center">
@@ -80,7 +80,7 @@
 						value={Number(value)}
 						checked={stayInTouchChoices?.includes(Number(value))}
 					/>
-					<label class="ml-2 text-base font-medium text-orange-900" for="stay_in_touch_choices"
+					<label class="text-secondary-900 ml-2 text-base font-medium" for="stay_in_touch_choices"
 						>{lable}</label
 					>
 				</div>
@@ -92,13 +92,13 @@
 	<div class:hidden={!stayInTouchChoices?.includes(5)}>
 		<div class="mx-2 flex flex-row">
 			<div class="mx-2 flex basis-7/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_street">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_street">
 					Postal Address
 				</label>
 				<input
 					type="text"
 					name="postal_address_street"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="POSTAL ADDRESS"
 					autocomplete="street-address"
 					use:setUpperCase
@@ -107,13 +107,13 @@
 				/>
 			</div>
 			<div class="mx-2 flex basis-3/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_suburb">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_suburb">
 					Suburb
 				</label>
 				<input
 					type="text"
 					name="postal_address_suburb"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="SUBURB"
 					autocomplete=""
 					use:setUpperCase
@@ -122,13 +122,13 @@
 				/>
 			</div>
 			<div class="mx-2 flex basis-2/12 flex-col">
-				<label class="text-base font-semibold text-gray-900" for="postal_address_postcode">
+				<label class="text-surface-900 text-base font-semibold" for="postal_address_postcode">
 					Postcode
 				</label>
 				<input
 					type="text"
 					name="postal_address_postcode"
-					class="w-full rounded border border-orange-700 bg-orange-50 py-1 sm:text-lg"
+					class="border-secondary-700 bg-secondary-50 w-full rounded border py-1 sm:text-lg"
 					placeholder="Postcode"
 					autocomplete=""
 					value={userPostalAddress?.postal_address_postcode}
@@ -137,7 +137,7 @@
 		</div>
 	</div>
 	<TextAreaInput
-		headingClass="h2 pt-2 text-lg font-semibold text-gray-900"
+		headingClass="h2 pt-2 text-lg font-semibold text-surface-900"
 		headingText="If you have any other comments, add them here."
 		lableClass={null}
 		lableText={null}

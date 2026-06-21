@@ -43,8 +43,9 @@
 					value={Number(value)}
 					checked={communityExternalProfile.community_meeting_choices?.includes(Number(value))}
 				/>
-				<label class="text-scale-6 ml-2 font-medium text-orange-900" for="community_meeting_choices"
-					>{lable}</label
+				<label
+					class="text-scale-6 text-secondary-900 ml-2 font-medium"
+					for="community_meeting_choices">{lable}</label
 				>
 			</div>
 		{/each}

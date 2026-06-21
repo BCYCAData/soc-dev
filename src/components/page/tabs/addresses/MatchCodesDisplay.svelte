@@ -81,25 +81,25 @@
 		<div class="flex flex-col" style="width: fit-content">
 			<h3 class="mb-2 text-xs font-semibold">Match Quality</h3>
 			<div class="inline-grid grid-cols-[min-content_min-content] gap-x-2">
-				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
+				<div class="bg-surface-100 border-b py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Type:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchTypeBackground(matchType)}">
-					<span class="px-2 text-xs text-gray-600">{matchType}</span>
+					<span class="text-surface-600 px-2 text-xs">{matchType}</span>
 				</div>
 
-				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
+				<div class="bg-surface-100 border-b py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Quality:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchQualityBackground(matchQuality)}">
-					<span class="px-2 text-xs text-gray-600">{matchQuality}</span>
+					<span class="text-surface-600 px-2 text-xs">{matchQuality}</span>
 				</div>
 
-				<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
+				<div class="bg-surface-100 border-b py-1 pl-3 text-xs font-medium whitespace-nowrap">
 					Score:
 				</div>
 				<div class="flex items-center whitespace-nowrap {getMatchScoreBackground(matchScore)}">
-					<span class="px-2 text-xs text-gray-600">{matchScore}</span>
+					<span class="text-surface-600 px-2 text-xs">{matchScore}</span>
 				</div>
 			</div>
 
@@ -107,11 +107,11 @@
 
 			<div class="inline-grid grid-cols-[min-content_min-content] gap-x-2">
 				{#each orderedKeys as key}
-					<div class="border-b bg-slate-100 py-1 pl-3 text-xs font-medium whitespace-nowrap">
+					<div class="bg-surface-100 border-b py-1 pl-3 text-xs font-medium whitespace-nowrap">
 						{displayLabels[key]}
 					</div>
 					<div class="flex items-center whitespace-nowrap {getBackgroundColor(matchcodes[key])}">
-						<span class="px-2 text-xs text-gray-600">{matchcodes[key]}</span>
+						<span class="text-surface-600 px-2 text-xs">{matchcodes[key]}</span>
 					</div>
 				{/each}
 			</div>

@@ -86,12 +86,12 @@
 	aria-labelledby="modal-title"
 	class="fixed inset-0 z-50 flex items-center justify-center"
 >
-	<button class="bg-opacity-50 fixed inset-0 bg-black" onclick={onClose} aria-label="Close modal"
+	<button class="bg-surface-950/50 fixed inset-0" onclick={onClose} aria-label="Close modal"
 	></button>
-	<div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+	<div class="card bg-surface-50-950 relative w-full max-w-md p-6 shadow-xl">
 		<button
 			type="button"
-			class="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+			class="text-surface-500 hover:bg-surface-100 hover:text-surface-700 absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full"
 			onclick={onClose}
 		>
 			✕
@@ -100,19 +100,19 @@
 		<h2 id="modal-title" class="mb-4 text-xl font-semibold">Add New Property</h2>
 
 		{#if loading}
-			<div class="bg-opacity-75 absolute inset-0 flex items-center justify-center bg-white">
+			<div class="bg-surface-50-950/75 absolute inset-0 flex items-center justify-center">
 				<Spinner />
 			</div>
 		{/if}
 
 		{#if successMessage}
-			<div class="mb-4 rounded-md bg-green-100 p-4 text-green-700">
+			<div class="bg-success-100 text-success-700 mb-4 rounded-md p-4">
 				<p>{successMessage}</p>
 			</div>
 		{/if}
 
 		{#if error}
-			<div class="mb-4 rounded-md bg-red-100 p-4 text-red-700">
+			<div class="bg-error-100 text-error-700 mb-4 rounded-md p-4">
 				<p>{error}</p>
 				{#if error.includes('could not find this address')}
 					<div class="mt-5">
@@ -187,15 +187,11 @@
 			{/if}
 
 			<div class="mt-6 flex justify-end space-x-3">
-				<button
-					type="button"
-					class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none"
-					onclick={onClose}
-				>
+				<button type="button" class="btn btn-sm preset-tonal-surface font-medium" onclick={onClose}>
 					Cancel
 				</button>
 				<button
-					class="rounded-md bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+					class="btn btn-sm preset-filled-secondary-500 font-medium disabled:cursor-not-allowed disabled:opacity-50"
 					type="submit"
 					disabled={!canGo || loading}
 					aria-busy={loading}

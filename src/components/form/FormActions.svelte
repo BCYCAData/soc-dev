@@ -11,18 +11,14 @@
 
 <div class="sticky bottom-2 mt-5">
 	<div class="flex justify-end space-x-4">
-		<button
-			type="button"
-			onclick={onReset}
-			class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
-		>
+		<button type="button" onclick={onReset} class="btn btn-sm preset-tonal-surface font-medium">
 			Undo Changes
 		</button>
 		<button
 			type="submit"
 			disabled={!isUnsaved || isSubmitting}
 			aria-busy={isSubmitting}
-			class="rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+			class="btn btn-sm preset-filled-primary-500 font-medium shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			{#if isSubmitting}
 				<Spinner size="sm" /> Saving...

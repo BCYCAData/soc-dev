@@ -73,11 +73,11 @@
 		float: left;
 	}
 	#breadcrumb li a {
-		color: #fff;
+		color: var(--color-surface-50);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: #f97316;
+		background: var(--color-secondary-500);
 		text-decoration: none;
 		position: relative;
 		height: 30px;
@@ -92,14 +92,14 @@
 	}
 
 	#breadcrumb li:nth-child(even) a {
-		background-color: #fba74c;
+		background-color: var(--color-secondary-300);
 	}
 	#breadcrumb li:nth-child(even) a:before {
-		border-color: #fba74c;
+		border-color: var(--color-secondary-300);
 		border-left-color: transparent;
 	}
 	#breadcrumb li:nth-child(even) a:after {
-		border-left-color: #fba74c;
+		border-left-color: var(--color-secondary-300);
 	}
 	#breadcrumb li:first-child a {
 		padding-left: 15px;
@@ -118,7 +118,7 @@
 		content: '';
 		position: absolute;
 		top: 0;
-		border: 0 solid #f97316;
+		border: 0 solid var(--color-secondary-500);
 		border-width: 15px 10px;
 		width: 0;
 		height: 0;
@@ -130,26 +130,26 @@
 	#breadcrumb li a:after {
 		left: 100%;
 		border-color: transparent;
-		border-left-color: #f97316;
+		border-left-color: var(--color-secondary-500);
 	}
 	#breadcrumb li a:hover {
-		background-color: #bc1a8e;
+		background-color: var(--color-warning-600);
 	}
 	#breadcrumb li a:hover:before {
-		border-color: #bc1a8e;
+		border-color: var(--color-warning-600);
 		border-left-color: transparent;
 	}
 	#breadcrumb li a:hover:after {
-		border-left-color: #bc1a8e;
+		border-left-color: var(--color-warning-600);
 	}
 	#breadcrumb li a:active {
-		background-color: #16a085;
+		background-color: var(--color-success-600);
 	}
 	#breadcrumb li a:active:before {
-		border-color: #16a085;
+		border-color: var(--color-success-600);
 		border-left-color: transparent;
 	}
 	#breadcrumb li a:active:after {
-		border-left-color: #16a085;
+		border-left-color: var(--color-success-600);
 	}
 </style>

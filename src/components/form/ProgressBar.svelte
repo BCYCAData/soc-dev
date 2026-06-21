@@ -81,7 +81,7 @@
 
 	.progress-container::before {
 		content: '';
-		background-color: #e0e0e0;
+		background-color: var(--color-surface-300);
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -93,11 +93,11 @@
 
 	.progress-container::after {
 		content: '';
-		background-color: #e0e0e0;
+		background-color: var(--color-surface-300);
 	}
 
 	.progress {
-		background-color: #fdba74;
+		background-color: var(--color-secondary-300);
 		position: absolute;
 		top: 50%;
 		left: 0;
@@ -111,15 +111,15 @@
 	}
 
 	.circle {
-		background-color: #fff;
-		color: #999;
+		background-color: var(--color-surface-50);
+		color: var(--color-surface-500);
 		border-radius: 50%;
 		height: 15px;
 		width: 15px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border: 3px solid #e0e0e0;
+		border: 3px solid var(--color-surface-300);
 		transition: 0.4s ease;
 		cursor: pointer;
 		/* Add this to ensure circles are above the progress bar */
@@ -131,15 +131,15 @@
 		content: attr(data-title) ' ';
 		position: absolute;
 		bottom: 20px;
-		color: #999;
+		color: var(--color-surface-500);
 		transition: 0.4s ease;
 	}
 
 	.circle.active::after {
-		color: #f97316;
+		color: var(--color-secondary-500);
 	}
 
 	.circle.active {
-		border-color: #f97316;
+		border-color: var(--color-secondary-500);
 	}
 </style>

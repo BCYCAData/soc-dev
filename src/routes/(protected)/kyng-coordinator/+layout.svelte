@@ -58,9 +58,9 @@
 
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
-<div class="app-shell bg-orange-200">
-	<!-- <header class="mx-auto flex w-full items-center justify-center bg-orange-100">
-		<h3 class="font-bold text-orange-900">Burrell Creek Youth & Community Association Inc.</h3>
+<div class="app-shell bg-secondary-200">
+	<!-- <header class="mx-auto flex w-full items-center justify-center bg-secondary-100">
+		<h3 class="font-bold text-secondary-900">Burrell Creek Youth & Community Association Inc.</h3>
 	</header> -->
 
 	<div class="app-shell-breadcrumbs">
@@ -75,12 +75,16 @@
 		>
 			<div class="flex w-full flex-col p-1">
 				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
-					<MenuToggleIcon isMenuCollapsed={isSidebarCollapsed} color="#FAFAF9" size={20} />
+					<MenuToggleIcon
+						isMenuCollapsed={isSidebarCollapsed}
+						color="var(--color-surface-50)"
+						size={20}
+					/>
 				</button>
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Coordinator Menu{/if}
 				</div>
-				<div class="flex flex-col rounded-lg bg-orange-600">
+				<div class="bg-secondary-600 flex flex-col rounded-lg">
 					{#each safeCoordinatesKYNG as kyngArea (kyngArea.kyngAreaId)}
 						<KYNGSideMenu {kyngArea} {isSidebarCollapsed} />
 					{/each}
@@ -93,7 +97,7 @@
 		</div>
 
 		<HelpPanel isCollapsed={isHelpbarCollapsed} />
-		<!-- <div class="app-shell-sidebar-right w-1/6 bg-stone-200">
+		<!-- <div class="app-shell-sidebar-right w-1/6 bg-surface-200">
 			<MessageContainer messagesData={kyngMessages} />
 		</div> -->
 	</div>

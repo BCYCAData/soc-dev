@@ -196,12 +196,12 @@
 
 <div class="mx-auto sm:w-11/12">
 	<div
-		class="text-scale-5 p-1 text-center text-orange-600"
+		class="text-scale-5 text-secondary-600 p-1 text-center"
 		hidden={active_step == 1 || active_step == 12}
 	>
 		Please complete all steps and tap
 		<span
-			class="text-scale-3 text-secondary-50 rounded-lg border border-purple-700 bg-[#0099E8] p-1 font-semibold"
+			class="text-scale-3 text-secondary-50 border-primary-700 bg-tertiary-500 rounded-lg border p-1 font-semibold"
 		>
 			Save My Answers
 		</span>
@@ -330,7 +330,7 @@
 
 		<div class="sm:text-scale-5 flex flex-col items-center justify-center">
 			<button
-				class="text-scale-3 text-secondary-50 mx-3 mb-3 w-1/4 rounded-lg border border-purple-700 bg-[#0099E8] font-semibold"
+				class="text-scale-3 text-secondary-50 border-primary-700 bg-tertiary-500 mx-3 mb-3 w-1/4 rounded-lg border font-semibold"
 				hidden={active_step != steps.length}
 				type="submit"
 				form="personalProfileForm"

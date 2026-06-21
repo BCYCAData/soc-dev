@@ -48,7 +48,7 @@
 </script>
 
 <div
-	class="mb-4 flex items-center justify-around rounded-md border border-gray-400 bg-primary-100 p-2 text-sm"
+	class="border-surface-400 bg-primary-100 mb-4 flex items-center justify-around rounded-md border p-2 text-sm"
 >
 	<span class="flex items-center">
 		<label class="mr-2 text-base" for="filter-field">Field: </label>
@@ -74,7 +74,7 @@
 	<div class="relative grow">
 		<div class="flex">
 			<input
-				class="mx-2 h-9 w-full rounded border border-gray-400 bg-surface-100 px-2 py-1"
+				class="border-surface-400 bg-surface-100 mx-2 h-9 w-full rounded border px-2 py-1"
 				id="filter-value"
 				bind:value={searchValue}
 				placeholder="Search text..."
@@ -83,7 +83,7 @@
 			{#if searchValue && searchValue.length > 0}
 				<div
 					id="clear-icon"
-					class="absolute right-2 top-1/2 -translate-y-1/2 transform cursor-pointer"
+					class="absolute top-1/2 right-2 -translate-y-1/2 transform cursor-pointer"
 					role="button"
 					tabindex="0"
 					onclick={clearValue}
@@ -102,19 +102,19 @@
 					>
 						<path
 							d="M7.50006 5.5L4.05262 10.7909C3.71387 11.3107 3.69732 11.9772 4.00984 12.5133L7.50006 18.5H18.8588C19.7651 18.5 20.4999 17.7653 20.4999 16.8589V7.14109C20.4999 6.23474 19.7651 5.5 18.8588 5.5H7.50006Z"
-							stroke="#000000"
+							stroke="var(--color-surface-900)"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						/>
 						<path
 							d="M10 8.5L17 15.5"
-							stroke="#000000"
+							stroke="var(--color-surface-900)"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						/>
 						<path
 							d="M10 15.5L16.9303 8.49996"
-							stroke="#000000"
+							stroke="var(--color-surface-900)"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 						/>
@@ -124,7 +124,7 @@
 		</div>
 	</div>
 	<button
-		class="mx-4 w-auto rounded border border-gray-400 bg-tertiary-400 py-1 pl-2 pr-1"
+		class="border-surface-400 bg-tertiary-400 mx-4 w-auto rounded border py-1 pr-1 pl-2"
 		onclick={clearValue}
 		id="filter-clear">Clear Filter</button
 	>
@@ -133,8 +133,8 @@
 <style>
 	.filter-type,
 	.filter-field {
-		border: 1px solid #e0e0e0;
-		background-color: #fafaf9;
+		border: 1px solid var(--color-surface-300);
+		background-color: var(--color-surface-50);
 		border-radius: 4px;
 		outline: none;
 		padding: 0 32px 0 8px;
