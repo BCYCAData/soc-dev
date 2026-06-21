@@ -22,7 +22,7 @@
 	<h4 class=" font-semibold">{section.title}</h4>
 {/if}
 <div class={sectionClass}>
-	{#each section.content.split('\n\n') as paragraph}
+	{#each section.content.split('\n\n') as paragraph (paragraph)}
 		<p class="mb-1">{paragraph}</p>
 	{/each}
 </div>

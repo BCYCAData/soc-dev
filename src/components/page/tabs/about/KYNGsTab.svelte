@@ -66,7 +66,7 @@
 		<section>
 			<h3>KYNG Co-ordinator Role</h3>
 			<ol class="mt-0 list-inside list-disc space-y-1">
-				{#each coordinatorRoles as role}
+				{#each coordinatorRoles as role (role)}
 					<li>{role}</li>
 				{/each}
 			</ol>
@@ -74,7 +74,7 @@
 	</div>
 
 	<footer class="text-primary-600 mx-auto space-y-2 pt-2 text-center font-semibold">
-		{#each keyPoints as point}
+		{#each keyPoints as point (point)}
 			<strong>{point}</strong>
 		{/each}
 	</footer>

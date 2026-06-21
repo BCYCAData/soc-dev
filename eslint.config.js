@@ -23,12 +23,32 @@ export default ts.config(
 		}
 	},
 	{
-		files: ['**/*.svelte'],
+		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 
 		languageOptions: {
 			parserOptions: {
 				parser: ts.parser
 			}
+		}
+	},
+	{
+		// TypeScript performs its own undefined-symbol analysis (and handles ambient
+		// globals/type namespaces like Leaflet's `L` and `GeoJSON`). The core
+		// `no-undef` rule produces false positives here, so typescript-eslint
+		// recommends disabling it for TS-typed files.
+		files: ['**/*.ts', '**/*.tsx', '**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
+		rules: {
+			'no-undef': 'off',
+			// Allow underscore-prefixed names as intentional unused placeholders
+			// (e.g. `.map((_, i) => …)`, `catch (_e)`), per typescript-eslint convention.
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_'
+				}
+			]
 		}
 	}
 );

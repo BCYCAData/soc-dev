@@ -164,7 +164,7 @@
 	</div>
 	<div class="bg-secondary-200 flex h-[62px] w-full flex-row rounded-lg p-2">
 		<div class="mr-4 flex w-1/8 items-center">
-			{#each yesNoOptions as { value, lable }}
+			{#each yesNoOptions as { value, lable } (value)}
 				{#if lable === 'Yes'}
 					<div class="flex items-center">
 						<input
@@ -274,7 +274,7 @@
 		Is your property well sign-posted and numbered clearly from the road?
 	</h2>
 	<div class="bg-secondary-200 flex flex-wrap rounded-lg p-2">
-		{#each yesNoOptions as { value, lable }}
+		{#each yesNoOptions as { value, lable } (value)}
 			<div class="mr-4 flex items-center">
 				<input
 					name="sign_posted"
@@ -293,7 +293,7 @@
 		Is there easy truck access to the buildings, boundaries and paddocks?
 	</h2>
 	<div class="bg-secondary-200 flex flex-wrap rounded-lg p-2">
-		{#each accessOptions as { value, lable }}
+		{#each accessOptions as { value, lable } (value)}
 			{#if lable === 'Other'}
 				<div class="flex-center bg-secondary-200 flex w-full rounded-lg pt-1">
 					<input

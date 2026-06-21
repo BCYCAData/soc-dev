@@ -65,7 +65,7 @@
 	<section class="mx-auto max-w-3xl">
 		<strong>The project focuses on four areas:</strong>
 		<ol class="mt-0 space-y-1">
-			{#each focusAreas as area}
+			{#each focusAreas as area (area)}
 				<li>
 					<strong>{area.title}</strong> - {area.description}
 				</li>

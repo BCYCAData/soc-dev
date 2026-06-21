@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>Site Admin-Roles</title>
 </svelte:head>
@@ -7,7 +11,7 @@
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<a
-			href="/admin/site/roles/assignments"
+			href={resolve('/admin/site/roles/assignments')}
 			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Role Assignments</h2>
@@ -20,7 +24,7 @@
 		</a>
 
 		<a
-			href="/admin/site/roles/permissions"
+			href={resolve('/admin/site/roles/permissions')}
 			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Roles & Permissions</h2>

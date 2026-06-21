@@ -21,9 +21,12 @@ export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) =>
 		throw redirect(303, '/auth/signin');
 	}
 
-	let { data: user_profile, error: userProfileError } = await supabase.rpc('get_profile_for_user', {
-		id_input: user.id
-	});
+	const { data: user_profile, error: userProfileError } = await supabase.rpc(
+		'get_profile_for_user',
+		{
+			id_input: user.id
+		}
+	);
 	if (userProfileError) {
 		console.log('GET data error Personal Profile:', userProfileError);
 		throw redirect(303, '/auth/signin?error=profile_load_failed');

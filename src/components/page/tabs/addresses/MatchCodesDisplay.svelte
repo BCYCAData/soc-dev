@@ -106,7 +106,7 @@
 			<div class="mt-1 text-xs font-medium">Match Codes</div>
 
 			<div class="inline-grid grid-cols-[min-content_min-content] gap-x-2">
-				{#each orderedKeys as key}
+				{#each orderedKeys as key (key)}
 					<div class="bg-surface-100 border-b py-1 pl-3 text-xs font-medium whitespace-nowrap">
 						{displayLabels[key]}
 					</div>

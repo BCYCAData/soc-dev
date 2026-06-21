@@ -1,4 +1,6 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
+	import { SvelteSet } from 'svelte/reactivity';
 	import { onMount, onDestroy, getContext } from 'svelte';
 
 	import type L from 'leaflet';
@@ -31,11 +33,6 @@
 		popupTemplate
 	}: Props = $props();
 
-	//@ts-ignore
-	let isLoading = $state(false);
-	//@ts-ignore
-	let loadingMessage = $state('');
-
 	const { getLeaflet, getLeafletMap, getLeafletLayers, getLayersControl, getEsriLeaflet } =
 		getContext<{
 			getLeaflet: () => typeof L;
@@ -64,12 +61,11 @@
 	let offset = 0;
 	const pageSize = 100;
 	let allFeatures: GeoJSON.Feature[] = [];
-	let loadedFeatureIds = new Set<string>();
+	let loadedFeatureIds = new SvelteSet<string>();
 	let geoJsonLayer: L.GeoJSON | undefined;
 	let idField: string;
 
 	async function loadFeatures(mapBounds: L.LatLngBounds, featureLayer: EsriLeaflet.FeatureLayer) {
-		isLoading = true;
 		offset = 0;
 		allFeatures = [];
 		loadedFeatureIds.clear();
@@ -79,14 +75,10 @@
 			.count((error: Error | null, count: number) => {
 				if (count > 0) {
 					loadNextBatch(count);
-				} else {
-					isLoading = false;
 				}
 			});
 
 		const loadNextBatch = async (totalCount: number) => {
-			loadingMessage = `Loading property ${allFeatures.length + 1} of ${totalCount}`;
-
 			featureLayer
 				.query()
 				.returnGeometry(true)
@@ -96,12 +88,10 @@
 				.run((error: Error | null, featureCollection: FeatureCollection) => {
 					if (error) {
 						console.log('ArcGISFeatureServerLayer Query error:', error);
-						isLoading = false;
 						return;
 					}
 
 					if (!featureCollection || !featureCollection.features.length || !map) {
-						isLoading = false;
 						return;
 					}
 
@@ -121,7 +111,6 @@
 						loadNextBatch(totalCount);
 					} else {
 						updateGeoJsonLayer();
-						isLoading = false;
 					}
 				});
 		};
@@ -248,7 +237,7 @@
 			layersControl.removeLayer(featureLayer);
 		}
 		layersStore.update((layers) => {
-			const { [name]: removed, ...rest } = layers;
+			const { [name]: _removed, ...rest } = layers;
 			return rest;
 		});
 	});

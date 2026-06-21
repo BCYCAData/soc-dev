@@ -1,6 +1,8 @@
 import { fail, type Actions } from '@sveltejs/kit';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 import type { PageServerLoad } from './$types';
+import type { Database } from '$lib/db.types';
 import { hasPermission } from '$lib/server/permissions';
 import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -19,10 +21,15 @@ interface ListsData {
 
 type MessageContext = 'users' | 'admins' | 'both';
 
-async function sendMessage(supabase: any, message: string, context?: MessageContext, ids?: string) {
+async function sendMessage(
+	supabase: SupabaseClient<Database>,
+	message: string,
+	context?: MessageContext,
+	ids?: string
+) {
 	const { data: response, error: sendError } = await supabase.rpc('insert_message', {
 		message_text: message,
-		context_text: context,
+		context_text: context ?? 'both',
 		ids
 	});
 
@@ -113,7 +120,7 @@ export const actions: Actions = {
 				});
 			}
 
-			const cleanTargetData = targetData.replace(/[\[\]]/g, '');
+			const cleanTargetData = targetData.replace(/[[\]]/g, '');
 			await sendMessage(supabase, message, 'both', cleanTargetData);
 
 			return {
@@ -147,7 +154,7 @@ export const actions: Actions = {
 				});
 			}
 
-			const cleanTargetData = targetData.replace(/[\[\]]/g, '');
+			const cleanTargetData = targetData.replace(/[[\]]/g, '');
 			await sendMessage(supabase, message, 'both', cleanTargetData);
 
 			return { success: true, message: 'Message sent successfully to selected users' };
@@ -178,7 +185,7 @@ export const actions: Actions = {
 				});
 			}
 
-			const cleanTargetData = targetData.replace(/[\[\]]/g, '');
+			const cleanTargetData = targetData.replace(/[[\]]/g, '');
 			await sendMessage(supabase, message, 'both', cleanTargetData);
 
 			return {
@@ -212,10 +219,13 @@ export const actions: Actions = {
 				});
 			}
 
-			const cleanTargetData = targetData.replace(/[\[\]]/g, '');
+			const cleanTargetData = targetData.replace(/[[\]]/g, '');
 			await sendMessage(supabase, message, 'both', cleanTargetData);
 
-			return { success: true, message: 'Message sent successfully to all users in selected community' };
+			return {
+				success: true,
+				message: 'Message sent successfully to all users in selected community'
+			};
 		} catch (err) {
 			console.error('Send to email list error:', err);
 
@@ -244,10 +254,13 @@ export const actions: Actions = {
 				});
 			}
 
-			const cleanTargetData = targetData.replace(/[\[\]]/g, '');
+			const cleanTargetData = targetData.replace(/[[\]]/g, '');
 			await sendMessage(supabase, message, 'both', cleanTargetData);
 
-			return { success: true, message: 'Message sent successfully to all users in selected suburb' };
+			return {
+				success: true,
+				message: 'Message sent successfully to all users in selected suburb'
+			};
 		} catch (err) {
 			console.error('Send to email list error:', err);
 

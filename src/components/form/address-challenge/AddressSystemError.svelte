@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import AlertTriangle from 'lucide-svelte/icons/alert-triangle';
 </script>
 
@@ -18,7 +19,7 @@
 		<p class="text-surface-700 mb-2">
 			Please try again later or
 			<a
-				href="../contact/"
+				href={resolve('/contact')}
 				class="text-tertiary-600 hover:text-tertiary-800 underline transition-colors"
 			>
 				contact our support team
@@ -31,6 +32,6 @@
 		<button on:click={() => window.location.reload()} class="variant-filled-primary btn">
 			Retry
 		</button>
-		<a href="/" class="variant-ghost-secondary btn"> Return Home </a>
+		<a href={resolve('/')} class="variant-ghost-secondary btn"> Return Home </a>
 	</div>
 </div>

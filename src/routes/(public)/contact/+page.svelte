@@ -33,7 +33,7 @@
 			<div class="text-center">
 				<h3 class="h3">If you want to be more involved,<br />please call</h3>
 				<div class="mt-5 space-y-4">
-					{#each contacts as contact}
+					{#each contacts as contact (contact)}
 						<div class="h3 flex flex-col items-center gap-2">
 							<span class=" text-secondary-600 font-bold">{contact.name}</span>
 							<span>on</span>

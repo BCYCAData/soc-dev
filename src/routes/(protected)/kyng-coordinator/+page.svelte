@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
 	// let permissions = $derived(page.data.permissions ? page.data.permissions.split(',') : []);
@@ -15,8 +16,11 @@
 		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
-				{#each coordinatesKYNG as { kyngAreaId, kyngName }}
-					<a href={`/kyng-coordinator/${kyngAreaId}`} class="btn preset-filled-secondary-500">
+				{#each coordinatesKYNG as { kyngAreaId, kyngName } (kyngAreaId)}
+					<a
+						href={resolve('/(protected)/kyng-coordinator/[kyng_area]', { kyng_area: kyngAreaId })}
+						class="btn preset-filled-secondary-500"
+					>
 						{kyngName}
 					</a>
 				{/each}

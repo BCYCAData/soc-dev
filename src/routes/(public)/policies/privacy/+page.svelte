@@ -108,11 +108,11 @@
 			</p>
 		</header>
 
-		{#each sections as section}
+		{#each sections as section (section)}
 			<section class="space-y-4" aria-labelledby={section.id}>
 				<h3 id={section.id} class="text-secondary-600 text-xl font-semibold">{section.title}</h3>
 				<div class="mx-5 space-y-2">
-					{#each section.content as paragraph}
+					{#each section.content as paragraph (paragraph)}
 						<p class="text-surface-700">{paragraph}</p>
 					{/each}
 				</div>

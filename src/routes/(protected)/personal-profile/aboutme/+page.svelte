@@ -29,19 +29,19 @@
 	let isSubmitting = $state(false);
 
 	let family_name = $state(data.userProfile.family_name);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let fire_fighting_experience = $state(data.userProfile.fire_fighting_experience);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let fire_trauma = $state(data.userProfile.fire_trauma);
 	let first_name = $state(data.userProfile.first_name);
 	let mobile = $state(data.userProfile.mobile);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let plan_to_leave_before_fire = $state(data.userProfile.plan_to_leave_before_fire);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let plan_to_leave_before_flood = $state(data.userProfile.plan_to_leave_before_flood);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let residency_profile = $state(data.userProfile.residency_profile);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let rfs_survival_plan = $state(data.userProfile.rfs_survival_plan);
 
 	function handleReset() {
@@ -107,7 +107,7 @@
 		<div
 			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-4 sm:gap-x-2"
 		>
-			{#each residencyOptions as { value, lable }}
+			{#each residencyOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -153,7 +153,7 @@
 			Have you completed a RFS Bushfire survival plan?
 		</h2>
 		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-			{#each yesNoSendOptions as { value, lable }}
+			{#each yesNoSendOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -175,7 +175,7 @@
 		<div
 			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
-			{#each fireFightingExperienceOptions as { value, lable }}
+			{#each fireFightingExperienceOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -196,7 +196,7 @@
 			Have you had unpleasant traumatic experience of bushfire?
 		</h2>
 		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-			{#each yesNoOptions as { value, lable }}
+			{#each yesNoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -218,7 +218,7 @@
 		<div
 			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
-			{#each stayGoOptions as { value, lable }}
+			{#each stayGoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -241,7 +241,7 @@
 		<div
 			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
 		>
-			{#each stayGoOptions as { value, lable }}
+			{#each stayGoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"

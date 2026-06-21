@@ -4,7 +4,7 @@
 	interface Props {
 		steps?: Step[];
 		currentActive?: number;
-		onStepClick?: (event: MouseEvent | KeyboardEvent | CustomEvent<any>) => void;
+		onStepClick?: (event: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => void;
 	}
 
 	let { steps = [], currentActive = $bindable(1), onStepClick }: Props = $props();
@@ -41,7 +41,7 @@
 		updateProgress();
 	};
 
-	export const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+	export const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => {
 		const target = e.currentTarget as HTMLDivElement;
 		const value = target?.dataset.title;
 		if (value) {
@@ -50,7 +50,7 @@
 		}
 	};
 
-	const handleClick = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+	const handleClick = (e: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => {
 		onStepClick?.(e);
 		skipTo(e);
 	};
@@ -58,7 +58,7 @@
 
 <div class="progress-container z-50">
 	<div class="progress" bind:this={progress}></div>
-	{#each steps as step, i}
+	{#each steps as step, i (i)}
 		<div
 			class="circle {i === 0 ? 'active' : ''}"
 			data-title={step.text}

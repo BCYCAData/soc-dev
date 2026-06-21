@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>Emergency Administration</title>
 </svelte:head>
@@ -8,10 +12,10 @@
 		<section class="bg-surface-50-950 rounded-lg px-6 pb-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
-				<a href="/admin/emergency/reports" class=" btn preset-filled-secondary-500">
+				<a href={resolve('/admin/emergency/reports')} class=" btn preset-filled-secondary-500">
 					Generate Reports for Emergency Services
 				</a>
-				<a href="/admin/emergency/service-map" class=" btn preset-filled-secondary-500">
+				<a href={resolve('/admin/emergency/service-map')} class=" btn preset-filled-secondary-500">
 					View Emergency Sevices Map
 				</a>
 			</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import LiteYouTube from '$components/page/LiteYouTube.svelte';
 
 	const videos = [
@@ -45,7 +46,7 @@
 				<strong><em class="preset-typo-body-2">Will you join us?</em></strong>
 
 				<div class="preset-typo-body-1">
-					<a href="/auth/signup" class="anchor"> Tap here to find out if you qualify </a>
+					<a href={resolve('/auth/signup')} class="anchor"> Tap here to find out if you qualify </a>
 				</div>
 
 				<strong><em class="preset-typo-body-2">Want more information?</em></strong>
@@ -57,7 +58,7 @@
 			<section class="mt-4">
 				<h2 class="sr-only">Informational Videos</h2>
 				<div class="flex flex-col items-center justify-center gap-4 md:flex-row">
-					{#each videos as video}
+					{#each videos as video (video)}
 						<LiteYouTube
 							videoId={video.id}
 							title={video.title}

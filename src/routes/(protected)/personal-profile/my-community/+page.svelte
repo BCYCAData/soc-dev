@@ -77,7 +77,7 @@
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#if stayInTouchOptions}
-			{#each stayInTouchOptions as { value, lable }}
+			{#each stayInTouchOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -163,7 +163,7 @@
 	Community based on your address.
 	<br />
 	{#if data.communityProfiles}
-		{#each ['bcyca', 'mondrook', 'tinonee', 'external'] as connectedCommunity}
+		{#each ['bcyca', 'mondrook', 'tinonee', 'external'] as connectedCommunity (connectedCommunity)}
 			{#if data.communityProfiles[`community_${connectedCommunity}_profile_id`] !== null && connectedCommunity !== intergratedCommunity.toLowerCase()}
 				You have also connected with the {connectedCommunity.toUpperCase()} community.
 			{/if}

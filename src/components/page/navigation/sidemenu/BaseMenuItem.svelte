@@ -11,6 +11,7 @@
 	let { href, isActive, isCollapsed, icon, content, caret }: Props = $props();
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
 	role="button"
 	tabindex="0"
@@ -25,3 +26,4 @@
 		{@render caret?.()}
 	{/if}
 </a>
+<!-- eslint-enable svelte/no-navigation-without-resolve -->

@@ -33,12 +33,12 @@ This project uses an AI-assisted development system for design documentation, co
 
 ## Project Context
 
-| Attribute | Value |
-| --------- | ----- |
-| **Project name** | soc-dev |
-| **Domain** | Community Environmental Management |
-| **Design docs** | `~/ai-dev-system/projects/soc-dev/design/` |
-| **Current iteration** | v0.1 |
+| Attribute             | Value                                      |
+| --------------------- | ------------------------------------------ |
+| **Project name**      | soc-dev                                    |
+| **Domain**            | Community Environmental Management         |
+| **Design docs**       | `~/ai-dev-system/projects/soc-dev/design/` |
+| **Current iteration** | v0.1                                       |
 
 ## Technology Stack
 

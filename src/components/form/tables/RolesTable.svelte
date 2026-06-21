@@ -53,7 +53,7 @@
 			} else {
 				toast.error('Failed to remove role. Please try again.');
 			}
-		} catch (error) {
+		} catch {
 			toast.error('Failed to remove role. Please try again.');
 		} finally {
 			showRemoveConfirm = false;

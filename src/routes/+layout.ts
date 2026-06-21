@@ -3,6 +3,8 @@ import type { LayoutLoad } from './$types';
 export const load: LayoutLoad = async ({ data }) => {
 	// Simply pass through server data - no client-side Supabase needed
 	// Note: optionsData may be provided by child layouts
+	// optionsData is injected by child layouts with varying shapes; keep it loose.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const dataWithOptional = data as typeof data & { optionsData?: any };
 
 	return {

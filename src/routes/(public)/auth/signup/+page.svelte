@@ -37,7 +37,7 @@
 <div class="max-w-container mx-0 flex flex-col items-center justify-center sm:w-full">
 	{#if message}
 		<div
-			class="text-scale-3 m-1 rounded-lg border-2 border-error-500 bg-error-50 p-2 text-error-700"
+			class="text-scale-3 border-error-500 bg-error-50 text-error-700 m-1 rounded-lg border-2 p-2"
 			role="alert"
 			aria-live="polite"
 		>
@@ -53,7 +53,7 @@
 		<AddressIneligible {streetaddress} {suburb} />
 	{:else if addressStatus === ADDRESS_STATUS.NOT_FOUND}
 		<div
-			class="text-scale-3 my-3 flex flex-col items-center rounded-lg border-2 border-error-500 bg-error-50 p-2 text-error-700"
+			class="text-scale-3 border-error-500 bg-error-50 text-error-700 my-3 flex flex-col items-center rounded-lg border-2 p-2"
 			role="alert"
 			aria-live="polite"
 		>
@@ -63,9 +63,11 @@
 		</div>
 
 		<div class="mt-5">
+			<!-- eslint-disable svelte/no-navigation-without-resolve -->
 			<a href={mailtoUrl} class="contact-button" rel="noopener noreferrer">
 				Tap here to send us an email
 			</a>
+			<!-- eslint-enable svelte/no-navigation-without-resolve -->
 		</div>
 	{:else}
 		<AddressSystemError />

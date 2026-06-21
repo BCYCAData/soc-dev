@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { SvelteSet } from 'svelte/reactivity';
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import type L from 'leaflet';
 	import { LeafletLegendControlClass } from '$lib/leaflet/leafletlegendcontrol';
@@ -20,7 +21,7 @@
 	const layersStore: Writable<Record<string, LayerInfo>> = getLeafletLayers();
 	const leafletModule: typeof L = getLeaflet();
 
-	let addedLayers = new Set<string>();
+	let addedLayers = new SvelteSet<string>();
 	let customControl: LeafletLegendControlClass;
 
 	onMount(() => {

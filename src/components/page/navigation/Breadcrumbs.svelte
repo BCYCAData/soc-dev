@@ -21,7 +21,7 @@
 	$effect(() => {
 		const tokens = page.url.pathname.split('/').filter((t) => t !== '');
 		let tokenPath = '';
-		crumbs = tokens.map((t, index) => {
+		crumbs = tokens.map((t) => {
 			tokenPath += '/' + t;
 			let config = pathLables[t] || { label: t };
 
@@ -47,14 +47,16 @@
 </script>
 
 <ul id="breadcrumb">
-	{#each crumbs as c}
+	{#each crumbs as c (c)}
 		<li>
+			<!-- eslint-disable svelte/no-navigation-without-resolve -->
 			<a href={c.href}>
 				{#if c.icon}
 					<span> <c.icon size={16} letter={c.letter} /></span>
 				{/if}
 				<span>{c.label}</span>
 			</a>
+			<!-- eslint-enable svelte/no-navigation-without-resolve -->
 		</li>
 	{/each}
 </ul>

@@ -58,14 +58,14 @@
 			padding="pb-0"
 			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
-			value={'0'}>Review Answers</Tabs.Control
+			value="0">Review Answers</Tabs.Control
 		>
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
 			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
-			value={'1'}>Something Else</Tabs.Control
+			value="1">Something Else</Tabs.Control
 		>
 	{/snippet}
 	{#snippet content()}

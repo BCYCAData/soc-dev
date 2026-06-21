@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onMount, onDestroy } from 'svelte';
 	import { getMapContext } from '$lib/map/map-types';
 	import { getLeaflet } from '$lib/map/layer-factory';
@@ -45,7 +46,8 @@
 
 	$effect(() => {
 		if (map && layer) {
-			visible ? layer.addTo(map) : map.removeLayer(layer);
+			if (visible) layer.addTo(map);
+			else map.removeLayer(layer);
 		}
 	});
 

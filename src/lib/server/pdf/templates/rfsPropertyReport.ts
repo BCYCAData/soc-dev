@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import PdfPrinter from 'pdfmake';
 import blobStream from 'blob-stream';
 import { fonts, getLogo } from '$lib/server/pdf/config/pdfConfig';
@@ -116,7 +117,7 @@ function getReportStyles(): StyleDictionary {
 
 async function buildReportContent(
 	propertyData: any[],
-	fetch: RequestEvent['fetch']
+	_fetch: RequestEvent['fetch']
 ): Promise<Content[]> {
 	const content: Content[] = [];
 
@@ -401,7 +402,7 @@ function buildLocalHazardsSection(property: any): Content {
 
 // async function buildPropertyMapSection(
 // 	property: any,
-// 	fetch: RequestEvent['fetch']
+// 	_fetch: RequestEvent['fetch']
 // ): Promise<Content> {
 // 	try {
 // 		const mapImage = await fetch(`/api/property-map/${property.id}`);

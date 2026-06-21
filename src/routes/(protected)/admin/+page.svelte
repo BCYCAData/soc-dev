@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -37,23 +38,25 @@
 			<h2 class="mb-2 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
 				{#if canAccessRoute('/admin/site')}
-					<a href="/admin/site" class="btn preset-filled-secondary-500"> Manage Site Settings </a>
+					<a href={resolve('/admin/site')} class="btn preset-filled-secondary-500">
+						Manage Site Settings
+					</a>
 				{/if}
 
 				{#if canAccessRoute('/admin/users')}
-					<a href="/admin/users" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/users')} class="btn preset-filled-secondary-500">
 						Manage Registered Users
 					</a>
 				{/if}
 
 				{#if canAccessRoute('/admin/emergency')}
-					<a href="/admin/emergency" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/emergency')} class="btn preset-filled-secondary-500">
 						Manage Emergency Services Reports
 					</a>
 				{/if}
 
 				{#if canAccessRoute('/admin/community')}
-					<a href="/admin/community" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/community')} class="btn preset-filled-secondary-500">
 						Manage Community Data Settings
 					</a>
 				{/if}

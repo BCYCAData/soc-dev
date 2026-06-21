@@ -31,7 +31,7 @@ CREATE TABLE template_fields (
     required BOOLEAN DEFAULT false,
     default_value TEXT,
     display_order INTEGER NOT NULL,
-    
+
     UNIQUE (template_id, field_name),
     UNIQUE (template_id, display_order)
 );
@@ -64,9 +64,9 @@ CREATE TABLE spatial_features (
     geom GEOMETRY NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_edited TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
+
     CONSTRAINT valid_geometry CHECK (ST_IsValid(geom)),
-    CONSTRAINT valid_user_property FOREIGN KEY (user_id, property_id) 
+    CONSTRAINT valid_user_property FOREIGN KEY (user_id, property_id)
         REFERENCES user_property_profile_join(user_id, property_id) ON DELETE CASCADE
 );
 
@@ -82,7 +82,7 @@ CREATE TABLE feature_attributes (
     field_id UUID NOT NULL REFERENCES template_fields(id) ON DELETE CASCADE,
     value TEXT,
     last_edited TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    
+
     UNIQUE (feature_id, field_id)
 );
 
@@ -103,7 +103,7 @@ CREATE INDEX idx_feature_attributes_field_id ON feature_attributes(field_id);
 
 -- Create views for easier querying
 CREATE VIEW categorized_features AS
-SELECT 
+SELECT
     sf.id,
     sf.property_id,
     sf.user_id,
@@ -117,7 +117,7 @@ FROM spatial_features sf
 JOIN feature_templates ft ON sf.template_id = ft.id;
 
 CREATE VIEW feature_details AS
-SELECT 
+SELECT
     sf.id as feature_id,
     sf.property_id,
     sf.user_id,
@@ -171,7 +171,7 @@ CREATE OR REPLACE FUNCTION get_property_features_by_category(
 ) AS $$
 BEGIN
     RETURN QUERY
-    SELECT 
+    SELECT
         sf.id,
         ft.name,
         sf.geom,
@@ -233,18 +233,18 @@ INSERT INTO feature_templates (name, description, geometry_type, category) VALUE
     ('Water Tank', 'Water storage location', 'point', 'asset'),
     ('Fire Hydrant', 'Fire hydrant location', 'point', 'asset'),
     ('Building', 'Structure location', 'point', 'asset'),
-    
+
     ('Fire Break', 'Maintained fire break area', 'line', 'operational'),
     ('Access Route', 'Vehicle access route', 'line', 'operational'),
     ('Staging Area', 'Emergency staging location', 'polygon', 'operational'),
-    
+
     ('Vegetation Hazard', 'High fuel load area', 'polygon', 'hazard'),
     ('Slope Hazard', 'Steep slope area', 'polygon', 'hazard'),
     ('Powerline', 'Overhead powerline location', 'line', 'hazard');
 
 -- Example template fields
-INSERT INTO template_fields (template_id, field_name, field_type, required, display_order) 
-SELECT 
+INSERT INTO template_fields (template_id, field_name, field_type, required, display_order)
+SELECT
     id,
     'name',
     'text'::field_type,
@@ -252,8 +252,8 @@ SELECT
     1
 FROM feature_templates;
 
-INSERT INTO template_fields (template_id, field_name, field_type, required, display_order) 
-SELECT 
+INSERT INTO template_fields (template_id, field_name, field_type, required, display_order)
+SELECT
     id,
     'description',
     'text'::field_type,

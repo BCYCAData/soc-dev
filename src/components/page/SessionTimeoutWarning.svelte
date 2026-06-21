@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 	import { toast } from '$stores/toaststore';
@@ -167,7 +168,7 @@
 					Stay Signed In
 				</button>
 
-				<a href="/auth/signin" class="btn preset-tonal-surface flex-1 font-semibold">
+				<a href={resolve('/auth/signin')} class="btn preset-tonal-surface flex-1 font-semibold">
 					Sign Out Now
 				</a>
 			</div>

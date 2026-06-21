@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type {
 	EditingState,
 	FeatureTemplate,
@@ -13,16 +14,16 @@ interface CustomProperties {
 export type CustomFeature = GeoJSON.Feature<GeoJSON.Geometry, CustomProperties>;
 
 // Active editing state
-let editingState = $state<EditingState>({
+const editingState = $state<EditingState>({
 	activeTemplate: null,
 	activeFeature: null,
 	mode: null
 });
 
 // Feature collections
-let spatialFeatures = $state<Record<string, SpatialFeature>>({});
-let featureAttributes = $state<Record<string, FeatureAttribute>>({});
-let featureTemplates = $state<Record<string, FeatureTemplate>>({});
+const spatialFeatures = $state<Record<string, SpatialFeature>>({});
+const featureAttributes = $state<Record<string, FeatureAttribute>>({});
+const featureTemplates = $state<Record<string, FeatureTemplate>>({});
 
 // Feature management functions
 function setActiveTemplate(template: FeatureTemplate | null) {

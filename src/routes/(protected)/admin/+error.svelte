@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import Error403 from '$components/page/Error403.svelte';
 </script>
@@ -14,7 +15,7 @@
 	<div class="error-fallback">
 		<h1>{page.status}</h1>
 		<p>{page.error?.message || 'An error occurred'}</p>
-		<a href="/personal-profile">Return to Dashboard</a>
+		<a href={resolve('/personal-profile')}>Return to Dashboard</a>
 	</div>
 {/if}
 

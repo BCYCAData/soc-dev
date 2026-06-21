@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import AddPropertyModal from '$components/page/modals/AddPropertyModal.svelte';
 	import RemovePropertyModal from '$components/page/modals/RemovePropertyModal.svelte';
 	import type { PageData } from './$types';
@@ -64,7 +65,7 @@
 	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">{title}</h1>
 
 	<div class="mb-8 grid gap-6">
-		{#each properties as property}
+		{#each properties as property (property)}
 			<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 				<div class="mb-4 flex items-center justify-between">
 					<div class="flex items-center gap-3">
@@ -115,7 +116,7 @@
 										>
 											<h3 class="mb-2 text-sm font-medium">Linked Users:</h3>
 											<ul class="space-y-1">
-												{#each property.linked_users as email}
+												{#each property.linked_users as email (email)}
 													<li class="text-surface-600 text-sm">{email}</li>
 												{/each}
 											</ul>
@@ -131,16 +132,36 @@
 					</button>
 				</div>
 				<div class="grid grid-cols-2 gap-4">
-					<a href="my-property/{property.id}/assets" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/(protected)/personal-profile/my-property/[propertyid]/assets', {
+							propertyid: property.id
+						})}
+						class="btn preset-filled-secondary-500"
+					>
 						Property Assets
 					</a>
-					<a href="my-property/{property.id}/hazards" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/(protected)/personal-profile/my-property/[propertyid]/hazards', {
+							propertyid: property.id
+						})}
+						class="btn preset-filled-secondary-500"
+					>
 						Property Hazards
 					</a>
-					<a href="my-property/{property.id}/my-map" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/(protected)/personal-profile/my-property/[propertyid]/my-map', {
+							propertyid: property.id
+						})}
+						class="btn preset-filled-secondary-500"
+					>
 						Property Map
 					</a>
-					<a href="my-property/{property.id}/resources" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/(protected)/personal-profile/my-property/[propertyid]/resources', {
+							propertyid: property.id
+						})}
+						class="btn preset-filled-secondary-500"
+					>
 						Property Resources
 					</a>
 				</div>

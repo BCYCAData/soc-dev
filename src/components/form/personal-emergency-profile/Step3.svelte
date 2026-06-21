@@ -29,7 +29,7 @@
 <div class="bg-secondary-200 rounded-lg p-1">
 	<ul class="text-scale-3 my-0 flex list-none items-center sm:mx-auto sm:w-1/2">
 		<div class="text-primary-700 flex-auto font-semibold">Poor</div>
-		{#each Array(5) as _, i}
+		{#each Array(5) as _, i (i)}
 			<li class="flex-auto">
 				<input
 					name="mobile_reception"
@@ -51,7 +51,7 @@
 <div
 	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 >
-	{#each residencyOptions as { value, lable }}
+	{#each residencyOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
 			<input
 				class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"
@@ -109,7 +109,7 @@
 		Do you consider any person on the property to be vulnerable?
 	</h2>
 	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-		{#each yesNoOptions as { value, lable }}
+		{#each yesNoOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
 					class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"

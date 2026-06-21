@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { setContext } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 

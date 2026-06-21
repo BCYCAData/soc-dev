@@ -23,7 +23,7 @@
 		bind:value={messageContext}
 		class="border-surface-300 ml-2 min-w-[125px] rounded-md border px-3 py-1 pr-9 focus:ring-0 focus:outline-none active:ring-0 active:outline-none"
 	>
-		{#each options as option}
+		{#each options as option (option)}
 			<option class="option-hover-bg min-w-max" value={option}>{option}</option>
 		{/each}
 	</select>

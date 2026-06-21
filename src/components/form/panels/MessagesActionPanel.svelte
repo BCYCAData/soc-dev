@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import MessagesTable from '$components/form/tables/MessagesTable.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import { enhance } from '$app/forms';

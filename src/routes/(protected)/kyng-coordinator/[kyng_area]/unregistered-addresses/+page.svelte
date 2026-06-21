@@ -13,6 +13,7 @@
 		<h2 class="h2 flex justify-around">Un-Registered Properties</h2>
 		<ul class="grid-container">
 			{#each unRegisteredPropertiesData.features as feature, index (feature.properties.principaladdresssiteoid + '_' + index)}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a
 					href="{baseUrl}?lat={feature.geometry.coordinates[1]}&lng={feature.geometry
 						.coordinates[0]}&zoom=15"
@@ -20,6 +21,7 @@
 				>
 					{feature.properties.address}
 				</a>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
 			{/each}
 		</ul>
 	{/if}

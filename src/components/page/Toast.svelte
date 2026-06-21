@@ -15,7 +15,7 @@
 </script>
 
 <div
-	class="flex items-start gap-3 p-4 rounded-lg min-w-[320px] max-w-md {styles.container}"
+	class="flex max-w-md min-w-[320px] items-start gap-3 rounded-lg p-4 {styles.container}"
 	role="alert"
 	aria-live={toast.type === 'error' ? 'assertive' : 'polite'}
 	in:fly={{ x: 300, duration: 200, easing: quintOut }}
@@ -25,17 +25,12 @@
 	<div class="shrink-0 {styles.icon}" aria-hidden="true">
 		{#if toast.type === 'success'}
 			<!-- Success Check Icon -->
-			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					stroke-width="2"
-					d="M5 13l4 4L19 7"
-				/>
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
 			</svg>
 		{:else if toast.type === 'error'}
 			<!-- Error X Icon -->
-			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -45,7 +40,7 @@
 			</svg>
 		{:else if toast.type === 'warning'}
 			<!-- Warning Triangle Icon -->
-			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -55,7 +50,7 @@
 			</svg>
 		{:else}
 			<!-- Info Icon -->
-			<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -67,8 +62,8 @@
 	</div>
 
 	<!-- Content -->
-	<div class="flex-1 min-w-0">
-		<p class="font-medium leading-tight">
+	<div class="min-w-0 flex-1">
+		<p class="leading-tight font-medium">
 			{toast.message}
 		</p>
 	</div>
@@ -76,11 +71,11 @@
 	<!-- Close Button -->
 	<button
 		type="button"
-		class="shrink-0 rounded-md p-1.5 transition-colors focus:outline-none focus:ring-2 {styles.closeButton}"
+		class="shrink-0 rounded-md p-1.5 transition-colors focus:ring-2 focus:outline-none {styles.closeButton}"
 		on:click={dismiss}
 		aria-label="Dismiss notification"
 	>
-		<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path
 				stroke-linecap="round"
 				stroke-linejoin="round"

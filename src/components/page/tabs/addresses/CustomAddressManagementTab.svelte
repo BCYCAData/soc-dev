@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { enhance } from '$app/forms';
 	import Spinner from '$components/page/Spinner.svelte';
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
@@ -92,7 +93,7 @@
 	<h1 class="mb-2 text-2xl font-bold">Custom Address Management</h1>
 	<Accordion {value} collapsible={true} spaceY="space-y-1">
 		<Accordion.Item
-			value={'0'}
+			value="0"
 			controlClasses="bg-primary-400 text-xl"
 			classes="bg-secondary-100 font-medium"
 		>
@@ -105,7 +106,7 @@
 		</Accordion.Item>
 
 		<Accordion.Item
-			value={'1'}
+			value="1"
 			controlClasses="bg-primary-400 text-xl"
 			classes="bg-secondary-100 font-medium"
 		>
@@ -117,7 +118,7 @@
 			{/snippet}
 		</Accordion.Item>
 		<Accordion.Item
-			value={'2'}
+			value="2"
 			controlClasses="bg-primary-400 text-xl"
 			classes="bg-secondary-100 font-medium"
 		>
@@ -229,6 +230,7 @@
 									<p class="ml-4">
 										Open Geo-coded National Address File (G-NAF) End User Licence Agreement.
 									</p>
+									<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted G-NAF licence attribution from the geocoder API; only URLs are linkified -->
 									{@html validatedData[0].geocoder_result.attribution.replace(
 										/(https?:\/\/[^\s]+)/g,
 										'<a href="$1" class="text-tertiary-600 hover:text-tertiary-800 underline" target="_blank" rel="noopener noreferrer">$1</a>'

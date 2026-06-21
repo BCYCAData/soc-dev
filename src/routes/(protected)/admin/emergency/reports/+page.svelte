@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { Tabs } from '@skeletonlabs/skeleton-svelte';
 	import StreetSelectInput from '$components/form/inputs/StreetSelectInput.svelte';
 	import AutoCompleteSelect from '$components/form/inputs/AutoCompleteSelect.svelte';
@@ -65,7 +66,7 @@
 						bind:selectedStreet
 					/>
 					<a
-						href={`/api/reports/rfs/street/${selectedStreet}`}
+						href={resolve('/api/reports/rfs/street/[streetname]', { streetname: selectedStreet })}
 						download={`${selectedStreet?.toLocaleLowerCase().replaceAll(' ', '_')}_${date.toLocaleDateString()}.pdf`}
 						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
 					>
@@ -91,7 +92,9 @@
 					/>
 					<pre>{JSON.stringify(selectedPropertyIds, null, 2)}</pre>
 					<a
-						href={`/api/reports/rfs/properties/${encodeURIComponent(JSON.stringify(selectedPropertyIds))}`}
+						href={resolve('/api/reports/rfs/properties/[ids]', {
+							ids: encodeURIComponent(JSON.stringify(selectedPropertyIds))
+						})}
 						download={`property_report_${date.toLocaleDateString()}.pdf`}
 						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
 					>

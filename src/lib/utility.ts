@@ -26,13 +26,13 @@ export const toTitleCase = (text: string) => {
 };
 
 export const checkStreetAddressString = (streetaddress: string) => {
-	let streetRegEx =
+	const streetRegEx =
 		/^\d+[a-zA-Z]?\s*\w+(\s+\w+)*\s+\w+(\s+\w+)*\s+(ALLEY|ARCADE|AVENUE|BOULEVARD|BYPASS|CIRCUIT|CLOSE|CORNER|COURT|CRESCENT|CUL-DE-SAC|DRIVE|ESPLANADE|GREEN|GROVE|HIGHWAY|JUNCTION|LANE|LINK|LMEWS|PARADE|PLACE|RIDGE|ROAD|SQUARE|STREET|TERRACE|WAY|)$/;
 	return streetRegEx.test(String(streetaddress).toUpperCase());
 };
 
 export const checkSuburbString = (suburb: string) => {
-	let suburbRegex = /^(?:(?!NSW|NEW\sSOUTH\sWALES)[A-Z\s])+$/;
+	const suburbRegex = /^(?:(?!NSW|NEW\sSOUTH\sWALES)[A-Z\s])+$/;
 	return suburbRegex.test(String(suburb).toUpperCase());
 };
 

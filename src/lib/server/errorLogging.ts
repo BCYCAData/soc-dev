@@ -1,16 +1,16 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '$lib/db.types';
+import type { Database, Json } from '$lib/db.types';
 
 type ErrorLogTable = 'address_validation_errors' | 'signup_errors' | 'signin_errors';
 
 interface ErrorLogParams {
 	errorType: string;
 	errorMessage: string;
-	errorDetails: any;
+	errorDetails: unknown;
 	clientIp: string;
 	userAgent: string;
 	status: number;
-	metadata?: any;
+	metadata?: Record<string, unknown>;
 	table: ErrorLogTable;
 }
 
@@ -30,7 +30,7 @@ const logSignUpSignInError = async (
 	const baseErrorData = {
 		error_message: errorMessage || 'Unknown error',
 		error_type: errorType || 'UNKNOWN_ERROR',
-		error_details: errorDetails || {},
+		error_details: (errorDetails ?? {}) as Json,
 		user_agent: userAgent
 	};
 
@@ -40,17 +40,17 @@ const logSignUpSignInError = async (
 		await supabase.from(table).insert({
 			...baseErrorData,
 			...ipData,
-			search_address_street: metadata?.searchaddressstreet || 'Unknown street',
-			search_address_suburb: metadata?.searchaddresssuburb || 'Unknown suburb',
+			search_address_street: (metadata?.searchaddressstreet as string) || 'Unknown street',
+			search_address_suburb: (metadata?.searchaddresssuburb as string) || 'Unknown suburb',
 			validation_status: status
 		});
 	} else {
 		await supabase.from(table).insert({
 			...baseErrorData,
 			...ipData,
-			email: metadata?.email || 'unknown',
+			email: (metadata?.email as string) || 'unknown',
 			http_status: status,
-			metadata: metadata || {}
+			metadata: (metadata ?? {}) as Json
 		});
 	}
 };

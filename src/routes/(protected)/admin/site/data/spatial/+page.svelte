@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
@@ -191,7 +192,7 @@
 						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
-						{#each geometryTypes as type}
+						{#each geometryTypes as type (type)}
 							<option value={type}>{type}</option>
 						{/each}
 					</select>
@@ -206,7 +207,7 @@
 						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
-						{#each categories as category}
+						{#each categories as category (category)}
 							<option value={category}>{category}</option>
 						{/each}
 					</select>
@@ -256,7 +257,7 @@
 
 	<!-- Existing Templates Accordion -->
 	<Accordion {value} collapsible={true} spaceY="space-y-1">
-		{#each templates as template}
+		{#each templates as template (template)}
 			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={template.id.toString()}>
 				{#snippet control()}
 					<div class="flex items-center justify-between">
@@ -313,7 +314,7 @@
 									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									required
 								>
-									{#each geometryTypes as type}
+									{#each geometryTypes as type (type)}
 										<option value={type}>{type}</option>
 									{/each}
 								</select>
@@ -328,7 +329,7 @@
 									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
 									required
 								>
-									{#each categories as category}
+									{#each categories as category (category)}
 										<option value={category}>{category}</option>
 									{/each}
 								</select>
@@ -390,7 +391,7 @@
 				>
 					<input type="hidden" name="template_id" value={currentTemplate.id ?? ''} />
 					<div class="space-y-4">
-						{#each templateFields as field, index}
+						{#each templateFields as field, index (index)}
 							<div class="grid grid-cols-3 gap-4">
 								<input
 									type="text"
@@ -405,7 +406,7 @@
 									class="rounded border p-2"
 								/>
 								<select bind:value={field.field_type} class="rounded border p-2">
-									{#each fieldTypes as type}
+									{#each fieldTypes as type (type)}
 										<option value={type}>{type}</option>
 									{/each}
 								</select>

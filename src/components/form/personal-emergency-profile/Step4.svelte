@@ -70,7 +70,7 @@
 </div>
 <h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Do you have livestock?</h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each yesNoOptions as { value, lable }}
+	{#each yesNoOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				form="surveyForm"
@@ -96,7 +96,7 @@
 		Do you have an area which would be safe for stock in the event of a bushfire or flood?
 	</h2>
 	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-		{#each yesNoMaybeOptions as { value, lable }}
+		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
 					form="surveyForm"
@@ -122,7 +122,7 @@
 			for a short period in an emergency?
 		</h2>
 		<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-			{#each yesNoMaybeOptions as { value, lable }}
+			{#each yesNoMaybeOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						form="surveyForm"

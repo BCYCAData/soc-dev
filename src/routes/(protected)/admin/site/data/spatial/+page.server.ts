@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import { error, fail } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';

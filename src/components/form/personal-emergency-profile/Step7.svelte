@@ -42,7 +42,7 @@
 	Have you completed a RFS Bushfire survival plan?
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each yesNoSendOptions as { value, lable }}
+	{#each yesNoSendOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				class="ml-8 h-6 w-6"
@@ -61,7 +61,7 @@
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
-		{#each fireFightingExperienceOptions as { value, lable }}
+		{#each fireFightingExperienceOptions as { value, lable } (value)}
 			<li class="flex items-center">
 				<input
 					class="ml-8 h-6 w-6"
@@ -80,7 +80,7 @@
 	Have you had unpleasant traumatic experience of bushfire?
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each yesNoOptions as { value, lable }}
+	{#each yesNoOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				class="ml-8 h-6 w-6"
@@ -99,7 +99,7 @@
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
-		{#each stayGoOptions as { value, lable }}
+		{#each stayGoOptions as { value, lable } (value)}
 			<li class="flex items-center">
 				<input
 					class="ml-8 h-6 w-6"
@@ -119,7 +119,7 @@
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
-		{#each stayGoOptions as { value, lable }}
+		{#each stayGoOptions as { value, lable } (value)}
 			<li class="flex items-center">
 				<input
 					class="ml-8 h-6 w-6"

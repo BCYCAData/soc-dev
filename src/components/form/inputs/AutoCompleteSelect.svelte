@@ -1,7 +1,8 @@
 <script lang="ts">
 	interface ListDataItem {
 		lut_text: string;
-		[key: string]: any; // This allows for additional properties
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic lookup item shape
+		[key: string]: any;
 	}
 
 	interface Props {
@@ -19,7 +20,6 @@
 	}: Props = $props();
 
 	let inputValue = $state('');
-	let sortedListData: ListDataItem[] = $state([]);
 
 	// Helper function to get sortable text (excluding leading numbers)
 	const getSortableText = (text: string) => {
@@ -32,11 +32,11 @@
 	};
 
 	// Enhanced sorting logic
-	$effect(() => {
-		sortedListData = [...listData].sort((a, b) =>
+	const sortedListData: ListDataItem[] = $derived(
+		[...listData].sort((a, b) =>
 			getSortableText(a.lut_text).localeCompare(getSortableText(b.lut_text))
-		);
-	});
+		)
+	);
 
 	const handleSelection = (event: Event) => {
 		const input = event.target as HTMLInputElement;
@@ -79,13 +79,13 @@
 	</div>
 
 	<datalist id={listId}>
-		{#each sortedListData.filter((item) => !selectedValues.includes(item.lut_text)) as item}
+		{#each sortedListData.filter((item) => !selectedValues.includes(item.lut_text)) as item (item)}
 			<option value={item.lut_text}></option>
 		{/each}
 	</datalist>
 
 	<div class="mt-2">
-		{#each selectedValues as selectedValue}
+		{#each selectedValues as selectedValue (selectedValue)}
 			<span class="preset-chip-token mr-2 mb-2">
 				{selectedValue}
 				<button

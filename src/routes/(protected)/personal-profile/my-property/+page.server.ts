@@ -77,7 +77,7 @@ export const actions: Actions = {
 				message: 'Address validated successfully',
 				data: validationData
 			};
-		} catch (error) {
+		} catch {
 			return fail(500, {
 				success: false,
 				message: 'Network or server error occurred'

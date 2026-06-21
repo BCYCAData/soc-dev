@@ -75,7 +75,7 @@ export const actions: Actions = {
 		};
 	},
 
-	signup: async ({ url, request, locals: { supabase } }) => {
+	signup: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 		const clientIp =
 			request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';

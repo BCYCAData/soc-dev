@@ -7,11 +7,7 @@
 	}
 
 	let { items = [], initialTab = 1 }: Props = $props();
-	let activeTabValue = $state(1);
-
-	$effect(() => {
-		activeTabValue = initialTab;
-	});
+	let activeTabValue = $derived(initialTab);
 
 	const handleTabChange = (tabValue: number) => () => {
 		activeTabValue = tabValue;
@@ -28,7 +24,7 @@
 <div class="w-full">
 	<nav class="mb-0" aria-label="Content tabs">
 		<ul class="flex list-none flex-wrap justify-center p-0" role="tablist">
-			{#each items as item}
+			{#each items as item (item)}
 				<li
 					class="[&.active_button]:border-secondary-300 [&.active_button]:bg-secondary-300 me-1 -mb-px [&.active_button]:border-b-4 [&.active_button]:font-bold"
 					class:active={activeTabValue === item.value}
@@ -49,7 +45,7 @@
 		</ul>
 	</nav>
 
-	{#each items as item}
+	{#each items as item (item)}
 		{#if activeTabValue === item.value}
 			<div
 				id="tab-content-{item.value}"

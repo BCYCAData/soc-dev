@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { enhance } from '$app/forms';
 
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -86,11 +87,6 @@
 		COMMUNITY_TYPES.BCYCA,
 		'communityMeetingOptions'
 	);
-	// @ts-ignore
-	const communityBCYCAStayInTouchOptions = extractOptionsData(
-		COMMUNITY_TYPES.BCYCA,
-		'stayInTouchOptions'
-	);
 
 	const communityExternalWorkshopOptions = extractOptionsData(
 		COMMUNITY_TYPES.EXTERNAL,
@@ -103,11 +99,6 @@
 	const communityExternalMeetingOptions = extractOptionsData(
 		COMMUNITY_TYPES.EXTERNAL,
 		'communityMeetingOptions'
-	);
-	// @ts-ignore
-	const communityExternalStayInTouchOptions = extractOptionsData(
-		COMMUNITY_TYPES.EXTERNAL,
-		'stayInTouchOptions'
 	);
 
 	const communityMondrookWorkshopOptions = extractOptionsData(
@@ -122,11 +113,6 @@
 		COMMUNITY_TYPES.MONDROOK,
 		'communityMeetingOptions'
 	);
-	// @ts-ignore
-	const communityMondrookStayInTouchOptions = extractOptionsData(
-		COMMUNITY_TYPES.MONDROOK,
-		'stayInTouchOptions'
-	);
 
 	const communityTinoneeWorkshopOptions = extractOptionsData(
 		COMMUNITY_TYPES.TINONEE,
@@ -139,11 +125,6 @@
 	const communityTinoneeMeetingOptions = extractOptionsData(
 		COMMUNITY_TYPES.TINONEE,
 		'communityMeetingOptions'
-	);
-	// @ts-ignore
-	const communityTinoneeStayInTouchOptions = extractOptionsData(
-		COMMUNITY_TYPES.TINONEE,
-		'stayInTouchOptions'
 	);
 
 	const userProfileStayInTouchOptionsData = $derived(

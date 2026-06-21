@@ -37,7 +37,7 @@
 				{/if}
 
 				{#if $helpContent.sections}
-					{#each $helpContent.sections as section}
+					{#each $helpContent.sections as section (section)}
 						<HelpSection {section} />
 					{/each}
 				{:else if $helpContent.content}

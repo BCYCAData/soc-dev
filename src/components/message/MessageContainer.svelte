@@ -11,7 +11,7 @@
 <div class="flex flex-row justify-around pt-2 text-xl">Messages</div>
 <div class="mx-4 my-4 flex flex-col">
 	{#if messagesData}
-		{#each messagesData as profileMessage}
+		{#each messagesData as profileMessage (profileMessage)}
 			<div class="card mt-2 rounded-[20px]">
 				<header class="card-header bg-tertiary-300 rounded-t-[20px] px-2 py-1 font-medium">
 					Message

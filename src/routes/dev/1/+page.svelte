@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { error } from '@sveltejs/kit';
 	import NewMap from '$components/leaflet/NewMap.svelte';
 	import BaseLayerGroup from '$components/leaflet/layers/BaseLayerGroup.svelte';
@@ -94,7 +95,7 @@
 			{
 				label: 'USA National Parks',
 				visible: false,
-				style: (feature: any): any => ({
+				style: (_feature: any): any => ({
 					color: '#2ecc71',
 					weight: 2,
 					fillOpacity: 0.3

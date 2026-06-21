@@ -44,7 +44,7 @@
 <div
 	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2"
 >
-	{#each siteHazardsOptions as { value, lable }}
+	{#each siteHazardsOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
 			<input
 				class="ml-8 h-6 w-6"
@@ -77,7 +77,7 @@
 <div
 	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
-	{#each fireHazardReductionOptions as { value, lable }}
+	{#each fireHazardReductionOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
 			<input
 				class="ml-8 h-6 w-6"
@@ -96,7 +96,7 @@
 	Does any adjoining land represent a hazard?
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each yesNoMaybeOptions as { value, lable }}
+	{#each yesNoMaybeOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				class="ml-8 h-6 w-6"

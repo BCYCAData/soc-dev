@@ -1,4 +1,5 @@
 <script>
+	import { resolve } from '$app/paths';
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 </script>
 
@@ -9,7 +10,7 @@
 	{#snippet lead()}
 		<a
 			class="btn btn-sm preset-tonal-primary mb-2 w-full font-semibold sm:mb-0 sm:w-auto"
-			href="/policies/termsofservice"
+			href={resolve('/policies/termsofservice')}
 		>
 			Terms of Service
 		</a>
@@ -18,7 +19,7 @@
 	{#snippet trail()}
 		<a
 			class="btn btn-sm preset-tonal-primary mb-2 w-full font-semibold sm:mb-0 sm:w-auto"
-			href="/policies/privacy"
+			href={resolve('/policies/privacy')}
 		>
 			Privacy Policy
 		</a>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { setContext, onMount } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import { getTimestamp } from '$lib/utility';
@@ -21,10 +22,8 @@
 	let {
 		appMessagesColumns,
 		appMessagesData,
-		//@ts-ignore
 		selectedIDs = $bindable([]),
 		isSelectionEmpty = $bindable(true),
-		//@ts-ignore
 		selectedRows = $bindable(),
 		downloadFileName,
 		showDownloadButton = true

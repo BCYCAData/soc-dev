@@ -2,10 +2,7 @@ import { error } from '@sveltejs/kit';
 
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({
-	locals: { permissions, coordinatesKYNG, supabase },
-	parent
-}) => {
+export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) => {
 	const parentData = await parent();
 	// Parent layout already validated user
 	// authGuard already checked KYNG permissions via routeMatchers

@@ -37,7 +37,7 @@ export const GET: RequestHandler = async ({ fetch, url }) => {
 		const tile = new mvt.VectorTile(new Protobuf(buffer));
 
 		const features = [];
-		for (let layerName in tile.layers) {
+		for (const layerName in tile.layers) {
 			const layer = tile.layers[layerName];
 
 			for (let i = 0; i < layer.length; i++) {

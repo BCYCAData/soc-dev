@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>My Settings</title>
 </svelte:head>
@@ -8,10 +12,10 @@
 		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid auto-rows-auto grid-cols-2 gap-4">
-				<a href="/auth/redirect/changeemail" class="btn preset-filled-secondary-500">
+				<a href={resolve('/auth/redirect/changeemail')} class="btn preset-filled-secondary-500">
 					Change My Email Address
 				</a>
-				<a href="/auth/redirect/resetpassword" class="btn preset-filled-secondary-500">
+				<a href={resolve('/auth/redirect/resetpassword')} class="btn preset-filled-secondary-500">
 					Change My Password
 				</a>
 			</div>

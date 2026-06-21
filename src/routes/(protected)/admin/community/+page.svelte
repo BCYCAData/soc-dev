@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -17,19 +18,28 @@
 			<h2 class="mb-4 text-xl font-semibold">Select a Community:</h2>
 			<div class="grid grid-cols-3 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA)}
-					<a href="/admin/community/bcyca/" class="btn preset-filled-secondary-500"> BCYCA </a>
+					<a href={resolve('/admin/community/bcyca')} class="btn preset-filled-secondary-500">
+						BCYCA
+					</a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE)}
-					<a href="/admin/community/tinonee/" class="btn preset-filled-secondary-500"> Tinonee </a>
+					<a href={resolve('/admin/community/tinonee')} class="btn preset-filled-secondary-500">
+						Tinonee
+					</a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_MONDROOK)}
-					<a href="/admin/community/mondrook" class="btn preset-filled-secondary-500"> Mondrook </a>
+					<a href={resolve('/admin/community/mondrook')} class="btn preset-filled-secondary-500">
+						Mondrook
+					</a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL)}
-					<a href="/admin/community/external" class="btn preset-filled-secondary-500 col-start-2">
+					<a
+						href={resolve('/admin/community/external')}
+						class="btn preset-filled-secondary-500 col-start-2"
+					>
 						External
 					</a>
 				{/if}

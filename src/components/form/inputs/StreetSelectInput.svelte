@@ -12,7 +12,6 @@
 		nameText,
 		requiredValue,
 		classText,
-		//@ts-ignore
 		selectedStreet = $bindable('')
 	}: Props = $props();
 
@@ -25,7 +24,7 @@
 
 <select bind:value={local} id={nameText} name={nameText} class={classText} required={requiredValue}>
 	<option value="" selected>Select a street name</option>
-	{#each streetList as street}
+	{#each streetList as street (street)}
 		<option value={street}>
 			{street}
 		</option>

@@ -8,4 +8,9 @@
  *
  * @module server/permissions
  */
-export { hasPermission, isAdmin, hasAnyFeature, hasAnyPermission } from '$lib/constants/permissions';
+export {
+	hasPermission,
+	isAdmin,
+	hasAnyFeature,
+	hasAnyPermission
+} from '$lib/constants/permissions';

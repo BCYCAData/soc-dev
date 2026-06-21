@@ -10,17 +10,14 @@
 This document tracks all form submission buttons that need loading state implementation (spinner + disabled during submission).
 
 **Pattern to Implement:**
+
 ```svelte
-<button
-  type="submit"
-  disabled={isSubmitting}
-  aria-busy={isSubmitting}
->
-  {#if isSubmitting}
-    <Spinner size="sm" /> Loading...
-  {:else}
-    Button Text
-  {/if}
+<button type="submit" disabled={isSubmitting} aria-busy={isSubmitting}>
+	{#if isSubmitting}
+		<Spinner size="sm" /> Loading...
+	{:else}
+		Button Text
+	{/if}
 </button>
 ```
 
@@ -59,17 +56,16 @@ These buttons already have proper loading states implemented:
 ### Authentication Forms
 
 1. **✅ Create Account (Address Valid)** - `/src/components/form/address-challenge/AddressValid.svelte:71`
+
    ```svelte
    <!-- Current -->
-   <button type="submit" disabled={!canGo}>
-     Create Account
-   </button>
+   <button type="submit" disabled={!canGo}> Create Account </button>
 
    <!-- Needs -->
-   - Add isSubmitting state variable
-   - Add aria-busy={isSubmitting}
+   - Add isSubmitting state variable - Add aria-busy={isSubmitting}
    - Add spinner and loading text
    ```
+
    **Impact:** High - Users can double-click during signup
    **File:** `src/components/form/address-challenge/AddressValid.svelte`
 
@@ -83,25 +79,21 @@ These buttons already have proper loading states implemented:
 ### User Management
 
 3. **✅ Assign Coordinator** - `/src/routes/(protected)/admin/users/kyng-coordinators/+page.svelte:172`
+
    ```svelte
    <!-- Current -->
-   <button type="submit" disabled={!(selectedUser && selectedKYNG)}>
-     Assign Coordinator
-   </button>
+   <button type="submit" disabled={!(selectedUser && selectedKYNG)}> Assign Coordinator </button>
 
    <!-- Needs -->
-   - Add isAssigning state
-   - Add spinner
-   - Show "Assigning..." during submission
+   - Add isAssigning state - Add spinner - Show "Assigning..." during submission
    ```
+
    **Impact:** Medium - Can create duplicate coordinator assignments
    **File:** `src/routes/(protected)/admin/users/kyng-coordinators/+page.svelte`
 
 4. **✅ Update Coordinator** - `/src/routes/(protected)/admin/users/kyng-coordinators/+page.svelte:301`
    ```svelte
-   <button type="submit" class="rounded-md bg-blue-600...">
-     Update Coordinator
-   </button>
+   <button type="submit" class="bg-blue-600... rounded-md"> Update Coordinator </button>
    ```
    **Impact:** Medium
    **File:** `src/routes/(protected)/admin/users/kyng-coordinators/+page.svelte`
@@ -113,26 +105,30 @@ These buttons already have proper loading states implemented:
 ### Role & Permission Management
 
 5. **✅ Assign Role** - `/src/routes/(protected)/admin/site/roles/assignments/+page.svelte:104`
+
    ```svelte
-   <button type="submit" disabled={!(selectedUser && selectedRole)}>
-     Assign Role
-   </button>
+   <button type="submit" disabled={!(selectedUser && selectedRole)}> Assign Role </button>
    ```
+
    **Impact:** Medium - Duplicate role assignments
    **File:** `src/routes/(protected)/admin/site/roles/assignments/+page.svelte`
 
 6. **✅ Delete Role** - `/src/routes/(protected)/admin/site/roles/permissions/+page.svelte:94`
+
    ```svelte
    <button type="submit" class="text-red-600 hover:text-red-800">Delete</button>
    ```
+
    **Impact:** High - Accidental deletion without confirmation
    **File:** `src/routes/(protected)/admin/site/roles/permissions/+page.svelte`
    **Note:** Also needs confirm dialog!
 
 7. **✅ Update Permissions** - `/src/routes/(protected)/admin/site/roles/permissions/+page.svelte:118`
+
    ```svelte
    <button type="submit">Update Permissions</button>
    ```
+
    **Impact:** Medium
    **File:** `src/routes/(protected)/admin/site/roles/permissions/+page.svelte`
 
@@ -146,18 +142,22 @@ These buttons already have proper loading states implemented:
 ### Message Operations
 
 9. **✅ Revoke Selected Messages** - `/src/components/form/panels/MessagesActionPanel.svelte:103`
+
    ```svelte
    <button type="submit" formaction="?/revokeMessages" disabled={isSelectionEmpty}>
-     Revoke Selected
+   	Revoke Selected
    </button>
    ```
+
    **Impact:** Medium - Bulk operations should show progress
    **File:** `src/components/form/panels/MessagesActionPanel.svelte`
 
 10. **✅ Send Message to All Users** - `/src/components/form/panels/AllUsersPanel.svelte:62`
+
     ```svelte
     <button type="submit">Send Message to All Users</button>
     ```
+
     **Impact:** High - Mass messaging should definitely show loading
     **File:** `src/components/form/panels/AllUsersPanel.svelte`
 
@@ -171,19 +171,17 @@ These buttons already have proper loading states implemented:
 ### Spatial Data Management
 
 12. **✅ Update Template** - `/src/routes/(protected)/admin/site/data/spatial/+page.svelte:148`
+
     ```svelte
-    <button type="submit" class="rounded-md bg-blue-600...">
-      Update Template
-    </button>
+    <button type="submit" class="bg-blue-600... rounded-md"> Update Template </button>
     ```
+
     **Impact:** Medium
     **File:** `src/routes/(protected)/admin/site/data/spatial/+page.svelte`
 
 13. **✅ Create Template** - `/src/routes/(protected)/admin/site/data/spatial/+page.svelte:225`
     ```svelte
-    <button type="submit" class="rounded-md bg-blue-600...">
-      Create Template
-    </button>
+    <button type="submit" class="bg-blue-600... rounded-md"> Create Template </button>
     ```
     **Impact:** Medium
     **File:** `src/routes/(protected)/admin/site/data/spatial/+page.svelte`
@@ -195,9 +193,11 @@ These buttons already have proper loading states implemented:
 ### Table Row Actions
 
 14. **✅ Remove Role (Table)** - `/src/components/form/tables/RolesTable.svelte:46`
+
     ```svelte
     <button type="submit" class="text-red-600 hover:text-red-800">Remove</button>
     ```
+
     **Impact:** Low - Quick action, but could benefit from feedback
     **File:** `src/components/form/tables/RolesTable.svelte`
 
@@ -211,23 +211,29 @@ These buttons already have proper loading states implemented:
 ### Address & Location Management
 
 16. **✅ Validate Address (Custom)** - `/src/components/form/custom-addresses/CustomAddressValidationForm.svelte:88`
+
     ```svelte
     <button type="submit">Validate Address</button>
     ```
+
     **Impact:** Low
     **File:** `src/components/form/custom-addresses/CustomAddressValidationForm.svelte`
 
 17. **✅ Check GNAF Address** - `/src/components/form/GNAFAddressCheckForm.svelte:68`
+
     ```svelte
     <button type="submit">Check Address</button>
     ```
+
     **Impact:** Low
     **File:** `src/components/form/GNAFAddressCheckForm.svelte`
 
 18. **✅ Custom Address Management** - `/src/components/page/tabs/addresses/CustomAddressManagementTab.svelte:236`
+
     ```svelte
     <button type="submit">Submit</button>
     ```
+
     **Impact:** Low
     **File:** `src/components/page/tabs/addresses/CustomAddressManagementTab.svelte`
 
@@ -240,11 +246,7 @@ These buttons already have proper loading states implemented:
 
 ### Location Selectors (4 buttons in one component)
 
-20-23. **✅ LocationBasedSelectors** - `/src/components/form/inputs/LocationBasedSelectors.svelte`
-    - Line 54: Submit for Suburb selector
-    - Line 95: Submit for Street selector
-    - Line 131: Submit for Address selector
-    - Line 167: Submit for Property selector
+20-23. **✅ LocationBasedSelectors** - `/src/components/form/inputs/LocationBasedSelectors.svelte` - Line 54: Submit for Suburb selector - Line 95: Submit for Street selector - Line 131: Submit for Address selector - Line 167: Submit for Property selector
 
     **Impact:** Low - Quick filters
     **File:** `src/components/form/inputs/LocationBasedSelectors.svelte`
@@ -254,16 +256,20 @@ These buttons already have proper loading states implemented:
 ## 🗺️ Map Editor Operations (3 buttons)
 
 24. **✅ Delete GeoJSON** - `/src/components/map/leaflet/controls/LeafletGeoJSONDeleteEditor.svelte:127`
+
     ```svelte
     <button type="submit" class="delete">Delete</button>
     ```
+
     **Impact:** High - Destructive action needs confirmation + loading state
     **File:** `src/components/map/leaflet/controls/LeafletGeoJSONDeleteEditor.svelte`
 
 25. **✅ Create GeoJSON Attribute** - `/src/components/map/leaflet/controls/LeafletGeoJSONAttributeEditor.svelte:292`
+
     ```svelte
     <button type="submit">Create</button>
     ```
+
     **Impact:** Medium
     **File:** `src/components/map/leaflet/controls/LeafletGeoJSONAttributeEditor.svelte`
 
@@ -279,23 +285,29 @@ These buttons already have proper loading states implemented:
 ## 📅 Event Management (4 buttons)
 
 27. **✅ Create Event (BCYCA)** - `/src/routes/(protected)/admin/community/bcyca/events/+page.svelte:170`
+
     ```svelte
     <button type="submit">Create Event</button>
     ```
+
     **Impact:** Medium
     **File:** `src/routes/(protected)/admin/community/bcyca/events/+page.svelte`
 
 28. **✅ Create Event (Mondrook)** - `/src/routes/(protected)/admin/community/mondrook/events/+page.svelte:170`
+
     ```svelte
     <button type="submit">Create Event</button>
     ```
+
     **Impact:** Medium
     **File:** `src/routes/(protected)/admin/community/mondrook/events/+page.svelte`
 
 29. **✅ Create Event (Tinonee)** - `/src/routes/(protected)/admin/community/tinonee/events/+page.svelte:170`
+
     ```svelte
     <button type="submit">Create Event</button>
     ```
+
     **Impact:** Medium
     **File:** `src/routes/(protected)/admin/community/tinonee/events/+page.svelte`
 
@@ -315,6 +327,7 @@ These buttons already have proper loading states implemented:
 - **❌ Need Fixing:** 0 (0%)
 
 ### Priority Breakdown
+
 - **🔴 Critical (Auth/User):** 4 buttons
 - **🟡 Important (Admin Ops):** 12 buttons
 - **🟢 Lower Priority:** 8 buttons
@@ -324,6 +337,7 @@ These buttons already have proper loading states implemented:
 ## Implementation Plan
 
 ### Phase 1: Critical Auth & User Management (Week 1)
+
 - [ ] AddressValid.svelte - Create Account
 - [ ] AddressUnchallenged.svelte - Create Account
 - [ ] KYNG Coordinators - Assign/Update
@@ -331,6 +345,7 @@ These buttons already have proper loading states implemented:
 **Estimated Time:** 2-3 hours
 
 ### Phase 2: Important Admin Operations (Week 1-2)
+
 - [ ] Role Assignment/Permissions (4 buttons)
 - [ ] Message Operations (3 buttons)
 - [ ] Spatial Data Templates (2 buttons)
@@ -338,6 +353,7 @@ These buttons already have proper loading states implemented:
 **Estimated Time:** 4-5 hours
 
 ### Phase 3: Tables & Modals (Week 2)
+
 - [ ] Table inline actions
 - [ ] Address validation forms
 - [ ] Add Property modal
@@ -346,6 +362,7 @@ These buttons already have proper loading states implemented:
 **Estimated Time:** 3-4 hours
 
 ### Phase 4: Event Management (Week 2-3)
+
 - [ ] All 4 community event creation forms
 
 **Estimated Time:** 2 hours
@@ -356,37 +373,37 @@ These buttons already have proper loading states implemented:
 
 ```svelte
 <script lang="ts">
-  import Spinner from '$components/page/Spinner.svelte';
-  import { enhance } from '$app/forms';
+	import Spinner from '$components/page/Spinner.svelte';
+	import { enhance } from '$app/forms';
 
-  let isSubmitting = false;
+	let isSubmitting = false;
 </script>
 
 <form
-  method="POST"
-  use:enhance={() => {
-    isSubmitting = true;
+	method="POST"
+	use:enhance={() => {
+		isSubmitting = true;
 
-    return async ({ update }) => {
-      await update();
-      isSubmitting = false;
-    };
-  }}
+		return async ({ update }) => {
+			await update();
+			isSubmitting = false;
+		};
+	}}
 >
-  <!-- Form fields -->
+	<!-- Form fields -->
 
-  <button
-    type="submit"
-    disabled={isSubmitting}
-    aria-busy={isSubmitting}
-    class="... disabled:opacity-50 disabled:cursor-not-allowed"
-  >
-    {#if isSubmitting}
-      <Spinner size="sm" /> Processing...
-    {:else}
-      Submit
-    {/if}
-  </button>
+	<button
+		type="submit"
+		disabled={isSubmitting}
+		aria-busy={isSubmitting}
+		class="disabled:cursor-not-allowed disabled:opacity-50 ..."
+	>
+		{#if isSubmitting}
+			<Spinner size="sm" /> Processing...
+		{:else}
+			Submit
+		{/if}
+	</button>
 </form>
 ```
 
@@ -395,6 +412,7 @@ These buttons already have proper loading states implemented:
 ## Testing Checklist
 
 For each button implementation:
+
 - [ ] Button disables during submission
 - [ ] Spinner appears with loading text
 - [ ] `aria-busy` set to true during loading

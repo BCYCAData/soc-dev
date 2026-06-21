@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>Site Admin-Roles</title>
 </svelte:head>
@@ -7,7 +11,7 @@
 
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<a
-			href="/admin/site/data/spatial"
+			href={resolve('/admin/site/data/spatial')}
 			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Manage Site Data</h2>
@@ -19,7 +23,7 @@
 		</a>
 
 		<a
-			href="/admin/site/data/addresses"
+			href={resolve('/admin/site/data/addresses')}
 			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Manage Custom Addresses</h2>

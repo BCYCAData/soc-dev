@@ -72,56 +72,56 @@
 
 <Accordion spaceY="space-y-1">
 	<CommunityRequestsAccordionItem
-		value={'1'}
+		value="1"
 		summary="Pre fire season checklist"
 		choice={1}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'2'}
+		value="2"
 		summary="Lighting fires - facts and responsibilities"
 		choice={2}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'3'}
+		value="3"
 		summary="Fire ready - pets and animals"
 		choice={3}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'4'}
+		value="4"
 		summary="Fire ready - livestock & large animals"
 		choice={4}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'5'}
+		value="5"
 		summary="External Leaflet"
 		choice={5}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'6'}
+		value="6"
 		summary="How to be more active locally"
 		choice={6}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'7'}
+		value="7"
 		summary="Strengthen Our Community Project report"
 		choice={7}
 		columns={externalInformationColumns}
 		data={data?.externalInformationData}
 	/>
 	<CommunityRequestsAccordionItem
-		value={'8'}
+		value="8"
 		summary="Other Information Requests"
 		columns={externalOtherInformationColumns}
 		data={data?.externalInformationData}

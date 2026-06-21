@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -16,20 +17,20 @@
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid auto-rows-auto grid-cols-2 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_MESSAGES)}
-					<a href="/admin/site/messages" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/site/messages')} class="btn preset-filled-secondary-500">
 						Manage User Messages
 					</a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_ROLES)}
-					<a href="/admin/site/roles" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/site/roles')} class="btn preset-filled-secondary-500">
 						Manage User Privleges
 					</a>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)}
 					<a
-						href="/admin/users/kyngcoordinators"
+						href={resolve('/admin/users/kyng-coordinators')}
 						class="btn preset-filled-secondary-500 col-span-2 mx-auto w-[calc(50%-0.5rem)]"
 					>
 						Manage KYNG Coordinators
@@ -38,7 +39,7 @@
 
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_DATA)}
 					<a
-						href="/admin/site/data"
+						href={resolve('/admin/site/data')}
 						class="btn preset-filled-secondary-500 col-span-2 mx-auto w-[calc(50%-0.5rem)]"
 					>
 						Manage Site Spatial Data and Address Validation Settings

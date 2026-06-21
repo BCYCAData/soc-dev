@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 // Lookup mappings
 const propertyTypeLookup: Record<number, string> = {
 	1: 'Property',

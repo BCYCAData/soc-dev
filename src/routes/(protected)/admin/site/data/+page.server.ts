@@ -8,13 +8,15 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 	// Check if user has ANY admin.site.data permission
 	// This allows access if they have admin.site.data.spatial, admin.site.data.addresses, etc.
-	if (!hasAnyPermission(
-		parentData.permissions,
-		PERMISSIONS.ADMIN_SITE_DATA,
-		PERMISSIONS.ADMIN_SITE_DATA_SPATIAL,
-		PERMISSIONS.ADMIN_SITE_DATA_ADDRESSES,
-		PERMISSIONS.ADMIN_SITE_DATA_KYNG_BOUNDARIES
-	)) {
+	if (
+		!hasAnyPermission(
+			parentData.permissions,
+			PERMISSIONS.ADMIN_SITE_DATA,
+			PERMISSIONS.ADMIN_SITE_DATA_SPATIAL,
+			PERMISSIONS.ADMIN_SITE_DATA_ADDRESSES,
+			PERMISSIONS.ADMIN_SITE_DATA_KYNG_BOUNDARIES
+		)
+	) {
 		throw error(403, 'Insufficient permissions for site data administration');
 	}
 
@@ -90,6 +92,7 @@ export const actions: Actions = {
 		const templateId = formData.get('template_id');
 
 		const { error: fieldsError } = await supabase.from('template_fields').upsert(
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			fields.map((field: any) => ({
 				...field,
 				template_id: templateId

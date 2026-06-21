@@ -53,7 +53,7 @@
 	<span class="flex items-center">
 		<label class="mr-2 text-base" for="filter-field">Field: </label>
 		<select class="filter-field" id="filter-field" bind:value={searchField} onchange={updateFilter}>
-			{#each fieldOptions as { value, lable }}
+			{#each fieldOptions as { value, lable } (value)}
 				<option {value}>{lable}</option>
 			{/each}
 		</select>
@@ -66,7 +66,7 @@
 			bind:value={comparisonType}
 			onchange={updateFilter}
 		>
-			{#each comparisonOptions as { value, lable }}
+			{#each comparisonOptions as { value, lable } (value)}
 				<option {value}>{lable}</option>
 			{/each}
 		</select>

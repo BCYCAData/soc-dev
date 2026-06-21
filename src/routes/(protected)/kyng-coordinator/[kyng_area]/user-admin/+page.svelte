@@ -15,6 +15,7 @@
 		<h3 class="h3 flex justify-around">{data.currentArea}</h3>
 		<ul class="grid-container">
 			{#each registeredPropertiesData.features as feature, index (feature.properties.principaladdresssiteoid + '_' + index)}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a
 					href="{baseUrl}?lat={feature.geometry.coordinates[1]}&lng={feature.geometry
 						.coordinates[0]}&zoom=15"
@@ -22,6 +23,7 @@
 				>
 					{feature.properties.address}
 				</a>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
 			{/each}
 		</ul>
 	{/if}

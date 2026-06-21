@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { get, type Writable } from 'svelte/store';
 	import { page } from '$app/state';
@@ -48,8 +49,6 @@
 
 	let selectElement: HTMLSelectElement;
 	let editToolsContainer: HTMLDivElement;
-	//@ts-ignore
-	let attributeEditorContainer: HTMLDivElement;
 	let unsubscribe: () => void = () => {};
 	let control: L.Control | null = null;
 	let previousLayerSelection: string | null = null;
@@ -387,7 +386,7 @@
 	}
 
 	const LayerSelectControl = leaflet.Control.extend({
-		onAdd(map: L.Map) {
+		onAdd(_map: L.Map) {
 			const container = leaflet.DomUtil.create('div', 'layer-selector-container');
 
 			const label = leaflet.DomUtil.create('label', 'layer-select-label', container);
@@ -408,11 +407,7 @@
 			defaultOption.selected = true;
 
 			editToolsContainer = leaflet.DomUtil.create('div', 'edit-tools', container);
-			attributeEditorContainer = leaflet.DomUtil.create(
-				'div',
-				'attribute-editor-container',
-				container
-			);
+			leaflet.DomUtil.create('div', 'attribute-editor-container', container);
 
 			unsubscribe = layersStore.subscribe((layers) => {
 				while (selectElement.childNodes.length > 1) {
@@ -550,11 +545,17 @@
 {#if editingState.mode && editingState.activeTemplate}
 	{#if editingState.mode === 'delete'}
 		<div class="delete-editor-wrapper">
-			<LeafletGeoJSONDeleteEditor currentPropertyId={currentPropertyId || ''} {featuresByTemplate} />
+			<LeafletGeoJSONDeleteEditor
+				currentPropertyId={currentPropertyId || ''}
+				{featuresByTemplate}
+			/>
 		</div>
 	{:else if ['create', 'edit'].includes(editingState.mode)}
 		<div class="attribute-editor-wrapper">
-			<LeafletGeoJSONAttributeEditor currentPropertyId={currentPropertyId || ''} onCleanup={handleEditorCleanup} />
+			<LeafletGeoJSONAttributeEditor
+				currentPropertyId={currentPropertyId || ''}
+				onCleanup={handleEditorCleanup}
+			/>
 		</div>
 	{/if}
 {/if}

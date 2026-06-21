@@ -8,12 +8,14 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 	// Check if user has ANY admin.site.roles permission
 	// This allows access if they have admin.site.roles.permissions, admin.site.roles.assignments, etc.
-	if (!hasAnyPermission(
-		parentData.permissions,
-		PERMISSIONS.ADMIN_SITE_ROLES,
-		PERMISSIONS.ADMIN_SITE_ROLES_PERMISSIONS,
-		PERMISSIONS.ADMIN_SITE_ROLES_ASSIGNMENTS
-	)) {
+	if (
+		!hasAnyPermission(
+			parentData.permissions,
+			PERMISSIONS.ADMIN_SITE_ROLES,
+			PERMISSIONS.ADMIN_SITE_ROLES_PERMISSIONS,
+			PERMISSIONS.ADMIN_SITE_ROLES_ASSIGNMENTS
+		)
+	) {
 		throw error(403, 'Insufficient permissions for roles administration');
 	}
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import AutoCompleteSelect from '$components/form/inputs/AutoCompleteSelect.svelte';
 	import Spinner from '$components/page/Spinner.svelte';

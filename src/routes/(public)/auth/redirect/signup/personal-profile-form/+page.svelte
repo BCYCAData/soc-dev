@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <div class="mx-auto mt-5 flex h-full max-w-3xl flex-col items-center text-center sm:mt-1">
 	<h1 class="title-font h1 text-primary-600 hidden font-bold sm:mt-4 sm:block sm:text-4xl">
 		Help Protect Yourself and Our Community
@@ -37,7 +41,7 @@
 
 		<div class="text-center">
 			<a
-				href="/personal-profile-form"
+				href={resolve('/personal-profile-form')}
 				class="text-scale-3 sm:text-scale-5 btn bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-5 inline-flex w-full max-w-md cursor-pointer items-center justify-center rounded-xl px-4 py-3 font-semibold focus:outline-none"
 			>
 				Complete Your Personal Emergency Profile Now

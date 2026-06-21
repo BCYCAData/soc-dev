@@ -48,7 +48,7 @@ export const GET: RequestHandler = async (event) => {
 		});
 
 		return new Response(pdf);
-	} catch (e) {
+	} catch {
 		throw error(500, { message: 'Error generating PDF report' });
 	}
 };

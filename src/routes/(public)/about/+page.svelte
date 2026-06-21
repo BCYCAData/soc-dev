@@ -9,8 +9,9 @@
 	interface TabItem {
 		label: string;
 		value: number;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- heterogeneous tab components
 		component: any;
-		props?: Record<string, any>;
+		props?: Record<string, unknown>;
 	}
 
 	interface Props {

@@ -15,21 +15,21 @@
 			padding="pb-0"
 			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
-			value={'0'}>(label)</Tabs.Control
+			value="0">(label)</Tabs.Control
 		>
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
 			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
-			value={'1'}>(label)</Tabs.Control
+			value="1">(label)</Tabs.Control
 		>
 		<Tabs.Control
 			base="rounded-tl-[10px] rounded-tr-[10px]"
 			padding="pb-0"
 			stateActive="bg-secondary-400"
 			stateInactive="bg-tertiary-400"
-			value={'2'}>(label)</Tabs.Control
+			value="2">(label)</Tabs.Control
 		>
 	{/snippet}
 	{#snippet content()}

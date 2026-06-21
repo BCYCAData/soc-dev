@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import NewMap from '$components/leaflet/NewMap.svelte';
 	import BaseLayerGroup from '$components/leaflet/layers/BaseLayerGroup.svelte';
 	import OverlayLayerGroup from '$components/leaflet/layers/OverlayLayerGroup.svelte';

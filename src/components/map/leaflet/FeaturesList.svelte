@@ -24,7 +24,7 @@
 
 <div class="bg-surface-50-950 max-h-[600px] overflow-y-auto rounded p-4 shadow">
 	<h2 class="mb-4 text-lg font-semibold">Property Features</h2>
-	{#each Object.entries(spatialFeatures) as [id, feature]}
+	{#each Object.entries(spatialFeatures) as [id, feature] (id)}
 		{@const template = featureTemplates[feature.template_id]}
 		<div class="border-surface-200 border-b py-2 last:border-0">
 			<div class="flex items-center justify-between">

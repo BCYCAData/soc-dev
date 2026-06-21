@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { enhance } from '$app/forms';
 	import { toast } from '$stores/toaststore';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
@@ -52,7 +53,9 @@
 					} else if (result.type === 'error') {
 						toast.error(result.error?.message || 'Failed to validate address. Please try again.');
 					} else if (result.type === 'failure') {
-						toast.error(String(result.data?.message || 'Address validation failed. Please check your input.'));
+						toast.error(
+							String(result.data?.message || 'Address validation failed. Please check your input.')
+						);
 					}
 					await update();
 					loading = false;

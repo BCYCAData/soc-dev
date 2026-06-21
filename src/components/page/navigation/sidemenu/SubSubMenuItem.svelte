@@ -26,6 +26,7 @@
 {/snippet}
 
 <div class="pl-12">
+	<!-- eslint-disable svelte/no-navigation-without-resolve -->
 	<a
 		href={item.link}
 		class="hover:bg-surface-700 flex items-center gap-2 rounded-lg px-4 py-2 {isActive
@@ -35,4 +36,5 @@
 		{@render icon()}
 		{@render content()}
 	</a>
+	<!-- eslint-enable svelte/no-navigation-without-resolve -->
 </div>

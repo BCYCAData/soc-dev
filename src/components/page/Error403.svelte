@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	interface Props {
 		message?: string;
 		context?: 'admin' | 'kyng_coordinator' | 'permission' | 'session' | 'generic';
@@ -138,7 +139,7 @@
 		<div class="error-reasons">
 			<h3 class="reasons-title">This could be because:</h3>
 			<ul class="reasons-list">
-				{#each details.reasons as reason}
+				{#each details.reasons as reason (reason)}
 					<li>{reason}</li>
 				{/each}
 			</ul>
@@ -146,7 +147,8 @@
 
 		<!-- Recovery Actions -->
 		<div class="error-actions">
-			{#each details.actions as action}
+			{#each details.actions as action (action)}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a
 					href={action.href}
 					class="action-button"
@@ -155,6 +157,7 @@
 				>
 					{action.label}
 				</a>
+				<!-- eslint-enable svelte/no-navigation-without-resolve -->
 			{/each}
 		</div>
 
@@ -162,7 +165,7 @@
 		<div class="error-help">
 			<p class="help-text">
 				Need help? Contact your system administrator or
-				<a href="/contact" class="help-link">get in touch with support</a>.
+				<a href={resolve('/contact')} class="help-link">get in touch with support</a>.
 			</p>
 		</div>
 	</div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { toast } from '$stores/toaststore';
 	import SetPassword from '$components/form/auth/SetPassword.svelte';
@@ -16,7 +18,6 @@
 	let password = $state('');
 	let validPassword = $state(false);
 	let validEmail = $state(false);
-	//@ts-ignore
 	let loading = $state(false);
 	let isSubmitting = $state(false);
 
@@ -88,12 +89,14 @@
 
 				<div class="text-surface-950 text-center">
 					By signing up, you agree to the
-					<a class="text-secondary-600 no-underline hover:underline" href="/policies/termsofservice"
-						>Terms of Service</a
+					<a
+						class="text-secondary-600 no-underline hover:underline"
+						href={resolve('/policies/termsofservice')}>Terms of Service</a
 					>
 					and
-					<a class="text-secondary-600 no-underline hover:underline" href="/policies/privacy"
-						>Privacy Policy</a
+					<a
+						class="text-secondary-600 no-underline hover:underline"
+						href={resolve('/policies/privacy')}>Privacy Policy</a
 					>
 				</div>
 			</form>
@@ -104,11 +107,12 @@
 		{/if}
 		<div class="text-surface-950 text-center">
 			By signing up, you agree to the
-			<a class="text-secondary-600 no-underline hover:underline" href="/policies/termsofservice"
-				>Terms of Service</a
+			<a
+				class="text-secondary-600 no-underline hover:underline"
+				href={resolve('/policies/termsofservice')}>Terms of Service</a
 			>
 			and
-			<a class="text-secondary-600 no-underline hover:underline" href="/policies/privacy"
+			<a class="text-secondary-600 no-underline hover:underline" href={resolve('/policies/privacy')}
 				>Privacy Policy</a
 			>
 		</div>

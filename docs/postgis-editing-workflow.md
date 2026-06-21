@@ -1,4 +1,5 @@
 # Leaflet-Based PostGIS Spatial Editing Workflow
+
 ## Strategic Enhancement Roadmap for My Property Map Feature
 
 A comprehensive architecture for browser-based spatial data capture with PostGIS rigour enforced server-side, specifically designed for the existing SvelteKit + Leaflet implementation.
@@ -81,6 +82,7 @@ This roadmap enhances the existing **My Property Map** feature (`/personal-profi
 ### Existing Implementation Strengths
 
 **Database Schema** ([documentation/spatial-schema.md](documentation/spatial-schema.md)):
+
 - ✅ Well-structured `spatial_features` table with PostGIS geometry
 - ✅ Flexible `feature_templates` and `template_fields` for attribute management
 - ✅ `feature_attributes` EAV pattern for dynamic attributes
@@ -89,6 +91,7 @@ This roadmap enhances the existing **My Property Map** feature (`/personal-profi
 - ✅ ST_IsValid constraint on geometry column
 
 **Frontend Components**:
+
 - ✅ Mature Leaflet integration with context-based architecture
 - ✅ Separate layer components for Point/Line/Polygon
 - ✅ Template-based symbology system
@@ -98,12 +101,14 @@ This roadmap enhances the existing **My Property Map** feature (`/personal-profi
 - ✅ Tooltip system with template support
 
 **Backend Integration**:
+
 - ✅ SvelteKit form actions for CRUD operations
 - ✅ RPC functions: `get_spatial_features`, `upsert_spatial_feature`, `delete_spatial_feature`
 - ✅ Proper error handling and toast notifications
 - ✅ Attribute synchronization pattern
 
 **State Management**:
+
 - ✅ Svelte 5 reactive state in [spatialutilities.svelte.ts](src/lib/leaflet/spatialutilities.svelte.ts)
 - ✅ Editing state tracking (template, feature, mode)
 - ✅ Feature collections by template
@@ -303,6 +308,7 @@ GRANT EXECUTE ON FUNCTION validate_spatial_feature TO authenticated;
 ```
 
 **Key Features**:
+
 - ✅ Validates geometry type matches template
 - ✅ Auto-corrects invalid geometries
 - ✅ Snaps to property boundary
@@ -455,6 +461,7 @@ GRANT EXECUTE ON FUNCTION merge_spatial_features TO authenticated;
 ```
 
 **Key Features**:
+
 - ✅ Validates user permissions via RLS
 - ✅ Ensures all features share same template
 - ✅ Only allows merging polygons and lines
@@ -550,136 +557,139 @@ $$;
 
 ```svelte
 <script lang="ts">
-    import { onMount, onDestroy, getContext } from 'svelte';
-    import {
-        editingState,
-        setActiveTemplate,
-        setEditingMode,
-        featureTemplates
-    } from '$lib/leaflet/spatialutilities.svelte';
-    import type L from 'leaflet';
-    import type { Writable } from 'svelte/store';
-    import type { FeatureTemplate } from '$lib/leaflet/spatial';
-    import type { LayerInfo } from '$lib/leaflet/types';
+	import { onMount, onDestroy, getContext } from 'svelte';
+	import {
+		editingState,
+		setActiveTemplate,
+		setEditingMode,
+		featureTemplates
+	} from '$lib/leaflet/spatialutilities.svelte';
+	import type L from 'leaflet';
+	import type { Writable } from 'svelte/store';
+	import type { FeatureTemplate } from '$lib/leaflet/spatial';
+	import type { LayerInfo } from '$lib/leaflet/types';
 
-    interface Props {
-        position?: L.ControlPosition;
-        propertyId: string;
-    }
+	interface Props {
+		position?: L.ControlPosition;
+		propertyId: string;
+	}
 
-    let { position = 'topright', propertyId }: Props = $props();
+	let { position = 'topright', propertyId }: Props = $props();
 
-    const { getLeaflet, getLeafletMap, getLeafletLayers } = getContext<{
-        getLeaflet: () => typeof L;
-        getLeafletMap: () => L.Map;
-        getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
-    }>('leafletContext');
+	const { getLeaflet, getLeafletMap, getLeafletLayers } = getContext<{
+		getLeaflet: () => typeof L;
+		getLeafletMap: () => L.Map;
+		getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
+	}>('leafletContext');
 
-    let leaflet: typeof L;
-    let map: L.Map;
-    let layersStore: Writable<Record<string, LayerInfo>>;
-    let control: L.Control;
-    let drawLayer: L.FeatureGroup;
-    let currentDrawHandler: any = null;
+	let leaflet: typeof L;
+	let map: L.Map;
+	let layersStore: Writable<Record<string, LayerInfo>>;
+	let control: L.Control;
+	let drawLayer: L.FeatureGroup;
+	let currentDrawHandler: any = null;
 
-    const templatesByCategory = $derived(
-        Object.values(featureTemplates).reduce<Record<string, FeatureTemplate[]>>((acc, template) => {
-            const t = template as FeatureTemplate;
-            if (!acc[t.category]) {
-                acc[t.category] = [];
-            }
-            acc[t.category].push(t);
-            return acc;
-        }, {})
-    );
+	const templatesByCategory = $derived(
+		Object.values(featureTemplates).reduce<Record<string, FeatureTemplate[]>>((acc, template) => {
+			const t = template as FeatureTemplate;
+			if (!acc[t.category]) {
+				acc[t.category] = [];
+			}
+			acc[t.category].push(t);
+			return acc;
+		}, {})
+	);
 
-    function startDrawing(template: FeatureTemplate) {
-        setActiveTemplate(template);
-        setEditingMode('create');
+	function startDrawing(template: FeatureTemplate) {
+		setActiveTemplate(template);
+		setEditingMode('create');
 
-        // Cancel any existing draw operation
-        if (currentDrawHandler) {
-            currentDrawHandler.disable();
-        }
+		// Cancel any existing draw operation
+		if (currentDrawHandler) {
+			currentDrawHandler.disable();
+		}
 
-        const geomTypeMap: Record<string, string> = {
-            point: 'marker',
-            line: 'polyline',
-            polygon: 'polygon'
-        };
+		const geomTypeMap: Record<string, string> = {
+			point: 'marker',
+			line: 'polyline',
+			polygon: 'polygon'
+		};
 
-        const drawType = geomTypeMap[template.geometry_type];
+		const drawType = geomTypeMap[template.geometry_type];
 
-        // Import leaflet-draw dynamically
-        import('leaflet-draw').then(() => {
-            currentDrawHandler = new (L.Draw as any)[
-                drawType.charAt(0).toUpperCase() + drawType.slice(1)
-            ](map, {
-                shapeOptions: {
-                    color: getCategoryColor(template.category),
-                    weight: 3
-                }
-            });
+		// Import leaflet-draw dynamically
+		import('leaflet-draw').then(() => {
+			currentDrawHandler = new (L.Draw as any)[
+				drawType.charAt(0).toUpperCase() + drawType.slice(1)
+			](map, {
+				shapeOptions: {
+					color: getCategoryColor(template.category),
+					weight: 3
+				}
+			});
 
-            currentDrawHandler.enable();
+			currentDrawHandler.enable();
 
-            map.on('draw:created', handleDrawCreated);
-        });
-    }
+			map.on('draw:created', handleDrawCreated);
+		});
+	}
 
-    function handleDrawCreated(e: any) {
-        const layer = e.layer;
-        drawLayer.addLayer(layer);
+	function handleDrawCreated(e: any) {
+		const layer = e.layer;
+		drawLayer.addLayer(layer);
 
-        // Convert to GeoJSON and trigger validation
-        const geoJSON = layer.toGeoJSON();
+		// Convert to GeoJSON and trigger validation
+		const geoJSON = layer.toGeoJSON();
 
-        // Dispatch event for parent to handle validation and save
-        map.fire('feature:created', {
-            geometry: geoJSON.geometry,
-            template: editingState.activeTemplate,
-            layer: layer
-        });
+		// Dispatch event for parent to handle validation and save
+		map.fire('feature:created', {
+			geometry: geoJSON.geometry,
+			template: editingState.activeTemplate,
+			layer: layer
+		});
 
-        // Clean up
-        if (currentDrawHandler) {
-            currentDrawHandler.disable();
-            currentDrawHandler = null;
-        }
-    }
+		// Clean up
+		if (currentDrawHandler) {
+			currentDrawHandler.disable();
+			currentDrawHandler = null;
+		}
+	}
 
-    function getCategoryColor(category: string): string {
-        const colors: Record<string, string> = {
-            asset: '#2196F3',
-            operational: '#4CAF50',
-            hazard: '#F44336'
-        };
-        return colors[category] || '#757575';
-    }
+	function getCategoryColor(category: string): string {
+		const colors: Record<string, string> = {
+			asset: '#2196F3',
+			operational: '#4CAF50',
+			hazard: '#F44336'
+		};
+		return colors[category] || '#757575';
+	}
 
-    function cancelDrawing() {
-        if (currentDrawHandler) {
-            currentDrawHandler.disable();
-            currentDrawHandler = null;
-        }
-        setActiveTemplate(null);
-        setEditingMode(null);
-    }
+	function cancelDrawing() {
+		if (currentDrawHandler) {
+			currentDrawHandler.disable();
+			currentDrawHandler = null;
+		}
+		setActiveTemplate(null);
+		setEditingMode(null);
+	}
 
-    onMount(() => {
-        leaflet = getLeaflet();
-        map = getLeafletMap();
-        layersStore = getLeafletLayers();
+	onMount(() => {
+		leaflet = getLeaflet();
+		map = getLeafletMap();
+		layersStore = getLeafletLayers();
 
-        // Create a feature group for drawing
-        drawLayer = leaflet.featureGroup();
-        map.addLayer(drawLayer);
+		// Create a feature group for drawing
+		drawLayer = leaflet.featureGroup();
+		map.addLayer(drawLayer);
 
-        // Create custom control
-        const DrawControl = leaflet.Control.extend({
-            onAdd: function() {
-                const container = leaflet.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-draw-control');
-                container.innerHTML = `
+		// Create custom control
+		const DrawControl = leaflet.Control.extend({
+			onAdd: function () {
+				const container = leaflet.DomUtil.create(
+					'div',
+					'leaflet-bar leaflet-control leaflet-draw-control'
+				);
+				container.innerHTML = `
                     <div class="draw-control-container">
                         <button class="draw-control-toggle" title="Draw Features">
                             <svg width="20" height="20" viewBox="0 0 20 20">
@@ -693,64 +703,65 @@ $$;
                     </div>
                 `;
 
-                leaflet.DomEvent.disableClickPropagation(container);
-                return container;
-            }
-        });
+				leaflet.DomEvent.disableClickPropagation(container);
+				return container;
+			}
+		});
 
-        control = new DrawControl({ position });
-        control.addTo(map);
-    });
+		control = new DrawControl({ position });
+		control.addTo(map);
+	});
 
-    onDestroy(() => {
-        if (currentDrawHandler) {
-            currentDrawHandler.disable();
-        }
-        if (drawLayer) {
-            map.removeLayer(drawLayer);
-        }
-        if (control) {
-            control.remove();
-        }
-    });
+	onDestroy(() => {
+		if (currentDrawHandler) {
+			currentDrawHandler.disable();
+		}
+		if (drawLayer) {
+			map.removeLayer(drawLayer);
+		}
+		if (control) {
+			control.remove();
+		}
+	});
 </script>
 
 <style>
-    :global(.draw-control-container) {
-        background: white;
-        border-radius: 4px;
-    }
+	:global(.draw-control-container) {
+		background: white;
+		border-radius: 4px;
+	}
 
-    :global(.draw-control-toggle) {
-        background: white;
-        border: none;
-        padding: 8px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+	:global(.draw-control-toggle) {
+		background: white;
+		border: none;
+		padding: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-    :global(.draw-control-toggle:hover) {
-        background: #f5f5f5;
-    }
+	:global(.draw-control-toggle:hover) {
+		background: #f5f5f5;
+	}
 
-    :global(.draw-control-panel) {
-        position: absolute;
-        right: 100%;
-        top: 0;
-        margin-right: 10px;
-        background: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        min-width: 250px;
-        max-height: 400px;
-        overflow-y: auto;
-    }
+	:global(.draw-control-panel) {
+		position: absolute;
+		right: 100%;
+		top: 0;
+		margin-right: 10px;
+		background: white;
+		border-radius: 4px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		min-width: 250px;
+		max-height: 400px;
+		overflow-y: auto;
+	}
 </style>
 ```
 
 **Key Features**:
+
 - Template-based drawing interface
 - Category-grouped template selection
 - Leaflet.draw integration
@@ -765,272 +776,263 @@ $$;
 
 ```svelte
 <script lang="ts">
-    import { onMount, getContext } from 'svelte';
-    import type L from 'leaflet';
+	import { onMount, getContext } from 'svelte';
+	import type L from 'leaflet';
 
-    interface ValidationResult {
-        valid: boolean;
-        issues: string[];
-        warnings: string[];
-        geometry: GeoJSON.Geometry | null;
-        metadata?: {
-            snapped: boolean;
-            area_m2?: number;
-            length_m?: number;
-        };
-    }
+	interface ValidationResult {
+		valid: boolean;
+		issues: string[];
+		warnings: string[];
+		geometry: GeoJSON.Geometry | null;
+		metadata?: {
+			snapped: boolean;
+			area_m2?: number;
+			length_m?: number;
+		};
+	}
 
-    interface Props {
-        position?: L.ControlPosition;
-        validationResult: ValidationResult | null;
-        onSave?: () => void;
-        onCancel?: () => void;
-        saving?: boolean;
-    }
+	interface Props {
+		position?: L.ControlPosition;
+		validationResult: ValidationResult | null;
+		onSave?: () => void;
+		onCancel?: () => void;
+		saving?: boolean;
+	}
 
-    let {
-        position = 'topright',
-        validationResult = null,
-        onSave,
-        onCancel,
-        saving = false
-    }: Props = $props();
+	let {
+		position = 'topright',
+		validationResult = null,
+		onSave,
+		onCancel,
+		saving = false
+	}: Props = $props();
 
-    const { getLeaflet, getLeafletMap } = getContext<{
-        getLeaflet: () => typeof L;
-        getLeafletMap: () => L.Map;
-    }>('leafletContext');
+	const { getLeaflet, getLeafletMap } = getContext<{
+		getLeaflet: () => typeof L;
+		getLeafletMap: () => L.Map;
+	}>('leafletContext');
 
-    let leaflet: typeof L;
-    let map: L.Map;
-    let control: L.Control;
+	let leaflet: typeof L;
+	let map: L.Map;
+	let control: L.Control;
 
-    const hasIssues = $derived(
-        validationResult?.issues && validationResult.issues.length > 0
-    );
+	const hasIssues = $derived(validationResult?.issues && validationResult.issues.length > 0);
 
-    const hasWarnings = $derived(
-        validationResult?.warnings && validationResult.warnings.length > 0
-    );
+	const hasWarnings = $derived(validationResult?.warnings && validationResult.warnings.length > 0);
 
-    const canSave = $derived(
-        validationResult?.valid && !saving
-    );
+	const canSave = $derived(validationResult?.valid && !saving);
 
-    function formatArea(area: number | undefined): string {
-        if (!area) return '';
-        if (area > 10000) {
-            return `${(area / 10000).toFixed(2)} ha`;
-        }
-        return `${area.toFixed(1)} m²`;
-    }
+	function formatArea(area: number | undefined): string {
+		if (!area) return '';
+		if (area > 10000) {
+			return `${(area / 10000).toFixed(2)} ha`;
+		}
+		return `${area.toFixed(1)} m²`;
+	}
 
-    function formatLength(length: number | undefined): string {
-        if (!length) return '';
-        if (length > 1000) {
-            return `${(length / 1000).toFixed(2)} km`;
-        }
-        return `${length.toFixed(1)} m`;
-    }
+	function formatLength(length: number | undefined): string {
+		if (!length) return '';
+		if (length > 1000) {
+			return `${(length / 1000).toFixed(2)} km`;
+		}
+		return `${length.toFixed(1)} m`;
+	}
 
-    onMount(() => {
-        leaflet = getLeaflet();
-        map = getLeafletMap();
+	onMount(() => {
+		leaflet = getLeaflet();
+		map = getLeafletMap();
 
-        const ValidationControl = leaflet.Control.extend({
-            onAdd: function() {
-                const container = leaflet.DomUtil.create('div',
-                    'leaflet-control leaflet-validation-panel');
-                leaflet.DomEvent.disableClickPropagation(container);
-                return container;
-            }
-        });
+		const ValidationControl = leaflet.Control.extend({
+			onAdd: function () {
+				const container = leaflet.DomUtil.create('div', 'leaflet-control leaflet-validation-panel');
+				leaflet.DomEvent.disableClickPropagation(container);
+				return container;
+			}
+		});
 
-        control = new ValidationControl({ position });
-        control.addTo(map);
-    });
+		control = new ValidationControl({ position });
+		control.addTo(map);
+	});
 </script>
 
 {#if validationResult}
-    <div class="validation-content" class:valid={validationResult.valid} class:invalid={!validationResult.valid}>
-        <div class="validation-header">
-            <h3>
-                {#if validationResult.valid}
-                    ✓ Validation Passed
-                {:else}
-                    ✗ Validation Failed
-                {/if}
-            </h3>
-        </div>
+	<div
+		class="validation-content"
+		class:valid={validationResult.valid}
+		class:invalid={!validationResult.valid}
+	>
+		<div class="validation-header">
+			<h3>
+				{#if validationResult.valid}
+					✓ Validation Passed
+				{:else}
+					✗ Validation Failed
+				{/if}
+			</h3>
+		</div>
 
-        {#if validationResult.metadata}
-            <div class="validation-metadata">
-                {#if validationResult.metadata.area_m2}
-                    <div class="metadata-item">
-                        <strong>Area:</strong> {formatArea(validationResult.metadata.area_m2)}
-                    </div>
-                {/if}
-                {#if validationResult.metadata.length_m}
-                    <div class="metadata-item">
-                        <strong>Length:</strong> {formatLength(validationResult.metadata.length_m)}
-                    </div>
-                {/if}
-                {#if validationResult.metadata.snapped}
-                    <div class="metadata-item snapped">
-                        🎯 Snapped to property boundary
-                    </div>
-                {/if}
-            </div>
-        {/if}
+		{#if validationResult.metadata}
+			<div class="validation-metadata">
+				{#if validationResult.metadata.area_m2}
+					<div class="metadata-item">
+						<strong>Area:</strong>
+						{formatArea(validationResult.metadata.area_m2)}
+					</div>
+				{/if}
+				{#if validationResult.metadata.length_m}
+					<div class="metadata-item">
+						<strong>Length:</strong>
+						{formatLength(validationResult.metadata.length_m)}
+					</div>
+				{/if}
+				{#if validationResult.metadata.snapped}
+					<div class="metadata-item snapped">🎯 Snapped to property boundary</div>
+				{/if}
+			</div>
+		{/if}
 
-        {#if hasIssues}
-            <div class="validation-issues">
-                <strong>Issues:</strong>
-                <ul>
-                    {#each validationResult.issues as issue}
-                        <li>{issue}</li>
-                    {/each}
-                </ul>
-            </div>
-        {/if}
+		{#if hasIssues}
+			<div class="validation-issues">
+				<strong>Issues:</strong>
+				<ul>
+					{#each validationResult.issues as issue}
+						<li>{issue}</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
 
-        {#if hasWarnings}
-            <div class="validation-warnings">
-                <strong>Warnings:</strong>
-                <ul>
-                    {#each validationResult.warnings as warning}
-                        <li>{warning}</li>
-                    {/each}
-                </ul>
-            </div>
-        {/if}
+		{#if hasWarnings}
+			<div class="validation-warnings">
+				<strong>Warnings:</strong>
+				<ul>
+					{#each validationResult.warnings as warning}
+						<li>{warning}</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
 
-        <div class="validation-actions">
-            <button
-                class="btn-save"
-                disabled={!canSave}
-                onclick={onSave}
-            >
-                {saving ? 'Saving...' : 'Save Feature'}
-            </button>
-            <button class="btn-cancel" onclick={onCancel}>
-                Cancel
-            </button>
-        </div>
-    </div>
+		<div class="validation-actions">
+			<button class="btn-save" disabled={!canSave} onclick={onSave}>
+				{saving ? 'Saving...' : 'Save Feature'}
+			</button>
+			<button class="btn-cancel" onclick={onCancel}> Cancel </button>
+		</div>
+	</div>
 {/if}
 
 <style>
-    :global(.leaflet-validation-panel) {
-        background: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        max-width: 350px;
-    }
+	:global(.leaflet-validation-panel) {
+		background: white;
+		border-radius: 4px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		max-width: 350px;
+	}
 
-    .validation-content {
-        padding: 16px;
-        border-left: 4px solid #4CAF50;
-    }
+	.validation-content {
+		padding: 16px;
+		border-left: 4px solid #4caf50;
+	}
 
-    .validation-content.invalid {
-        border-left-color: #F44336;
-    }
+	.validation-content.invalid {
+		border-left-color: #f44336;
+	}
 
-    .validation-header h3 {
-        margin: 0 0 12px 0;
-        font-size: 16px;
-        color: #4CAF50;
-    }
+	.validation-header h3 {
+		margin: 0 0 12px 0;
+		font-size: 16px;
+		color: #4caf50;
+	}
 
-    .validation-content.invalid .validation-header h3 {
-        color: #F44336;
-    }
+	.validation-content.invalid .validation-header h3 {
+		color: #f44336;
+	}
 
-    .validation-metadata {
-        margin-bottom: 12px;
-        padding: 8px;
-        background: #f5f5f5;
-        border-radius: 4px;
-        font-size: 13px;
-    }
+	.validation-metadata {
+		margin-bottom: 12px;
+		padding: 8px;
+		background: #f5f5f5;
+		border-radius: 4px;
+		font-size: 13px;
+	}
 
-    .metadata-item {
-        margin: 4px 0;
-    }
+	.metadata-item {
+		margin: 4px 0;
+	}
 
-    .metadata-item.snapped {
-        color: #2196F3;
-        font-weight: 500;
-    }
+	.metadata-item.snapped {
+		color: #2196f3;
+		font-weight: 500;
+	}
 
-    .validation-issues,
-    .validation-warnings {
-        margin-bottom: 12px;
-        padding: 8px;
-        border-radius: 4px;
-        font-size: 13px;
-    }
+	.validation-issues,
+	.validation-warnings {
+		margin-bottom: 12px;
+		padding: 8px;
+		border-radius: 4px;
+		font-size: 13px;
+	}
 
-    .validation-issues {
-        background: #ffebee;
-        color: #c62828;
-    }
+	.validation-issues {
+		background: #ffebee;
+		color: #c62828;
+	}
 
-    .validation-warnings {
-        background: #fff3e0;
-        color: #e65100;
-    }
+	.validation-warnings {
+		background: #fff3e0;
+		color: #e65100;
+	}
 
-    .validation-issues ul,
-    .validation-warnings ul {
-        margin: 4px 0 0 0;
-        padding-left: 20px;
-    }
+	.validation-issues ul,
+	.validation-warnings ul {
+		margin: 4px 0 0 0;
+		padding-left: 20px;
+	}
 
-    .validation-issues li,
-    .validation-warnings li {
-        margin: 2px 0;
-    }
+	.validation-issues li,
+	.validation-warnings li {
+		margin: 2px 0;
+	}
 
-    .validation-actions {
-        display: flex;
-        gap: 8px;
-    }
+	.validation-actions {
+		display: flex;
+		gap: 8px;
+	}
 
-    .btn-save,
-    .btn-cancel {
-        flex: 1;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
+	.btn-save,
+	.btn-cancel {
+		flex: 1;
+		padding: 8px 16px;
+		border: none;
+		border-radius: 4px;
+		font-size: 14px;
+		cursor: pointer;
+		transition: background-color 0.2s;
+	}
 
-    .btn-save {
-        background: #4CAF50;
-        color: white;
-    }
+	.btn-save {
+		background: #4caf50;
+		color: white;
+	}
 
-    .btn-save:hover:not(:disabled) {
-        background: #45a049;
-    }
+	.btn-save:hover:not(:disabled) {
+		background: #45a049;
+	}
 
-    .btn-save:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-    }
+	.btn-save:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+	}
 
-    .btn-cancel {
-        background: #f5f5f5;
-        color: #333;
-    }
+	.btn-cancel {
+		background: #f5f5f5;
+		color: #333;
+	}
 
-    .btn-cancel:hover {
-        background: #e0e0e0;
-    }
+	.btn-cancel:hover {
+		background: #e0e0e0;
+	}
 </style>
 ```
 
@@ -1042,239 +1044,239 @@ $$;
 
 ```svelte
 <script lang="ts">
-    import { onMount, onDestroy, getContext } from 'svelte';
-    import type L from 'leaflet';
-    import type { Writable } from 'svelte/store';
-    import type { LayerInfo } from '$lib/leaflet/types';
+	import { onMount, onDestroy, getContext } from 'svelte';
+	import type L from 'leaflet';
+	import type { Writable } from 'svelte/store';
+	import type { LayerInfo } from '$lib/leaflet/types';
 
-    interface Props {
-        position?: L.ControlPosition;
-        onMerge?: (featureIds: string[]) => void;
-    }
+	interface Props {
+		position?: L.ControlPosition;
+		onMerge?: (featureIds: string[]) => void;
+	}
 
-    let { position = 'topright', onMerge }: Props = $props();
+	let { position = 'topright', onMerge }: Props = $props();
 
-    const { getLeaflet, getLeafletMap, getLeafletLayers } = getContext<{
-        getLeaflet: () => typeof L;
-        getLeafletMap: () => L.Map;
-        getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
-    }>('leafletContext');
+	const { getLeaflet, getLeafletMap, getLeafletLayers } = getContext<{
+		getLeaflet: () => typeof L;
+		getLeafletMap: () => L.Map;
+		getLeafletLayers: () => Writable<Record<string, LayerInfo>>;
+	}>('leafletContext');
 
-    let leaflet: typeof L;
-    let map: L.Map;
-    let layersStore: Writable<Record<string, LayerInfo>>;
-    let control: L.Control;
+	let leaflet: typeof L;
+	let map: L.Map;
+	let layersStore: Writable<Record<string, LayerInfo>>;
+	let control: L.Control;
 
-    let mergeMode = $state(false);
-    let selectedFeatures = $state<Set<string>>(new Set());
-    let selectedLayers = $state<Map<string, L.Layer>>(new Map());
+	let mergeMode = $state(false);
+	let selectedFeatures = $state<Set<string>>(new Set());
+	let selectedLayers = $state<Map<string, L.Layer>>(new Map());
 
-    function toggleMergeMode() {
-        mergeMode = !mergeMode;
+	function toggleMergeMode() {
+		mergeMode = !mergeMode;
 
-        if (!mergeMode) {
-            clearSelection();
-        } else {
-            enableSelection();
-        }
-    }
+		if (!mergeMode) {
+			clearSelection();
+		} else {
+			enableSelection();
+		}
+	}
 
-    function enableSelection() {
-        // Add click handlers to editable layers
-        layersStore.subscribe(layers => {
-            Object.entries(layers).forEach(([layerName, layerInfo]) => {
-                if (layerInfo.editable && layerInfo.layer instanceof leaflet.GeoJSON) {
-                    layerInfo.layer.eachLayer((layer: any) => {
-                        layer.on('click', handleFeatureClick);
-                    });
-                }
-            });
-        });
-    }
+	function enableSelection() {
+		// Add click handlers to editable layers
+		layersStore.subscribe((layers) => {
+			Object.entries(layers).forEach(([layerName, layerInfo]) => {
+				if (layerInfo.editable && layerInfo.layer instanceof leaflet.GeoJSON) {
+					layerInfo.layer.eachLayer((layer: any) => {
+						layer.on('click', handleFeatureClick);
+					});
+				}
+			});
+		});
+	}
 
-    function handleFeatureClick(e: L.LeafletMouseEvent) {
-        if (!mergeMode) return;
+	function handleFeatureClick(e: L.LeafletMouseEvent) {
+		if (!mergeMode) return;
 
-        L.DomEvent.stopPropagation(e);
+		L.DomEvent.stopPropagation(e);
 
-        const layer = e.target;
-        const featureId = layer.feature?.properties?.id;
+		const layer = e.target;
+		const featureId = layer.feature?.properties?.id;
 
-        if (!featureId) return;
+		if (!featureId) return;
 
-        if (selectedFeatures.has(featureId)) {
-            // Deselect
-            selectedFeatures.delete(featureId);
-            selectedLayers.delete(featureId);
-            layer.setStyle({ color: '#3388ff', weight: 3 });
-        } else {
-            // Select
-            selectedFeatures.add(featureId);
-            selectedLayers.set(featureId, layer);
-            layer.setStyle({ color: '#FFD700', weight: 5 });
-        }
+		if (selectedFeatures.has(featureId)) {
+			// Deselect
+			selectedFeatures.delete(featureId);
+			selectedLayers.delete(featureId);
+			layer.setStyle({ color: '#3388ff', weight: 3 });
+		} else {
+			// Select
+			selectedFeatures.add(featureId);
+			selectedLayers.set(featureId, layer);
+			layer.setStyle({ color: '#FFD700', weight: 5 });
+		}
 
-        selectedFeatures = new Set(selectedFeatures); // Trigger reactivity
-    }
+		selectedFeatures = new Set(selectedFeatures); // Trigger reactivity
+	}
 
-    function clearSelection() {
-        selectedLayers.forEach((layer: any) => {
-            layer.setStyle({ color: '#3388ff', weight: 3 });
-        });
-        selectedFeatures.clear();
-        selectedLayers.clear();
-        selectedFeatures = new Set(); // Trigger reactivity
-    }
+	function clearSelection() {
+		selectedLayers.forEach((layer: any) => {
+			layer.setStyle({ color: '#3388ff', weight: 3 });
+		});
+		selectedFeatures.clear();
+		selectedLayers.clear();
+		selectedFeatures = new Set(); // Trigger reactivity
+	}
 
-    function executeMerge() {
-        if (selectedFeatures.size < 2) {
-            alert('Please select at least 2 features to merge');
-            return;
-        }
+	function executeMerge() {
+		if (selectedFeatures.size < 2) {
+			alert('Please select at least 2 features to merge');
+			return;
+		}
 
-        const featureIds = Array.from(selectedFeatures);
-        onMerge?.(featureIds);
+		const featureIds = Array.from(selectedFeatures);
+		onMerge?.(featureIds);
 
-        // Reset
-        toggleMergeMode();
-    }
+		// Reset
+		toggleMergeMode();
+	}
 
-    onMount(() => {
-        leaflet = getLeaflet();
-        map = getLeafletMap();
-        layersStore = getLeafletLayers();
+	onMount(() => {
+		leaflet = getLeaflet();
+		map = getLeafletMap();
+		layersStore = getLeafletLayers();
 
-        const MergeControl = leaflet.Control.extend({
-            onAdd: function() {
-                const container = leaflet.DomUtil.create('div',
-                    'leaflet-bar leaflet-control leaflet-merge-control');
-                leaflet.DomEvent.disableClickPropagation(container);
-                return container;
-            }
-        });
+		const MergeControl = leaflet.Control.extend({
+			onAdd: function () {
+				const container = leaflet.DomUtil.create(
+					'div',
+					'leaflet-bar leaflet-control leaflet-merge-control'
+				);
+				leaflet.DomEvent.disableClickPropagation(container);
+				return container;
+			}
+		});
 
-        control = new MergeControl({ position });
-        control.addTo(map);
-    });
+		control = new MergeControl({ position });
+		control.addTo(map);
+	});
 
-    onDestroy(() => {
-        clearSelection();
-        if (control) {
-            control.remove();
-        }
-    });
+	onDestroy(() => {
+		clearSelection();
+		if (control) {
+			control.remove();
+		}
+	});
 </script>
 
 <div class="merge-control-content">
-    <button
-        class="merge-toggle"
-        class:active={mergeMode}
-        onclick={toggleMergeMode}
-        title={mergeMode ? 'Cancel merge' : 'Merge features'}
-    >
-        <svg width="20" height="20" viewBox="0 0 20 20">
-            <path d="M4 4 L9 4 L9 9 L4 9 Z M11 11 L16 11 L16 16 L11 16 Z M9 9 L11 11"
-                  stroke="currentColor" fill="none" stroke-width="2"/>
-        </svg>
-    </button>
+	<button
+		class="merge-toggle"
+		class:active={mergeMode}
+		onclick={toggleMergeMode}
+		title={mergeMode ? 'Cancel merge' : 'Merge features'}
+	>
+		<svg width="20" height="20" viewBox="0 0 20 20">
+			<path
+				d="M4 4 L9 4 L9 9 L4 9 Z M11 11 L16 11 L16 16 L11 16 Z M9 9 L11 11"
+				stroke="currentColor"
+				fill="none"
+				stroke-width="2"
+			/>
+		</svg>
+	</button>
 
-    {#if mergeMode}
-        <div class="merge-panel">
-            <div class="merge-info">
-                Selected: {selectedFeatures.size} feature{selectedFeatures.size !== 1 ? 's' : ''}
-            </div>
-            <div class="merge-actions">
-                <button
-                    class="btn-merge"
-                    disabled={selectedFeatures.size < 2}
-                    onclick={executeMerge}
-                >
-                    Merge ({selectedFeatures.size})
-                </button>
-                <button class="btn-clear" onclick={clearSelection}>
-                    Clear
-                </button>
-            </div>
-        </div>
-    {/if}
+	{#if mergeMode}
+		<div class="merge-panel">
+			<div class="merge-info">
+				Selected: {selectedFeatures.size} feature{selectedFeatures.size !== 1 ? 's' : ''}
+			</div>
+			<div class="merge-actions">
+				<button class="btn-merge" disabled={selectedFeatures.size < 2} onclick={executeMerge}>
+					Merge ({selectedFeatures.size})
+				</button>
+				<button class="btn-clear" onclick={clearSelection}> Clear </button>
+			</div>
+		</div>
+	{/if}
 </div>
 
 <style>
-    .merge-control-content {
-        background: white;
-        border-radius: 4px;
-    }
+	.merge-control-content {
+		background: white;
+		border-radius: 4px;
+	}
 
-    .merge-toggle {
-        background: white;
-        border: none;
-        padding: 8px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-    }
+	.merge-toggle {
+		background: white;
+		border: none;
+		padding: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+	}
 
-    .merge-toggle:hover {
-        background: #f5f5f5;
-    }
+	.merge-toggle:hover {
+		background: #f5f5f5;
+	}
 
-    .merge-toggle.active {
-        background: #FFD700;
-    }
+	.merge-toggle.active {
+		background: #ffd700;
+	}
 
-    .merge-panel {
-        position: absolute;
-        right: 100%;
-        top: 0;
-        margin-right: 10px;
-        background: white;
-        border-radius: 4px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        padding: 12px;
-        min-width: 200px;
-    }
+	.merge-panel {
+		position: absolute;
+		right: 100%;
+		top: 0;
+		margin-right: 10px;
+		background: white;
+		border-radius: 4px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+		padding: 12px;
+		min-width: 200px;
+	}
 
-    .merge-info {
-        margin-bottom: 8px;
-        font-size: 13px;
-        font-weight: 500;
-    }
+	.merge-info {
+		margin-bottom: 8px;
+		font-size: 13px;
+		font-weight: 500;
+	}
 
-    .merge-actions {
-        display: flex;
-        gap: 8px;
-    }
+	.merge-actions {
+		display: flex;
+		gap: 8px;
+	}
 
-    .btn-merge,
-    .btn-clear {
-        flex: 1;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        font-size: 13px;
-        cursor: pointer;
-    }
+	.btn-merge,
+	.btn-clear {
+		flex: 1;
+		padding: 6px 12px;
+		border: none;
+		border-radius: 4px;
+		font-size: 13px;
+		cursor: pointer;
+	}
 
-    .btn-merge {
-        background: #4CAF50;
-        color: white;
-    }
+	.btn-merge {
+		background: #4caf50;
+		color: white;
+	}
 
-    .btn-merge:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-    }
+	.btn-merge:disabled {
+		background: #ccc;
+		cursor: not-allowed;
+	}
 
-    .btn-clear {
-        background: #f5f5f5;
-    }
+	.btn-clear {
+		background: #f5f5f5;
+	}
 
-    .btn-clear:hover {
-        background: #e0e0e0;
-    }
+	.btn-clear:hover {
+		background: #e0e0e0;
+	}
 </style>
 ```
 
@@ -1287,41 +1289,41 @@ $$;
 ```svelte
 <!-- Replace placeholder comment at line 140-142 -->
 {#if editable}
-    <script>
-        import('leaflet-editable').then(() => {
-            setupEditableLayer();
-        });
+	<script>
+		import('leaflet-editable').then(() => {
+			setupEditableLayer();
+		});
 
-        function setupEditableLayer() {
-            geoJSONLayer.eachLayer((layer: any) => {
-                layer.on('click', () => {
-                    if (editingState.mode === 'edit') {
-                        layer.enableEdit();
-                    }
-                });
-            });
+		function setupEditableLayer() {
+			geoJSONLayer.eachLayer((layer: any) => {
+				layer.on('click', () => {
+					if (editingState.mode === 'edit') {
+						layer.enableEdit();
+					}
+				});
+			});
 
-            // Setup snapping to property boundary
-            setupSnapping();
-        }
+			// Setup snapping to property boundary
+			setupSnapping();
+		}
 
-        function setupSnapping() {
-            // Get property boundary layer
-            const propertyLayer = layersStore.subscribe(layers => {
-                const boundaryLayer = layers['Property Boundary Layer'];
-                if (boundaryLayer && boundaryLayer.layer) {
-                    enableSnapToLayer(boundaryLayer.layer);
-                }
-            });
-        }
+		function setupSnapping() {
+			// Get property boundary layer
+			const propertyLayer = layersStore.subscribe((layers) => {
+				const boundaryLayer = layers['Property Boundary Layer'];
+				if (boundaryLayer && boundaryLayer.layer) {
+					enableSnapToLayer(boundaryLayer.layer);
+				}
+			});
+		}
 
-        function enableSnapToLayer(snapLayer: L.Layer) {
-            // Use leaflet-editable snapping
-            if (map.editTools) {
-                map.editTools.featuresLayer = snapLayer;
-            }
-        }
-    </script>
+		function enableSnapToLayer(snapLayer: L.Layer) {
+			// Use leaflet-editable snapping
+			if (map.editTools) {
+				map.editTools.featuresLayer = snapLayer;
+			}
+		}
+	</script>
 {/if}
 ```
 
@@ -1331,96 +1333,93 @@ $$;
 
 ### 3.1 Add Validation Action to +page.server.ts
 
-**File**: [src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts](src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts)
+**File**: [src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts](<src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts>)
 
 ```typescript
 export const actions: Actions = {
-    // ... existing saveFeature and deleteFeature actions ...
+	// ... existing saveFeature and deleteFeature actions ...
 
-    validateFeature: async ({ request, locals: { supabase, user } }) => {
-        const formData = await request.formData();
-        const propertyId = formData.get('propertyId');
-        const templateId = formData.get('templateId');
-        const geometryStr = formData.get('geometry');
+	validateFeature: async ({ request, locals: { supabase, user } }) => {
+		const formData = await request.formData();
+		const propertyId = formData.get('propertyId');
+		const templateId = formData.get('templateId');
+		const geometryStr = formData.get('geometry');
 
-        if (!propertyId || !templateId || !geometryStr) {
-            return fail(400, {
-                success: false,
-                message: 'Missing required fields'
-            });
-        }
+		if (!propertyId || !templateId || !geometryStr) {
+			return fail(400, {
+				success: false,
+				message: 'Missing required fields'
+			});
+		}
 
-        const { data: validationResult, error: validationError } = await supabase.rpc(
-            'validate_spatial_feature',
-            {
-                p_geojson: geometryStr.toString(),
-                p_template_id: templateId.toString(),
-                p_property_id: propertyId.toString(),
-                p_snap_tolerance: 0.5
-            }
-        );
+		const { data: validationResult, error: validationError } = await supabase.rpc(
+			'validate_spatial_feature',
+			{
+				p_geojson: geometryStr.toString(),
+				p_template_id: templateId.toString(),
+				p_property_id: propertyId.toString(),
+				p_snap_tolerance: 0.5
+			}
+		);
 
-        if (validationError) {
-            console.log('validationError', validationError.message);
-            return fail(400, {
-                success: false,
-                message: 'Validation failed',
-                error: validationError.message
-            });
-        }
+		if (validationError) {
+			console.log('validationError', validationError.message);
+			return fail(400, {
+				success: false,
+				message: 'Validation failed',
+				error: validationError.message
+			});
+		}
 
-        return {
-            success: true,
-            validation: validationResult
-        };
-    },
+		return {
+			success: true,
+			validation: validationResult
+		};
+	},
 
-    mergeFeatures: async ({ request, locals: { supabase, user } }) => {
-        const formData = await request.formData();
-        const propertyId = formData.get('propertyId');
-        const featureIdsStr = formData.get('featureIds');
+	mergeFeatures: async ({ request, locals: { supabase, user } }) => {
+		const formData = await request.formData();
+		const propertyId = formData.get('propertyId');
+		const featureIdsStr = formData.get('featureIds');
 
-        if (!propertyId || !featureIdsStr) {
-            return fail(400, {
-                success: false,
-                message: 'Missing required fields'
-            });
-        }
+		if (!propertyId || !featureIdsStr) {
+			return fail(400, {
+				success: false,
+				message: 'Missing required fields'
+			});
+		}
 
-        const featureIds = JSON.parse(featureIdsStr.toString());
+		const featureIds = JSON.parse(featureIdsStr.toString());
 
-        const { data: mergeResult, error: mergeError } = await supabase.rpc(
-            'merge_spatial_features',
-            {
-                p_feature_ids: featureIds,
-                p_user_id: user.id,
-                p_property_id: propertyId.toString()
-            }
-        );
+		const { data: mergeResult, error: mergeError } = await supabase.rpc('merge_spatial_features', {
+			p_feature_ids: featureIds,
+			p_user_id: user.id,
+			p_property_id: propertyId.toString()
+		});
 
-        if (mergeError) {
-            console.log('mergeError', mergeError.message);
-            return fail(400, {
-                success: false,
-                message: 'Merge failed',
-                error: mergeError.message
-            });
-        }
+		if (mergeError) {
+			console.log('mergeError', mergeError.message);
+			return fail(400, {
+				success: false,
+				message: 'Merge failed',
+				error: mergeError.message
+			});
+		}
 
-        if (!mergeResult.success) {
-            return fail(400, {
-                success: false,
-                message: mergeResult.error || 'Merge failed'
-            });
-        }
+		if (!mergeResult.success) {
+			return fail(400, {
+				success: false,
+				message: mergeResult.error || 'Merge failed'
+			});
+		}
 
-        return {
-            success: true,
-            message: mergeResult.message,
-            featureId: mergeResult.feature_id,
-            geometry: mergeResult.geometry
-        };
-    }
+		return {
+			success: true,
+			message: mergeResult.message,
+			featureId: mergeResult.feature_id,
+			geometry: mergeResult.geometry
+		};
+	}
 };
 ```
 
@@ -1434,72 +1433,72 @@ export const actions: Actions = {
 import type { Geometry } from 'geojson';
 
 export interface ValidationResult {
-    valid: boolean;
-    issues: string[];
-    warnings: string[];
-    geometry: Geometry | null;
-    metadata?: {
-        snapped: boolean;
-        area_m2?: number;
-        length_m?: number;
-    };
+	valid: boolean;
+	issues: string[];
+	warnings: string[];
+	geometry: Geometry | null;
+	metadata?: {
+		snapped: boolean;
+		area_m2?: number;
+		length_m?: number;
+	};
 }
 
 export interface MergeResult {
-    success: boolean;
-    feature_id?: string;
-    merged_count?: number;
-    geometry?: Geometry;
-    message?: string;
-    error?: string;
+	success: boolean;
+	feature_id?: string;
+	merged_count?: number;
+	geometry?: Geometry;
+	message?: string;
+	error?: string;
 }
 
 /**
  * Validate a feature geometry against PostGIS rules
  */
 export async function validateFeature(
-    geometry: Geometry,
-    templateId: string,
-    propertyId: string,
-    snapTolerance: number = 0.5
+	geometry: Geometry,
+	templateId: string,
+	propertyId: string,
+	snapTolerance: number = 0.5
 ): Promise<ValidationResult> {
-    const formData = new FormData();
-    formData.append('propertyId', propertyId);
-    formData.append('templateId', templateId);
-    formData.append('geometry', JSON.stringify(geometry));
+	const formData = new FormData();
+	formData.append('propertyId', propertyId);
+	formData.append('templateId', templateId);
+	formData.append('geometry', JSON.stringify(geometry));
 
-    const response = await fetch('?/validateFeature', {
-        method: 'POST',
-        body: formData
-    });
+	const response = await fetch('?/validateFeature', {
+		method: 'POST',
+		body: formData
+	});
 
-    const result = await response.json();
+	const result = await response.json();
 
-    if (!result.success) {
-        throw new Error(result.message || 'Validation failed');
-    }
+	if (!result.success) {
+		throw new Error(result.message || 'Validation failed');
+	}
 
-    return result.validation;
+	return result.validation;
 }
 
 /**
  * Merge multiple features into one
  */
 export async function mergeFeatures(
-    featureIds: string[],
-    propertyId: string
+	featureIds: string[],
+	propertyId: string
 ): Promise<MergeResult> {
-    const formData = new FormData();
-    formData.append('propertyId', propertyId);
-    formData.append('featureIds', JSON.stringify(featureIds));
+	const formData = new FormData();
+	formData.append('propertyId', propertyId);
+	formData.append('featureIds', JSON.stringify(featureIds));
 
-    const response = await fetch('?/mergeFeatures', {
-        method: 'POST',
-        body: formData
-    });
+	const response = await fetch('?/mergeFeatures', {
+		method: 'POST',
+		body: formData
+	});
 
-    const result = await response.json();
-    return result;
+	const result = await response.json();
+	return result;
 }
 ```
 
@@ -1509,177 +1508,174 @@ export async function mergeFeatures(
 
 ### 4.1 Update My Property Map Page
 
-**File**: [src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.svelte](src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.svelte)
+**File**: [src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.svelte](<src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.svelte>)
 
 **Add these imports and state**:
 
 ```svelte
 <script lang="ts">
-    // ... existing imports ...
-    import { validateFeature, mergeFeatures } from '$lib/services/spatial-validation';
-    import { enhance } from '$app/forms';
-    import { toast } from '$lib/components/ui/toast'; // Assuming you have toast system
+	// ... existing imports ...
+	import { validateFeature, mergeFeatures } from '$lib/services/spatial-validation';
+	import { enhance } from '$app/forms';
+	import { toast } from '$lib/components/ui/toast'; // Assuming you have toast system
 
-    // New components
-    let LeafletDrawControl = $state<Component>();
-    let LeafletValidationPanel = $state<Component>();
-    let LeafletMergeControl = $state<Component>();
+	// New components
+	let LeafletDrawControl = $state<Component>();
+	let LeafletValidationPanel = $state<Component>();
+	let LeafletMergeControl = $state<Component>();
 
-    // State for validation
-    let validationResult = $state<any>(null);
-    let pendingFeature = $state<any>(null);
-    let saving = $state(false);
+	// State for validation
+	let validationResult = $state<any>(null);
+	let pendingFeature = $state<any>(null);
+	let saving = $state(false);
 
-    // Load new components in onMount
-    onMount(async () => {
-        [
-            // ... existing component loads ...
-            LeafletDrawControl,
-            LeafletValidationPanel,
-            LeafletMergeControl
-        ] = await Promise.all([
-            // ... existing imports ...
-            import('$components/map/leaflet/controls/LeafletDrawControl.svelte').then(m => m.default),
-            import('$components/map/leaflet/controls/LeafletValidationPanel.svelte').then(m => m.default),
-            import('$components/map/leaflet/controls/LeafletMergeControl.svelte').then(m => m.default)
-        ]);
-    });
+	// Load new components in onMount
+	onMount(async () => {
+		[
+			// ... existing component loads ...
+			LeafletDrawControl,
+			LeafletValidationPanel,
+			LeafletMergeControl
+		] = await Promise.all([
+			// ... existing imports ...
+			import('$components/map/leaflet/controls/LeafletDrawControl.svelte').then((m) => m.default),
+			import('$components/map/leaflet/controls/LeafletValidationPanel.svelte').then(
+				(m) => m.default
+			),
+			import('$components/map/leaflet/controls/LeafletMergeControl.svelte').then((m) => m.default)
+		]);
+	});
 
-    // Handle feature creation
-    function handleFeatureCreated(e: CustomEvent) {
-        pendingFeature = {
-            geometry: e.detail.geometry,
-            template: e.detail.template,
-            layer: e.detail.layer
-        };
+	// Handle feature creation
+	function handleFeatureCreated(e: CustomEvent) {
+		pendingFeature = {
+			geometry: e.detail.geometry,
+			template: e.detail.template,
+			layer: e.detail.layer
+		};
 
-        // Trigger validation
-        validateNewFeature();
-    }
+		// Trigger validation
+		validateNewFeature();
+	}
 
-    async function validateNewFeature() {
-        if (!pendingFeature) return;
+	async function validateNewFeature() {
+		if (!pendingFeature) return;
 
-        try {
-            validationResult = await validateFeature(
-                pendingFeature.geometry,
-                pendingFeature.template.id,
-                data.propertyGeometryData[0].property.features[0].properties.id,
-                0.5
-            );
+		try {
+			validationResult = await validateFeature(
+				pendingFeature.geometry,
+				pendingFeature.template.id,
+				data.propertyGeometryData[0].property.features[0].properties.id,
+				0.5
+			);
 
-            // Update the drawn layer with snapped geometry
-            if (validationResult.geometry && pendingFeature.layer) {
-                const geoJSONFormat = new L.GeoJSON();
-                const updatedGeom = geoJSONFormat.geometryToLayer(
-                    validationResult.geometry
-                );
+			// Update the drawn layer with snapped geometry
+			if (validationResult.geometry && pendingFeature.layer) {
+				const geoJSONFormat = new L.GeoJSON();
+				const updatedGeom = geoJSONFormat.geometryToLayer(validationResult.geometry);
 
-                // Replace layer geometry
-                if (updatedGeom) {
-                    map.removeLayer(pendingFeature.layer);
-                    pendingFeature.layer = updatedGeom;
-                    map.addLayer(updatedGeom);
-                }
-            }
-        } catch (err) {
-            toast.error('Validation failed: ' + err.message);
-        }
-    }
+				// Replace layer geometry
+				if (updatedGeom) {
+					map.removeLayer(pendingFeature.layer);
+					pendingFeature.layer = updatedGeom;
+					map.addLayer(updatedGeom);
+				}
+			}
+		} catch (err) {
+			toast.error('Validation failed: ' + err.message);
+		}
+	}
 
-    async function saveValidatedFeature() {
-        if (!validationResult?.valid || !pendingFeature) return;
+	async function saveValidatedFeature() {
+		if (!validationResult?.valid || !pendingFeature) return;
 
-        saving = true;
+		saving = true;
 
-        const formData = new FormData();
-        formData.append('propertyId', data.propertyGeometryData[0].property.features[0].properties.id);
-        formData.append('templateId', pendingFeature.template.id);
-        formData.append('geometry', JSON.stringify(validationResult.geometry));
+		const formData = new FormData();
+		formData.append('propertyId', data.propertyGeometryData[0].property.features[0].properties.id);
+		formData.append('templateId', pendingFeature.template.id);
+		formData.append('geometry', JSON.stringify(validationResult.geometry));
 
-        try {
-            const response = await fetch('?/saveFeature', {
-                method: 'POST',
-                body: formData
-            });
+		try {
+			const response = await fetch('?/saveFeature', {
+				method: 'POST',
+				body: formData
+			});
 
-            const result = await response.json();
+			const result = await response.json();
 
-            if (result.success) {
-                toast.success(result.message || 'Feature saved successfully');
+			if (result.success) {
+				toast.success(result.message || 'Feature saved successfully');
 
-                // Clear validation and pending feature
-                validationResult = null;
-                pendingFeature = null;
+				// Clear validation and pending feature
+				validationResult = null;
+				pendingFeature = null;
 
-                // Reload page data
-                location.reload(); // Or use invalidate() for better UX
-            } else {
-                toast.error(result.message || 'Failed to save feature');
-            }
-        } catch (err) {
-            toast.error('Error saving feature');
-        } finally {
-            saving = false;
-        }
-    }
+				// Reload page data
+				location.reload(); // Or use invalidate() for better UX
+			} else {
+				toast.error(result.message || 'Failed to save feature');
+			}
+		} catch (err) {
+			toast.error('Error saving feature');
+		} finally {
+			saving = false;
+		}
+	}
 
-    function cancelFeatureCreation() {
-        if (pendingFeature?.layer) {
-            map.removeLayer(pendingFeature.layer);
-        }
-        pendingFeature = null;
-        validationResult = null;
-    }
+	function cancelFeatureCreation() {
+		if (pendingFeature?.layer) {
+			map.removeLayer(pendingFeature.layer);
+		}
+		pendingFeature = null;
+		validationResult = null;
+	}
 
-    async function handleMerge(featureIds: string[]) {
-        try {
-            const result = await mergeFeatures(
-                featureIds,
-                data.propertyGeometryData[0].property.features[0].properties.id
-            );
+	async function handleMerge(featureIds: string[]) {
+		try {
+			const result = await mergeFeatures(
+				featureIds,
+				data.propertyGeometryData[0].property.features[0].properties.id
+			);
 
-            if (result.success) {
-                toast.success(result.message || 'Features merged successfully');
-                location.reload();
-            } else {
-                toast.error(result.error || 'Merge failed');
-            }
-        } catch (err) {
-            toast.error('Error merging features');
-        }
-    }
+			if (result.success) {
+				toast.success(result.message || 'Features merged successfully');
+				location.reload();
+			} else {
+				toast.error(result.error || 'Merge failed');
+			}
+		} catch (err) {
+			toast.error('Error merging features');
+		}
+	}
 </script>
 
 <!-- In the template, add the new controls -->
 <LeafletMap ...>
-    <!-- ... existing layers ... -->
+	<!-- ... existing layers ... -->
 
-    {#if LeafletDrawControl}
-        <LeafletDrawControl
-            position="topright"
-            propertyId={data.propertyGeometryData[0].property.features[0].properties.id}
-        />
-    {/if}
+	{#if LeafletDrawControl}
+		<LeafletDrawControl
+			position="topright"
+			propertyId={data.propertyGeometryData[0].property.features[0].properties.id}
+		/>
+	{/if}
 
-    {#if LeafletValidationPanel}
-        <LeafletValidationPanel
-            position="topleft"
-            {validationResult}
-            onSave={saveValidatedFeature}
-            onCancel={cancelFeatureCreation}
-            {saving}
-        />
-    {/if}
+	{#if LeafletValidationPanel}
+		<LeafletValidationPanel
+			position="topleft"
+			{validationResult}
+			onSave={saveValidatedFeature}
+			onCancel={cancelFeatureCreation}
+			{saving}
+		/>
+	{/if}
 
-    {#if LeafletMergeControl}
-        <LeafletMergeControl
-            position="topright"
-            onMerge={handleMerge}
-        />
-    {/if}
+	{#if LeafletMergeControl}
+		<LeafletMergeControl position="topright" onMerge={handleMerge} />
+	{/if}
 
-    <!-- ... other controls ... -->
+	<!-- ... other controls ... -->
 </LeafletMap>
 ```
 
@@ -1788,6 +1784,7 @@ CREATE TRIGGER audit_spatial_features
 ### 7.1 User Documentation
 
 Create user guide covering:
+
 - How to draw features
 - Understanding validation messages
 - Using merge tool
@@ -1805,6 +1802,7 @@ Create user guide covering:
 ## Implementation Timeline Recommendation
 
 ### Sprint 1 (Week 1-2): Database Foundation
+
 - [ ] Add validation columns to spatial_features
 - [ ] Implement validate_spatial_feature() RPC
 - [ ] Implement merge_spatial_features() RPC
@@ -1812,6 +1810,7 @@ Create user guide covering:
 - [ ] Write database tests
 
 ### Sprint 2 (Week 3-4): Frontend Components
+
 - [ ] Create LeafletDrawControl
 - [ ] Create LeafletValidationPanel
 - [ ] Create LeafletMergeControl
@@ -1819,6 +1818,7 @@ Create user guide covering:
 - [ ] Create spatial-validation service
 
 ### Sprint 3 (Week 5): Integration
+
 - [ ] Update +page.server.ts with new actions
 - [ ] Integrate components into +page.svelte
 - [ ] Wire up validation workflow
@@ -1826,6 +1826,7 @@ Create user guide covering:
 - [ ] Add toast notifications
 
 ### Sprint 4 (Week 6): Testing & Polish
+
 - [ ] End-to-end testing
 - [ ] Performance optimization
 - [ ] UI/UX refinements
@@ -1854,7 +1855,7 @@ Create user guide covering:
 ✅ **Security First** - RLS policies enforced, SECURITY DEFINER for controlled access
 ✅ **Component Reusability** - Leaflet controls as standalone, composable components
 ✅ **Type Safety** - Full TypeScript coverage with GeoJSON types
-✅ **Performance** - Spatial indexes, efficient ST_ functions, client-side caching
+✅ **Performance** - Spatial indexes, efficient ST\_ functions, client-side caching
 ✅ **Audit Trail** - Track all geometry changes for compliance
 
 ---

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import type { ColumnDefinition } from 'tabulator-tables';
 	import MessagesTable from '$components/form/tables/MessagesTable.svelte';
 
@@ -21,7 +22,6 @@
 		isSelectionEmpty = $bindable(),
 		selectedIDs = $bindable(),
 		selectedRows = $bindable(),
-		//@ts-ignore
 		messagesTable = $bindable()
 	}: Props = $props();
 </script>

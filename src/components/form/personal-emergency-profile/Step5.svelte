@@ -62,7 +62,7 @@
 	>
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each staticWaterOptions as { value, lable }}
+	{#each staticWaterOptions as { value, lable } (value)}
 		{#if value < 5}
 			<div class="flex items-center">
 				<input
@@ -105,7 +105,7 @@
 	Do you have a Stortz fitting attached to a water tank?
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each yesNoMaybeOptions as { value, lable }}
+	{#each yesNoMaybeOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				class="ml-8 h-6 w-6"
@@ -149,7 +149,7 @@
 	>
 </h2>
 <div class="bg-secondary-200 flex justify-start rounded-lg p-2">
-	{#each fireFightingResourceOptions as { value, lable }}
+	{#each fireFightingResourceOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
 				class="ml-8 h-6 w-6"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import { onDestroy, getContext } from 'svelte';
@@ -106,11 +107,15 @@
 			} else if (result.type === 'error') {
 				const action = editingState.mode === 'create' ? 'create' : 'update';
 				setErrorMessage('Failed to save feature');
-				toast.error(result.error?.message || `Failed to ${action} GeoJSON feature. Please try again.`);
+				toast.error(
+					result.error?.message || `Failed to ${action} GeoJSON feature. Please try again.`
+				);
 			} else if (result.type === 'failure') {
 				const action = editingState.mode === 'create' ? 'create' : 'update';
 				setErrorMessage(result.data?.message || 'Failed to save feature');
-				toast.error(result.data?.message || `Failed to ${action} GeoJSON feature. Please try again.`);
+				toast.error(
+					result.data?.message || `Failed to ${action} GeoJSON feature. Please try again.`
+				);
 			}
 			isSubmitting = false;
 		};
@@ -129,7 +134,7 @@
 				return 'input-text';
 		}
 	}
-	function cleanup(e?: Event) {
+	function cleanup(_e?: Event) {
 		leafletMap.editTools.stopDrawing();
 		leafletMap.editable = false;
 		updateStatus = '';
@@ -167,7 +172,7 @@
 		</h3>
 		<button
 			class="close-button"
-			onclick={(e) => {
+			onclick={() => {
 				cleanup();
 			}}>×</button
 		>
@@ -179,7 +184,7 @@
 		<input type="hidden" name="templateId" value={template?.id || undefined} />
 		<input type="hidden" name="geometry" value={JSON.stringify(feature?.geom || null)} />
 		{#if template}
-			{#each template.attributes as field}
+			{#each template.attributes as field (field)}
 				<div class="field">
 					<label for={field.id}>
 						{field.name}
@@ -194,7 +199,7 @@
 							onchange={(e) => handleFieldChange(field.id, e.currentTarget.value)}
 						>
 							<option value="">Select...</option>
-							{#each field.validation?.split(',') || [] as option}
+							{#each field.validation?.split(',') || [] as option (option)}
 								<option value={option.trim()}>{option.trim()}</option>
 							{/each}
 						</select>

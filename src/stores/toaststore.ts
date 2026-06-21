@@ -51,11 +51,9 @@ function createToastStore() {
 		remove,
 		clear,
 		// Convenience methods
-		success: (message: string, duration?: number) =>
-			add({ type: 'success', message, duration }),
+		success: (message: string, duration?: number) => add({ type: 'success', message, duration }),
 		error: (message: string, duration?: number) => add({ type: 'error', message, duration }),
-		warning: (message: string, duration?: number) =>
-			add({ type: 'warning', message, duration }),
+		warning: (message: string, duration?: number) => add({ type: 'warning', message, duration }),
 		info: (message: string, duration?: number) => add({ type: 'info', message, duration })
 	};
 }

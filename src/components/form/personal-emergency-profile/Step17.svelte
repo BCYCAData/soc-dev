@@ -36,7 +36,7 @@
 	<div
 		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
-		{#each communityExternalWorkshopOptions as { value, lable }}
+		{#each communityExternalWorkshopOptions as { value, lable } (value)}
 			<div class="col-span-1 flex items-center">
 				<input
 					class="ml-8 h-6 w-6"

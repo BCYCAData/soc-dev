@@ -33,7 +33,7 @@ export interface LayerMeta {
 	pane?: string;
 	visible: boolean;
 	instance?: L.Layer;
-	events?: Record<string, Function>;
+	events?: Record<string, (...args: unknown[]) => unknown>;
 	color?: string;
 	category?: string;
 }

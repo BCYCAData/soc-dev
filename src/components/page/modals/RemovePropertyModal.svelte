@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { invalidateAll, goto } from '$app/navigation';
 
 	import Spinner from '$components/page/Spinner.svelte';
@@ -31,14 +32,14 @@
 			if (result.type === 'success') {
 				successMessage = 'Property removed successfully!';
 				await invalidateAll();
-				await goto('/personal-profile/my-property', { invalidateAll: true });
+				await goto(resolve('/personal-profile/my-property'), { invalidateAll: true });
 				setTimeout(() => {
 					onClose();
 				}, 2000);
 			} else {
 				error = result.error;
 			}
-		} catch (e) {
+		} catch {
 			error = 'Failed to remove property';
 		} finally {
 			loading = false;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type {
 	Layer,
 	LeafletEvent,
@@ -81,7 +82,7 @@ export interface OverlayConfig {
 	data?: any;
 	options?: any;
 	pane?: string;
-	events?: Record<string, Function>;
+	events?: Record<string, (...args: unknown[]) => unknown>;
 	factory?: (L: any) => Layer; // Factory function for custom layers
 }
 
@@ -106,7 +107,7 @@ export interface OverlayLayerConfig {
 	data?: any;
 	options?: any;
 	pane?: string;
-	events?: Record<string, Function>;
+	events?: Record<string, (...args: unknown[]) => unknown>;
 	factory?: (L: any) => Layer;
 }
 

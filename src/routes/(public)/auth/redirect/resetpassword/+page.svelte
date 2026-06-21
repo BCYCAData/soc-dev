@@ -14,7 +14,7 @@
 </svelte:head>
 
 <div class="mx-auto flex max-w-md flex-col items-center justify-center">
-	<div class="w-5/6 rounded bg-secondary-100 p-6 text-surface-950 shadow-md sm:ml-0 sm:w-full">
+	<div class="bg-secondary-100 text-surface-950 w-5/6 rounded p-6 shadow-md sm:ml-0 sm:w-full">
 		<h1 class="h1 mb-6 text-center text-2xl">{heading}</h1>
 
 		<form action="?/resetpassword" method="POST">
@@ -22,7 +22,7 @@
 
 			<button
 				type="submit"
-				class="mt-6 w-full rounded-full bg-secondary-500 py-2 text-center text-secondary-50 hover:bg-secondary-700 focus:outline-none disabled:opacity-25"
+				class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 mt-6 w-full rounded-full py-2 text-center focus:outline-none disabled:opacity-25"
 				disabled={!canGo}
 			>
 				Update Password

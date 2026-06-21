@@ -112,7 +112,7 @@
 </svelte:head>
 
 <Accordion {value} collapsible={true} spaceY="space-y-1">
-	{#each workshopItems as item}
+	{#each workshopItems as item (item)}
 		<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
 			{#snippet control()}{item.summary}{/snippet}
 			{#snippet panel()}
@@ -129,13 +129,13 @@
 	{/each}
 
 	<Accordion.Item controlClasses="bg-secondary-100 font-medium" value="OtherWorkshopSuggestions">
-		{#snippet control()}{'Other Workshop Suggestions'}{/snippet}
+		{#snippet control()}Other Workshop Suggestions{/snippet}
 		{#snippet panel()}"
 			<div class="table-container" id="OtherWorkshopSuggestions">
 				<CommunityRequestsTable
 					columns={bcycaOtherWorkshopsColumns}
 					tableData={bcycaWorkshopsData.filter(
-						(item: { other_wokshop: string | any[] }) => item.other_wokshop?.length > 0
+						(item: { other_wokshop: string | unknown[] }) => item.other_wokshop?.length > 0
 					)}
 				/>
 			</div>
@@ -143,13 +143,13 @@
 	</Accordion.Item>
 
 	<Accordion.Item controlClasses="bg-secondary-100 font-medium" value="WillRunWorkshops">
-		{#snippet control()}{'Will Run Workshops'}{/snippet}
+		{#snippet control()}Will Run Workshops{/snippet}
 		{#snippet panel()}"
 			<div class="table-container" id="WillRunWorkshops">
 				<CommunityRequestsTable
 					columns={bcycaWillRunWorkshopsColumns}
 					tableData={bcycaWorkshopsData.filter(
-						(item: { will_run_wokshop: string | any[] }) => item.will_run_wokshop?.length > 0
+						(item: { will_run_wokshop: string | unknown[] }) => item.will_run_wokshop?.length > 0
 					)}
 				/>
 			</div>

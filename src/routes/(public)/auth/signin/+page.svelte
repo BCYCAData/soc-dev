@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import type { ActionData } from './$types';
@@ -54,7 +55,7 @@
 			</div>
 			<div class="mb-4 text-center">
 				<a
-					href="/auth/requestresetpassword"
+					href={resolve('/auth/requestresetpassword')}
 					class="text-secondary-900 font-semibold hover:underline"
 				>
 					&gt&gt&gt Forgot Your Password ? &lt&lt&lt
@@ -80,7 +81,7 @@
 	<div class="text-surface-950 mt-6 flex items-center justify-center gap-2">
 		Not registered?
 		<a
-			href="/auth/signup"
+			href={resolve('/auth/signup')}
 			class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 my-1 rounded-full px-5 py-1 text-center focus:outline-none"
 		>
 			Create an Account

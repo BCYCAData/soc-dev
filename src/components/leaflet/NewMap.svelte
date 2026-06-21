@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onMount, onDestroy } from 'svelte';
 	import { getLeaflet } from '$lib/map/layer-factory';
 	import { writable } from 'svelte/store';

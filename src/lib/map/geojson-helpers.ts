@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type { GeoJSONOptions, CircleMarkerOptions, MarkerOptions, PolylineOptions } from 'leaflet';
 import { getLeaflet } from './layer-factory';
 

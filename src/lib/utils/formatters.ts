@@ -458,7 +458,7 @@ export function formatCoordinatesDMS(
 /**
  * Smart format any value based on its type
  */
-export function formatValue(value: any): string {
+export function formatValue(value: unknown): string {
 	if (value === null || value === undefined) return 'N/A';
 
 	// Boolean

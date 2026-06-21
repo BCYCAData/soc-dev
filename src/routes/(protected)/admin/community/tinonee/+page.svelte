@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -17,23 +18,32 @@
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE_INFORMATION)}
-					<a href="/admin/community/tinonee/information" class=" btn preset-filled-secondary-500">
+					<a
+						href={resolve('/admin/community/tinonee/information')}
+						class=" btn preset-filled-secondary-500"
+					>
 						Manage Information Requests
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE_EVENTS)}
-					<a href="/admin/community/tinonee/events" class=" btn preset-filled-secondary-500">
+					<a
+						href={resolve('/admin/community/tinonee/events')}
+						class=" btn preset-filled-secondary-500"
+					>
 						Manage Community Events
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE_WORKSHOPS)}
-					<a href="/admin/community/tinonee/workshops" class=" btn preset-filled-secondary-500">
+					<a
+						href={resolve('/admin/community/tinonee/workshops')}
+						class=" btn preset-filled-secondary-500"
+					>
 						Manage Workshops
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE)}
 					<a
-						href="/admin/community/tinonee/map"
+						href={resolve('/admin/community/tinonee/map')}
 						class="btn preset-filled-secondary-500 col-start-2"
 					>
 						Tinonee Community At A Glance

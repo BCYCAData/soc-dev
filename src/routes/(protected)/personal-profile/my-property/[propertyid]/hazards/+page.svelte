@@ -28,10 +28,10 @@
 		)
 	);
 
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let site_hazards = $state(currentProperty.site_hazards);
 	let other_site_hazards = $state(currentProperty.other_site_hazards);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let land_adjacent_hazard = $state(currentProperty.land_adjacent_hazard);
 	let other_hazards = $state(currentProperty.other_hazards);
 
@@ -67,7 +67,7 @@
 		>
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each siteHazardsOptions as { value, lable }}
+		{#each siteHazardsOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
 					class="ml-8 h-4 w-4"
@@ -96,7 +96,7 @@
 		Does any adjoining land represent a hazard?
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each yesNoMaybeOptions as { value, lable }}
+		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
 				name="land_adjacent_hazard"

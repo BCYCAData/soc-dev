@@ -10,15 +10,15 @@
 <div class="table-skeleton" role="status" aria-label="Loading data">
 	<!-- Header skeleton -->
 	<div class="skeleton-header">
-		{#each Array(columns) as _}
+		{#each Array(columns) as _ (_)}
 			<div class="skeleton-cell skeleton-shimmer"></div>
 		{/each}
 	</div>
 
 	<!-- Row skeletons -->
-	{#each Array(rows) as _}
+	{#each Array(rows) as _ (_)}
 		<div class="skeleton-row">
-			{#each Array(columns) as _}
+			{#each Array(columns) as _ (_)}
 				<div class="skeleton-cell skeleton-shimmer"></div>
 			{/each}
 		</div>

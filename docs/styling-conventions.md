@@ -12,15 +12,15 @@ Tailwind palette colors and bespoke CSS. The guardrail `npm run lint:styles` (ch
 
 Use the seven semantic color bands — never raw Tailwind palette colors (`bg-blue-600`, `text-gray-700`, …).
 
-| Use | Token | Theme hue |
-| --- | --- | --- |
-| Brand / primary actions | `primary` | pink/red |
-| Accent (was "orange") | `secondary` | gold/amber |
-| Links / info | `tertiary` | blue |
-| Success | `success` | green |
-| Warning | `warning` | magenta |
-| Errors / destructive | `error` | red |
-| Structural chrome / neutrals | `surface` | neutral grey |
+| Use                          | Token       | Theme hue    |
+| ---------------------------- | ----------- | ------------ |
+| Brand / primary actions      | `primary`   | pink/red     |
+| Accent (was "orange")        | `secondary` | gold/amber   |
+| Links / info                 | `tertiary`  | blue         |
+| Success                      | `success`   | green        |
+| Warning                      | `warning`   | magenta      |
+| Errors / destructive         | `error`     | red          |
+| Structural chrome / neutrals | `surface`   | neutral grey |
 
 Pattern: `{property}-{color}-{shade}` — e.g. `bg-primary-600`, `text-surface-900`, `border-secondary-300`.
 For text/icons on a colored fill, use the contrast tokens: `text-primary-contrast-500`.

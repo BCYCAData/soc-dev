@@ -86,13 +86,15 @@ export type SignupActionResponse = SignupSuccessResponse | SignupErrorResponse;
 export type ValidateActionResponse = ValidateSuccessResponse | ValidateErrorResponse;
 
 export interface TabulatorProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	columns: any[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	data: any[];
 	layout: 'fitDataFill' | 'fitData' | 'fitColumns' | 'fitDataStretch' | 'fitDataTable' | undefined;
 	responsiveLayout?: boolean | 'collapse' | 'hide';
 	pagination?: boolean;
 	paginationSize?: number;
-	paginationSizeSelector?: any[];
+	paginationSizeSelector?: number[];
 	movableColumns?: boolean;
 	paginationCounter?:
 		| 'rows'
@@ -145,7 +147,7 @@ interface TabItem {
 	label: string;
 	value: number;
 	component: ConstructorOfATypedSvelteComponent;
-	props?: Record<string, any>;
+	props?: Record<string, unknown>;
 }
 
 interface KYNGArea {

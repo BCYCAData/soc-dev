@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type { OverlayLayerConfig } from './layer-factory';
 import {
 	createPointLayerOptions,
@@ -20,17 +21,22 @@ import type { SymbologyPreset } from './symbology-presets';
 export interface PointLayerConfig {
 	id: string;
 	data: GeoJSON.FeatureCollection<GeoJSON.Point | GeoJSON.MultiPoint>;
-	
+
 	// Symbology options (mutually exclusive priority: preset > style > defaults)
 	preset?: SymbologyPreset;
-	style?: PointStyle | ((feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>) => PointStyle);
+	style?:
+		| PointStyle
+		| ((feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>) => PointStyle);
 	hover?: HoverConfig<PointStyle>;
-	
+
 	// Interaction callbacks
 	tooltip?: (feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>) => string;
 	popup?: (feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>) => string;
-	onclick?: (feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>, latlng: L.LatLngExpression) => void;
-	
+	onclick?: (
+		feature: GeoJSON.Feature<GeoJSON.Point | GeoJSON.MultiPoint>,
+		latlng: L.LatLngExpression
+	) => void;
+
 	// Layer metadata
 	label?: string;
 	visible?: boolean;
@@ -43,15 +49,20 @@ export interface PointLayerConfig {
 export interface LineLayerConfig {
 	id: string;
 	data: GeoJSON.FeatureCollection<GeoJSON.LineString | GeoJSON.MultiLineString>;
-	
+
 	preset?: SymbologyPreset;
-	style?: LineStyle | ((feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>) => LineStyle);
+	style?:
+		| LineStyle
+		| ((feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>) => LineStyle);
 	hover?: HoverConfig<LineStyle>;
-	
+
 	tooltip?: (feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>) => string;
 	popup?: (feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>) => string;
-	onclick?: (feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>, latlng: L.LatLngExpression) => void;
-	
+	onclick?: (
+		feature: GeoJSON.Feature<GeoJSON.LineString | GeoJSON.MultiLineString>,
+		latlng: L.LatLngExpression
+	) => void;
+
 	label?: string;
 	visible?: boolean;
 	pane?: string;
@@ -63,15 +74,20 @@ export interface LineLayerConfig {
 export interface PolygonLayerConfig {
 	id: string;
 	data: GeoJSON.FeatureCollection<GeoJSON.Polygon | GeoJSON.MultiPolygon>;
-	
+
 	preset?: SymbologyPreset;
-	style?: PolygonStyle | ((feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>) => PolygonStyle);
+	style?:
+		| PolygonStyle
+		| ((feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>) => PolygonStyle);
 	hover?: HoverConfig<PolygonStyle>;
-	
+
 	tooltip?: (feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>) => string;
 	popup?: (feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>) => string;
-	onclick?: (feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>, latlng: L.LatLngExpression) => void;
-	
+	onclick?: (
+		feature: GeoJSON.Feature<GeoJSON.Polygon | GeoJSON.MultiPolygon>,
+		latlng: L.LatLngExpression
+	) => void;
+
 	label?: string;
 	visible?: boolean;
 	pane?: string;
@@ -84,7 +100,7 @@ export interface PolygonLayerConfig {
 /**
  * Create a GeoJSON point layer with symbology support
  * Returns an OverlayLayerConfig that can be used with OverlayLayerGroup
- * 
+ *
  * @example
  * // With preset
  * const layer = await pointGeoJSON({
@@ -93,7 +109,7 @@ export interface PolygonLayerConfig {
  *   preset: symbologyPresets.criticalInfrastructure,
  *   tooltip: (f) => f.properties.name
  * });
- * 
+ *
  * // With custom style
  * const layer = await pointGeoJSON({
  *   id: 'sensors',
@@ -101,7 +117,7 @@ export interface PolygonLayerConfig {
  *   style: { color: 'red', radius: 8 },
  *   popup: (f) => `<h3>${f.properties.name}</h3>`
  * });
- * 
+ *
  * // With dynamic style function
  * const layer = await pointGeoJSON({
  *   id: 'markers',
@@ -114,10 +130,10 @@ export interface PolygonLayerConfig {
  */
 export async function pointGeoJSON(config: PointLayerConfig): Promise<OverlayLayerConfig> {
 	const { id, data, preset, style, hover, tooltip, popup, onclick, label, visible, pane } = config;
-	
+
 	// Determine final style: preset takes priority
 	const finalStyle = preset?.point || style || {};
-	
+
 	// Create GeoJSON options using the helper
 	const options = await createPointLayerOptions(finalStyle, {
 		tooltip,
@@ -125,7 +141,7 @@ export async function pointGeoJSON(config: PointLayerConfig): Promise<OverlayLay
 		onClick: onclick,
 		hover
 	});
-	
+
 	return {
 		id,
 		type: 'geojson',
@@ -140,7 +156,7 @@ export async function pointGeoJSON(config: PointLayerConfig): Promise<OverlayLay
 /**
  * Create a GeoJSON line layer with symbology support
  * Returns an OverlayLayerConfig that can be used with OverlayLayerGroup
- * 
+ *
  * @example
  * const roadLayer = await lineGeoJSON({
  *   id: 'roads',
@@ -152,16 +168,16 @@ export async function pointGeoJSON(config: PointLayerConfig): Promise<OverlayLay
  */
 export async function lineGeoJSON(config: LineLayerConfig): Promise<OverlayLayerConfig> {
 	const { id, data, preset, style, hover, tooltip, popup, onclick, label, visible, pane } = config;
-	
+
 	const finalStyle = preset?.line || style || {};
-	
+
 	const options = await createLineLayerOptions(finalStyle, {
 		tooltip,
 		popup,
 		onClick: onclick,
 		hover
 	});
-	
+
 	return {
 		id,
 		type: 'geojson',
@@ -176,7 +192,7 @@ export async function lineGeoJSON(config: LineLayerConfig): Promise<OverlayLayer
 /**
  * Create a GeoJSON polygon layer with symbology support
  * Returns an OverlayLayerConfig that can be used with OverlayLayerGroup
- * 
+ *
  * @example
  * const zoneLayer = await polygonGeoJSON({
  *   id: 'zones',
@@ -192,16 +208,16 @@ export async function lineGeoJSON(config: LineLayerConfig): Promise<OverlayLayer
  */
 export async function polygonGeoJSON(config: PolygonLayerConfig): Promise<OverlayLayerConfig> {
 	const { id, data, preset, style, hover, tooltip, popup, onclick, label, visible, pane } = config;
-	
+
 	const finalStyle = preset?.polygon || style || {};
-	
+
 	const options = await createPolygonLayerOptions(finalStyle, {
 		tooltip,
 		popup,
 		onClick: onclick,
 		hover
 	});
-	
+
 	return {
 		id,
 		type: 'geojson',
@@ -220,7 +236,7 @@ export async function polygonGeoJSON(config: PolygonLayerConfig): Promise<Overla
 /**
  * Automatically detect geometry type and create appropriate layer
  * Useful when you don't know the geometry type in advance
- * 
+ *
  * @example
  * const layer = await autoGeoJSON({
  *   id: 'mixed-data',
@@ -232,28 +248,28 @@ export async function autoGeoJSON(
 	config: PointLayerConfig | LineLayerConfig | PolygonLayerConfig
 ): Promise<OverlayLayerConfig> {
 	const { data } = config;
-	
+
 	// Check first feature to determine geometry type
 	if (!data.features || data.features.length === 0) {
 		throw new Error('GeoJSON data has no features');
 	}
-	
+
 	const firstGeometry = data.features[0].geometry;
 	const geometryType = firstGeometry.type;
-	
+
 	switch (geometryType) {
 		case 'Point':
 		case 'MultiPoint':
 			return pointGeoJSON(config as PointLayerConfig);
-		
+
 		case 'LineString':
 		case 'MultiLineString':
 			return lineGeoJSON(config as LineLayerConfig);
-		
+
 		case 'Polygon':
 		case 'MultiPolygon':
 			return polygonGeoJSON(config as PolygonLayerConfig);
-		
+
 		default:
 			throw new Error(`Unsupported geometry type: ${geometryType}`);
 	}
@@ -266,16 +282,16 @@ export async function autoGeoJSON(
 /**
  * Enhanced geoJSON helper that maintains backward compatibility
  * but adds symbology support
- * 
+ *
  * This can be used as a drop-in replacement for the original geoJSON() function
- * 
+ *
  * @example
  * // Old way (still works)
- * const layer = geoJSONEnhanced('id', data, { 
+ * const layer = geoJSONEnhanced('id', data, {
  *   label: 'My Layer',
  *   ...await createPointLayerOptions({ color: 'red' })
  * });
- * 
+ *
  * // New way (more ergonomic)
  * const layer = await geoJSONEnhanced('id', data, {
  *   label: 'My Layer',
@@ -290,7 +306,7 @@ export function geoJSONEnhanced(
 		label?: string;
 		visible?: boolean;
 		pane?: string;
-		
+
 		// New symbology options
 		preset?: SymbologyPreset;
 		style?: PointStyle | LineStyle | PolygonStyle | ((feature: any) => any);
@@ -298,7 +314,7 @@ export function geoJSONEnhanced(
 		tooltip?: (feature: any) => string;
 		popup?: (feature: any) => string;
 		onclick?: (feature: any, latlng: any) => void;
-		
+
 		// Allows passing through raw GeoJSONOptions (backward compatibility)
 		[key: string]: any;
 	}

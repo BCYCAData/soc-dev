@@ -127,7 +127,7 @@
 		<h2 class="h2 text-surface-900 text-lg font-semibold">Are you renting this property?</h2>
 		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			<div class="mr-4 flex items-center">
-				{#each yesNoOptions as { value, lable }}
+				{#each yesNoOptions as { value, lable } (value)}
 					{#if lable === 'Yes'}
 						<div class="mr-4 flex items-center">
 							<input
@@ -239,7 +239,7 @@
 		</h2>
 		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 			<div class="mr-4 flex items-center">
-				{#each yesNoOptions as { value, lable }}
+				{#each yesNoOptions as { value, lable } (value)}
 					<input
 						class="ml-8 h-4 w-4"
 						name="sign_posted"
@@ -259,7 +259,7 @@
 		<div
 			class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-2 sm:gap-2"
 		>
-			{#each accessOptions as { value, lable }}
+			{#each accessOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
 					{#if lable === 'Other'}
 						<input
@@ -339,7 +339,7 @@
 			Do you consider any person on the property to be vulnerable?
 		</h2>
 		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-			{#each yesNoOptions as { value, lable }}
+			{#each yesNoOptions as { value, lable } (value)}
 				<div class="mr-4 flex items-center">
 					<input
 						class="ml-8 h-4 w-4"
@@ -387,7 +387,7 @@
 			<div class="bg-secondary-300 ml-4 rounded-lg p-1">
 				<div class="my-0 flex list-none items-center text-base sm:mx-auto sm:w-full">
 					<div class="text-primary-900 mx-4 flex-auto font-semibold">Poor</div>
-					{#each Array(5) as _, i}
+					{#each Array(5) as _, i (i)}
 						<li class="mx-3 flex-auto">
 							<input
 								name="mobile_reception"

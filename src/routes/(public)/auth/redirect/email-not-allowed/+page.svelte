@@ -29,9 +29,11 @@
 		</div>
 
 		<div class="mt-8 flex flex-col items-center">
+			<!-- eslint-disable svelte/no-navigation-without-resolve -->
 			<a href={PUBLIC_PRODUCTION_URL} class="text-surface-500 mt-4 text-center text-xs">
 				Continue to Public Site
 			</a>
+			<!-- eslint-enable svelte/no-navigation-without-resolve -->
 
 			<p class="text-surface-500 mt-4 text-center text-xs">
 				If you believe this is an error or need assistance, please call Helen on 0424515963.

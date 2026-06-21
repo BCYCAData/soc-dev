@@ -8,13 +8,15 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 	// Check if user has ANY admin.users permission
 	// This allows access if they have admin.users.kits, admin.users.newusers, etc.
-	if (!hasAnyPermission(
-		parentData.permissions,
-		PERMISSIONS.ADMIN_USERS,
-		PERMISSIONS.ADMIN_USERS_KITS,
-		PERMISSIONS.ADMIN_USERS_NEWUSERS,
-		PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS
-	)) {
+	if (
+		!hasAnyPermission(
+			parentData.permissions,
+			PERMISSIONS.ADMIN_USERS,
+			PERMISSIONS.ADMIN_USERS_KITS,
+			PERMISSIONS.ADMIN_USERS_NEWUSERS,
+			PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS
+		)
+	) {
 		throw error(403, 'Insufficient permissions for users administration');
 	}
 

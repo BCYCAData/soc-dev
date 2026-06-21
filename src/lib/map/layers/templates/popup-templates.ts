@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 export function parcelPopupTemplate(feature: GeoJSON.Feature): string {
 	const props = feature.properties || {};
 

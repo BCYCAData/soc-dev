@@ -1,4 +1,4 @@
-<h1 class="title-font h1 mx-auto hidden text-center font-bold text-primary-600 sm:mt-4 sm:block">
+<h1 class="title-font h1 text-primary-600 mx-auto hidden text-center font-bold sm:mt-4 sm:block">
 	Strengthen OUR Community
 </h1>
 <h1 class="h1 mx-auto mt-2 text-center">Personal Emergency Profile</h1>

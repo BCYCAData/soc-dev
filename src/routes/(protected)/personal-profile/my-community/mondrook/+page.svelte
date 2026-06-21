@@ -68,7 +68,7 @@
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
 		{#if stayInTouchOptions}
-			{#each stayInTouchOptions as { value, lable }}
+			{#each stayInTouchOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
 						class="ml-8 h-4 w-4"

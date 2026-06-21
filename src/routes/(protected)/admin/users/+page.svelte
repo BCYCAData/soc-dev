@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 
@@ -16,22 +17,28 @@
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KITS)}
-					<a href="/admin/users/kits" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/users/kits')} class="btn preset-filled-secondary-500">
 						Generate Reports on Kit Delivery
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_NEWUSERS)}
-					<a href="/admin/users/new" class="btn preset-filled-secondary-500">
+					<a href={resolve('/admin/users/new')} class="btn preset-filled-secondary-500">
 						Generate Reports on New Users
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)}
-					<a href="/admin/users/kyng-coordinators" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/admin/users/kyng-coordinators')}
+						class="btn preset-filled-secondary-500"
+					>
 						Manage KYNG Coordinators
 					</a>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_DATA_KYNG_BOUNDARIES)}
-					<a href="/admin/site/data/kyng-boundaries" class="btn preset-filled-secondary-500">
+					<a
+						href={resolve('/admin/site/data/kyng-boundaries')}
+						class="btn preset-filled-secondary-500"
+					>
 						Manage KYNG Area Boundaries
 					</a>
 				{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { onMount } from 'svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import { featureTemplates } from '$lib/leaflet/spatialutilities.svelte';
@@ -260,8 +261,8 @@
 							symbology={propertyOptions}
 						/>
 
-						{#each Object.entries(templatesByCategory) as [category, templates]}
-							{#each templates as template, templateIndex}
+						{#each Object.entries(templatesByCategory) as [category, templates] (category)}
+							{#each templates as template, templateIndex (templateIndex)}
 								{@const typedTemplate = template as FeatureTemplate}
 								{#if typedTemplate.geometry_type === 'polygon'}
 									<LeafletGeoJSONPolygonLayer

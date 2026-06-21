@@ -27,11 +27,11 @@
 			(property: { id: string }) => property.id === propertyId
 		)
 	);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let live_stock_present = $state(currentProperty.live_stock_present);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let live_stock_safe_area = $state(currentProperty.live_stock_safe_area);
-	//@ts-ignore
+	// @ts-expect-error svelte-check false positive: value is read via bind:group in markup
 	let share_livestock_safe_area = $state(currentProperty.share_livestock_safe_area);
 	let number_birds = $state(currentProperty.number_birds);
 	let number_cats = $state(currentProperty.number_cats);
@@ -105,7 +105,7 @@
 	</div>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">Do you have livestock?</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each yesNoOptions as { value, lable }}
+		{#each yesNoOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
 				name="live_stock_present"
@@ -123,7 +123,7 @@
 		Do you have a safe area for stock in the event of a bushfire or flood?
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each yesNoMaybeOptions as { value, lable }}
+		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
 				name="live_stock_safe_area"
@@ -141,7 +141,7 @@
 		Would you let others leave their stock in your safe area, for a short time, in an emergency?
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each yesNoMaybeOptions as { value, lable }}
+		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
 				name="share_livestock_safe_area"

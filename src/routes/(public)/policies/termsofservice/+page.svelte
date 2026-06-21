@@ -128,19 +128,19 @@
 			</p>
 		</header>
 
-		{#each sections as section}
+		{#each sections as section (section)}
 			<section class="mt-6 space-y-4" aria-labelledby={section.id}>
 				<h3 id={section.id} class="text-primary-600 text-xl font-semibold">{section.title}</h3>
 
 				{#if section.definitions}
 					<dl class="mx-5 space-y-4">
-						{#each section.definitions as { term, description }}
+						{#each section.definitions as { term, description } (term)}
 							<dt class="font-bold">{term}</dt>
 							<dd class="text-surface-700 ml-4">{description}</dd>
 						{/each}
 					</dl>
 				{:else}
-					{#each section.content as paragraph}
+					{#each section.content as paragraph (paragraph)}
 						<p class="text-surface-700">{paragraph}</p>
 					{/each}
 				{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { invalidateAll } from '$app/navigation';
@@ -38,8 +39,6 @@
 	let tabSet = $state<TabValue>('add_messages');
 	let message = $state('');
 	let messageContext = $state<MessageContext>('both');
-	//@ts-ignore
-	let haveMessage = $state(false);
 	let selectedValues: string[] = $state([]);
 	let isSelectionEmpty = $state(true);
 
@@ -58,11 +57,6 @@
 	];
 
 	// Effects
-	$effect(() => {
-		const words = message.trim().split(/\s+/);
-		haveMessage = message.length > 4 && words.length > 1;
-	});
-
 	$effect(() => {
 		if (tabSet !== 'add_messages') {
 			isSelectionEmpty = true;

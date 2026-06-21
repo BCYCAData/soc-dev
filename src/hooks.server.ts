@@ -1,49 +1,54 @@
 // src/hooks.server.ts
-import { createServerClient } from '@supabase/ssr';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import type { Database } from '$lib/db.types';
+
+/** Custom JWT claims this app issues, read via `getClaims()`. */
+interface AppClaims {
+	user_role?: string | null;
+	permissions?: unknown;
+	property_ids?: string[] | null;
+	community_slugs?: string[];
+	coordinates_kyng?: App.Locals['coordinatesKYNG'];
+	[key: string]: unknown;
+}
 
 // IMPORTANT: No authGuard / guardRoute here.
 // All auth logic happens inside route layouts now.
 
 export const handle = async ({ event, resolve }) => {
 	// 1. Create Supabase client for SSR
-	event.locals.supabase = createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
-		cookies: {
-			getAll: (): { name: string; value: string }[] => event.cookies.getAll(),
-			setAll: (cookiesToSet: { name: string; value: string; options: Record<string, any> }[]) =>
-				cookiesToSet.forEach(
-					({
-						name,
-						value,
-						options
-					}: {
-						name: string;
-						value: string;
-						options: Record<string, any>;
-					}) => event.cookies.set(name, value, { ...options, path: '/' })
-				)
+	event.locals.supabase = createServerClient<Database>(
+		PUBLIC_SUPABASE_URL,
+		PUBLIC_SUPABASE_ANON_KEY,
+		{
+			cookies: {
+				getAll: (): { name: string; value: string }[] => event.cookies.getAll(),
+				setAll: (cookiesToSet: { name: string; value: string; options: CookieOptions }[]) =>
+					cookiesToSet.forEach(({ name, value, options }) =>
+						event.cookies.set(name, value, { ...options, path: '/' })
+					)
+			}
 		}
-	});
+	);
 
 	// 2. Get user (secure - validates with Supabase Auth server)
 	const {
 		data: { user }
 	} = await event.locals.supabase.auth.getUser();
 
-	let claims: Record<string, any> = {};
+	let claims: AppClaims = {};
 
 	// Read verified JWT claims via getClaims() rather than a manual base64 decode
 	// of the cookie token. NOTE: this project signs JWTs with a symmetric secret,
 	// so getClaims() makes a server round-trip — gate it on `user` so anonymous
 	// requests stay cheap.
 	if (user) {
-		const { data: claimsData, error: claimsError } =
-			await event.locals.supabase.auth.getClaims();
+		const { data: claimsData, error: claimsError } = await event.locals.supabase.auth.getClaims();
 		if (claimsError) {
 			console.error('Failed to read JWT claims:', claimsError);
 		} else if (claimsData) {
-			claims = claimsData.claims;
+			claims = claimsData.claims as AppClaims;
 		}
 	}
 

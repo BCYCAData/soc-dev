@@ -67,7 +67,7 @@
 		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
 		{#if informationSheetOptions}
-			{#each informationSheetOptions as { value, lable }}
+			{#each informationSheetOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
 					<input
 						class="ml-8 h-4 w-4"

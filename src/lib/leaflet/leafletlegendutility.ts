@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import { PATTERNS, GRADIENTS, SHAPE_TEMPLATES } from '$lib/leaflet/symbol/shapes';
 import { createSVGWrapper, createDefs } from '$lib/leaflet/symbol/svg';
 import { pointTemplateStyles } from '$lib/leaflet/symbol/leaflet-template-symbol';

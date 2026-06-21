@@ -3,7 +3,7 @@
 		size?: number;
 		color?: string;
 		strokeWidth?: number;
-		letter: any;
+		letter?: string;
 		bgColor?: string;
 		gap?: number;
 	}

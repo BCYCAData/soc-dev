@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type { PropertySchema } from '$lib/map/layers/schemas/layer-config.types';
 
 /**
@@ -79,9 +80,9 @@ export const parcelFeatureSchema: PropertySchema[] = [
 		group: 'ownership',
 		order: 5,
 		validation: {
-			pattern: /^[\d\s\-\+\(\)]+$/,
+			pattern: /^[\d\s\-+()]+$/,
 			custom: (value) => {
-				if (value && !/^[\d\s\-\+\(\)]+$/.test(value)) {
+				if (value && !/^[\d\s\-+()]+$/.test(value)) {
 					return 'Invalid phone number format';
 				}
 				return null;
@@ -625,7 +626,7 @@ export const poiFeatureSchema: PropertySchema[] = [
 		group: 'contact',
 		order: 9,
 		validation: {
-			pattern: /^[\d\s\-\+\(\)]+$/
+			pattern: /^[\d\s\-+()]+$/
 		}
 	},
 	{

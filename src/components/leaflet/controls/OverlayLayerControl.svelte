@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onDestroy } from 'svelte';
 	import { getMapContext } from '$lib/map/map-types';
 	import { getLeaflet } from '$lib/map/layer-factory';
@@ -95,7 +96,7 @@
 		<h3 class="text-surface-700 mb-2 text-sm font-semibold">Overlays</h3>
 		{#if overlayLayers.length > 0}
 			<div class="space-y-2">
-				{#each overlayLayers as layer}
+				{#each overlayLayers as layer (layer)}
 					<label class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1">
 						<input
 							type="checkbox"

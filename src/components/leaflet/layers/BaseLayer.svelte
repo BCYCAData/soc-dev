@@ -26,7 +26,8 @@
 
 	$effect(() => {
 		if (map && layer) {
-			visible ? layer.addTo(map) : map.removeLayer(layer);
+			if (visible) layer.addTo(map);
+			else map.removeLayer(layer);
 		}
 	});
 

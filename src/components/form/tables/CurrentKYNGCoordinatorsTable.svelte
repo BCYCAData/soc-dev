@@ -66,7 +66,7 @@
 			} else {
 				toast.error('Failed to revoke coordinator. Please try again.');
 			}
-		} catch (error) {
+		} catch {
 			toast.error('Failed to revoke coordinator. Please try again.');
 		} finally {
 			showRevokeConfirm = false;

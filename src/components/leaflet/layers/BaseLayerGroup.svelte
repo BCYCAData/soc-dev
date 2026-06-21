@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onMount, onDestroy } from 'svelte';
 	import type { Layer } from 'leaflet';
 	import { getMapContext } from '$lib/map/map-types';

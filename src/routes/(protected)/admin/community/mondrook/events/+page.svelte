@@ -170,7 +170,7 @@
 
 <div>
 	<Accordion {value} collapsible={true} spaceY="space-y-1">
-		{#each accordionItems as item}
+		{#each accordionItems as item (item)}
 			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
 				{#snippet control()}{item.summary}{/snippet}
 				{#snippet panel()}
@@ -179,7 +179,7 @@
 							columns={item.columns}
 							tableData={item.isOther
 								? mondrookEventsData.filter(
-										(row: { other_event: string | any[] }) => row.other_event?.length > 0
+										(row: { other_event: string | unknown[] }) => row.other_event?.length > 0
 									)
 								: mondrookEventsData.filter((row: { event_choices: (number | undefined)[] }) =>
 										row.event_choices?.includes(item.eventId)

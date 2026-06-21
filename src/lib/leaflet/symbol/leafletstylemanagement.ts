@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import { Path, Marker, CircleMarker, Icon, DivIcon } from 'leaflet';
 import type L from 'leaflet';
 
@@ -226,7 +227,7 @@ function getShapeStyle(shape: MarkerShape, color: string): string {
 
 const styleCache = new Map<string, LayerStyle>();
 
-function generateStyleFromTemplate(templateId: string, feature: any): LayerStyle {
+function generateStyleFromTemplate(templateId: string, _feature: any): LayerStyle {
 	// Add template style logic based on requirements
 	switch (templateId) {
 		case 'point':

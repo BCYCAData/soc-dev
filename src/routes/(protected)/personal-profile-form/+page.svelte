@@ -14,7 +14,7 @@
 
 	interface ProgressBarInstance extends SvelteComponent {
 		handleProgress: (stepIncrement: number) => void;
-		skipTo: (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => void;
+		skipTo: (e: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => void;
 	}
 
 	// let { data = $bindable(), form }: Props = $props();
@@ -83,11 +83,11 @@
 			isPrevLoading = false;
 		}
 	};
-	// const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+	// const skipTo = (e: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => {
 	// 	progressBar?.skipTo(e);
 	// };
 
-	const skipTo = async (e: MouseEvent | KeyboardEvent | CustomEvent<any>) => {
+	const skipTo = async (e: MouseEvent | KeyboardEvent | CustomEvent<unknown>) => {
 		const formElement = document.querySelector('#personalProfileForm');
 		if (formElement instanceof HTMLFormElement) {
 			const formData = new FormData(formElement);
@@ -122,7 +122,7 @@
 			userProfile={data.userProfile}
 			{optionsData}
 			{steps}
-			onFormResult={({ success, message, formData }) => {
+			onFormResult={({ success, message }) => {
 				if (success) {
 					// Show success notification
 					console.log('Survey Form submitted successfully:', message);

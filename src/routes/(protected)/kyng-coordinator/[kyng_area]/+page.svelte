@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data } = $props<{ data: PageData }>();
@@ -18,17 +19,24 @@
 		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
-				<a href="/kyng-coordinator/{kyngAreaId}/map" class=" btn preset-filled-secondary-500">
+				<a
+					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/map', { kyng_area: kyngAreaId })}
+					class=" btn preset-filled-secondary-500"
+				>
 					{kyngName} KYNG Map
 				</a>
 				<a
-					href="/kyng-coordinator/{kyngAreaId}/unregistered-addresses"
+					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/unregistered-addresses', {
+						kyng_area: kyngAreaId
+					})}
 					class=" btn preset-filled-secondary-500"
 				>
 					{kyngName} Un-registered Addresses
 				</a>
 				<a
-					href="/kyng-coordinator/{kyngAreaId}/user-admin"
+					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/user-admin', {
+						kyng_area: kyngAreaId
+					})}
 					class=" btn preset-filled-secondary-500"
 				>
 					{kyngName} KYNG User Management

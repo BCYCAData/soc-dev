@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import Spinner from '$components/page/Spinner.svelte';
 	import LeafletArcGisFeatureServerLayer from '$components/map/leaflet/layers/LeafletArcGISFeatureServerLayer.svelte';
 	import LeafletGeoJSONPointLayer from '$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte';

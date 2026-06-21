@@ -49,7 +49,7 @@
 	</div>
 
 	<datalist id={listId}>
-		{#each sortedListData.filter((item) => item !== selectedValue) as item}
+		{#each sortedListData.filter((item) => item !== selectedValue) as item (item)}
 			<option value={item}></option>
 		{/each}
 	</datalist>

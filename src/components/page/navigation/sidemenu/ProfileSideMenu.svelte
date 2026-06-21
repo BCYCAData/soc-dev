@@ -95,7 +95,7 @@
 </script>
 
 <div class="menu-container">
-	{#each menuItems as item}
+	{#each menuItems as item (item)}
 		<MenuItem
 			{item}
 			isCollapsed={isSidebarCollapsed}
@@ -105,7 +105,7 @@
 
 		{#if activeSubmenus.includes(item.id) && item.subItems && !isSidebarCollapsed}
 			<div class="submenu" transition:smoothSlide={{ duration: 200 }}>
-				{#each item.subItems as subItem}
+				{#each item.subItems as subItem (subItem)}
 					<div transition:fade={{ duration: 150 }}>
 						<SubMenuItem
 							item={subItem}
@@ -115,7 +115,7 @@
 
 						{#if activeSubSubmenus[item.id]?.includes(subItem.id) && subItem.subItems}
 							<div class="nested-submenu" transition:smoothSlide={{ duration: 200 }}>
-								{#each subItem.subItems as nestedSubItem}
+								{#each subItem.subItems as nestedSubItem (nestedSubItem)}
 									<div transition:fade={{ duration: 150 }}>
 										<SubSubMenuItem
 											item={nestedSubItem}

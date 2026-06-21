@@ -15,6 +15,7 @@ monolithic `profile` schema) into the new decomposed schema. Re-runnable; contai
 ## Procedure (dry run on the local stack, then new prod)
 
 1. **Export old prod** (access token only, no DB password needed):
+
    ```sh
    SUPABASE_ACCESS_TOKEN=$SUPABASE_PROD_ACCESS_TOKEN \
      npx supabase link --project-ref oiwbamoupmoudqwautha
@@ -22,6 +23,7 @@ monolithic `profile` schema) into the new decomposed schema. Re-runnable; contai
    npx supabase db dump --linked --data-only --schema public -f /tmp/legacy/public_data.sql
    npx supabase db dump --linked --data-only --schema auth   -f /tmp/legacy/auth_data.sql
    ```
+
    Keep these dumps **out of git** (PII + a hardcoded key in old prod's own funcs is absent, but
    profiles/auth are PII).
 

@@ -12,7 +12,7 @@
 
 <ul class="text-scale-4eft mt-2 list-none pl-1">
 	Your password must have:
-	{#each requirements as requirement, i}
+	{#each requirements as requirement, i (i)}
 		<li class="pl-4">
 			<span class="text-[10px]">{validations[i] ? '✔️' : '❌'}</span>
 			<span>{requirement}</span>

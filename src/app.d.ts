@@ -85,21 +85,21 @@ declare global {
 export {};
 
 declare module '@fontsource/inter' {
-	const content: any;
+	const content: string;
 	export default content;
 }
 
 declare module '@fontsource/poppins' {
-	const content: any;
+	const content: string;
 	export default content;
 }
 
 declare module '@fontsource/open-sans' {
-	const content: any;
+	const content: string;
 	export default content;
 }
 
 declare module '@fontsource/raleway' {
-	const content: any;
+	const content: string;
 	export default content;
 }

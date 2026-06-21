@@ -69,13 +69,13 @@
 	</div>
 
 	<datalist id={listId}>
-		{#each sortedListData.filter((item) => !selectedValues.includes(item.lut_text)) as item}
+		{#each sortedListData.filter((item) => !selectedValues.includes(item.lut_text)) as item (item)}
 			<option value={item.lut_text}>{item.lut_text} ➤ Current role: {item.current_value}</option>
 		{/each}
 	</datalist>
 
 	<div class="mt-2">
-		{#each selectedValues as selectedValue}
+		{#each selectedValues as selectedValue (selectedValue)}
 			<span class="preset-chip-token mr-2 mb-2">
 				{selectedValue} - {sortedListData.find((item) => item.lut_text === selectedValue)
 					?.current_value}

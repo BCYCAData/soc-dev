@@ -74,7 +74,7 @@
 		>
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each staticWaterOptions as { value, lable }}
+		{#each staticWaterOptions as { value, lable } (value)}
 			{#if value < 5}
 				<input
 					class="ml-8 h-4 w-4"
@@ -105,7 +105,7 @@
 		Do you have a Stortz fitting attached to a water tank?
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each yesNoMaybeOptions as { value, lable }}
+		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input class="ml-8 h-4 w-4" name="have_stortz" type="radio" bind:group={haveStortz} {value} />
 			<label class="font-Poppins text-secondary-900 ml-2 text-base font-medium" for="have_stortz"
 				>{lable}</label
@@ -128,7 +128,7 @@
 		>
 	</h2>
 	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
-		{#each fireFightingResourceOptions as { value, lable }}
+		{#each fireFightingResourceOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
 				name="fire_fighting_resources"
@@ -151,7 +151,7 @@
 	<div
 		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 	>
-		{#each fireHazardReductionOptions as { value, lable }}
+		{#each fireHazardReductionOptions as { value, lable } (value)}
 			<div class="col-span-1 flex items-center">
 				<input
 					class="ml-8 h-4 w-4"

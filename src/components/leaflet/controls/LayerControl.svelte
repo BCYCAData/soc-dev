@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 	import { onDestroy } from 'svelte';
 	import { getMapContext } from '$lib/map/map-types';
 	import { getLeaflet } from '$lib/map/layer-factory';
@@ -145,7 +146,7 @@
 					<div class="mb-3">
 						<h3 class="text-surface-500 mb-2 text-xs font-semibold uppercase">Base Layers</h3>
 						<div class="space-y-2">
-							{#each baseLayers as layer}
+							{#each baseLayers as layer (layer)}
 								<label
 									class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1"
 								>
@@ -168,7 +169,7 @@
 					<div>
 						<h3 class="text-surface-500 mb-2 text-xs font-semibold uppercase">Overlays</h3>
 						<div class="space-y-2">
-							{#each overlayLayers as layer}
+							{#each overlayLayers as layer (layer)}
 								<label
 									class="hover:bg-surface-50 flex cursor-pointer items-center space-x-2 rounded p-1"
 								>

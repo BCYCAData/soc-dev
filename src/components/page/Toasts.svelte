@@ -5,7 +5,7 @@
 
 <!-- Toast Container - Fixed position at top-right -->
 <div
-	class="fixed top-4 right-4 z-50 flex flex-col gap-3 w-full max-w-md pointer-events-none"
+	class="pointer-events-none fixed top-4 right-4 z-50 flex w-full max-w-md flex-col gap-3"
 	aria-live="polite"
 	aria-atomic="false"
 >

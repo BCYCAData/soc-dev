@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { Tabulator } from 'tabulator-tables';
 	import TabulatorTable from '$components/form/tables/TabulatorTable.svelte';
 	import TabulatorTableSearch from '$components/form/tables/TabulatorTableSearch.svelte';

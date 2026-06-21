@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import Error403 from '$components/page/Error403.svelte';
 
@@ -27,7 +28,7 @@
 	<div class="generic-error">
 		<h1>{page.status}</h1>
 		<p>{page.error?.message || 'An error occurred'}</p>
-		<a href="/">Return to Home</a>
+		<a href={resolve('/')}>Return to Home</a>
 	</div>
 {/if}
 

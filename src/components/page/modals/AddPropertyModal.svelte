@@ -1,4 +1,6 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
+	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
@@ -63,7 +65,7 @@
 				successMessage = 'Property added successfully!';
 				toast.success('Property added successfully');
 				await invalidateAll();
-				await goto('/personal-profile/my-property', { invalidateAll: true });
+				await goto(resolve('/personal-profile/my-property'), { invalidateAll: true });
 				setTimeout(() => {
 					onClose();
 				}, 2000);
@@ -116,12 +118,14 @@
 				<p>{error}</p>
 				{#if error.includes('could not find this address')}
 					<div class="mt-5">
+						<!-- eslint-disable svelte/no-navigation-without-resolve -->
 						<a
 							href={mailtoUrl}
 							class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
 						>
 							Tap here to send us an email
 						</a>
+						<!-- eslint-enable svelte/no-navigation-without-resolve -->
 					</div>
 				{/if}
 			</div>

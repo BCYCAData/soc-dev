@@ -128,7 +128,7 @@
 	>
 		{#snippet control()}Current Roles{/snippet}
 		{#snippet panel()}
-			{#each data.rolePermissions as { role }}
+			{#each data.rolePermissions as { role } (role)}
 				<div class="space-y-4">
 					<div class="flex items-center justify-between">
 						<button
@@ -171,7 +171,7 @@
 							>
 								<input type="hidden" name="role" value={selectedRole} />
 								<div class="max-h-96 space-y-2 overflow-y-auto">
-									{#each allPermissions as permission}
+									{#each allPermissions as permission (permission)}
 										<label class="flex items-center">
 											<input
 												type="checkbox"
@@ -252,7 +252,7 @@
 					<div class="space-y-2">
 						<span>Custom Permissions</span>
 						<div class="space-y-1">
-							{#each customPermissions as permission}
+							{#each customPermissions as permission (permission)}
 								<div class="bg-secondary-50 flex items-center justify-between rounded p-2">
 									<span>{permission}</span>
 									<button
@@ -271,7 +271,7 @@
 				<div>
 					<span>Existing Permissions</span>
 					<div class="max-h-96 space-y-2 overflow-y-auto">
-						{#each allPermissions as permission}
+						{#each allPermissions as permission (permission)}
 							<label class="flex items-center">
 								<input
 									type="checkbox"

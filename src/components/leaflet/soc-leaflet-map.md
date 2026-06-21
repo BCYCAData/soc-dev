@@ -7,37 +7,44 @@ A clean, composable, and typed way to initialize Leaflet map logic in Svelte, wh
 Move all the browser-only setup (dynamic imports, layer registry, context setup, etc.) into a helper module called `createLeafletMap.ts`.
 
 ### Step 1 — Create src/lib/map/createLeafletMap.ts
+
 This helper handles:
+
 - dynamic import of leaflet (SSR-safe)
 - layer registry state
 - typed API: registerLayer, unregisterLayer, updateLayer
 - setting the MapContext
 
 ### Step 2 — Simplify Map.svelte
+
 Now the component is minimal and purely declarative.
+
 - No Leaflet import here, so SSR never fails.
 - The helper returns a typed, ready-to-use map and context setup.
 
 ### Advantages of this pattern
-| **Benefit**             | **Explanation**                                                                 |
-|-------------------------|----------------------------------------------------------------------------------|
-| SSR-safe                | Leaflet loads only in `onMount()` via dynamic import                            |
-| Single source of truth  | The helper sets and exposes context                                             |
-| Testable                | Method `createLeafletMap()` can be imported in tests or utilities                       |
-| Extendable              | Add more context features later (draw tools, popups, selections)                |
-| Typed                   | Full TypeScript coverage of Leaflet API + your registry                         |
-| Composable              | Use the same helper in other components if needed                               |
+
+| **Benefit**            | **Explanation**                                                   |
+| ---------------------- | ----------------------------------------------------------------- |
+| SSR-safe               | Leaflet loads only in `onMount()` via dynamic import              |
+| Single source of truth | The helper sets and exposes context                               |
+| Testable               | Method `createLeafletMap()` can be imported in tests or utilities |
+| Extendable             | Add more context features later (draw tools, popups, selections)  |
+| Typed                  | Full TypeScript coverage of Leaflet API + your registry           |
+| Composable             | Use the same helper in other components if needed                 |
 
 ## Reactivity and `context`
 
 We want to expose the same $state map instance through context (so child controls can also read when the map is ready without polling).
 
 This will make the design fully reactive and typed from top to bottom:
+
 - `Map.svelte` exposes a `$state` version of the Leaflet map through `context`
 - all child components (`LayerControl`, `Legend`, `GeoJSONLayer`, etc.) can react to the map becoming ready automatically (no polling or “map-ready” events)
 - Svelte 5’s reactivity does all the propagation for us.
 
 **Process:**
+
 1. Add a reactive `$state` **map object** in Map.svelte
 2. Pass that `$state` into context via the existing `MapContext`
 3. Update the `MapContext` type to reflect that the `map` is reactive (`$state<L.Map | null`>)
@@ -46,10 +53,11 @@ This will make the design fully reactive and typed from top to bottom:
 ### Step 1: Update the context type
 
 Edit `src/lib/map/map-types.ts` to type the reactive map reference:
+
 ```ts
-import type * as L from "leaflet";
-import type { MapLayerDescriptor, MapLayerRegistry } from "$lib/map/map-types";
-import { getContext, setContext } from "svelte";
+import type * as L from 'leaflet';
+import type { MapLayerDescriptor, MapLayerRegistry } from '$lib/map/map-types';
+import { getContext, setContext } from 'svelte';
 
 /** Interface exposed via Svelte context */
 export interface MapContext {
@@ -61,7 +69,7 @@ export interface MapContext {
 }
 
 /** Unique key for context lookup */
-export const MAP_CONTEXT_KEY = Symbol("MapContext");
+export const MAP_CONTEXT_KEY = Symbol('MapContext');
 
 export function setMapContext(ctx: MapContext) {
 	setContext<MapContext>(MAP_CONTEXT_KEY, ctx);
@@ -77,10 +85,11 @@ The code is explicitly using `ReturnType<typeof $state<L.Map | null>>` so that T
 ### Step 2: Update `createLeafletMap.ts` to accept a reactive map reference
 
 Edit `src/lib/map/createLeafletMap.ts`:
+
 ```ts
-import type * as L from "leaflet";
-import type { MapLayerDescriptor, MapLayerRegistry } from "$lib/types/map-types";
-import { setMapContext } from "$lib/types/map-types";
+import type * as L from 'leaflet';
+import type { MapLayerDescriptor, MapLayerRegistry } from '$lib/types/map-types';
+import { setMapContext } from '$lib/types/map-types';
 
 export interface LeafletInitOptions {
 	center?: [number, number];
@@ -95,14 +104,14 @@ export async function createLeafletMap({
 	container,
 	mapState
 }: LeafletInitOptions) {
-	const L = await import("leaflet");
-	await import("leaflet/dist/leaflet.css");
+	const L = await import('leaflet');
+	await import('leaflet/dist/leaflet.css');
 
 	const map = L.map(container).setView(center, zoom);
 	mapState = map; // This updates the reactive `$state`
 
-	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-		attribution: "&copy; OSM contributors"
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; OSM contributors'
 	}).addTo(map);
 
 	const layers: MapLayerRegistry = {};
@@ -127,14 +136,14 @@ export async function createLeafletMap({
 		Object.assign(l, patch);
 		if (!l.leafletLayer) return;
 
-		if ("visible" in patch) {
+		if ('visible' in patch) {
 			if (patch.visible) l.leafletLayer.addTo(map);
 			else map.removeLayer(l.leafletLayer);
 		}
-		if ("opacity" in patch && typeof l.leafletLayer["setOpacity"] === "function") {
+		if ('opacity' in patch && typeof l.leafletLayer['setOpacity'] === 'function') {
 			(l.leafletLayer as L.TileLayer).setOpacity(patch.opacity ?? 1);
 		}
-		if ("zIndex" in patch && typeof l.leafletLayer["setZIndex"] === "function") {
+		if ('zIndex' in patch && typeof l.leafletLayer['setZIndex'] === 'function') {
 			(l.leafletLayer as L.TileLayer).setZIndex(patch.zIndex ?? 0);
 		}
 	}
@@ -147,13 +156,15 @@ export async function createLeafletMap({
 ```
 
 ### Step 3: Update `Map.svelte` to pass in `$state` map
+
 Edit `src/components/leaflet/Map.svelte`:
+
 ```svelte
 <script lang="ts">
-	import { onMount } from "svelte";
-	import type { LeafletInitOptions } from "$lib/map/createLeafletMap";
-	import { createLeafletMap } from "$lib/map/createLeafletMap";
-	import type * as L from "leaflet";
+	import { onMount } from 'svelte';
+	import type { LeafletInitOptions } from '$lib/map/createLeafletMap';
+	import { createLeafletMap } from '$lib/map/createLeafletMap';
+	import type * as L from 'leaflet';
 
 	let { center = [0, 0], zoom = 2 } = $props<{
 		center?: [number, number];
@@ -178,26 +189,24 @@ Edit `src/components/leaflet/Map.svelte`:
 	}
 </script>
 
-<div
-	class="map-container w-full h-full"
-	bind:this={mapEl}
-	style="width:100%;height:100%;"
->
+<div class="map-container h-full w-full" bind:this={mapEl} style="width:100%;height:100%;">
 	{#if !map}
-		<div class="flex items-center justify-center h-full text-gray-500 text-sm">
-			Loading map…
-		</div>
+		<div class="flex h-full items-center justify-center text-sm text-gray-500">Loading map…</div>
 	{/if}
 </div>
 
 <style>
-	.map-container { position: relative; }
+	.map-container {
+		position: relative;
+	}
 </style>
 ```
+
 ## Step 4: Children react to the map automatically
 
 Now in any child component, we can do:
-``` ts
+
+```ts
 <script lang="ts">
 	import { getMapContext } from "$lib/types/map-types";
 	import { onMount } from "svelte";
@@ -217,13 +226,12 @@ Now in any child component, we can do:
 No events, no waiting — the $effect re-runs when the map becomes available.
 
 ### Summary
-| **Step**                                   | **Purpose**                                               |
-|-------------------------------------------|-----------------------------------------------------------|
-| `$state<L.Map \| null>` in `Map.svelte`     | Pass `$state` to `createLeafletMap()` to maintain a single reference between map and context |
-| `MapContext.map` type                      | `ReturnType<typeof $state<L.Map>` ensures type safety     |
-| Child components                           | React automatically to `ctx.map` being set                |
 
-
+| **Step**                                | **Purpose**                                                                                  |
+| --------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `$state<L.Map \| null>` in `Map.svelte` | Pass `$state` to `createLeafletMap()` to maintain a single reference between map and context |
+| `MapContext.map` type                   | `ReturnType<typeof $state<L.Map>` ensures type safety                                        |
+| Child components                        | React automatically to `ctx.map` being set                                                   |
 
 ```mermaid
 flowchart TB

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import type L from 'leaflet';
 import { Point, LatLngBounds, rectangle } from 'leaflet';
 
@@ -25,7 +26,7 @@ export class SelectionBoxControl {
 	constructor(
 		map: L.Map,
 		onSelection: (bounds: L.LatLngBounds) => void,
-		options?: SelectionBoxOptions
+		_options?: SelectionBoxOptions
 	) {
 		this.map = map;
 		this.onSelection = onSelection;

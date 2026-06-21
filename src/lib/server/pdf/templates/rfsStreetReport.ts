@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
 import PdfPrinter from 'pdfmake';
 import blobStream from 'blob-stream';
 import { fonts, getLogo } from '$lib/server/pdf/config/pdfConfig';

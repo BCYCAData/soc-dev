@@ -1,4 +1,6 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic Leaflet/GeoJSON/external-library data structures */
+	import { SvelteMap } from 'svelte/reactivity';
 	import { onMount, onDestroy, getContext } from 'svelte';
 	import { createPointSymbol } from '$lib/leaflet/leafletlegendutility';
 	import { generateMarkerHtml } from '$lib/leaflet/symbol/leafletstylemanagement';
@@ -87,7 +89,7 @@
 	function findNearbyFeatures(clickedPoint: L.LatLng, radius: number): GeoJSON.Feature[] {
 		if (!geoJSONLayer) return [];
 
-		const uniqueFeatures = new Map<string, GeoJSON.Feature>();
+		const uniqueFeatures = new SvelteMap<string, GeoJSON.Feature>();
 
 		geoJSONLayer.eachLayer((layer) => {
 			const marker = layer as L.Marker;
