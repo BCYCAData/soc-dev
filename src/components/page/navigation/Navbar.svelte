@@ -2,6 +2,7 @@
 	import { AppBar } from '@skeletonlabs/skeleton-svelte';
 	import { page } from '$app/state';
 	import Logo from '$components/page/navigation/Logo.svelte';
+	import DarkModeToggle from '$components/page/navigation/DarkModeToggle.svelte';
 	import { usePermissions } from '$lib/permissions.svelte';
 
 	let user = $derived(page.data.user);
@@ -42,6 +43,9 @@
 
 {#snippet trail()}
 	<div class="flex h-full items-center">
+		<div class="mr-3 flex items-center">
+			<DarkModeToggle />
+		</div>
 		{#if user}
 			{#if isAdmin()}
 				{#if coordinatesKYNG && coordinatesKYNG.length > 0}

@@ -13,6 +13,7 @@ To determine the location of an address, follow these steps:
 3. **Check if the address is an exact match at Geoscape**:
     Use: `process_geoscape_geocoder_response(address_string text)`
     If return is:
+
     ```json
         {
             "matchType": "exact",
@@ -20,9 +21,11 @@ To determine the location of an address, follow these steps:
             "cadastralIdentifier": "DP/22//1220838"
         }
     ```
-        - look up the `propid` using the `cadastralIdentifier`. 
+
+    - look up the `propid` using the `cadastralIdentifier`.
 
     If return is:
+
     ```json
         {
             "matchType": "neighbour",
@@ -30,10 +33,12 @@ To determine the location of an address, follow these steps:
             "cadastralIdentifier": "DP/22//1220838"
         }
     ```
-        - handle validated address. 
-        - look up the `propid` using the `cadastralIdentifier`. 
+
+    - handle validated address.
+    - look up the `propid` using the `cadastralIdentifier`.
 
     If return is:
+
     ```json
         {
             "matchType": "noMatch",
@@ -41,7 +46,8 @@ To determine the location of an address, follow these steps:
             "cadastralIdentifier": null
         }
     ```
-        - the address cannot be located. 
+
+    - the address cannot be located.
 
 4. **Get `principaladdresssiteoid` from SSNSW**
     Use: `get_principaladdresssiteoid_from_cadastralidentifier(cadastral_identifier text)`

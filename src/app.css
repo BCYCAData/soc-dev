@@ -11,6 +11,11 @@
 @import '@skeletonlabs/skeleton/themes/cerberus';
 @import '../soc-theme.css';
 
+/* Use Tailwind's selector strategy so `dark:` utilities follow the `.dark`
+   class on <html> (managed by $stores/mode.svelte), enabling a manual toggle
+   rather than tracking the OS preference only. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 
 /* External CSS imports */
 @import 'leaflet/dist/leaflet.css';

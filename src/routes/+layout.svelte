@@ -10,12 +10,14 @@
 
 	import '../app.css';
 
+	import type { Snippet } from 'svelte';
 	import type { LayoutData } from './$types';
 	import { initSession } from '$stores/auth';
+	import { mode } from '$stores/mode.svelte';
 
 	interface Props {
 		data: LayoutData;
-		children: any;
+		children: Snippet;
 	}
 
 	let { data, children }: Props = $props();
@@ -37,26 +39,13 @@
 		}
 	});
 
-	function initDarkMode() {
-		const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-		function updateDarkMode(e?: MediaQueryListEvent) {
-			const isDarkMode = e ? e.matches : prefersDarkScheme.matches;
-			document.documentElement.classList.toggle('dark', isDarkMode);
-		}
-		updateDarkMode();
-		prefersDarkScheme.addEventListener('change', updateDarkMode);
-		return () => {
-			prefersDarkScheme.removeEventListener('change', updateDarkMode);
-		};
-	}
 	$effect(() => {
 		// Update store when server data changes
 		initSession(data.session);
 	});
 
 	onMount(() => {
-		return initDarkMode();
+		return mode.init();
 	});
 
 	function handleSkipToMain(event: Event) {

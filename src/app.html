@@ -1,16 +1,28 @@
 <!doctype html>
-<html lang="en" data-theme="socTheme" class="light">
+<html lang="en" data-theme="socTheme">
 
 <head>
 	<meta charset="utf-8" />
 	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<!-- Set dark mode before paint to avoid a flash of the wrong theme.
+	     Mirrors the logic in $stores/mode.svelte. -->
+	<script>
+		(function () {
+			try {
+				var stored = localStorage.getItem('mode');
+				var dark = stored
+					? stored === 'dark'
+					: window.matchMedia('(prefers-color-scheme: dark)').matches;
+				if (dark) document.documentElement.classList.add('dark');
+			} catch (e) {}
+		})();
+	</script>
 	%sveltekit.head%
 </head>
 
 <!-- Available themes: pine, catppuccin, socTheme -->
 <!-- TODO: add theme switcher -->
-<!-- TODO: add dark mode switcher -->
 
 <body data-sveltekit-preload-data="hover">
 	<div style="display: contents">%sveltekit.body%</div>
