@@ -1,3 +1,5 @@
+import type { Database } from '$lib/db.types';
+
 export interface HelpContent {
 	hasHelp: boolean;
 	content?: string;
@@ -51,40 +53,6 @@ export interface AddressValidationResponse {
 	status: number;
 }
 
-interface ValidateAddressSuccessResponse {
-	apiData: AddressValidationResponse;
-	error: false;
-	success: true;
-}
-
-interface ValidateAddressErrorResponse {
-	error: true;
-	message: string;
-	success: false;
-	formInputs: {
-		streetaddress: string;
-		suburb: string;
-	};
-}
-
-interface SignupSuccessResponse {
-	apiData: AddressValidationResponse;
-	error: false;
-	success: true;
-	redirect: string;
-}
-
-interface SignupErrorResponse {
-	error: true;
-	message: string;
-	success: false;
-	apiData: AddressValidationResponse;
-}
-
-export type SignupActionResponse = SignupSuccessResponse | SignupErrorResponse;
-
-export type ValidateActionResponse = ValidateSuccessResponse | ValidateErrorResponse;
-
 export interface TabulatorProps {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	columns: any[];
@@ -114,34 +82,10 @@ export type ComparisonOption = {
 	lable: string;
 };
 
-export interface BCYCAInformationItem {
-	other_information?: string;
-	email: string;
-	name: string;
-	property_address: string;
-	created_at: string;
-}
-interface ExternalInformationItem {
-	other_information?: string;
-	email: string;
-	name: string;
-	property_address: string;
-	created_at: string;
-}
-interface MondrookInformationItem {
-	other_information?: string;
-	email: string;
-	name: string;
-	property_address: string;
-	created_at: string;
-}
-interface TinoneeInformationItem {
-	other_information?: string;
-	email: string;
-	name: string;
-	property_address: string;
-	created_at: string;
-}
+// Row shape returned by get_user_{bcyca,external,mondrook,tinonee}_information_data.
+// All four RPCs return the identical shape, so a single DB-derived type covers them.
+export type CommunityInformationItem =
+	Database['public']['Functions']['get_user_bcyca_information_data']['Returns'][number];
 
 interface TabItem {
 	label: string;

@@ -1,5 +1,4 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { resolve } from '$app/paths';
 	import { enhance } from '$app/forms';
 	import { toast } from '$stores/toaststore';
@@ -10,10 +9,10 @@
 
 	interface Props {
 		apiData: APIData;
-		form: any;
+		errorMessage?: string;
 	}
 
-	let { apiData = $bindable(), form }: Props = $props();
+	let { apiData = $bindable(), errorMessage = '' }: Props = $props();
 	let email = $state('');
 	let password = $state('');
 	let validPassword = $state(false);
@@ -25,12 +24,6 @@
 	let searchAddress = $derived(`${apiData.searchaddressstreet} ${apiData.searchaddresssuburb}`);
 	let validAddress = $derived(`${apiData.validaddressstreet} ${apiData.validaddresssuburb}`);
 	let apiDataJson = $derived(JSON.stringify(apiData));
-	$effect(() => {
-		if (form?.formInputs) {
-			email = form.formInputs.email;
-			password = form.formInputs.password;
-		}
-	});
 </script>
 
 <div class="flex flex-col gap-4">
@@ -102,8 +95,8 @@
 			</form>
 		</div>
 
-		{#if form?.error}
-			<AuthErrorMessage errorMessage={form?.message ?? ''} />
+		{#if errorMessage}
+			<AuthErrorMessage {errorMessage} />
 		{/if}
 		<div class="text-surface-950 text-center">
 			By signing up, you agree to the

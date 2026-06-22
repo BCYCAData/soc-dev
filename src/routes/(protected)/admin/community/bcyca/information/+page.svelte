@@ -3,8 +3,8 @@
 	import CommunityRequestsAccordionItem from '$components/form/CommunityRequestsAccordionItem.svelte';
 
 	import type { PageData } from './$types';
-	import type { CellComponent } from 'tabulator-tables';
-	import type { BCYCAInformationItem } from '$lib/types';
+	import type { CellComponent, ColumnDefinition } from 'tabulator-tables';
+	import type { CommunityInformationItem } from '$lib/types';
 
 	interface Props {
 		data: PageData;
@@ -13,7 +13,7 @@
 
 	let { data }: Props = $props();
 
-	let bcycaInformationColumns = [
+	const bcycaInformationColumns: Partial<ColumnDefinition>[] = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -37,7 +37,7 @@
 			headerSort: false
 		}
 	];
-	let bcycaOtherInformationColumns = [
+	const bcycaOtherInformationColumns: Partial<ColumnDefinition>[] = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -125,7 +125,7 @@
 		summary="Other Information Requests"
 		columns={bcycaOtherInformationColumns}
 		data={data?.bcycaInformationData}
-		dataFilter={(item: BCYCAInformationItem): boolean => Boolean(item.other_information)}
+		dataFilter={(item: CommunityInformationItem): boolean => Boolean(item.other_information)}
 	/>
 	<!-- Repeat for other items -->
 </Accordion>

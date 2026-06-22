@@ -5,14 +5,10 @@
 	import AddressSystemError from '$components/form/address-challenge/AddressSystemError.svelte';
 	import AddressUnchallenged from '$components/form/address-challenge/AddressUnchallenged.svelte';
 	import AddressValid from '$components/form/address-challenge/AddressValid.svelte';
-	import type { ValidateActionResponse, SignupActionResponse } from '$lib/types';
 	import type { APIData } from '$lib/types';
+	import type { PageProps } from './$types';
 
-	interface Props {
-		form: ValidateActionResponse | SignupActionResponse | null;
-	}
-
-	let { form }: Props = $props();
+	let { form }: PageProps = $props();
 
 	const ADDRESS_STATUS = {
 		UNCHALLENGED: 100,
@@ -21,12 +17,19 @@
 		INELIGIBLE: 404
 	} as const;
 
-	const apiData = $derived(form?.apiData as unknown as APIData);
+	// `data` is the validated address payload returned by both actions
+	// (validate success and signup failure echo it back). Cast bridges the
+	// server's AddressValidationResponse (siteoid: string) to APIData (number).
+	const apiData = $derived(form?.data as unknown as APIData);
 
 	let message = $derived(page.url.searchParams.get('message') ?? '');
-	let streetaddress = $derived(apiData?.searchaddressstreet ?? '');
-	let suburb = $derived(apiData?.searchaddresssuburb ?? '');
-	let addressStatus = $derived(form?.apiData?.status ?? ADDRESS_STATUS.UNCHALLENGED);
+	let streetaddress = $derived(form?.data?.searchaddressstreet ?? '');
+	let suburb = $derived(form?.data?.searchaddresssuburb ?? '');
+	let addressStatus = $derived(form?.data?.status ?? ADDRESS_STATUS.UNCHALLENGED);
+
+	// Narrowed values passed to route-agnostic children instead of the whole form blob.
+	let errorMessage = $derived(form && form.success === false ? (form.message ?? '') : '');
+	let validateErrors = $derived(form && 'errors' in form ? (form.errors ?? null) : null);
 
 	let encodedRef = $derived(
 		encodeURIComponent(`SOC Address not found: '${streetaddress}, ${suburb}'`)
@@ -46,9 +49,9 @@
 	{/if}
 
 	{#if addressStatus === ADDRESS_STATUS.UNCHALLENGED}
-		<AddressUnchallenged {streetaddress} {suburb} {form} />
+		<AddressUnchallenged {streetaddress} {suburb} errors={validateErrors} {errorMessage} />
 	{:else if addressStatus === ADDRESS_STATUS.VALID}
-		<AddressValid {apiData} {form} />
+		<AddressValid {apiData} {errorMessage} />
 	{:else if addressStatus === ADDRESS_STATUS.INELIGIBLE}
 		<AddressIneligible {streetaddress} {suburb} />
 	{:else if addressStatus === ADDRESS_STATUS.NOT_FOUND}

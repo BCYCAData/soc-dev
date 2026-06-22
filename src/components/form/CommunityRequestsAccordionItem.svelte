@@ -1,27 +1,30 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import CommunityRequestsTable from '$components/form/tables/CommunityRequestsTable.svelte';
+
+	import type { ColumnDefinition } from 'tabulator-tables';
+	import type { CommunityInformationItem } from '$lib/types';
 
 	interface Props {
 		value: string;
 		summary: string;
 		choice?: number;
-		columns: any[];
-		data: any[];
-		dataFilter?: (item: any) => boolean;
+		// Partial: Tabulator's @types mark `title` required, but formatter-only
+		// columns (rownum/rowSelection/responsiveCollapse) legitimately omit it.
+		columns: Partial<ColumnDefinition>[];
+		data: CommunityInformationItem[] | null;
+		dataFilter?: (item: CommunityInformationItem) => boolean;
 	}
 
-	let { value, summary, choice = 0, columns, data, dataFilter = () => true }: Props = $props();
+	let { value, summary, choice = 0, columns, data, dataFilter }: Props = $props();
 
-	function getFilteredData(): any[] {
-		let standardFilteredData =
-			data?.filter((item) => item.informatiion_choices?.includes(choice)) ?? [];
-
-		if (dataFilter) {
-			standardFilteredData = data.filter(dataFilter);
-		}
-		return standardFilteredData;
+	function getFilteredData(): CommunityInformationItem[] {
+		const rows = data ?? [];
+		// When an explicit dataFilter is supplied (e.g. the "Other Information" item)
+		// use it; otherwise filter rows by the information-sheet choice.
+		return dataFilter
+			? rows.filter(dataFilter)
+			: rows.filter((item) => item.informatiion_choices?.includes(choice));
 	}
 </script>
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
 	import { enhance } from '$app/forms';
 	import { toast } from '$stores/toaststore';
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
@@ -10,17 +9,18 @@
 	interface Props {
 		streetaddress?: string;
 		suburb?: string;
-		form?: any;
+		errors?: { streetaddress?: string; suburb?: string } | null;
+		errorMessage?: string;
 	}
 
 	let loading = $state(false);
 	let isSubmitting = $state(false);
-	let { streetaddress = '', suburb = '', form }: Props = $props();
+	let { streetaddress = '', suburb = '', errors = null, errorMessage = '' }: Props = $props();
 
 	$effect(() => {
-		if (form?.formInputs) {
-			streetaddress = form.formInputs.streetaddress;
-			suburb = form.formInputs.suburb;
+		if (errors) {
+			streetaddress = errors.streetaddress ?? '';
+			suburb = errors.suburb ?? '';
 		}
 	});
 
@@ -104,8 +104,8 @@
 				<ValidationMessage>The suburb must not have State or Postcode.</ValidationMessage>
 			{/if}
 
-			{#if form?.error}
-				<ValidationMessage>{form.message}</ValidationMessage>
+			{#if errorMessage}
+				<ValidationMessage>{errorMessage}</ValidationMessage>
 			{/if}
 		</form>
 	</div>

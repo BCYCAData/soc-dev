@@ -27,7 +27,7 @@ interface AddressValidationResponse {
 	status: number;
 }
 
-export const actions: Actions = {
+export const actions = {
 	validate: async ({ request, locals: { supabase } }): Promise<ValidateActionResponse> => {
 		const formData = await request.formData();
 		const searchaddressstreet = String(formData.get('streetaddress')).toUpperCase();
@@ -207,4 +207,4 @@ export const actions: Actions = {
 		}
 		throw redirect(303, `/auth/redirect/signup/respond/?redirectType=${redirectType}`);
 	}
-};
+} satisfies Actions;

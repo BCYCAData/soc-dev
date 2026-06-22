@@ -3,8 +3,8 @@
 	import CommunityRequestsAccordionItem from '$components/form/CommunityRequestsAccordionItem.svelte';
 
 	import type { PageData } from './$types';
-	import type { CellComponent } from 'tabulator-tables';
-	import type { MondrookInformationItem } from '$lib/types';
+	import type { CellComponent, ColumnDefinition } from 'tabulator-tables';
+	import type { CommunityInformationItem } from '$lib/types';
 
 	interface Props {
 		data: PageData;
@@ -13,7 +13,7 @@
 
 	let { data }: Props = $props();
 
-	let mondrookInformationColumns = [
+	const mondrookInformationColumns: Partial<ColumnDefinition>[] = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -37,7 +37,7 @@
 			headerSort: false
 		}
 	];
-	let mondrookOtherInformationColumns = [
+	const mondrookOtherInformationColumns: Partial<ColumnDefinition>[] = [
 		{ formatter: 'rownum', hozAlign: 'center', width: 40 },
 		{
 			formatter: 'rowSelection',
@@ -125,7 +125,7 @@
 		summary="Other Information Requests"
 		columns={mondrookOtherInformationColumns}
 		data={data?.mondrookInformationData}
-		dataFilter={(item: MondrookInformationItem): boolean => Boolean(item.other_information)}
+		dataFilter={(item: CommunityInformationItem): boolean => Boolean(item.other_information)}
 	/>
 	<!-- Repeat for other items -->
 </Accordion>
