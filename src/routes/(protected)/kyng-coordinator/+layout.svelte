@@ -58,7 +58,7 @@
 
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
-<div class="app-shell bg-secondary-200">
+<div class="app-shell bg-secondary-200 dark:bg-surface-900">
 	<!-- <header class="mx-auto flex w-full items-center justify-center bg-secondary-100">
 		<h3 class="font-bold text-secondary-900">Burrell Creek Youth & Community Association Inc.</h3>
 	</header> -->
@@ -74,7 +74,10 @@
 				: 'w-1/6'} transition-all duration-300"
 		>
 			<div class="flex w-full flex-col p-1">
-				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
+				<button
+					class="collapse-toggle text-secondary-700 dark:text-secondary-300 self-end p-2"
+					onclick={toggleSidebar}
+				>
 					<MenuToggleIcon
 						isMenuCollapsed={isSidebarCollapsed}
 						color="var(--color-surface-50)"
@@ -84,7 +87,7 @@
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Coordinator Menu{/if}
 				</div>
-				<div class="bg-secondary-600 flex flex-col rounded-lg">
+				<div class="bg-secondary-800 dark:bg-secondary-900 flex flex-col rounded-lg">
 					{#each safeCoordinatesKYNG as kyngArea (kyngArea.kyngAreaId)}
 						<KYNGSideMenu {kyngArea} {isSidebarCollapsed} />
 					{/each}

@@ -49,7 +49,7 @@
 
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
-<div class="app-shell bg-secondary-200">
+<div class="app-shell bg-secondary-200 dark:bg-surface-900">
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={adminSidebarPathLables} />
 	</div>
@@ -61,7 +61,10 @@
 				: 'w-1/6'} transition-all duration-300"
 		>
 			<div class="flex w-full flex-col p-1">
-				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
+				<button
+					class="collapse-toggle text-secondary-700 dark:text-secondary-300 self-end p-2"
+					onclick={toggleSidebar}
+				>
 					<MenuToggleIcon
 						isMenuCollapsed={isSidebarCollapsed}
 						color="var(--color-surface-50)"
@@ -71,7 +74,7 @@
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Admin Menu{/if}
 				</div>
-				<div class="bg-secondary-600 flex flex-col rounded-lg">
+				<div class="bg-secondary-800 dark:bg-secondary-900 flex flex-col rounded-lg">
 					<AdminSideMenu {isSidebarCollapsed} />
 				</div>
 				{#if !isSidebarCollapsed}

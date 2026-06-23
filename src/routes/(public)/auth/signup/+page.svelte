@@ -5,6 +5,7 @@
 	import AddressSystemError from '$components/form/address-challenge/AddressSystemError.svelte';
 	import AddressUnchallenged from '$components/form/address-challenge/AddressUnchallenged.svelte';
 	import AddressValid from '$components/form/address-challenge/AddressValid.svelte';
+	import MailtoButton from '$components/page/MailtoButton.svelte';
 	import type { APIData } from '$lib/types';
 	import type { PageProps } from './$types';
 
@@ -65,13 +66,7 @@
 			<p>If you are sure it exists please send us a message.</p>
 		</div>
 
-		<div class="mt-5">
-			<!-- eslint-disable svelte/no-navigation-without-resolve -->
-			<a href={mailtoUrl} class="contact-button" rel="noopener noreferrer">
-				Tap here to send us an email
-			</a>
-			<!-- eslint-enable svelte/no-navigation-without-resolve -->
-		</div>
+		<MailtoButton href={mailtoUrl} />
 	{:else}
 		<AddressSystemError />
 	{/if}

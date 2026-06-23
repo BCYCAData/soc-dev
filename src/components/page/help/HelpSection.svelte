@@ -8,9 +8,9 @@
 	let { section }: Props = $props();
 
 	const importanceClasses = {
-		info: 'bg-tertiary-50 border-tertiary-200',
-		warning: 'bg-secondary-50 border-secondary-200',
-		tip: 'bg-success-50 border-success-200'
+		info: 'bg-tertiary-50 border-tertiary-200 dark:bg-surface-800 dark:border-tertiary-500',
+		warning: 'bg-secondary-50 border-secondary-200 dark:bg-surface-800 dark:border-secondary-500',
+		tip: 'bg-success-50 border-success-200 dark:bg-surface-800 dark:border-success-500'
 	};
 
 	let sectionClass = $derived(

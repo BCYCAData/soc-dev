@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
+	import MailtoButton from '$components/page/MailtoButton.svelte';
 
 	interface Props {
 		streetaddress: string;
@@ -24,15 +25,5 @@
 		<p class="text-center">If you would like more information:</p>
 	</div>
 
-	<div class="mt-5">
-		<!-- eslint-disable svelte/no-navigation-without-resolve -->
-		<a
-			class="bg-secondary-500 text-secondary-50 hover:bg-secondary-700 mt-5 inline-block max-w-80 cursor-pointer rounded-xl p-2 font-medium hover:underline sm:max-w-96 md:max-w-full"
-			href={subjectUrl}
-			rel="noopener noreferrer"
-		>
-			Tap here to send us an email
-		</a>
-		<!-- eslint-enable svelte/no-navigation-without-resolve -->
-	</div>
+	<MailtoButton href={subjectUrl} />
 </div>

@@ -2,6 +2,14 @@
 export const SITE_URL =
 	process.env.NODE_ENV === 'production' ? 'https://soc-dev.vercel.app' : 'http://127.0.0.1:5173';
 
+// Password-recovery flow
+// Short-lived, HttpOnly flag set by the confirm endpoint once a genuine recovery
+// link has been exchanged for a session, and required by the reset-password page so
+// an ordinary logged-in session can't reach the "set new password" form.
+export const RECOVERY_COOKIE_NAME = 'pw_recovery';
+export const RECOVERY_COOKIE_PATH = '/auth/redirect/resetpassword';
+export const RECOVERY_COOKIE_MAX_AGE = 600; // seconds
+
 // Validation Patterns
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

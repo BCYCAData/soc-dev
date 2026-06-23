@@ -22,16 +22,16 @@
 	{#if $helpContent && $helpContent.hasHelp}
 		<button class="collapse-toggle self-end p-2" onclick={toggleHelp}>
 			<div
-				class="text-secondary-800 flex text-sm {!isCollapsed
+				class="text-secondary-800 dark:text-secondary-300 flex text-sm {!isCollapsed
 					? 'flex-row items-center gap-2'
 					: 'flex-col items-center'}"
 			>
-				<HelpToggleIcon color="var(--color-secondary-700)" size={24} />
+				<HelpToggleIcon color="currentColor" size={24} />
 				{!isCollapsed ? 'Hide help' : ''}
 			</div>
 		</button>
 		{#if !isCollapsed}
-			<div class="bg-secondary-100 p-4">
+			<div class="bg-secondary-100 dark:bg-surface-800 p-4">
 				{#if $helpContent.title}
 					<h3 class="mb-4 font-bold">{$helpContent.title}</h3>
 				{/if}

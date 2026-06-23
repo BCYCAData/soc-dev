@@ -29,8 +29,8 @@
 	<!-- eslint-disable svelte/no-navigation-without-resolve -->
 	<a
 		href={item.link}
-		class="hover:bg-surface-700 flex items-center gap-2 rounded-lg px-4 py-2 {isActive
-			? 'bg-surface-700'
+		class="hover:bg-secondary-900 flex items-center gap-2 rounded-lg px-4 py-2 {isActive
+			? 'bg-secondary-950 ring-1 ring-inset ring-secondary-400'
 			: ''}"
 	>
 		{@render icon()}

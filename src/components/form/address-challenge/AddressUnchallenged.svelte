@@ -17,6 +17,11 @@
 	let isSubmitting = $state(false);
 	let { streetaddress = '', suburb = '', errors = null, errorMessage = '' }: Props = $props();
 
+	// Mirrors ADDRESS_STATUS in the signup page. The `validate` action returns a
+	// `success` result even when the address isn't found/eligible — the outcome is
+	// carried in data.status — so we must branch on status, not on result.type.
+	const ADDRESS_STATUS_VALID = 200;
+
 	$effect(() => {
 		if (errors) {
 			streetaddress = errors.streetaddress ?? '';
@@ -43,13 +48,20 @@
 		</p>
 
 		<form
+			method="POST"
 			action="/auth/signup?/validate"
 			use:enhance={() => {
 				loading = true;
 				isSubmitting = true;
 				return async ({ result, update }) => {
 					if (result.type === 'success') {
-						toast.success('Address validated successfully!');
+						// A successful action doesn't mean a usable address — only a
+						// status of 200 (VALID) qualifies. NOT_FOUND/INELIGIBLE render
+						// their own inline message, so don't flash a green toast.
+						const status = result.data?.data?.status;
+						if (status === ADDRESS_STATUS_VALID) {
+							toast.success('Address validated successfully!');
+						}
 					} else if (result.type === 'error') {
 						toast.error(result.error?.message || 'Failed to validate address. Please try again.');
 					} else if (result.type === 'failure') {

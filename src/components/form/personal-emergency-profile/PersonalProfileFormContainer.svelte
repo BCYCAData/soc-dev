@@ -188,7 +188,7 @@
 		</span>
 		at Step 12
 	</div>
-	<form method="post" action="?/saveData" id="personalProfileForm" use:enhance={handleSubmit}>
+	<form method="POST" action="?/saveData" id="personalProfileForm" use:enhance={handleSubmit}>
 		<input type="hidden" name="currentStep" value={active_step} />
 		<input type="hidden" name="totalSteps" value={steps.length} />
 		<input

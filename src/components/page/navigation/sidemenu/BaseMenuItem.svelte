@@ -17,7 +17,7 @@
 	tabindex="0"
 	{href}
 	class="menu-item relative flex cursor-pointer items-center rounded-full p-2 {isActive
-		? 'bg-secondary-700'
+		? 'bg-secondary-950 ring-1 ring-inset ring-secondary-400'
 		: ''} {isCollapsed ? 'justify-center' : ''}"
 >
 	{@render icon?.()}

@@ -6,6 +6,7 @@
 	import { checkStreetAddressString, checkSuburbString } from '$lib/utility';
 	import { toast } from '$stores/toaststore';
 	import Spinner from '$components/page/Spinner.svelte';
+	import MailtoButton from '$components/page/MailtoButton.svelte';
 	import AddressInput from '$components/form/auth/AddressInput.svelte';
 	import ValidationMessage from '$components/form/auth/ValidationMessage.svelte';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -117,16 +118,7 @@
 			<div class="bg-error-100 text-error-700 mb-4 rounded-md p-4">
 				<p>{error}</p>
 				{#if error.includes('could not find this address')}
-					<div class="mt-5">
-						<!-- eslint-disable svelte/no-navigation-without-resolve -->
-						<a
-							href={mailtoUrl}
-							class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
-						>
-							Tap here to send us an email
-						</a>
-						<!-- eslint-enable svelte/no-navigation-without-resolve -->
-					</div>
+					<MailtoButton href={mailtoUrl} />
 				{/if}
 			</div>
 		{/if}

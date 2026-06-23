@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
+	import MailtoButton from '$components/page/MailtoButton.svelte';
 
 	const redirectType = page.url.searchParams.get('redirectType');
 	const encodedRef = encodeURIComponent('SOC Email Already Registered');
@@ -25,14 +26,7 @@
 			<p class="my-1 text-xl">
 				Please contact our support team who will help guide you through the next steps.
 			</p>
-			<div class="mt-5">
-				<a
-					href={mailtoUrl}
-					class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
-				>
-					Tap here to send us an email
-				</a>
-			</div>
+			<MailtoButton href={mailtoUrl} />
 		</div>
 	{/if}
 </section>

@@ -63,7 +63,7 @@
 
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
-<div class="app-shell bg-secondary-200">
+<div class="app-shell bg-secondary-200 dark:bg-surface-900">
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={profileSidebarPathLables} properties={propertyProfiles} />
 	</div>
@@ -77,7 +77,7 @@
 			<div class="flex w-full flex-col p-1">
 				<button class="collapse-toggle self-end p-2" onclick={toggleSidebar}>
 					<div
-						class="text-secondary-800 flex text-sm {!isSidebarCollapsed
+						class="text-secondary-800 dark:text-secondary-300 flex text-sm {!isSidebarCollapsed
 							? 'flex-row items-center gap-2'
 							: 'flex-col items-center'}"
 					>
@@ -92,7 +92,7 @@
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Profile Menu{/if}
 				</div>
-				<div class="bg-secondary-600 flex flex-col rounded-lg">
+				<div class="bg-secondary-800 dark:bg-secondary-900 flex flex-col rounded-lg">
 					<ProfileSideMenu
 						{isSidebarCollapsed}
 						communityText="Community"

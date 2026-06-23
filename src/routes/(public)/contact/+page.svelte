@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { PUBLIC_CONTACT_EMAIL } from '$env/static/public';
+	import MailtoButton from '$components/page/MailtoButton.svelte';
 
 	const reference: string = page.url.searchParams.get('subject') ?? '';
 	const subjectText: string = `subject=${encodeURIComponent(reference)}`;
@@ -21,14 +22,7 @@
 			<header class="text-center">
 				<h1 class="mt-5">{reference}</h1>
 			</header>
-			<div class="mt-5">
-				<a
-					href={mailtoUrl}
-					class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
-				>
-					Tap here to send us an email
-				</a>
-			</div>
+			<MailtoButton href={mailtoUrl} />
 		{:else}
 			<div class="text-center">
 				<h3 class="h3">If you want to be more involved,<br />please call</h3>
@@ -45,13 +39,10 @@
 					{/each}
 				</div>
 
-				<a
+				<MailtoButton
 					href={mailtoUrl}
-					class="bg-secondary-500 text-secondary-50 mt-5 inline-block rounded-xl p-2 font-medium hover:underline"
-					aria-label="Send us an email about the SOC address not found"
-				>
-					Tap here to send us an email
-				</a>
+					ariaLabel="Send us an email about the SOC address not found"
+				/>
 			</div>
 		{/if}
 	</section>

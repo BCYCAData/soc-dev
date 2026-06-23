@@ -14,7 +14,7 @@
 	height={size}
 	viewBox="0 0 24 24"
 	fill="none"
-	stroke="var(--color-secondary-700)"
+	stroke="currentColor"
 	stroke-width="3"
 	stroke-linecap="round"
 	stroke-linejoin="round"
