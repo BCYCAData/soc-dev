@@ -22,6 +22,7 @@ export const PERMISSIONS = {
 	// Site administration
 	ADMIN_SITE: 'admin.site',
 	ADMIN_SITE_MESSAGES: 'admin.site.messages',
+	ADMIN_SITE_PROFILE_REQUIREMENTS: 'admin.site.profile-requirements',
 	ADMIN_SITE_ROLES: 'admin.site.roles',
 	ADMIN_SITE_ROLES_PERMISSIONS: 'admin.site.roles.permissions',
 	ADMIN_SITE_ROLES_ASSIGNMENTS: 'admin.site.roles.assignments',

@@ -19,6 +19,20 @@
 
 	// let { data = $bindable(), form }: Props = $props();
 	let { data = $bindable() }: Props = $props();
+
+	// Outstanding required questions at page load, grouped by section, so users can
+	// see exactly what remains. (Reflects the profile as loaded; refreshes on next visit.)
+	const completion = $derived(data.completion);
+	const missingBySection = $derived.by(() => {
+		const map = new Map<string, string[]>();
+		for (const item of completion.missing) {
+			const list = map.get(item.section) ?? [];
+			list.push(item.label);
+			map.set(item.section, list);
+		}
+		return [...map.entries()];
+	});
+
 	let currentActive = $state(1);
 	let isPrevLoading = $state(false);
 	let isNextLoading = $state(false);
@@ -116,6 +130,34 @@
 
 <div class="bg-secondary-50 text-surface-950 mx-auto flex h-full w-full justify-center">
 	<div class="bg-secondary-100 mb-5 sm:w-11/12">
+		{#if completion.total > 0}
+			<div class="mx-auto px-4 pt-4 sm:w-10/12">
+				{#if completion.isComplete}
+					<div class="preset-filled-success-500 rounded-lg p-3 text-sm" role="status">
+						✓ All {completion.total} required questions are answered — your profile is complete.
+					</div>
+				{:else}
+					<details class="bg-surface-50-950 rounded-lg p-3 shadow">
+						<summary class="cursor-pointer font-semibold">
+							Profile {completion.percent}% complete — {completion.answered} of {completion.total}
+							required questions answered ({completion.missing.length} still needed)
+						</summary>
+						<div class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+							{#each missingBySection as [section, labels] (section)}
+								<div>
+									<p class="font-semibold">{section}</p>
+									<ul class="list-disc pl-5 opacity-90">
+										{#each labels as label (label)}
+											<li>{label}</li>
+										{/each}
+									</ul>
+								</div>
+							{/each}
+						</div>
+					</details>
+				{/if}
+			</div>
+		{/if}
 		<PersonalProfileFormContainer
 			active_step={steps[currentActive - 1].index}
 			{propertyWasRented}

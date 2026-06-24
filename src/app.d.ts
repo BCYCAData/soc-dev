@@ -11,6 +11,9 @@ declare global {
 			propertyIds: string[] | null;
 			communities: string[];
 			coordinatesKYNG: KYNGArea[] | null;
+			// Supabase session id (stable for the life of a login, changes on re-login);
+			// used to show the profile-completion nag once per login.
+			sessionId: string | null;
 		}
 		interface PageData {
 			session: Session | null;
@@ -20,6 +23,15 @@ declare global {
 			coordinatesKYNG: KYNGArea[] | null;
 			propertyIds: string[] | null;
 			steps?: { index: number; text: string; page: string }[];
+
+			// Profile-completion nag (set by the protected layout when a signed-in user
+			// has an incomplete profile and hasn't yet resolved the nag this login).
+			profileNag?: {
+				percent: number;
+				answered: number;
+				total: number;
+				sessionId: string;
+			} | null;
 
 			// Admin-specific
 			messages?: AdminMessage[];

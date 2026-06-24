@@ -27,7 +27,7 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<div class="bg-success-100 rounded-lg p-4 text-center">
+	<div class="bg-success-100 text-success-900 rounded-lg p-4 text-center">
 		<p class="text-scale-5 font-semibold">
 			{searchAddress}
 		</p>

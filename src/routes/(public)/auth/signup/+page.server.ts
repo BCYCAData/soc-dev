@@ -1,5 +1,5 @@
 import { AuthApiError } from '@supabase/supabase-js';
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { isEmailAllowed } from '$lib/server/auth/dev-config';
 
 import { PUBLIC_GEOSCAPE_ADDRESS_API_KEY } from '$env/static/public';
@@ -185,6 +185,11 @@ export const actions = {
 				redirectType = 'emailExists';
 			}
 		} catch (err) {
+			// redirect() throws a control-flow object; let SvelteKit handle it
+			// instead of logging it as an unexpected error.
+			if (isRedirect(err)) {
+				throw err;
+			}
 			const catchError = err as Error;
 			await logSignUpSignInError(supabase, {
 				errorType: 'UNEXPECTED_ERROR',

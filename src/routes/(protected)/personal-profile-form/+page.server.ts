@@ -8,6 +8,8 @@ import type {
 } from '$lib/form.types';
 import { getPersonalProfileFormData } from '$lib/server/form.utilities';
 import { getCommunityRequestOptions } from '$lib/server/community-options';
+import { getRequiredFieldKeys } from '$lib/server/profile-requirements';
+import { computeProfileCompletion } from '$lib/profile/completion';
 
 function getPropertyValue<T>(propertyData: UserPropertyProfile, key: keyof PropertyProfile): T {
 	return propertyData.type === 'single'
@@ -40,6 +42,12 @@ export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) =>
 		...user_profile,
 		property_profile: user_profile.property_profile[0] // Take first item from array
 	} as PersonalProfileFormData;
+
+	// Completion against the admin-configured required set. Computed from the raw RPC
+	// payload (property_profile is still an array here — what the engine expects), so
+	// no second profile fetch is needed.
+	const requiredKeys = await getRequiredFieldKeys(supabase);
+	const completion = computeProfileCompletion(user_profile as Record<string, unknown>, requiredKeys);
 
 	const userOptionsData = await getCommunityRequestOptions(supabase);
 
@@ -142,7 +150,8 @@ export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) =>
 		steps,
 		optionsData,
 		propertyIds: [],
-		userProfile: personalProfileFormData
+		userProfile: personalProfileFormData,
+		completion
 	};
 }) satisfies PageServerLoad;
 

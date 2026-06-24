@@ -965,6 +965,30 @@ export type Database = {
 				};
 				Relationships: [];
 			};
+			profile_required_question: {
+				Row: {
+					field_key: string;
+					is_required: boolean;
+					sort_order: number;
+					updated_at: string;
+					updated_by: string | null;
+				};
+				Insert: {
+					field_key: string;
+					is_required?: boolean;
+					sort_order?: number;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Update: {
+					field_key?: string;
+					is_required?: boolean;
+					sort_order?: number;
+					updated_at?: string;
+					updated_by?: string | null;
+				};
+				Relationships: [];
+			};
 			project_addresspoints: {
 				Row: {
 					address: string | null;

@@ -66,6 +66,8 @@ export const handle = async ({ event, resolve }) => {
 	event.locals.propertyIds = claims.property_ids ?? [];
 	event.locals.communities = claims.community_slugs ?? [];
 	event.locals.coordinatesKYNG = claims.coordinates_kyng ?? null;
+	// Standard Supabase claim; stable per login. Used to gate the profile nag.
+	event.locals.sessionId = typeof claims.session_id === 'string' ? claims.session_id : null;
 
 	// 4. Proceed normally
 	return resolve(event, {

@@ -28,6 +28,15 @@
 					</a>
 				{/if}
 
+				{#if hasPermission(PERMISSIONS.ADMIN_SITE_PROFILE_REQUIREMENTS)}
+					<a
+						href={resolve('/admin/site/profile-requirements')}
+						class="btn preset-filled-secondary-500"
+					>
+						Manage Profile Requirements
+					</a>
+				{/if}
+
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)}
 					<a
 						href={resolve('/admin/users/kyng-coordinators')}
