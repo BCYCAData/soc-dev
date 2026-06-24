@@ -28,7 +28,7 @@
 		"@fontsource/raleway": "^5.2.6",
 		"@mapbox/vector-tile": "^2.0.3",
 		"@skeletonlabs/skeleton": "^3.1.3",
-		"@skeletonlabs/skeleton-svelte": "^1.2.3",
+		"@skeletonlabs/skeleton-svelte": "^4.15.2",
 		"@supabase/ssr": "^0.6.1",
 		"@supabase/supabase-js": "^2.75.1",
 		"@sveltejs/adapter-vercel": "^5.6.3",
