@@ -58,7 +58,8 @@
 						// A successful action doesn't mean a usable address — only a
 						// status of 200 (VALID) qualifies. NOT_FOUND/INELIGIBLE render
 						// their own inline message, so don't flash a green toast.
-						const status = result.data?.data?.status;
+						const data = result.data as { data?: { status?: number } } | undefined;
+						const status = data?.data?.status;
 						if (status === ADDRESS_STATUS_VALID) {
 							toast.success('Address validated successfully!');
 						}

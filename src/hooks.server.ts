@@ -1,7 +1,14 @@
 // src/hooks.server.ts
+import { redirect } from '@sveltejs/kit';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import type { Database } from '$lib/db.types';
+import { windowForRole } from '$lib/constants/sessionPolicy';
+import {
+	readSessionTracking,
+	writeSessionTracking,
+	clearSessionTracking
+} from '$lib/server/auth/sessionTracking';
 
 /** Custom JWT claims this app issues, read via `getClaims()`. */
 interface AppClaims {
@@ -68,6 +75,34 @@ export const handle = async ({ event, resolve }) => {
 	event.locals.coordinatesKYNG = claims.coordinates_kyng ?? null;
 	// Standard Supabase claim; stable per login. Used to gate the profile nag.
 	event.locals.sessionId = typeof claims.session_id === 'string' ? claims.session_id : null;
+
+	// 3b. Enforce role-scoped session lifetime (idle timeout + absolute cap).
+	// This is the app-side ceiling layered on Supabase's lenient baseline — Supabase JWTs
+	// may still be valid, but we sign out once the role's idle or absolute window is past.
+	// Session lifecycle, NOT route authorization, so it's compatible with the "no authGuard
+	// in hooks" rule. See docs/session-management-policy.md.
+	if (user) {
+		const now = Date.now();
+		const { idleMs, absoluteMs } = windowForRole(event.locals.userRole, event.locals.permissions);
+		const { sessionStart, lastActivity } = readSessionTracking(
+			event.cookies,
+			event.locals.sessionId,
+			now
+		);
+
+		const absoluteExpired = now > sessionStart + absoluteMs;
+		const idleExpired = now > lastActivity + idleMs;
+
+		if (absoluteExpired || idleExpired) {
+			await event.locals.supabase.auth.signOut();
+			clearSessionTracking(event.cookies);
+			throw redirect(303, `/auth/signin?reason=${absoluteExpired ? 'expired' : 'idle'}`);
+		}
+
+		// Active session: persist the absolute anchor (bound to this login) and slide the
+		// inactivity timer forward.
+		writeSessionTracking(event.cookies, sessionStart, event.locals.sessionId, now);
+	}
 
 	// 4. Proceed normally
 	return resolve(event, {

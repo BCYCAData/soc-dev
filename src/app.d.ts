@@ -24,6 +24,17 @@ declare global {
 			propertyIds: string[] | null;
 			steps?: { index: number; text: string; page: string }[];
 
+			// Role-scoped session window + absolute deadline (ms epoch) for the timeout
+			// warning's countdown. Display-only; the server enforces independently. See
+			// docs/session-management-policy.md.
+			sessionPolicy?: {
+				tier: 'resident' | 'coordinator' | 'admin';
+				idleMs: number;
+				absoluteMs: number;
+				warningMs: number;
+				absoluteDeadline: number | null;
+			} | null;
+
 			// Profile-completion nag (set by the protected layout when a signed-in user
 			// has an incomplete profile and hasn't yet resolved the nag this login).
 			profileNag?: {

@@ -1,5 +1,6 @@
 import type { Actions } from './$types';
 import { redirect } from '@sveltejs/kit';
+import { clearSessionTracking } from '$lib/server/auth/sessionTracking';
 
 export const actions: Actions = {
 	default: async (event) => {
@@ -15,6 +16,8 @@ export const actions: Actions = {
 		// Clear the session cookies
 		event.cookies.delete('sb-access-token', { path: '/' });
 		event.cookies.delete('sb-refresh-token', { path: '/' });
+		// Clear the session-lifetime tracking cookies (idle + absolute cap).
+		clearSessionTracking(event.cookies);
 
 		throw redirect(303, '/auth/signin');
 	}

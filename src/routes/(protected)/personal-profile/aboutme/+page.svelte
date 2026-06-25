@@ -12,6 +12,7 @@
 
 	import { formatMobile } from '$lib/utility';
 	import { setTitleCase } from '$lib/svelte-actions.js';
+	import { unsavedChanges } from '$stores/unsavedChanges.svelte';
 
 	import type { ActionData, PageData } from './$types';
 
@@ -23,6 +24,15 @@
 	let { data = $bindable(), form }: Props = $props();
 
 	let unsaved = $state(false);
+
+	// Feed this form's dirty state into the global unsaved-changes guard so a forced session
+	// logout doesn't silently discard in-progress edits. See SessionTimeoutWarning.
+	const unsavedTracker = unsavedChanges.acquire();
+	$effect(() => {
+		unsavedTracker.set(unsaved);
+		return unsavedTracker.release;
+	});
+
 	let formError = $derived(form?.success === false);
 	let formErrorMessage = $derived(form?.message || '');
 	let formSuccess = $derived(form?.success || false);

@@ -10,6 +10,15 @@ export const RECOVERY_COOKIE_NAME = 'pw_recovery';
 export const RECOVERY_COOKIE_PATH = '/auth/redirect/resetpassword';
 export const RECOVERY_COOKIE_MAX_AGE = 600; // seconds
 
+// Session-lifetime tracking (role-scoped idle timeout + absolute cap).
+// HttpOnly cookies set server-side, consumed by the hooks enforcement step and surfaced
+// (as a deadline) to the SessionTimeoutWarning component. See
+// docs/session-management-policy.md and $lib/constants/sessionPolicy.
+export const SESSION_START_COOKIE = 'sb_session_start'; // ms epoch; written once per login
+export const LAST_ACTIVITY_COOKIE = 'sb_last_activity'; // ms epoch; slides each request
+export const SESSION_COOKIE_PATH = '/';
+export const SESSION_COOKIE_MAX_AGE = 30 * 24 * 60 * 60; // 30 days (≥ largest absolute cap)
+
 // Validation Patterns
 export const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 

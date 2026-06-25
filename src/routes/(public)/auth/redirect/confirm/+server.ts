@@ -9,6 +9,7 @@ import {
 
 import type { EmailOtpType } from '@supabase/supabase-js';
 import type { RequestHandler } from './$types';
+import { clearSessionTracking } from '$lib/server/auth/sessionTracking';
 
 /**
  * Mark the current session as a genuine password-recovery session. The reset-password
@@ -84,6 +85,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals: { supabase } }
 
 						// Sign out after successful email change
 						await supabase.auth.signOut();
+						clearSessionTracking(cookies);
 						redirectTo.pathname = '/auth/signin';
 						redirectTo.searchParams.set('message', 'email_changed');
 					} catch (error) {

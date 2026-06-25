@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
@@ -13,6 +14,23 @@
 	let errorMessage = $derived(form?.message ?? '');
 	let showPassword = $state(false);
 	let isSubmitting = $state(false);
+
+	// Informational notices for users redirected here after a sign-out. `reason` is set by
+	// the session-lifetime enforcement (hooks.server.ts) and the timeout warning;
+	// `message` is set by the email-change flow. Not an error — shown as a neutral notice.
+	const SIGNIN_NOTICES: Record<string, string> = {
+		expired:
+			'Your session reached its maximum length, so you were signed out. Please sign in again.',
+		idle: 'You were signed out after a period of inactivity. Please sign in again.',
+		'session-refresh-failed': "We couldn't keep your session active. Please sign in again.",
+		email_changed:
+			'Your email address has been updated. Please sign in with your new email address.'
+	};
+	let notice = $derived(
+		SIGNIN_NOTICES[page.url.searchParams.get('reason') ?? ''] ??
+			SIGNIN_NOTICES[page.url.searchParams.get('message') ?? ''] ??
+			''
+	);
 </script>
 
 <svelte:head>
@@ -22,6 +40,27 @@
 <div class="mx-auto flex max-w-md flex-col items-center justify-center">
 	<div class="bg-secondary-100 text-surface-950 w-5/6 rounded p-6 shadow-md sm:ml-0 sm:w-full">
 		<h1 class="h1 mb-4 text-center text-2xl">Welcome Back</h1>
+		{#if notice !== ''}
+			<div
+				class="bg-warning-50 text-warning-700 mb-4 flex w-full items-center rounded-lg py-3"
+				role="status"
+				aria-live="polite"
+			>
+				<svg
+					class="m-2 h-4 w-4 shrink-0 fill-current"
+					aria-hidden="true"
+					focusable="false"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 512 512"
+				>
+					<path
+						fill="currentColor"
+						d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"
+					/>
+				</svg>
+				<span class="text-sm font-medium">{notice}</span>
+			</div>
+		{/if}
 		<form action="?/signin" method="POST">
 			<input
 				id="email"
