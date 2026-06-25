@@ -38,10 +38,10 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Have you completed a RFS Bushfire survival plan?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each yesNoSendOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -56,10 +56,10 @@
 		</div>
 	{/each}
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	What is your level of firefighting experience?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
 		{#each fireFightingExperienceOptions as { value, lable } (value)}
 			<li class="flex items-center">
@@ -76,10 +76,10 @@
 		{/each}
 	</ul>
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Have you had unpleasant traumatic experience of bushfire?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each yesNoOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -94,10 +94,10 @@
 		</div>
 	{/each}
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	In the event of a bushfire, do you plan to stay and defend or leave early?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
 		{#each stayGoOptions as { value, lable } (value)}
 			<li class="flex items-center">
@@ -114,10 +114,10 @@
 		{/each}
 	</ul>
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	In the event of a flood, do you plan to stay and defend or leave early?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	<ul class="my-0 w-full list-none pl-0">
 		{#each stayGoOptions as { value, lable } (value)}
 			<li class="flex items-center">
@@ -130,7 +130,7 @@
 					{value}
 				/>
 				<label
-					class="text-scale-6 text-secondary-900 ml-2 font-medium"
+					class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 					for="plan_to_leave_before_flood_{value}">{lable}</label
 				>
 			</li>

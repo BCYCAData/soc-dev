@@ -2,6 +2,8 @@
 	import PersonalProfileFormContainer from '$components/form/personal-emergency-profile/PersonalProfileFormContainer.svelte';
 	import ProgressBar from '$components/form/ProgressBar.svelte';
 
+	import { invalidateAll } from '$app/navigation';
+
 	import { Loader } from 'lucide-svelte';
 
 	import type { ActionData, PageData } from './$types';
@@ -83,6 +85,8 @@
 					body: formData
 				});
 				if (response.ok) {
+					// Re-run load so the completion banner reflects the just-saved answers.
+					await invalidateAll();
 					progressBar?.handleProgress(stepIncrement);
 				}
 			} catch (error) {
@@ -111,6 +115,8 @@
 					body: formData
 				});
 				if (response.ok) {
+					// Re-run load so the completion banner reflects the just-saved answers.
+					await invalidateAll();
 					progressBar?.skipTo(e);
 				} else {
 					console.error('Failed to save form data');
@@ -128,8 +134,8 @@
 	<title>Personal Profile Form</title>
 </svelte:head>
 
-<div class="bg-secondary-50 text-surface-950 mx-auto flex h-full w-full justify-center">
-	<div class="bg-secondary-100 mb-5 sm:w-11/12">
+<div class="bg-secondary-50-950 text-surface-950-50 mx-auto flex h-full w-full justify-center">
+	<div class="bg-secondary-100-900 mb-5 sm:w-11/12">
 		{#if completion.total > 0}
 			<div class="mx-auto px-4 pt-4 sm:w-10/12">
 				{#if completion.isComplete}

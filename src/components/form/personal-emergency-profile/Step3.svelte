@@ -23,38 +23,38 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	What is the quality of your mobile reception at the property?
 </h2>
-<div class="bg-secondary-200 rounded-lg p-1">
+<div class="bg-secondary-200-800 rounded-lg p-1">
 	<ul class="text-scale-3 my-0 flex list-none items-center sm:mx-auto sm:w-1/2">
-		<div class="text-primary-700 flex-auto font-semibold">Poor</div>
+		<div class="text-primary-700-300 flex-auto font-semibold">Poor</div>
 		{#each Array(5) as _, i (i)}
 			<li class="flex-auto">
 				<input
 					name="mobile_reception"
 					type="radio"
-					class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 h-4 w-4"
+					class="border-surface-300-700 bg-surface-100-900 text-secondary-700-300 checked:ring-secondary-700-300 focus:ring-secondary-700-300 h-4 w-4"
 					id={`mobile_reception-${i + 1}`}
 					bind:group={formData.property_profile.mobile_reception}
 					value={i + 1}
 				/>
-				<label class="text-primary-700 ml-1 inline-block" for={`mobile_reception-${i + 1}`}>
+				<label class="text-primary-700-300 ml-1 inline-block" for={`mobile_reception-${i + 1}`}>
 					{i + 1}
 				</label>
 			</li>
 		{/each}
-		<div class="text-primary-700 flex-auto font-semibold">Excellent</div>
+		<div class="text-primary-700-300 flex-auto font-semibold">Excellent</div>
 	</ul>
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Are you:</h2>
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">Are you:</h2>
 <div
-	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+	class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 >
 	{#each residencyOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
 			<input
-				class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"
+				class="border-surface-300-700 bg-surface-100-900 text-secondary-700-300 checked:ring-secondary-700-300 focus:ring-secondary-700-300 ml-8 h-6 w-6"
 				id={`residency_profile-${value}`}
 				type="radio"
 				name="residency_profile"
@@ -63,56 +63,56 @@
 				checked={value != null}
 			/>
 			<label
-				class="text-scale-6 text-secondary-700 ml-2 font-medium"
+				class="text-scale-6 text-secondary-700-300 ml-2 font-medium"
 				for={`residency_profile-${value}`}>{lable}</label
 			>
 		</div>
 	{/each}
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Please record the number of people who usually live at this property:
 </h2>
-<div class="bg-secondary-200 rounded-lg p-2">
+<div class="bg-secondary-200-800 rounded-lg p-2">
 	<ul class="sm:text-scale-5 my-0 flex list-none justify-around pl-0">
 		<NumberInput
 			name="residents0_18"
 			lable="0-18 years"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700-300 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents0_18}
 		/>
 		<NumberInput
 			name="residents19_50"
 			lable="19-50 years"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700-300 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents19_50}
 		/>
 		<NumberInput
 			name="residents51_70"
 			lable="51-70 years"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700-300 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents51_70}
 		/>
 		<NumberInput
 			name="residents71_"
 			lable="71 years +"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-700 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-700-300 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formData.property_profile.residents71_}
 		/>
 	</ul>
 </div>
 <div>
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 		Do you consider any person on the property to be vulnerable?
 	</h2>
-	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+	<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 		{#each yesNoOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
-					class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 ml-8 h-6 w-6"
+					class="border-surface-300-700 bg-surface-100-900 text-secondary-700-300 checked:ring-secondary-700-300 focus:ring-secondary-700-300 ml-8 h-6 w-6"
 					id={`vulnerable_residents-${value}`}
 					type="radio"
 					name="vulnerable_residents"
@@ -120,7 +120,7 @@
 					{value}
 				/>
 				<label
-					class="text-scale-6 text-secondary-700 ml-2 font-medium"
+					class="text-scale-6 text-secondary-700-300 ml-2 font-medium"
 					for={`vulnerable_residents-${value}`}>{lable}</label
 				>
 			</div>

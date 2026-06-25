@@ -33,43 +33,43 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Please record the number of pets you have on this property:
 </h2>
-<div class="bg-secondary-200 rounded-lg p-2">
+<div class="bg-secondary-200-800 rounded-lg p-2">
 	<ul class="sm:text-scale-5 my-0 flex list-none justify-around pl-0">
 		<NumberInput
 			name="number_dogs"
 			lable="Dogs"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900-100 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_dogs}
 		/>
 		<NumberInput
 			name="number_cats"
 			lable="Cats"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900-100 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_cats}
 		/>
 		<NumberInput
 			name="number_birds"
 			lable="Birds"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900-100 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_birds}
 		/>
 		<NumberInput
 			name="number_other_pets"
 			lable="Other"
-			lableClass="ml-2 text-scale-6 font-medium text-secondary-900 font-Poppins"
-			inputClass="border border-secondary-700 w-20 rounded text-center sm:text-scale-5"
+			lableClass="ml-2 text-scale-6 font-medium text-secondary-900-100 font-Poppins"
+			inputClass="border border-secondary-700-300 w-20 rounded text-center sm:text-scale-5"
 			bind:inputValue={formState.number_other_pets}
 		/>
 	</ul>
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Do you have livestock?</h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">Do you have livestock?</h2>
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each yesNoOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -84,7 +84,7 @@
 				bind:group={formState.live_stock_present}
 				{value}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="live_stock_present"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="live_stock_present"
 				>{lable}</label
 			>
 		</div>
@@ -92,10 +92,10 @@
 </div>
 
 {#if formState.live_stock_present === true}
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 		Do you have an area which would be safe for stock in the event of a bushfire or flood?
 	</h2>
-	<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+	<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
@@ -110,18 +110,18 @@
 					bind:group={formState.live_stock_safe_area}
 					{value}
 				/>
-				<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="live_stock_safe_area"
+				<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="live_stock_safe_area"
 					>{lable}</label
 				>
 			</div>
 		{/each}
 	</div>
 	{#if formState.live_stock_present && formState.live_stock_safe_area != 'N'}
-		<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+		<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 			Would you be happy for other people to leave their stock on your property, in your safe area,
 			for a short period in an emergency?
 		</h2>
-		<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+		<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 			{#each yesNoMaybeOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -134,7 +134,7 @@
 						{value}
 					/>
 					<label
-						class="text-scale-6 text-secondary-900 ml-2 font-medium"
+						class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 						for="share_livestock_safe_area">{lable}</label
 					>
 				</div>
@@ -144,11 +144,11 @@
 {/if}
 
 <TextAreaInput
-	headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+	headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 	headingText="If there are assets, other than the residence, that you consider essential (eg crops, sheds with equipment or antique cars) please describe them here."
 	lableClass={null}
 	lableText={null}
-	divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
+	divClass="p-2 rounded-lg bg-secondary-200-800 sm:text-scale-5"
 	nameText="other_essential_assets"
 	textAreaClass="w-full resize-y sm:text-scale-5"
 	bind:inputValue={formState.other_essential_assets}

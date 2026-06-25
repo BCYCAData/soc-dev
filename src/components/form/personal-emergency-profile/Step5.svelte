@@ -54,14 +54,14 @@
 	};
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Are there any static water supplies on the property?<span
 		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each staticWaterOptions as { value, lable } (value)}
 		{#if value < 5}
 			<div class="flex items-center">
@@ -76,7 +76,7 @@
 					onchange={setStaticWater}
 				/>
 				<label
-					class="text-scale-6 text-secondary-900 ml-2 font-medium"
+					class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 					for="static_water_available_{value}">{lable}</label
 				>
 			</div>
@@ -93,7 +93,7 @@
 					checked={noneChecked}
 				/>
 				<label
-					class="text-scale-6 text-secondary-900 ml-2 font-medium"
+					class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 					for="static_water_available_{value}">{lable}</label
 				>
 			</div>
@@ -101,10 +101,10 @@
 	{/each}
 </div>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Do you have a Stortz fitting attached to a water tank?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each yesNoMaybeOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -118,7 +118,7 @@
 				bind:group={formState.have_stortz}
 				{value}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="have_stortz_{value}"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="have_stortz_{value}"
 				>{lable}</label
 			>
 		</div>
@@ -126,14 +126,14 @@
 </div>
 
 {#if have_stortzChecked}
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Please include the size</h2>
-	<div class="bg-secondary-200 flex flex-wrap justify-between rounded-lg p-2">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">Please include the size</h2>
+	<div class="bg-secondary-200-800 flex flex-wrap justify-between rounded-lg p-2">
 		<div class="flex items-center">
 			<NumberInput
 				name="stortz_size"
 				lable="Size (mm)"
-				lableClass="min-w-fit mr-3 text-scale-6 font-medium text-secondary-900 font-Poppins"
-				inputClass="max-w-sm border border-secondary-700 text-center w-20 rounded sm:text-scale-5"
+				lableClass="min-w-fit mr-3 text-scale-6 font-medium text-secondary-900-100 font-Poppins"
+				inputClass="max-w-sm border border-secondary-700-300 text-center w-20 rounded sm:text-scale-5"
 				divClass="flex items-center"
 				bind:inputValue={formState.stortz_size}
 			/>
@@ -141,14 +141,14 @@
 	</div>
 {/if}
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Do you have any of the following at this property?<span
 		class="text-scale-3 text-surface-500 ml-2"
 	>
 		(Check all that apply)</span
 	>
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each fireFightingResourceOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -161,7 +161,7 @@
 				checked={formState.fire_fighting_resources?.includes(Number(value)) ?? false}
 			/>
 			<label
-				class="text-scale-6 text-secondary-900 ml-2 font-medium"
+				class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 				for="fire_fighting_resources_{value}">{lable}</label
 			>
 		</div>

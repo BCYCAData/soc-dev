@@ -22,7 +22,7 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	What BCYCA Community information would be useful to you?<span
 		class="text-scale-3 text-surface-500 ml-2"
 	>
@@ -31,7 +31,7 @@
 </h2>
 {#if communityBCYCAProfile}
 	<div
-		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
+		class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
 	>
 		{#each communityBCYCAInformationOptions as { value, lable } (value)}
 			<div class="col-span-1 flex items-center">
@@ -44,7 +44,7 @@
 					checked={formState.information_sheet_choices.includes(Number(value))}
 				/>
 				<label
-					class="text-scale-6 text-secondary-900 ml-2 font-medium"
+					class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
 					for="information_sheet_choices">{lable}</label
 				>
 			</div>
@@ -52,11 +52,11 @@
 	</div>
 
 	<TextAreaInput
-		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+		headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 		headingText="Is there other information which you would find useful?"
 		lableClass={null}
 		lableText={null}
-		divClass="p-2 rounded-lg bg-secondary-300 sm:text-scale-5"
+		divClass="p-2 rounded-lg bg-secondary-300-700 sm:text-scale-5"
 		nameText="other_information_sheet"
 		textAreaClass="w-full resize-y sm:text-scale-5"
 		bind:inputValue={formState.other_information_sheet}

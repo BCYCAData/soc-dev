@@ -31,8 +31,8 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mt-2 mb-1 text-lg font-semibold">
-	How would you prefer to stay in touch with the <span class="text-secondary-600"
+<h2 class="h2 text-surface-950-50 mt-2 mb-1 text-lg font-semibold">
+	How would you prefer to stay in touch with the <span class="text-secondary-600-400"
 		>Strengthen OUR Community</span
 	>
 	project team? <br />
@@ -43,7 +43,7 @@
 	>
 </h2>
 <div
-	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+	class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
 	{#each userProfileStayInTouchOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
@@ -58,22 +58,22 @@
 				value={Number(value)}
 				checked={userProfile?.stay_in_touch_choices?.includes(Number(value))}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="stay_in_touch_choices"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="stay_in_touch_choices"
 				>{lable}
 			</label>
 		</div>
 	{/each}
 </div>
 <input type="text" name="postal_was_checked" value={postalWasChecked} hidden />
-<h2 hidden={!postalChecked} class="text-scale-6 text-surface-950 mb-1 font-semibold">
+<h2 hidden={!postalChecked} class="text-scale-6 text-surface-950-50 mb-1 font-semibold">
 	Please enter your postal address:
 </h2>
-<div hidden={!postalChecked} class="bg-secondary-200 rounded-lg p-2">
+<div hidden={!postalChecked} class="bg-secondary-200-800 rounded-lg p-2">
 	<div class="grid gap-0 sm:grid-cols-12">
 		<div class="flex items-center">
 			<label
 				hidden={!postalChecked}
-				class="text-primary-700 px-3 text-lg font-semibold"
+				class="text-primary-700-300 px-3 text-lg font-semibold"
 				for="postal_address_street">ADDRESS</label
 			>
 		</div>
@@ -83,7 +83,7 @@
 				type="text"
 				id="postal_address_street"
 				name="postal_address_street"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 				placeholder="STREET ADDRESS"
 				autocomplete="street-address"
 				use:setUpperCase
@@ -93,12 +93,12 @@
 		</div>
 	</div>
 
-	<div class="bg-secondary-200 rounded-lg p-2">
+	<div class="bg-secondary-200-800 rounded-lg p-2">
 		<div class="grid gap-0 sm:grid-cols-12">
 			<div class="flex items-center">
 				<label
 					hidden={!postalChecked}
-					class="text-primary-700 px-3 pl-2 text-lg font-semibold"
+					class="text-primary-700-300 px-3 pl-2 text-lg font-semibold"
 					for="property_address_suburb">SUBURB</label
 				>
 			</div>
@@ -108,7 +108,7 @@
 					type="text"
 					id="postal_address_suburb"
 					name="postal_address_suburb"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+					class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 					placeholder="SUBURB"
 					autocomplete="address-level2"
 					use:setUpperCase
@@ -119,7 +119,7 @@
 			<div class="col-span-2 flex items-center">
 				<label
 					hidden={!postalChecked}
-					class="text-primary-700 px-3 text-lg font-semibold sm:pl-16"
+					class="text-primary-700-300 px-3 text-lg font-semibold sm:pl-16"
 					for="postal_address_postcode">POSTCODE</label
 				>
 			</div>
@@ -129,7 +129,7 @@
 					type="text"
 					id="postal_address_postcode"
 					name="property_address_postcode"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+					class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 					placeholder="POSTCODE"
 					autocomplete="postal-code"
 					style="text-transform:uppercase"
@@ -140,11 +140,11 @@
 	</div>
 </div>
 <TextAreaInput
-	headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+	headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 	headingText="Do you have any other comments that you would like to add?"
 	lableClass={null}
 	lableText={null}
-	divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
+	divClass="p-2 rounded-lg bg-secondary-200-800 sm:text-scale-5"
 	nameText="other_comments"
 	textAreaClass="w-full resize-y sm:text-scale-5"
 	bind:inputValue={formState.other_comments}

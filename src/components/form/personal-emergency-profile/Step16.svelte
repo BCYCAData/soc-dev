@@ -22,7 +22,7 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	What Mondrook Community Events are you interested in?<span
 		class="text-scale-3 text-surface-500 ml-2"
 	>
@@ -31,7 +31,7 @@
 </h2>
 {#if communityMondrookProfile}
 	<div
-		class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
+		class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-6 sm:gap-2"
 	>
 		{#each communityMondrookMeetingOptions as { value, lable } (value)}
 			<label class="col-span-1 flex items-center">
@@ -49,11 +49,11 @@
 	</div>
 
 	<TextAreaInput
-		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+		headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 		headingText="If there are other events you would be interested in, please add them below."
 		lableClass={null}
 		lableText={null}
-		divClass="p-2 rounded-lg bg-secondary-200 sm:text-scale-5"
+		divClass="p-2 rounded-lg bg-secondary-200-800 sm:text-scale-5"
 		nameText="other_community_meeting"
 		textAreaClass="w-full resize-y sm:text-scale-5"
 		bind:inputValue={other_community_meeting}

@@ -1,5 +1,5 @@
 <h1
-	class="title-font text-primary-600 mx-auto hidden text-center font-bold sm:mt-4 sm:block sm:text-4xl"
+	class="title-font text-primary-600-400 mx-auto hidden text-center font-bold sm:mt-4 sm:block sm:text-4xl"
 >
 	Strengthen OUR Community
 </h1>

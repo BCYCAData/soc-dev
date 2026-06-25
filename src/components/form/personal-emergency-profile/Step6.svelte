@@ -38,11 +38,11 @@
 	});
 </script>
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Do you have any of the following on your property?
 </h2>
 <div
-	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2"
+	class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-4 sm:grid-rows-2 sm:gap-2"
 >
 	{#each siteHazardsOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
@@ -53,7 +53,7 @@
 				bind:group={formState.site_hazards}
 				value={Number(value)}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="site_hazards"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="site_hazards"
 				>{lable}</label
 			>
 		</div>
@@ -61,21 +61,21 @@
 </div>
 
 <TextAreaInput
-	headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+	headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 	headingText="Are there any other hazards on the property that should be noted?"
 	lableClass={null}
 	lableText={null}
-	divClass="p-3 rounded-lg bg-secondary-300 sm:text-scale-5"
+	divClass="p-3 rounded-lg bg-secondary-300-700 sm:text-scale-5"
 	nameText="other_site_hazards"
 	textAreaClass="w-full resize-y sm:text-scale-5"
 	bind:inputValue={formState.other_site_hazards}
 />
 
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Does your property have:<span class="text-surface-500 ml-2 text-sm"> (Check all that apply)</span>
 </h2>
 <div
-	class="bg-secondary-200 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
+	class="bg-secondary-200-800 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
 >
 	{#each fireHazardReductionOptions as { value, lable } (value)}
 		<div class="col-span-1 flex items-center">
@@ -86,16 +86,16 @@
 				bind:group={formState.fire_hazard_reduction}
 				value={Number(value)}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="fire_hazard_reduction"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="fire_hazard_reduction"
 				>{lable}</label
 			>
 		</div>
 	{/each}
 </div>
-<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 	Does any adjoining land represent a hazard?
 </h2>
-<div class="bg-secondary-200 flex justify-start rounded-lg p-2">
+<div class="bg-secondary-200-800 flex justify-start rounded-lg p-2">
 	{#each yesNoMaybeOptions as { value, lable } (value)}
 		<div class="flex items-center">
 			<input
@@ -106,7 +106,7 @@
 				bind:group={formState.land_adjacent_hazard}
 				{value}
 			/>
-			<label class="text-scale-6 text-secondary-900 ml-2 font-medium" for="land_adjacent_hazard"
+			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="land_adjacent_hazard"
 				>{lable}</label
 			>
 		</div>
@@ -114,11 +114,11 @@
 </div>
 
 <TextAreaInput
-	headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
+	headingClass="h2 mb-1 text-lg font-semibold text-surface-950-50"
 	headingText="Are there other areas that concern you or represent a potential threat?"
 	lableClass={null}
 	lableText={null}
-	divClass="p-3 rounded-lg bg-secondary-300 sm:text-scale-5"
+	divClass="p-3 rounded-lg bg-secondary-300-700 sm:text-scale-5"
 	nameText="other_hazards"
 	textAreaClass="w-full resize-y sm:text-scale-5"
 	bind:inputValue={formState.other_hazards}

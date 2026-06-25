@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import { setUpperCase, setTitleCase } from '$lib/svelte-actions';
 	import { yesNoOptions, accessOptions } from '$lib/profile-options';
 	import { formatMobile, formatPhone } from '$lib/utility';
@@ -11,22 +12,22 @@
 
 	let { propertyWasRented, userProfile }: Props = $props();
 
-	// Create reactive state for the form data
-	let formData = $derived.by(() => ({
-		...userProfile,
-		property_profile: { ...userProfile.property_profile }
-	}));
+	// Local, mutable form state initialized from the incoming profile. Form
+	// submission is gathered from the named DOM inputs (see the page's FormData
+	// build), so this only drives display/binding — it must be real $state, not
+	// $derived, otherwise bind:value targets a non-reactive property.
+	let formData = $state(
+		untrack(() => ({
+			...userProfile,
+			property_profile: { ...userProfile.property_profile }
+		}))
+	);
 
 	let otherAccessChecked = $derived(formData.property_profile.truck_access === 4);
 	let rentingChecked = $derived(formData.property_profile.property_rented === true);
 	let agentName = $state('');
 	let agentMobile = $state('');
 	let agentPhone = $state('');
-
-	// Update parent component whenever formData changes
-	$effect(() => {
-		userProfile = formData;
-	});
 
 	function initializePropertyAgent() {
 		if (formData.property_profile.property_agent === null) {
@@ -58,14 +59,14 @@
 </script>
 
 <div class="mx-auto py-2 lg:py-2">
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">What is your name?</h2>
-	<div class="bg-secondary-200 grid gap-2 rounded-lg p-2 sm:grid-cols-2 sm:gap-2">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">What is your name?</h2>
+	<div class="bg-secondary-200-800 grid gap-2 rounded-lg p-2 sm:grid-cols-2 sm:gap-2">
 		<div class="w-full">
 			<input
 				type="text"
 				id="first_name"
 				name="first_name"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 				autocomplete="given-name"
 				style="text-transform:capitalize"
 				placeholder="First Name "
@@ -79,7 +80,7 @@
 				id="family_name"
 				name="family_name"
 				autocomplete="off"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 				style="text-transform:capitalize"
 				placeholder="Family Name "
 				use:setTitleCase
@@ -87,11 +88,11 @@
 			/>
 		</div>
 	</div>
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">Your property address is:</h2>
-	<div class="bg-secondary-200 rounded-lg p-2">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">Your property address is:</h2>
+	<div class="bg-secondary-200-800 rounded-lg p-2">
 		<div class="grid gap-0 sm:grid-cols-12">
 			<div class="flex items-center">
-				<label class="text-primary-700 px-3 text-lg font-semibold" for="property_address_street"
+				<label class="text-primary-700-300 px-3 text-lg font-semibold" for="property_address_street"
 					>STREET</label
 				>
 			</div>
@@ -100,7 +101,7 @@
 					type="text"
 					id="property_address_street"
 					name="property_address_street"
-					class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+					class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 					autocomplete="street-address"
 					placeholder="STREET ADDRESS"
 					use:setUpperCase
@@ -111,11 +112,11 @@
 			</div>
 		</div>
 
-		<div class="bg-secondary-200 rounded-lg p-2">
+		<div class="bg-secondary-200-800 rounded-lg p-2">
 			<div class="grid gap-0 sm:grid-cols-12">
 				<div class="flex items-center">
 					<label
-						class="text-primary-700 px-3 pl-2 text-lg font-semibold"
+						class="text-primary-700-300 px-3 pl-2 text-lg font-semibold"
 						for="property_address_suburb">SUBURB</label
 					>
 				</div>
@@ -124,7 +125,7 @@
 						type="text"
 						id="property_address_suburb"
 						name="property_address_suburb"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5"
+						class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5"
 						autocomplete="address-level2"
 						placeholder="SUBURB"
 						use:setUpperCase
@@ -135,7 +136,7 @@
 				</div>
 				<div class="col-span-2 flex items-center">
 					<label
-						class="text-primary-700 px-3 text-lg font-semibold sm:pl-16"
+						class="text-primary-700-300 px-3 text-lg font-semibold sm:pl-16"
 						for="property_address_postcode">POSTCODE</label
 					>
 				</div>
@@ -144,7 +145,7 @@
 						type="text"
 						id="property_address_postcode"
 						name="property_address_postcode"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
+						class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5 pr-20"
 						placeholder="Postcode"
 						autocomplete="postal-code"
 						style="text-transform:uppercase"
@@ -157,12 +158,12 @@
 	</div>
 	<input type="text" name="property_was_rented" value={propertyWasRented} hidden />
 	<div class="mb-1 flex items-center">
-		<h2 class="h2 text-surface-950 text-lg font-semibold">Are you renting this property?</h2>
+		<h2 class="h2 text-surface-950-50 text-lg font-semibold">Are you renting this property?</h2>
 		<p class="pt-1 pl-12" hidden={!rentingChecked}>
 			Please enter your Agent's Name and at least one contact number if you can.
 		</p>
 	</div>
-	<div class="bg-secondary-200 flex h-[62px] w-full flex-row rounded-lg p-2">
+	<div class="bg-secondary-200-800 flex h-15.5 w-full flex-row rounded-lg p-2">
 		<div class="mr-4 flex w-1/8 items-center">
 			{#each yesNoOptions as { value, lable } (value)}
 				{#if lable === 'Yes'}
@@ -178,7 +179,7 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 text-secondary-700 ml-2 font-medium" for="property_rented"
+						<label class="text-scale-6 text-secondary-700-300 ml-2 font-medium" for="property_rented"
 							>{lable}</label
 						>
 					</div>
@@ -195,7 +196,7 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 text-secondary-700 ml-2 font-medium" for="property_rented"
+						<label class="text-scale-6 text-secondary-700-300 ml-2 font-medium" for="property_rented"
 							>{lable}</label
 						>
 					</div>
@@ -204,13 +205,13 @@
 		</div>
 		<div class="sm:text-scale-5 flex flex-1 items-center justify-around">
 			<label
-				class="text-primary-700 flex-initial px-3 text-lg font-semibold"
+				class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
 				for="agent_name"
 				hidden={!rentingChecked}>Agent</label
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-3/4 flex-initial rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 w-3/4 flex-initial rounded-lg border p-0.5"
 				id="agent_name"
 				name="agent_name"
 				autocomplete="off"
@@ -218,13 +219,13 @@
 				bind:value={agentName}
 			/>
 			<label
-				class="text-primary-700 flex-initial px-3 text-lg font-semibold"
+				class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
 				for="agent_mobile"
 				hidden={!rentingChecked}>Mobile</label
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-1/8 flex-auto rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 w-1/8 flex-auto rounded-lg border p-0.5"
 				id="agent_mobile"
 				name="agent_mobile"
 				autocomplete="off"
@@ -244,13 +245,13 @@
 				bind:value={agentMobile}
 			/>
 			<label
-				class="text-primary-700 flex-initial px-3 text-lg font-semibold"
+				class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
 				for="agent_phone"
 				hidden={!rentingChecked}>Landline</label
 			>
 			<input
 				type="text"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-1/8 flex-auto rounded-lg border p-0.5"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 w-1/8 flex-auto rounded-lg border p-0.5"
 				id="agent_phone"
 				autocomplete="off"
 				placeholder="Landline XXXX XXXX"
@@ -270,10 +271,10 @@
 			/>
 		</div>
 	</div>
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 		Is your property well sign-posted and numbered clearly from the road?
 	</h2>
-	<div class="bg-secondary-200 flex flex-wrap rounded-lg p-2">
+	<div class="bg-secondary-200-800 flex flex-wrap rounded-lg p-2">
 		{#each yesNoOptions as { value, lable } (value)}
 			<div class="mr-4 flex items-center">
 				<input
@@ -283,19 +284,19 @@
 					bind:group={formData.property_profile.sign_posted}
 					{value}
 				/>
-				<label class="text-primary-700 flex-initial px-3 text-lg font-semibold" for="sign_posted"
+				<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="sign_posted"
 					>{lable}</label
 				>
 			</div>
 		{/each}
 	</div>
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">
 		Is there easy truck access to the buildings, boundaries and paddocks?
 	</h2>
-	<div class="bg-secondary-200 flex flex-wrap rounded-lg p-2">
+	<div class="bg-secondary-200-800 flex flex-wrap rounded-lg p-2">
 		{#each accessOptions as { value, lable } (value)}
 			{#if lable === 'Other'}
-				<div class="flex-center bg-secondary-200 flex w-full rounded-lg pt-1">
+				<div class="flex-center bg-secondary-200-800 flex w-full rounded-lg pt-1">
 					<input
 						class="ml-8 h-6 w-6"
 						onchange={() => {
@@ -306,12 +307,12 @@
 						bind:group={formData.property_profile.truck_access}
 						{value}
 					/>
-					<label class="text-primary-700 flex-initial px-3 text-lg font-semibold" for="truck_access"
+					<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="truck_access"
 						>{lable}</label
 					>
 					<input
 						type="text"
-						class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 w-full rounded-lg border p-0.5 pr-20"
+						class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 w-full rounded-lg border p-0.5 pr-20"
 						id="truck_access_other_information"
 						name="truck_access_other_information"
 						hidden={!otherAccessChecked}
@@ -332,57 +333,57 @@
 						bind:group={formData.property_profile.truck_access}
 						{value}
 					/>
-					<label class="text-primary-700 flex-initial px-3 text-lg font-semibold" for="truck_access"
+					<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="truck_access"
 						>{lable}</label
 					>
 				</div>
 			{/if}
 		{/each}
 	</div>
-	<h2 class="h2 text-surface-950 mb-1 text-lg font-semibold">What is your phone number?</h2>
-	<div class="bg-secondary-200 rounded-lg p-2">
+	<h2 class="h2 text-surface-950-50 mb-1 text-lg font-semibold">What is your phone number?</h2>
+	<div class="bg-secondary-200-800 rounded-lg p-2">
 		<div class="sm:text-scale-5 flex flex-row">
-			<label class="text-primary-700 flex-initial px-3 text-lg font-semibold" for="mobile"
+			<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="mobile"
 				>Mobile</label
 			>
 			<input
 				type="tel"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5 pr-20"
 				id="mobile"
 				name="mobile"
 				placeholder="Mobile 0XXX XXX XXX"
 				onkeydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						userProfile.mobile = e.currentTarget.value;
+						formData.mobile = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						userProfile.mobile = e.currentTarget.value;
+						formData.mobile = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							userProfile.mobile = formatMobile(userProfile.mobile, e.key);
+							formData.mobile = formatMobile(formData.mobile, e.key);
 						}
 					}
 				}}
 				bind:value={formData.mobile}
 				autocomplete="off"
 			/>
-			<label class="text-primary-700 flex-initial px-3 text-lg font-semibold" for="phone"
+			<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="phone"
 				>Landline</label
 			>
 			<input
 				type="tel"
-				class="text-scale-5 text-surface-950 focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 block w-full rounded-lg border p-0.5 pr-20"
+				class="text-scale-5 text-surface-950-50 focus:border-primary-600 focus:ring-primary-600 border-surface-300-700 bg-surface-50-950 block w-full rounded-lg border p-0.5 pr-20"
 				id="phone"
 				name="phone"
 				placeholder="Landline XXXX XXXX"
 				onkeydown={(e) => {
 					if (['Backspace', 'Delete'].includes(e.key)) {
-						userProfile.property_profile.phone = e.currentTarget.value;
+						formData.property_profile.phone = e.currentTarget.value;
 					} else {
 						e.preventDefault();
-						userProfile.property_profile.phone = e.currentTarget.value;
+						formData.property_profile.phone = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							userProfile.property_profile.phone = formatPhone(
-								userProfile.property_profile.phone,
+							formData.property_profile.phone = formatPhone(
+								formData.property_profile.phone,
 								e.key
 							);
 						}
