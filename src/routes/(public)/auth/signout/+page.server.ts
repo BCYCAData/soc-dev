@@ -18,6 +18,8 @@ export const actions: Actions = {
 		event.cookies.delete('sb-refresh-token', { path: '/' });
 		// Clear the session-lifetime tracking cookies (idle + absolute cap).
 		clearSessionTracking(event.cookies);
+		// Clear the profile-completion nag cookie so it doesn't linger past logout.
+		event.cookies.delete('ppf_nag', { path: '/' });
 
 		throw redirect(303, '/auth/signin');
 	}
