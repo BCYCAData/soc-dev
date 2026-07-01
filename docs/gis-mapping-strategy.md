@@ -227,15 +227,18 @@ Layer       =  LayerConfig (declarative; sourced by RPC name)
   the param to `jsonb`/`text` and `ST_GeomFromGeoJSON` inside) — this is a latent bug to validate
   before building on top of it.
 
-### 4.5 SRID & the client/DB data contract
-
-Single enforced rule:
+### 4.5 SRID & the client/DB data contract *(implemented, G5 done)*
 
 - **Client / Leaflet / GeoJSON over the wire = EPSG:4326 (WGS84).**
-- **Database storage = EPSG:7844 (GDA2020).**
-- **Transform only at the RPC boundary:** read RPCs return `ST_AsGeoJSON(ST_Transform(geom,4326))`;
-  write RPCs do `ST_Transform(ST_GeomFromGeoJSON(...)::geometry,7844)`. No transforms in the
-  browser, no 7844 GeoJSON leaving the DB. Document this contract next to the type defs.
+- **Cached NSW SS *reference* geometry = EPSG:7844 (GDA2020)** — `property_geometry`, `project_*`,
+  `project_area`. Read RPCs return `ST_AsGeoJSON(ST_Transform(geom,4326))`.
+- **User-authored *editable* features (`spatial_features.geom`) = EPSG:4326** — their native
+  capture CRS (drawn in Leaflet, served back as 4326). The column is declared `geometry(Geometry,
+  4326)` (was an unconstrained SRID 0). Storing these in 7844 would add read+write transforms for
+  no benefit at property scale (7844↔4326 differ <2 m).
+- **Transform at the comparison boundary:** where the two CRSs meet, transform once — e.g.
+  `validate_spatial_feature` transforms the 7844 property boundary *to* 4326 to check/snap 4326
+  features. No transforms in the browser; no 7844 GeoJSON leaves the DB.
 
 ### 4.6 Caching & provenance model
 
@@ -257,9 +260,9 @@ Single enforced rule:
 | G2 | Validation/snapping/merge RPCs don't exist | dev/newprod | High | Build as migrations (§4.4) |
 | G3 | Two editing libs loaded at once | `Leafletmap.svelte` | Med | **Done** — Leaflet.Editable only (v1 deleted) |
 | G4 | `upsert_spatial_feature` geometry-vs-GeoJSON contract | `my-map/+page.server.ts` + RPC | High | Verify/repair coercion |
-| G5 | SRID handling implicit/mixed (7844 vs 4326) | RPCs + docs | High | Enforce boundary-transform rule (§4.5) |
+| G5 | SRID handling implicit/mixed (7844 vs 4326) | RPCs + docs | High | **Done** — `spatial_features.geom` declared 4326; reference caches 7844; transform at boundary (§4.5) |
 | G6 | `transformFeaturesToGeoJSON` duplicated | utils + page | Low | Single shared util |
-| G7 | Type defs scattered | `lib/data`, `lib/map` | Med | Partial — v1 `lib/leaflet` type files removed; `lib/data`/`lib/map` consolidation still open |
+| G7 | Type defs scattered | `lib/data`, `lib/map` | Med | **Done** — v1 dup type files removed; engine types via barrel [`lib/map/types.ts`](../src/lib/map/types.ts); data-shapes stay in `lib/data/spatial` |
 | G8 | Geoscape tiles uncached; live dependency | geoscape proxy | Med | Done — edge-cached; no PostGIS cache (cadastre commercial) |
 | G9 | Module-level `$state` singletons | `spatialutilities.svelte.ts` | Med | **Done** — per-map state in `MapView`; v1 deleted |
 | G10 | `location.reload()` in save UX | proposed `my-map` flow | Low | `invalidateAll()` |

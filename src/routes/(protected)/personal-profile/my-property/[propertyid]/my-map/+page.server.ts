@@ -179,5 +179,57 @@ export const actions: Actions = {
 			message: 'Spatial feature successfully deleted',
 			deleteResult
 		};
+	},
+	mergeFeatures: async ({ request, locals: { supabase } }) => {
+		const {
+			data: { user }
+		} = await supabase.auth.getUser();
+		if (!user) {
+			return fail(401, { success: false, message: 'Authentication required' });
+		}
+		const formData = await request.formData();
+		const propertyId = formData.get('propertyId');
+		const featureIdsRaw = formData.get('featureIds'); // comma-joined uuids
+
+		if (!propertyId || !featureIdsRaw) {
+			return fail(400, { success: false, message: 'Missing required fields' });
+		}
+		const featureIds = featureIdsRaw
+			.toString()
+			.split(',')
+			.map((s) => s.trim())
+			.filter(Boolean);
+		if (featureIds.length < 2) {
+			return fail(400, { success: false, message: 'Select at least 2 features to merge' });
+		}
+
+		// merge_spatial_features validates ownership, same-template and geometry type,
+		// unions the geometry (last-edited-wins attrs), inserts the merged feature and
+		// deletes the originals. Returns { success, feature_id?, merged_count?, error? }.
+		const { data, error: rpcError } = await supabase.rpc('merge_spatial_features', {
+			p_feature_ids: featureIds,
+			p_user_id: user.id,
+			p_property_id: propertyId.toString()
+		});
+		if (rpcError) {
+			console.log('mergeFeaturesError', rpcError.message);
+			return fail(400, { success: false, message: 'Failed to merge features' });
+		}
+
+		const result = (data ?? {}) as {
+			success?: boolean;
+			error?: string;
+			feature_id?: string;
+			merged_count?: number;
+		};
+		if (!result.success) {
+			return fail(400, { success: false, message: result.error ?? 'Merge failed' });
+		}
+
+		return {
+			success: true,
+			message: `Merged ${result.merged_count ?? featureIds.length} features`,
+			featureId: result.feature_id
+		};
 	}
 };

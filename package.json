@@ -70,6 +70,7 @@
 		"vite": "^6.3.5"
 	},
 	"dependencies": {
+		"leaflet-geometryutil": "^0.10.3",
 		"leaflet.markercluster": "^1.5.3"
 	}
 }

@@ -6,6 +6,7 @@
 
 	import { LEAFLET_CONTEXT_KEY, type LeafletContext } from '$lib/map/createLeafletMap';
 	import { templateLeafletStyle } from '$lib/map/profiles/property-capture';
+	import { enableSnapping } from '$lib/map/capture/snapping';
 
 	export interface TemplateAttribute {
 		id: string;
@@ -59,11 +60,23 @@
 	let saving = $state(false);
 	let showTemplatePicker = $state(false);
 
+	// ── Snapping ──
+	let snapEnabled = $state(true);
+
+	// ── Merge mode ──
+	let mergeMode = $state(false);
+	let mergeIds = $state<string[]>([]); // reactive mirror of the selection
+	let mergeTemplateId = $state<string | null>(null);
+	let merging = $state(false);
+
 	// Imperative (non-reactive) Leaflet handles.
 	let pendingGeometry: GeoJSON.Geometry | null = null;
 	let tempDrawLayer: any = null; // the in-progress drawn layer
 	let selectedLayer: any = null; // an existing feature layer being edited
 	const featureLayers = new Map<string, any>(); // templateId → L.GeoJSON
+	const mergeSelected = new Map<string, { layer: any; template: FeatureTemplate }>(); // id → layer
+
+	const MERGE_HIGHLIGHT = { color: '#f59e0b', weight: 4, fillColor: '#f59e0b', fillOpacity: 0.35 };
 
 	function clearDrawArtifacts() {
 		if (mapRef) {
@@ -175,13 +188,75 @@
 				onEachFeature: (feature: GeoJSON.Feature, lyr: any) => {
 					lyr.on('click', (e: any) => {
 						e.originalEvent?.stopPropagation?.();
-						selectExisting(template, feature, lyr);
+						if (mergeMode) toggleMergeSelect(template, feature, lyr);
+						else selectExisting(template, feature, lyr);
 					});
 				}
 			});
 			layer.addTo(map);
 			featureLayers.set(template.id, layer);
 		}
+	}
+
+	// ── Snapping: collect candidate layers (context + existing features), flattened to
+	// primitive geometries, excluding the shape currently being drawn/edited. ──
+	function getSnapLayers(): any[] {
+		if (!snapEnabled) return [];
+		const out: any[] = [];
+		const push = (lyr: any) => {
+			if (!lyr) return;
+			if (typeof lyr.getLayers === 'function') lyr.getLayers().forEach(push);
+			else out.push(lyr);
+		};
+		const registry = ctx.getLeafletLayers();
+		for (const id in registry) push(registry[id].leafletLayer);
+		for (const [, layer] of featureLayers) push(layer);
+		return out.filter((l) => l !== tempDrawLayer && l !== selectedLayer);
+	}
+
+	// ── Merge mode ──
+	function highlight(layer: any) {
+		layer?.setStyle?.(MERGE_HIGHLIGHT);
+	}
+	function restore(template: FeatureTemplate, layer: any) {
+		layer?.setStyle?.(templateLeafletStyle(template.category));
+	}
+	function clearMergeSelection() {
+		for (const [, { layer, template }] of mergeSelected) restore(template, layer);
+		mergeSelected.clear();
+		mergeIds = [];
+		mergeTemplateId = null;
+	}
+	function toggleMergeMode() {
+		if (mergeMode) {
+			clearMergeSelection();
+			mergeMode = false;
+			statusMessage = null;
+		} else {
+			resetCapture();
+			showTemplatePicker = false;
+			mergeMode = true;
+			statusMessage = 'Merge: pick 2+ line/area features of the same type, then Merge.';
+		}
+	}
+	function toggleMergeSelect(template: FeatureTemplate, feature: GeoJSON.Feature, layer: any) {
+		if (template.geometry_type === 'point') {
+			statusMessage = 'Only line and area features can be merged.';
+			return;
+		}
+		const id = feature.properties?.id as string;
+		if (!id) return;
+		// Merge requires a single template — switching type starts a fresh selection.
+		if (mergeTemplateId && mergeTemplateId !== template.id) clearMergeSelection();
+		mergeTemplateId = template.id;
+		if (mergeSelected.has(id)) {
+			mergeSelected.delete(id);
+			restore(template, layer);
+		} else {
+			mergeSelected.set(id, { layer, template });
+			highlight(layer);
+		}
+		mergeIds = [...mergeSelected.keys()];
 	}
 
 	// Init once the map exists.
@@ -201,7 +276,19 @@
 			statusMessage = null;
 		};
 		map.on('editable:drawing:commit', onCommit);
-		return () => map.off('editable:drawing:commit', onCommit);
+
+		// Snapping (GeometryUtil loaded lazily; augments the shared L singleton).
+		let cancelled = false;
+		let disposeSnap = () => {};
+		import('leaflet-geometryutil').then(() => {
+			if (!cancelled) disposeSnap = enableSnapping(L, map, getSnapLayers);
+		});
+
+		return () => {
+			cancelled = true;
+			disposeSnap();
+			map.off('editable:drawing:commit', onCommit);
+		};
 	});
 
 	// Rebuild feature layers whenever the data (or map) changes.
@@ -212,15 +299,29 @@
 	});
 </script>
 
-<!-- Toolbar: add-feature template picker -->
+<!-- Toolbar: add-feature template picker + merge/snap controls -->
 <div class="capture-toolbar">
-	<button
-		type="button"
-		class="capture-btn capture-btn--primary"
-		onclick={() => (showTemplatePicker = !showTemplatePicker)}
-	>
-		+ Add feature
-	</button>
+	<div class="capture-toolbar__row">
+		<button
+			type="button"
+			class="capture-btn capture-btn--primary"
+			onclick={() => (showTemplatePicker = !showTemplatePicker)}
+		>
+			+ Add feature
+		</button>
+		<button
+			type="button"
+			class="capture-btn"
+			class:capture-btn--active={mergeMode}
+			onclick={toggleMergeMode}
+		>
+			Merge
+		</button>
+		<label class="capture-snap" title="Snap vertices to nearby boundaries and features">
+			<input type="checkbox" bind:checked={snapEnabled} />
+			Snap
+		</label>
+	</div>
 	{#if showTemplatePicker}
 		<div class="capture-picker">
 			{#each Object.entries(templatesByCategory) as [category, list] (category)}
@@ -233,6 +334,42 @@
 				{/each}
 			{/each}
 		</div>
+	{/if}
+
+	{#if mergeMode}
+		<form
+			method="POST"
+			action="?/mergeFeatures"
+			class="capture-merge-bar"
+			use:enhance={() => {
+				merging = true;
+				return async ({ result }) => {
+					merging = false;
+					if (result.type === 'success') {
+						await invalidateAll();
+						clearMergeSelection();
+						mergeMode = false;
+						statusMessage = ((result.data as any)?.message as string) ?? 'Merged';
+					} else if (result.type === 'failure') {
+						statusMessage = ((result.data as any)?.message as string) ?? 'Merge failed';
+					} else {
+						statusMessage = 'Merge failed';
+					}
+				};
+			}}
+		>
+			<input type="hidden" name="propertyId" value={propertyId} />
+			<input type="hidden" name="featureIds" value={mergeIds.join(',')} />
+			<span>{mergeIds.length} selected</span>
+			<button
+				type="submit"
+				class="capture-btn capture-btn--primary"
+				disabled={mergeIds.length < 2 || merging}
+			>
+				{merging ? 'Merging…' : 'Merge'}
+			</button>
+			<button type="button" class="capture-btn" onclick={toggleMergeMode}>Cancel</button>
+		</form>
 	{/if}
 </div>
 
@@ -370,6 +507,46 @@
 		top: 0.75rem;
 		left: 0.75rem;
 		z-index: 1100;
+	}
+	.capture-toolbar__row {
+		display: flex;
+		gap: 6px;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.capture-snap {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		font-size: 0.8rem;
+		padding: 4px 8px;
+		border-radius: 5px;
+		background: var(--color-surface-100);
+		color: var(--color-surface-900);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+	}
+	:global(.dark) .capture-snap {
+		background: var(--color-surface-800);
+		color: var(--color-surface-50);
+	}
+	.capture-btn--active {
+		outline: 2px solid #f59e0b;
+	}
+	.capture-merge-bar {
+		margin-top: 6px;
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		background: var(--color-surface-100);
+		color: var(--color-surface-900);
+		padding: 6px 10px;
+		border-radius: 6px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+		font-size: 0.82rem;
+	}
+	:global(.dark) .capture-merge-bar {
+		background: var(--color-surface-800);
+		color: var(--color-surface-50);
 	}
 	.capture-status {
 		position: absolute;
