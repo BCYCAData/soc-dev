@@ -1,98 +1,59 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/table/API/map data */
-	import Spinner from '$components/page/Spinner.svelte';
-	import LeafletArcGisFeatureServerLayer from '$components/map/leaflet/layers/LeafletArcGISFeatureServerLayer.svelte';
-	import LeafletGeoJSONPointLayer from '$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte';
-	import GNAFGeoJSON from '$components/map/leaflet/layers/pbf-data/GNAFGeoJSON.svelte';
+	/* eslint-disable @typescript-eslint/no-explicit-any -- dynamic form/API/map data */
+	import type L from 'leaflet';
+	import MapView from '$lib/map/MapView.svelte';
+	import ArcGisFeatureLayer from '$lib/map/layers/live/ArcGisFeatureLayer.svelte';
+	import GnafAddressLayer from '$lib/map/layers/live/GnafAddressLayer.svelte';
 	import GNAFAddressCheckForm from '$components/form/GNAFAddressCheckForm.svelte';
-
-	import { customAddressesMapConfig, gnafAddressPointsOptions } from '$lib/leaflet/mapconfig';
-	import {
-		gurasPropertyPopUpTemplate,
-		gnafAddressTooltipTemplate,
-		gnafMultiFeaturePopupTemplate
-	} from '$lib/leaflet/leafletdatatemplates';
-
-	// import 'leaflet/dist/leaflet.css';
+	import { addressMapProfile } from '$lib/map/profiles/site';
+	import { gurasPropertyPopUpTemplate } from '$lib/map/render/address-templates';
 
 	interface Props {
 		active: boolean;
 	}
 
 	let { active = false }: Props = $props();
-	let leafletMapInstance = $state<L.Map>();
-	let mapLoaded = $state(false);
-	let gnafAddressPoints = $state<GeoJSON.FeatureCollection>({
-		type: 'FeatureCollection',
-		features: []
-	});
+
+	let mapInstance = $state<L.Map>();
+	let mapReady = $state(false);
+
+	function handleReady(map: L.Map) {
+		mapInstance = map;
+		mapReady = true;
+	}
 
 	function handleAddressChecked(result: any) {
 		if (result?.geojson?.geometry) {
 			const coords = result.geojson.geometry.coordinates;
-			leafletMapInstance?.setView([coords[1], coords[0]], 18);
+			mapInstance?.setView([coords[1], coords[0]], 18);
 		}
 	}
 
-	function handleMapInstance(map: L.Map) {
-		leafletMapInstance = map;
-	}
-
-	function handleMapLoaded() {
-		mapLoaded = true;
-	}
-
-	function handleGnafData(data: GeoJSON.FeatureCollection) {
-		gnafAddressPoints = data;
-	}
-
+	// Leaflet needs a size recalculation when the tab becomes visible.
 	$effect(() => {
-		if (active && leafletMapInstance) {
-			setTimeout(() => {
-				leafletMapInstance?.invalidateSize();
-			}, 100);
+		if (active && mapInstance) {
+			setTimeout(() => mapInstance?.invalidateSize(), 100);
 		}
 	});
 </script>
 
 <div class="map-wrapper">
 	<div class="map-container">
-		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: Leafletmap }}
-			{#if !mapLoaded}
-				<div class="spinner-overlay">
-					<Spinner size="100" />
-				</div>
-			{/if}
-			<Leafletmap
-				{...customAddressesMapConfig([-31.9511, 152.2983] as [number, number])}
-				onMapReady={handleMapLoaded}
-				onMapInstance={handleMapInstance}
-			>
-				<LeafletArcGisFeatureServerLayer
-					url="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12"
-					name="Property Theme"
-					visible={true}
-					popupTemplate={gurasPropertyPopUpTemplate}
-				/>
-				{#if leafletMapInstance}
-					<GNAFGeoJSON {leafletMapInstance} onGnafData={handleGnafData} />
-				{/if}
-				<LeafletGeoJSONPointLayer
-					geojsonData={gnafAddressPoints}
-					layerName="GNAF Addresses"
-					visible={true}
-					editable={false}
-					showInLegend={true}
-					staticLayer={false}
-					symbology={gnafAddressPointsOptions}
-					tooltipTemplate={gnafAddressTooltipTemplate}
-					multiFeaturePopupTemplate={gnafMultiFeaturePopupTemplate}
-				/>
-				{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
-					<LeafletScaleControl position="bottomleft" />
-				{/await}
-			</Leafletmap>
-		{/await}
+		<MapView
+			profile={addressMapProfile}
+			view={{ center: [-31.9511, 152.2983], zoom: 15 }}
+			layers={[]}
+			onReady={handleReady}
+			class="h-full"
+		>
+			<ArcGisFeatureLayer
+				ready={mapReady}
+				url="https://portal.spatial.nsw.gov.au/server/rest/services/NSW_Land_Parcel_Property_Theme/FeatureServer/12"
+				name="Property Theme"
+				popupTemplate={gurasPropertyPopUpTemplate}
+			/>
+			<GnafAddressLayer ready={mapReady} />
+		</MapView>
 	</div>
 	<div class="card mb-4 px-4">
 		<GNAFAddressCheckForm onAddressChecked={handleAddressChecked} />

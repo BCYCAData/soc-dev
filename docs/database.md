@@ -454,9 +454,22 @@ Together, these provide a complete picture of the defense-in-depth security arch
 
 **`check_gnaf_address_match(...) → Json`**
 
-- Validates address against NSW GNAF dataset
+- Validates address against NSW GNAF dataset (Geoscape geocoder)
 - Used during property onboarding
 - Returns principaladdresssiteoid for property linkage
+
+### Cached source geometry (provenance & refresh)
+
+- `project_addresspoints` / `project_waypoints` / `project_proways` / `project_properties` /
+  `project_properties_singlepart` cache NSW Spatial Services reference geometry (SRID 7844),
+  repopulated wholesale by `refresh_spatial_data()` → `extract_*()`.
+- Provenance columns `source` / `source_layer` / `fetched_at` (DEFAULT-stamped per refresh) make
+  staleness queryable; a monthly `pg_cron` job runs the refresh.
+- **`get_spatial_data_currency() → timestamptz`** — currency ("as at" date) of the cache, surfaced
+  in map attribution via `/api/spatial-data-currency`.
+- **`get_site_boundary() → (project_geom, project_boundary)`** — project boundary union
+  (`project_area.geom`, SRID 7844 → 4326), used by the admin KYNG-boundaries map.
+- Full lifecycle, licensing and operator commands: [source-data-lifecycle.md](./source-data-lifecycle.md).
 
 ---
 

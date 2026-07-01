@@ -1,11 +1,14 @@
 <script lang="ts">
 	import Spinner from '$components/page/Spinner.svelte';
+
+	import MapView from '$lib/map/MapView.svelte';
 	import {
-		communityFillOptions,
-		myCommunityExternalMapConfig,
-		projectAddresspointsOptions,
-		registeredAddresspointsOptions
-	} from '$lib/leaflet/mapconfig';
+		communityMapProfile,
+		communityAreaLayer,
+		projectAddressPointsLayer,
+		registeredAddressPointsLayer
+	} from '$lib/map/profiles/community';
+	import type { MapViewTarget, ResolvedLayer } from '$lib/map/profiles/types';
 
 	import type { PageData } from './$types';
 
@@ -15,70 +18,30 @@
 
 	let { data }: Props = $props();
 
-	const initialExtent = $derived(data.mapExtent);
-	const externalAddressPoints = $derived(data.addressPoints);
-	const externalRegisteredPoints = $derived(data.registeredPoints);
-	const externalCommunityArea = $derived(data.community);
+	const view = $derived<MapViewTarget>({ extent: data.mapExtent });
+
+	const layers = $derived<ResolvedLayer[]>([
+		{ config: communityAreaLayer, data: data.community },
+		{ config: projectAddressPointsLayer, data: data.addressPoints },
+		{ config: registeredAddressPointsLayer, data: data.registeredPoints }
+	]);
 
 	let mapLoaded = $state(false);
-
-	function handleMapLoaded() {
-		mapLoaded = true;
-	}
 </script>
 
 <svelte:head>
 	<title>Profile-Community External-Map</title>
 </svelte:head>
 
-{#if initialExtent}
+{#if data.mapExtent}
 	<div class="map-container mx-auto flex w-5/6 flex-col">
-		{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
-			<LeafletMap {...myCommunityExternalMapConfig(initialExtent)} onMapReady={handleMapLoaded}>
-				{#if !mapLoaded}
-					<div class="spinner-overlay">
-						<Spinner size="100" />
-					</div>
-				{/if}
-				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPolygonLayer.svelte') then { default: LeafletGeoJSONPolygonLayer }}
-					<LeafletGeoJSONPolygonLayer
-						geojsonData={externalCommunityArea}
-						layerName="External Community Area"
-						visible={true}
-						editable={false}
-						staticLayer={false}
-						showInLegend={true}
-						symbology={communityFillOptions}
-					/>
-				{/await}
-				{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
-					<LeafletGeoJSONPointLayer
-						geojsonData={externalAddressPoints}
-						layerName="Project Address Points"
-						visible={true}
-						editable={false}
-						showInLegend={true}
-						staticLayer={false}
-						symbology={projectAddresspointsOptions}
-					/>
-					<LeafletGeoJSONPointLayer
-						geojsonData={externalRegisteredPoints}
-						layerName="Registered Address Points"
-						visible={true}
-						editable={false}
-						showInLegend={true}
-						staticLayer={false}
-						symbology={registeredAddresspointsOptions}
-					/>
-				{/await}
-				{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
-					<LeafletScaleControl position="bottomleft" />
-				{/await}
-				{#await import('$components/map/leaflet/controls/LeafletLegendControl.svelte') then { default: LeafletLegendControl }}
-					<LeafletLegendControl position="bottomright" />
-				{/await}
-			</LeafletMap>
-		{/await}
+		<MapView profile={communityMapProfile} {view} {layers} onReady={() => (mapLoaded = true)}>
+			{#if !mapLoaded}
+				<div class="spinner-overlay">
+					<Spinner size="100" />
+				</div>
+			{/if}
+		</MapView>
 	</div>
 {:else}
 	<div class="main-map mx-auto flex h-full w-5/6 flex-col">

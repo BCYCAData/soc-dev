@@ -1,11 +1,9 @@
 <script lang="ts">
-	import Spinner from '$components/page/Spinner.svelte';
 	import type { AddressPointsGeoJSON } from '$lib/data/spatial/types';
-	import {
-		aboutMapConfig,
-		projectAddresspointsOptions,
-		registeredAddresspointsOptions
-	} from '$lib/leaflet/mapconfig';
+	import MapView from '$lib/map/MapView.svelte';
+	import { siteStreetsProfile } from '$lib/map/profiles/site';
+	import { projectAddressPointsLayer, registeredAddressPointsLayer } from '$lib/map/profiles/community';
+	import type { ResolvedLayer } from '$lib/map/profiles/types';
 
 	interface Props {
 		addressPointsGeoJSON: AddressPointsGeoJSON;
@@ -13,7 +11,10 @@
 
 	let { addressPointsGeoJSON }: Props = $props();
 
-	let mapLoaded = $state(false);
+	let layers = $derived<ResolvedLayer[]>([
+		{ config: projectAddressPointsLayer, data: addressPointsGeoJSON?.allAddresspoints ?? null },
+		{ config: registeredAddressPointsLayer, data: addressPointsGeoJSON?.registeredAddresspoints ?? null }
+	]);
 
 	const focusAreas = [
 		{
@@ -37,8 +38,6 @@
 				'locally run workshops to increase community preparedness, through knowledge sharing.'
 		}
 	];
-
-	const handleMapLoaded = () => (mapLoaded = true);
 </script>
 
 <svelte:head>
@@ -52,9 +51,9 @@
 <article class="grid h-full grid-rows-[auto_auto_auto_1fr] gap-4 overflow-hidden">
 	<header class="text-center">
 		<h1 class="h1 text-primary-600">Strengthen OUR Community</h1>
-		<p class="text-xl">
-			This project empowers our community to take responsibility for being prepared and <br /> working
-			together to make a difference.
+		<p class="text-base sm:text-xl">
+			This project empowers our community to take responsibility for being prepared and
+			<br class="hidden sm:inline" /> working together to make a difference.
 		</p>
 	</header>
 
@@ -78,48 +77,15 @@
 	</section>
 
 	<section
-		class="mx-auto flex h-[calc(100vh-400px)] w-full max-w-3xl flex-col overflow-hidden px-4"
+		class="mx-auto flex h-[45vh] min-h-75 w-full max-w-3xl flex-col overflow-hidden px-0 sm:h-[calc(100vh-400px)] sm:px-4"
 	>
 		{#if addressPointsGeoJSON}
-			{#await import('$components/map/leaflet/Leafletmap.svelte') then { default: LeafletMap }}
-				{#if !mapLoaded}
-					<div class="flex items-center justify-center">
-						<Spinner size="100" />
-					</div>
-				{/if}
-
-				<LeafletMap
-					{...aboutMapConfig(
-						addressPointsGeoJSON.initialExtent as [[number, number], [number, number]]
-					)}
-					onMapReady={handleMapLoaded}
-				>
-					{#await import('$components/map/leaflet/layers/geojson/LeafletGeoJSONPointLayer.svelte') then { default: LeafletGeoJSONPointLayer }}
-						<LeafletGeoJSONPointLayer
-							geojsonData={addressPointsGeoJSON.allAddresspoints}
-							layerName="Project Address Points"
-							visible={true}
-							symbology={projectAddresspointsOptions}
-							staticLayer={false}
-							showInLegend={true}
-							editable={false}
-						/>
-						<LeafletGeoJSONPointLayer
-							geojsonData={addressPointsGeoJSON.registeredAddresspoints}
-							layerName="Registered Address Points"
-							visible={true}
-							symbology={registeredAddresspointsOptions}
-							staticLayer={false}
-							showInLegend={true}
-							editable={false}
-						/>
-					{/await}
-
-					{#await import('$components/map/leaflet/controls/LeafletScaleControl.svelte') then { default: LeafletScaleControl }}
-						<LeafletScaleControl position="bottomleft" />
-					{/await}
-				</LeafletMap>
-			{/await}
+			<MapView
+				profile={siteStreetsProfile}
+				view={{ extent: addressPointsGeoJSON.initialExtent as [[number, number], [number, number]] }}
+				{layers}
+				class="h-full"
+			/>
 		{:else}
 			<p class="text-surface-500 mt-4 text-center">Unable to load map data</p>
 		{/if}

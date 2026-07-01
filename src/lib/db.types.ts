@@ -6099,6 +6099,7 @@ export type Database = {
 					suburbname: string;
 				}[];
 			};
+			get_spatial_data_currency: { Args: never; Returns: string };
 			get_spatial_feature_attributes:
 				| { Args: { p_property_id: string }; Returns: Json }
 				| { Args: { p_property_id: string; p_user_id: string }; Returns: Json };
@@ -6444,6 +6445,33 @@ export type Database = {
 					p_user_id: string;
 				};
 				Returns: string;
+			};
+			upsert_spatial_feature_geojson: {
+				Args: {
+					p_feature_id: string;
+					p_geom: Json;
+					p_property_id: string;
+					p_template_id: string;
+					p_user_id: string;
+				};
+				Returns: Json;
+			};
+			validate_spatial_feature: {
+				Args: {
+					p_geojson: string;
+					p_property_id: string;
+					p_snap_tolerance?: number;
+					p_template_id: string;
+				};
+				Returns: Json;
+			};
+			merge_spatial_features: {
+				Args: {
+					p_feature_ids: string[];
+					p_property_id: string;
+					p_user_id: string;
+				};
+				Returns: Json;
 			};
 			user_in_community: { Args: { community_slug: string }; Returns: boolean };
 			user_owns_property: { Args: { property_id: string }; Returns: boolean };

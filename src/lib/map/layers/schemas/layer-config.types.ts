@@ -47,6 +47,8 @@ export interface LayerConfig {
 		maxZoom?: number;
 		pane?: string;
 		zIndex?: number;
+		/** Wrap point features in a Leaflet.markercluster group (dense layers). */
+		cluster?: boolean;
 	};
 
 	// Feature property schema (for validation & forms)
@@ -99,6 +101,10 @@ export interface StyleConfig {
 	};
 }
 
+/** Shapes a point can render as. `circle` → Leaflet circleMarker; the rest are
+ * SVG divIcon markers (see lib/map/render/markers.ts). */
+export type MarkerShape = 'circle' | 'square' | 'diamond' | 'triangle';
+
 export interface PointStyle {
 	radius?: number;
 	fillColor?: string;
@@ -106,6 +112,10 @@ export interface PointStyle {
 	color?: string;
 	weight?: number;
 	opacity?: number;
+	/** When set to a non-circle shape, the point renders as an SVG divIcon. */
+	shape?: MarkerShape;
+	/** Pixel size for shape (divIcon) markers. */
+	size?: number;
 }
 
 export interface LineStyle {

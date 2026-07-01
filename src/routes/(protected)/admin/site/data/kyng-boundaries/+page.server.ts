@@ -2,26 +2,16 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
-	const { data: siteSuburbsData, error: siteSuburbsError } = await supabase.rpc('get_site_suburbs');
-	if (siteSuburbsError) {
-		console.log('error get Project Suburbs list:', siteSuburbsError);
-		error(400, siteSuburbsError.message);
-	}
-	const { data: siteRoadsData, error: siteRoadsError } = await supabase.rpc('get_site_roads');
-	if (siteRoadsError) {
-		console.log('error get Project Roads list:', siteRoadsError);
-		error(400, siteRoadsError.message);
-	}
-	const { data: siteBoundaryData, error: siteBoundaryError } =
-		await supabase.rpc('get_site_boundary');
-	if (siteRoadsError) {
-		console.log('error get Project Boundary:', siteBoundaryError);
-		error(400, siteBoundaryError.message);
+	// Only the project boundary is needed for this map. (The previous get_site_suburbs /
+	// get_site_roads calls were unused here and made slow live NSW Spatial Services requests.)
+	const { data, error: boundaryError } = await supabase.rpc('get_site_boundary');
+	if (boundaryError) {
+		console.log('error get Project Boundary:', boundaryError);
+		error(400, boundaryError.message);
 	}
 
+	const row = Array.isArray(data) ? data[0] : data;
 	return {
-		siteSuburbsData: siteSuburbsData,
-		siteRoadsData: siteRoadsData,
-		siteBoundaryData: siteBoundaryData
+		boundaryGeometry: (row?.project_boundary ?? null) as GeoJSON.Geometry | null
 	};
 };

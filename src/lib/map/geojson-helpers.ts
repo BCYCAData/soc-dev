@@ -2,6 +2,22 @@
 import type { GeoJSONOptions, CircleMarkerOptions, MarkerOptions, PolylineOptions } from 'leaflet';
 import { getLeaflet } from './layer-factory';
 
+/**
+ * Remove keys whose value is `undefined`. Style objects are built by
+ * destructuring every possible option, so unset props come through as
+ * `undefined`. Spreading those over Leaflet's defaults (or its prototype
+ * options via setOptions) clobbers them — e.g. `fill: undefined` disables fill,
+ * `color: undefined` wipes the default stroke colour. Pruning first keeps the
+ * defaults intact and only overrides with values the caller actually set.
+ */
+function stripUndefined<T extends Record<string, unknown>>(obj: T): T {
+	const out = {} as T;
+	for (const key in obj) {
+		if (obj[key] !== undefined) out[key] = obj[key];
+	}
+	return out;
+}
+
 // ============================================================================
 // POINT STYLES
 // ============================================================================
@@ -131,7 +147,7 @@ function getCircleMarkerOptions(style: PointStyle): CircleMarkerOptions {
 		className
 	} = style;
 
-	return {
+	return stripUndefined({
 		radius,
 		stroke,
 		color,
@@ -148,7 +164,7 @@ function getCircleMarkerOptions(style: PointStyle): CircleMarkerOptions {
 		bubblingMouseEvents,
 		interactive,
 		className
-	};
+	});
 }
 
 function getMarkerOptions(style: PointStyle): MarkerOptions {
@@ -169,7 +185,7 @@ function getMarkerOptions(style: PointStyle): MarkerOptions {
 		bubblingMouseEvents
 	} = style;
 
-	return {
+	return stripUndefined({
 		icon,
 		zIndexOffset,
 		opacity,
@@ -184,7 +200,7 @@ function getMarkerOptions(style: PointStyle): MarkerOptions {
 		autoPanSpeed,
 		interactive,
 		bubblingMouseEvents
-	};
+	});
 }
 
 function getDefaultPointHoverStyle(
@@ -334,7 +350,7 @@ function getPolylineOptions(style: LineStyle): PolylineOptions {
 		noClip
 	} = style;
 
-	return {
+	return stripUndefined({
 		stroke,
 		color,
 		weight,
@@ -348,7 +364,7 @@ function getPolylineOptions(style: LineStyle): PolylineOptions {
 		className,
 		smoothFactor,
 		noClip
-	};
+	});
 }
 
 function getDefaultLineHoverStyle(defaultStyle: PolylineOptions): Partial<PolylineOptions> {
@@ -459,7 +475,7 @@ function getPolygonOptions(style: PolygonStyle): PolylineOptions {
 		noClip
 	} = style;
 
-	return {
+	return stripUndefined({
 		stroke,
 		color,
 		weight,
@@ -477,7 +493,7 @@ function getPolygonOptions(style: PolygonStyle): PolylineOptions {
 		className,
 		smoothFactor,
 		noClip
-	};
+	});
 }
 
 function getDefaultPolygonHoverStyle(defaultStyle: PolylineOptions): Partial<PolylineOptions> {

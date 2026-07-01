@@ -25,7 +25,7 @@
 	/>
 </svelte:head>
 
-<section class="text-surface-950 grid grid-cols-1 gap-6">
+<section class="text-surface-950-50 grid grid-cols-1 gap-6">
 	<header class="text-center">
 		<h1>Strengthen Our Community - KYNGs</h1>
 	</header>

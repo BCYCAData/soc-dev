@@ -319,7 +319,118 @@ Routes involved:
 
 ---
 
-## 2–7. Remaining sections
+## 3–5 (partial). Maps & spatial data capture
+
+> All map-bearing routes now run on the single **v2 map engine**
+> (`$lib/map/MapView.svelte` plus per-purpose profiles in `$lib/map/profiles/`). Read RPCs
+> return GeoJSON in **EPSG:4326**;
+> the property capture write path validates server-side. Covers outline items **3.4** (property
+> map), **3.5** (community maps), **4.2** (KYNG area map) and **5.1** (admin community maps).
+
+### 3.5 My community maps (+ 5.1 admin community maps)
+
+Routes: `/personal-profile/my-community/{bcyca,tinonee,mondrook,external}/map` and
+`/admin/community/{bcyca,tinonee,mondrook,external}/map` — all driven by `communityMapProfile`
+with `get_community_data`.
+
+- [ ] **3.5.1 Render & extent:** open a community map → the NSW Streets basemap loads and the
+      view fits the community extent; a brief spinner shows until the map is ready.
+- [ ] **3.5.2 Layers present:** the community boundary polygon (blue, ~30% fill), grey **project
+      address points**, and orange **registered address points** all render.
+- [ ] **3.5.3 Layer control:** the top-right control lists all three overlays + the base layer;
+      toggling each adds/removes it from the map.
+- [ ] **3.5.4 Clustering:** the dense **project address points** layer renders as counted
+      cluster bubbles that split apart as you zoom in (markercluster).
+- [ ] **3.5.5 Legend dark-mode:** the bottom-right legend lists the layers with colour swatches;
+      toggle light/dark — the legend background **and** text both flip and stay readable.
+- [ ] **3.5.6 Empty/extent failure:** a community with no `mapExtent` shows the fallback message
+      rather than a broken map.
+- [ ] **3.5.7 Parity:** the admin variant (`/admin/community/.../map`) renders identically to the
+      personal-profile variant for the same community.
+
+### 4.2 KYNG coordinator area map
+
+Route: `/kyng-coordinator/[kyng_area]/map` — `kyngMapProfile` + `get_kyngs_geojson`.
+
+> **Access rule:** reaching `/kyng-coordinator/*` requires **both** the `kyng` permission (from
+> the `kyng` role) **and** an active coordinator assignment for the area (`coordinates_kyng`
+> claim, materialised from `kyng_area_users_join`). Assigning a coordinator now auto-grants the
+> `kyng` role via trigger; the user must re-login to refresh claims.
+
+- [ ] **4.2.1 Access — not a coordinator:** a user without the `kyng` permission visiting
+      `/kyng-coordinator` gets a 403 ("Insufficient permissions"); without an active assignment
+      gets "Not authorized as KYNG coordinator".
+- [ ] **4.2.2 Access — wrong area:** a coordinator opening an area **not** in their
+      `coordinates_kyng` gets "Not authorized for this KYNG area".
+- [ ] **4.2.3 Render & base layers:** the **Air Photo** basemap shows by default; the layer
+      control offers **Streets** as an alternate base.
+- [ ] **4.2.4 Symbology:** the KYNG area boundary draws as a magenta outline; **property areas**
+      render as polygons with a unique fill colour per property; **address points** render as
+      blue squares (Property), green diamonds (Building), black diamonds (other).
+- [ ] **4.2.5 Default visibility:** **Way Points** and **Proway Lines** are present in the layer
+      control but **off by default**; toggling them on shows red way-point dots / steelblue lines.
+- [ ] **4.2.6 Address tooltips:** hovering an address point shows its address / type details.
+- [ ] **4.2.7 View params:** opening the map with `?lat=&lng=&zoom=` centres on those coords;
+      without them it fits the area bounds.
+
+### 3.4 My property map — spatial data capture (PostGIS)
+
+Route: `/personal-profile/my-property/[propertyid]/my-map` — `propertyCaptureProfile` +
+`PropertyCaptureMap`/`PropertyCaptureController`. Editing uses **Leaflet.Editable**; saves go
+through `upsert_spatial_feature_geojson`, which validates server-side
+(`validate_spatial_feature`) before insert.
+
+> **Validation strictness = "block real errors only":** only a wrong geometry type or
+> unparseable GeoJSON **blocks** the save; out-of-boundary, snapped-to-boundary, too-small/short,
+> self-intersection and hazard-overlap are **non-blocking warnings** (geometry is auto-corrected
+> via `ST_MakeValid` and snapped via `ST_Snap`).
+
+- [ ] **3.4.1 Context render:** the property boundary (translucent yellow), address point
+      (orange diamond) and way point (grey diamond) render; the view fits the property bounds;
+      multiple basemaps are available in the layer control.
+- [ ] **3.4.2 Add a point:** "Add feature" → pick a point template (e.g. _Water Tank_) → click on
+      the map → the side panel opens with the template's attribute fields.
+- [ ] **3.4.3 Required validation (client):** leave a **required** field (e.g. _name_) blank and
+      Save → an inline "… is required" error; the save is cancelled.
+- [ ] **3.4.4 Save point:** fill the required field → **Save** → the panel closes, a "Saved"
+      status shows, and the new feature appears on the map (persists after reload — `invalidateAll`).
+- [ ] **3.4.5 Draw a line / polygon:** pick a line (e.g. _Access Route_) or polygon (e.g.
+      _Vegetation Hazard_) template, draw vertices, finish the shape → fill name → Save.
+- [ ] **3.4.6 Edit attributes:** click an existing feature → the panel shows its current values →
+      change a field → Save → the change persists.
+- [ ] **3.4.7 Edit shape (line/polygon):** select a line/polygon feature → **Edit shape** → drag
+      vertices → Save → the new geometry persists. _("Edit shape" is intentionally hidden for
+      **point** features — move a point by deleting and redrawing.)_
+- [ ] **3.4.8 Delete:** select a feature → **Delete** → it is removed from the map and DB.
+- [ ] **3.4.9 Warning — beyond boundary:** draw a feature **outside** the property boundary →
+      it **saves**, and an amber "extends beyond property boundary (10m tolerance)" warning shows
+      in the saved-with-warnings banner.
+- [ ] **3.4.10 Warning — snapped:** draw a feature with a vertex just off the boundary (within
+      ~0.5 m) → it saves with a "snapped to property boundary" warning and the geometry is nudged
+      onto the boundary.
+- [ ] **3.4.11 Block — wrong geometry type:** _(hard to trigger via the normal UI, which only
+      starts the matching draw tool)_ — a save whose geometry type mismatches the template is
+      **blocked** with a red "Expected … geometry" issue and is **not** persisted.
+- [ ] **3.4.12 Panel dark-mode:** toggle light/dark — the capture toolbar, template picker and
+      side panel all adapt and stay readable.
+
+### Maps section — cross-checks
+
+- [ ] No console errors on load beyond the expected Leaflet/ESRI "loaded" logs.
+- [ ] Switching between two maps (navigation) tears down the previous map cleanly (no leaked
+      map instances, no duplicate controls).
+- [ ] Light/dark toggle is correct on **every** map (legend, capture panel).
+- [ ] Capture saves round-trip without coordinate drift (a saved feature reloads in the same place).
+
+### Maps section — run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+| | | | | | |
+
+---
+
+## Remaining sections (2; 3.1–3.3; 4.1, 4.3–4.4; 5.2–5.3; 6; 7)
 
 _Not yet written._ Use Section 1 as the template: list the routes/actions involved, state
 the domain rules, then enumerate happy-path and failure-path tests with Preconditions /

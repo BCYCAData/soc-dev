@@ -61,9 +61,11 @@ export const actions: Actions = {
 
 		const geometry = JSON.parse(geometryStr.toString());
 
-		// First save the feature
+		// First save the feature. Use the GeoJSON-accepting wrapper: the geometry
+		// param is jsonb (ST_GeomFromGeoJSON server-side) rather than a PostGIS
+		// `geometry`, which the parsed GeoJSON object could not bind to (G4).
 		const { data: featureData, error: featureError } = await supabase.rpc(
-			'upsert_spatial_feature',
+			'upsert_spatial_feature_geojson',
 			{
 				p_feature_id: featureId ? featureId.toString() : null,
 				p_user_id: user.id,
@@ -81,11 +83,31 @@ export const actions: Actions = {
 			});
 		}
 
+		// The hardened RPC returns a structured result: { valid, feature_id?, issues?, warnings? }.
+		const result = (featureData ?? {}) as {
+			valid?: boolean;
+			feature_id?: string;
+			issues?: string[];
+			warnings?: string[];
+		};
+
+		if (!result.valid || !result.feature_id) {
+			return fail(400, {
+				success: false,
+				message: 'Validation failed',
+				issues: result.issues ?? [],
+				warnings: result.warnings ?? []
+			});
+		}
+
+		const newFeatureId = result.feature_id;
+		const warnings = result.warnings ?? [];
+
 		// Then update any provided attribute values
 		const attributesArray = Array.from(formData.entries())
 			.filter(([key]) => key.startsWith('attr_'))
 			.map(([key]) => ({
-				feature_id: featureData,
+				feature_id: newFeatureId,
 				field_id: key.replace('attr_', ''),
 				value: formData.get(key)?.toString() || null // Allow null values
 			}));
@@ -108,16 +130,18 @@ export const actions: Actions = {
 
 			return {
 				success: true,
-				message: 'Spatial feature and attrubutes successfully updated',
-				featureId: featureData,
-				attributeIds: attributeData
+				message: 'Spatial feature and attributes successfully updated',
+				featureId: newFeatureId,
+				attributeIds: attributeData,
+				warnings
 			};
 		}
 
 		return {
 			success: true,
 			message: 'Spatial feature successfully updated',
-			featureId: featureData
+			featureId: newFeatureId,
+			warnings
 		};
 	},
 	deleteFeature: async ({ request, locals: { supabase } }) => {
