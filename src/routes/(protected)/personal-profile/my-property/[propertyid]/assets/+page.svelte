@@ -4,6 +4,7 @@
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
 
 	import type { ActionData } from './$types';
@@ -104,7 +105,7 @@
 		/>
 	</div>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">Do you have livestock?</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each yesNoOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
@@ -118,11 +119,11 @@
 				for="live_stock_present">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Do you have a safe area for stock in the event of a bushfire or flood?
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
@@ -136,11 +137,11 @@
 				for="live_stock_safe_area">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Would you let others leave their stock in your safe area, for a short time, in an emergency?
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
@@ -154,7 +155,7 @@
 				for="share_livestock_safe_area">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="If there are assets, other than the residence, that you consider essential (eg crops, sheds with equipment or antique cars) please describe them here."

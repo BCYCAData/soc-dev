@@ -7,10 +7,12 @@
 
 	let { section }: Props = $props();
 
+	// Cross-family light→dark fills (family tint → surface-800), which Skeleton Color
+	// Pairings can't express, so these resolve via plain `.dark`-selector rules in app.css.
 	const importanceClasses = {
-		info: 'bg-tertiary-50 border-tertiary-200 dark:bg-surface-800 dark:border-tertiary-500',
-		warning: 'bg-secondary-50 border-secondary-200 dark:bg-surface-800 dark:border-secondary-500',
-		tip: 'bg-success-50 border-success-200 dark:bg-surface-800 dark:border-success-500'
+		info: 'help-callout-info',
+		warning: 'help-callout-warning',
+		tip: 'help-callout-tip'
 	};
 
 	let sectionClass = $derived(

@@ -2,6 +2,7 @@
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 
 	import { setUpperCase } from '$lib/svelte-actions';
 	import type { UserPostalAddress } from '$lib/form.types';
@@ -68,7 +69,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#if stayInTouchOptions}
 			{#each stayInTouchOptions as { value, lable } (value)}
 				<div class="flex items-center">
@@ -86,7 +87,7 @@
 				</div>
 			{/each}
 		{/if}
-	</div>
+	</FormWell>
 
 	<!-- Postal address -->
 	<div class:hidden={!stayInTouchChoices?.includes(5)}>

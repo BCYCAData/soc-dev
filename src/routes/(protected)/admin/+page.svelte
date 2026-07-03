@@ -2,6 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
+	import Card from '$components/page/Card.svelte';
 
 	const { hasPermission, hasAnyPermission, hasFeature } = usePermissions();
 
@@ -34,7 +35,7 @@
 <div class="mx-auto max-w-4xl px-6">
 	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">SOC Website Administration</h1>
 	<div class="mb-8 grid gap-6">
-		<section class="bg-surface-50-950 rounded-lg px-6 pb-6 shadow">
+		<Card>
 			<h2 class="mb-2 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-2 gap-4">
 				{#if canAccessRoute('/admin/site')}
@@ -61,9 +62,9 @@
 					</a>
 				{/if}
 			</div>
-		</section>
+		</Card>
 
-		<section class="bg-surface-50-950 rounded-lg px-6 py-2 shadow">
+		<Card>
 			<h2 class="mb-2 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE)}
@@ -164,7 +165,7 @@
 					</div>
 				{/if}
 			</div>
-		</section>
+		</Card>
 	</div>
 </div>
 

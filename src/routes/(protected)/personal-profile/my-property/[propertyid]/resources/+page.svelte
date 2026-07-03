@@ -2,6 +2,7 @@
 	import { page } from '$app/state';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 
 	import {
 		staticWaterOptions,
@@ -73,7 +74,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each staticWaterOptions as { value, lable } (value)}
 			{#if value < 5}
 				<input
@@ -100,18 +101,18 @@
 				for="static_water_available">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Do you have a Stortz fitting attached to a water tank?
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input class="ml-8 h-4 w-4" name="have_stortz" type="radio" bind:group={haveStortz} {value} />
 			<label class="font-Poppins text-secondary-900 ml-2 text-base font-medium" for="have_stortz"
 				>{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	{#if haveStortz === 'Y'}
 		<h2 class="unstyled text-surface-900 text-base font-semibold">Please include the size (mm)</h2>
 		<input
@@ -127,7 +128,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each fireFightingResourceOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
@@ -142,15 +143,13 @@
 				for="fire_fighting_resources">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Does your property have?<span class="text-surface-500 ml-2 text-sm">
 			(Check all that apply)</span
 		>
 	</h2>
-	<div
-		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-3 sm:gap-2"
-	>
+	<FormWell layout="grid-2">
 		{#each fireHazardReductionOptions as { value, lable } (value)}
 			<div class="col-span-1 flex items-center">
 				<input
@@ -167,7 +166,7 @@
 				>
 			</div>
 		{/each}
-	</div>
+	</FormWell>
 	<input type="hidden" name="property_key" value={currentProperty.id} />
 	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>

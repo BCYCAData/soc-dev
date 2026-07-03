@@ -22,7 +22,7 @@
 	{#if $helpContent && $helpContent.hasHelp}
 		<button class="collapse-toggle self-end p-2" onclick={toggleHelp}>
 			<div
-				class="text-secondary-800 dark:text-secondary-300 flex text-sm {!isCollapsed
+				class="help-toggle-label flex text-sm {!isCollapsed
 					? 'flex-row items-center gap-2'
 					: 'flex-col items-center'}"
 			>
@@ -31,7 +31,7 @@
 			</div>
 		</button>
 		{#if !isCollapsed}
-			<div class="bg-secondary-100 dark:bg-surface-800 p-4">
+			<div class="help-panel-body p-4">
 				{#if $helpContent.title}
 					<h3 class="mb-4 font-bold">{$helpContent.title}</h3>
 				{/if}
@@ -51,5 +51,21 @@
 <style>
 	.help-panel {
 		overflow-y: auto;
+	}
+
+	/* secondary-800→300 (non-balanced) and secondary-100→surface-800 (cross-family):
+	   neither is a valid Skeleton Color Pairing, so use the .dark selector directly. */
+	.help-toggle-label {
+		color: var(--color-secondary-800);
+	}
+	:global(.dark) .help-toggle-label {
+		color: var(--color-secondary-300);
+	}
+
+	.help-panel-body {
+		background-color: var(--color-secondary-100);
+	}
+	:global(.dark) .help-panel-body {
+		background-color: var(--color-surface-800);
 	}
 </style>

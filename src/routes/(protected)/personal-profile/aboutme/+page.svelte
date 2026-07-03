@@ -9,6 +9,7 @@
 
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 
 	import { formatMobile } from '$lib/utility';
 	import { setTitleCase } from '$lib/svelte-actions.js';
@@ -89,7 +90,7 @@
 		<FormAlerts {unsaved} {formError} {formSuccess} errorMessage={formErrorMessage} />
 
 		<h2 class="h2 text-surface-900 text-lg font-semibold">What is your name?</h2>
-		<div class="bg-secondary-300 grid gap-2 rounded-lg p-1 sm:grid-cols-2 sm:gap-2">
+		<FormWell layout="grid-2">
 			<input
 				type="text"
 				id="first_name"
@@ -112,11 +113,9 @@
 				use:setTitleCase
 				bind:value={family_name}
 			/>
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">Are you:</h2>
-		<div
-			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-4 sm:gap-x-2"
-		>
+		<FormWell layout="grid-2">
 			{#each residencyOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
 					<input
@@ -132,37 +131,39 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<div class="flex flex-row items-center justify-start pt-2">
 			<h2 class="h2 text-surface-900 text-lg font-semibold">What is your mobile phone number?</h2>
-			<div class="bg-secondary-300 ml-3 rounded-lg p-1">
-				<input
-					onchange={() => {
-						unsaved = true;
-					}}
-					type="tel"
-					name="mobile"
-					class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
-					placeholder="Mobile 0XXX XXX XXX"
-					onkeydown={(e) => {
-						if (['Backspace', 'Delete'].includes(e.key)) {
-							mobile = e.currentTarget.value;
-						} else {
-							e.preventDefault();
-							mobile = e.currentTarget.value;
-							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								mobile = formatMobile(mobile, e.key);
+			<div class="ml-3">
+				<FormWell>
+					<input
+						onchange={() => {
+							unsaved = true;
+						}}
+						type="tel"
+						name="mobile"
+						class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
+						placeholder="Mobile 0XXX XXX XXX"
+						onkeydown={(e) => {
+							if (['Backspace', 'Delete'].includes(e.key)) {
+								mobile = e.currentTarget.value;
+							} else {
+								e.preventDefault();
+								mobile = e.currentTarget.value;
+								if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+									mobile = formatMobile(mobile, e.key);
+								}
 							}
-						}
-					}}
-					bind:value={mobile}
-				/>
+						}}
+						bind:value={mobile}
+					/>
+				</FormWell>
 			</div>
 		</div>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Have you completed a RFS Bushfire survival plan?
 		</h2>
-		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+		<FormWell>
 			{#each yesNoSendOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -178,13 +179,11 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			What is your level of firefighting experience?
 		</h2>
-		<div
-			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
-		>
+		<FormWell layout="grid-2">
 			{#each fireFightingExperienceOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -201,11 +200,11 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Have you had unpleasant traumatic experience of bushfire?
 		</h2>
-		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+		<FormWell>
 			{#each yesNoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -221,13 +220,11 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			If your property is threatened by fire, are you:
 		</h2>
-		<div
-			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
-		>
+		<FormWell layout="grid-2">
 			{#each stayGoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -244,13 +241,11 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			If your property is threatened by flood, are you:
 		</h2>
-		<div
-			class="bg-secondary-300 grid grid-flow-col gap-x-2 rounded-lg p-1 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-2"
-		>
+		<FormWell layout="grid-2">
 			{#each stayGoOptions as { value, lable } (value)}
 				<div class="flex items-center">
 					<input
@@ -268,6 +263,6 @@
 				</div>
 			{/each}
 			<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
-		</div>
+		</FormWell>
 	</form>
 </section>

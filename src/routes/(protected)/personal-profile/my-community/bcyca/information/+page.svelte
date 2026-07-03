@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import type { ActionData, PageData } from './$types';
@@ -64,7 +65,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="bg-secondary-300 grid gap-4 rounded-lg p-2 sm:grid-cols-2">
+	<FormWell layout="grid-2">
 		{#if informationSheetOptions}
 			{#each informationSheetOptions as { value, lable } (value)}
 				<div class="flex items-center space-x-1">
@@ -83,7 +84,7 @@
 				</div>
 			{/each}
 		{/if}
-	</div>
+	</FormWell>
 
 	<TextAreaInput
 		headingClass="h2 text-lg font-semibold text-surface-900"

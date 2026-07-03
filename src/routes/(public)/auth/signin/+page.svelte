@@ -117,7 +117,7 @@
 			</button>
 		</form>
 	</div>
-	<div class="text-surface-950 dark:text-surface-50 mt-6 flex items-center justify-center gap-2">
+	<div class="text-surface-950-50 mt-6 flex items-center justify-center gap-2">
 		Not registered?
 		<a
 			href={resolve('/auth/signup')}

@@ -9,6 +9,7 @@
 	import NumberInput from '$components/form/inputs/NumberInput.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 
 	import type { ActionData } from './$types';
 	import type { PropertyProfile } from '$lib/form.types';
@@ -125,7 +126,7 @@
 			/>
 		</div>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">Are you renting this property?</h2>
-		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+		<FormWell>
 			<div class="mr-4 flex items-center">
 				{#each yesNoOptions as { value, lable } (value)}
 					{#if lable === 'Yes'}
@@ -233,11 +234,11 @@
 					/>
 				</div>
 			</div>
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Is your property well sign posted and numbered clearly from the road?
 		</h2>
-		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+		<FormWell>
 			<div class="mr-4 flex items-center">
 				{#each yesNoOptions as { value, lable } (value)}
 					<input
@@ -252,13 +253,11 @@
 					>
 				{/each}
 			</div>
-		</div>
+		</FormWell>
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Is there easy truck access to the buildings, boundaries and paddocks?
 		</h2>
-		<div
-			class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-2 sm:gap-2"
-		>
+		<FormWell layout="grid-2">
 			{#each accessOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
 					{#if lable === 'Other'}
@@ -283,7 +282,7 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<h2
 			class="text-surface-900 text-base font-semibold"
 			hidden={currentProperty.truck_access !== 4}
@@ -338,7 +337,7 @@
 		<h2 class="h2 text-surface-900 text-lg font-semibold">
 			Do you consider any person on the property to be vulnerable?
 		</h2>
-		<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+		<FormWell>
 			{#each yesNoOptions as { value, lable } (value)}
 				<div class="mr-4 flex items-center">
 					<input
@@ -353,56 +352,60 @@
 					>
 				</div>
 			{/each}
-		</div>
+		</FormWell>
 		<div class="flex flex-row items-center justify-start pt-2">
 			<h2 class="h2 text-surface-900 text-lg font-semibold">What is your landline phone number?</h2>
-			<div class="bg-secondary-300 ml-3 rounded-lg p-1">
-				<input
-					onchange={() => {
-						unsaved = true;
-					}}
-					type="tel"
-					name="phone"
-					class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
-					placeholder="Landline XXXX XXXX"
-					onkeydown={(e) => {
-						if (['Backspace', 'Delete'].includes(e.key)) {
-							currentProperty.phone = e.currentTarget.value;
-						} else {
-							e.preventDefault();
-							currentProperty.phone = e.currentTarget.value;
-							if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-								currentProperty.phone = formatPhone(currentProperty.phone, e.key);
+			<div class="ml-3">
+				<FormWell>
+					<input
+						onchange={() => {
+							unsaved = true;
+						}}
+						type="tel"
+						name="phone"
+						class="focus:border-primary-600 focus:ring-primary-600 border-surface-300 bg-surface-50 text-surface-900 block w-full rounded-lg border p-0.5 text-base"
+						placeholder="Landline XXXX XXXX"
+						onkeydown={(e) => {
+							if (['Backspace', 'Delete'].includes(e.key)) {
+								currentProperty.phone = e.currentTarget.value;
+							} else {
+								e.preventDefault();
+								currentProperty.phone = e.currentTarget.value;
+								if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
+									currentProperty.phone = formatPhone(currentProperty.phone, e.key);
+								}
 							}
-						}
-					}}
-					bind:value={currentProperty.phone}
-				/>
+						}}
+						bind:value={currentProperty.phone}
+					/>
+				</FormWell>
 			</div>
 		</div>
 		<div class="flex flex-row items-center justify-start pt-2">
 			<h2 class="h2 text-surface-900 text-lg font-semibold">
 				What is the mobile reception quality at the property?
 			</h2>
-			<div class="bg-secondary-300 ml-4 rounded-lg p-1">
-				<div class="my-0 flex list-none items-center text-base sm:mx-auto sm:w-full">
-					<div class="text-primary-900 mx-4 flex-auto font-semibold">Poor</div>
-					{#each Array(5) as _, i (i)}
-						<li class="mx-3 flex-auto">
-							<input
-								name="mobile_reception"
-								type="radio"
-								class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 h-4 w-4"
-								bind:group={currentProperty.mobile_reception}
-								value={i + 1}
-							/>
-							<label class="text-primary-900 ml-1 inline-block" for="mobile_reception">
-								{i + 1}
-							</label>
-						</li>
-					{/each}
-					<div class="text-primary-900 mx-4 flex-auto font-semibold">Excellent</div>
-				</div>
+			<div class="ml-4">
+				<FormWell>
+					<div class="my-0 flex list-none items-center text-base sm:mx-auto sm:w-full">
+						<div class="text-primary-900 mx-4 flex-auto font-semibold">Poor</div>
+						{#each Array(5) as _, i (i)}
+							<li class="mx-3 flex-auto">
+								<input
+									name="mobile_reception"
+									type="radio"
+									class="border-surface-300 bg-surface-100 text-secondary-700 checked:ring-secondary-700 focus:ring-secondary-700 h-4 w-4"
+									bind:group={currentProperty.mobile_reception}
+									value={i + 1}
+								/>
+								<label class="text-primary-900 ml-1 inline-block" for="mobile_reception">
+									{i + 1}
+								</label>
+							</li>
+						{/each}
+						<div class="text-primary-900 mx-4 flex-auto font-semibold">Excellent</div>
+					</div>
+				</FormWell>
 			</div>
 		</div>
 		<input type="hidden" name="property_key" value={currentProperty.id} />

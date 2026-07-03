@@ -3,6 +3,7 @@
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
 
 	import type { ActionData } from './$types';
@@ -66,7 +67,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each siteHazardsOptions as { value, lable } (value)}
 			<div class="flex items-center">
 				<input
@@ -81,7 +82,7 @@
 				>
 			</div>
 		{/each}
-	</div>
+	</FormWell>
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="Are there any other hazards on the property that should be noted?"
@@ -95,7 +96,7 @@
 	<h2 class="unstyled text-surface-900 text-base font-semibold">
 		Does any adjoining land represent a hazard?
 	</h2>
-	<div class="bg-secondary-300 flex justify-start rounded-lg p-1">
+	<FormWell>
 		{#each yesNoMaybeOptions as { value, lable } (value)}
 			<input
 				class="ml-8 h-4 w-4"
@@ -109,7 +110,7 @@
 				for="land_adjacent_hazard">{lable}</label
 			>
 		{/each}
-	</div>
+	</FormWell>
 	<TextAreaInput
 		headingClass="h2 mb-1 text-lg font-semibold text-surface-950"
 		headingText="Are there other areas that concern you or represent a potential threat?"

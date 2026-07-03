@@ -16,7 +16,6 @@
 
 /* External CSS imports */
 @import 'leaflet/dist/leaflet.css';
-@import '../src/components/map/leaflet/css/custom-leaflet.css';
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
 
@@ -40,6 +39,35 @@
 	.preset-chip-token {
 		@apply preset-tonal-secondary inline-flex items-center rounded-full px-3 py-0.5 text-sm font-medium;
 	}
+}
+
+/* Help-section callout tints. Light mode uses the semantic family tint; dark mode
+   collapses the fill to surface-800 with a brighter family border. These are
+   cross-family light→dark pairs, which Skeleton Color Pairings can't represent, so
+   they use the `.dark` selector directly (see docs/styling-conventions.md). */
+.help-callout-info {
+	background-color: var(--color-tertiary-50);
+	border-color: var(--color-tertiary-200);
+}
+.help-callout-warning {
+	background-color: var(--color-secondary-50);
+	border-color: var(--color-secondary-200);
+}
+.help-callout-tip {
+	background-color: var(--color-success-50);
+	border-color: var(--color-success-200);
+}
+.dark .help-callout-info {
+	background-color: var(--color-surface-800);
+	border-color: var(--color-tertiary-500);
+}
+.dark .help-callout-warning {
+	background-color: var(--color-surface-800);
+	border-color: var(--color-secondary-500);
+}
+.dark .help-callout-tip {
+	background-color: var(--color-surface-800);
+	border-color: var(--color-success-500);
 }
 
 .tabulator {

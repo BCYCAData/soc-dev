@@ -49,7 +49,7 @@
 
 <svelte:window on:keydown={handleKeyboardShortcut} />
 
-<div class="app-shell bg-secondary-200 dark:bg-surface-900">
+<div class="app-shell">
 	<div class="app-shell-breadcrumbs">
 		<Breadcrumbs pathLables={adminSidebarPathLables} />
 	</div>
@@ -61,10 +61,7 @@
 				: 'w-1/6'} transition-all duration-300"
 		>
 			<div class="flex w-full flex-col p-1">
-				<button
-					class="collapse-toggle text-secondary-700 dark:text-secondary-300 self-end p-2"
-					onclick={toggleSidebar}
-				>
+				<button class="collapse-toggle text-secondary-700-300 self-end p-2" onclick={toggleSidebar}>
 					<MenuToggleIcon
 						isMenuCollapsed={isSidebarCollapsed}
 						color="var(--color-surface-50)"
@@ -74,7 +71,7 @@
 				<div class="flex flex-row justify-around pt-2 text-xl">
 					{#if !isSidebarCollapsed}Admin Menu{/if}
 				</div>
-				<div class="bg-secondary-800 dark:bg-secondary-900 flex flex-col rounded-lg">
+				<div class="sidebar-menu flex flex-col rounded-lg">
 					<AdminSideMenu {isSidebarCollapsed} />
 				</div>
 				{#if !isSidebarCollapsed}
@@ -100,6 +97,19 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
+		/* secondary-200 → surface-900 is cross-family, so not a Color Pairing. */
+		background-color: var(--color-secondary-200);
+	}
+	:global(.dark) .app-shell {
+		background-color: var(--color-surface-900);
+	}
+
+	/* secondary-800 → secondary-900 (non-balanced), so not a Color Pairing. */
+	.sidebar-menu {
+		background-color: var(--color-secondary-800);
+	}
+	:global(.dark) .sidebar-menu {
+		background-color: var(--color-secondary-900);
 	}
 
 	.app-shell-main {

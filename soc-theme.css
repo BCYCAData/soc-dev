@@ -26,6 +26,11 @@
 	--spacing: 0.25rem;
 	--radius-base: 0.375rem;
 	--radius-container: 0.75rem;
+	--radius-pill: 9999px;
+	/* Convenience aliases from the SOC Design System handoff — pure aliases to
+	   values already declared above, exposed under the design-system's names. */
+	--surface-well: var(--color-secondary-300);
+	--anchor-color: var(--color-tertiary-800);
 	--default-border-width: 1px;
 	--default-divide-width: 1px;
 	--default-ring-width: 1px;

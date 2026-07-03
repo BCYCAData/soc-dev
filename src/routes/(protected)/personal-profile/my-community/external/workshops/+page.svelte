@@ -2,6 +2,7 @@
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
+	import FormWell from '$components/form/FormWell.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	interface Props {
@@ -67,9 +68,7 @@
 			(Check all that apply)</span
 		>
 	</h2>
-	<div
-		class="bg-secondary-300 grid grid-flow-col gap-2 rounded-lg p-2 sm:grid-cols-2 sm:grid-rows-4 sm:gap-2"
-	>
+	<FormWell layout="grid-2">
 		{#if communityWorkshopOptions}
 			{#each communityWorkshopOptions as { value, lable } (value)}
 				<div class="col-span-1 flex items-center">
@@ -88,7 +87,7 @@
 				</div>
 			{/each}
 		{/if}
-	</div>
+	</FormWell>
 	<TextAreaInput
 		headingClass="h2 pt-2 text-lg font-semibold text-surface-900"
 		headingText="If there are other workshops that you would like to see run, please add the details here"

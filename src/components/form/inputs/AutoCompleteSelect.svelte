@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Chip from '$components/form/Chip.svelte';
+
 	interface ListDataItem {
 		lut_text: string;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- dynamic lookup item shape
@@ -86,24 +88,7 @@
 
 	<div class="mt-2">
 		{#each selectedValues as selectedValue (selectedValue)}
-			<span class="preset-chip-token mr-2 mb-2">
-				{selectedValue}
-				<button
-					type="button"
-					class="hover:text-tertiary-400 focus:ring-tertiary-500 text-secondary-700 ml-1.5 shrink-0 rounded-full p-1.5 focus:ring-2 focus:ring-offset-2 focus:outline-none"
-					onclick={() => removeValue(selectedValue)}
-					aria-label="Remove {selectedValue}"
-				>
-					<span class="sr-only">Remove</span>
-					<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-						<path
-							fill-rule="evenodd"
-							d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.59-11.59a1 1 0 10-1.42-1.42L10 8.59 7.41 6a1 1 0 00-1.42 1.42L8.59 10l-2.6 2.59a1 1 0 101.42 1.42L10 11.41l2.59 2.6a1 1 0 001.42-1.42L11.41 10l2.59-2.59z"
-							clip-rule="evenodd"
-						/>
-					</svg>
-				</button>
-			</span>
+			<Chip onRemove={() => removeValue(selectedValue)}>{selectedValue}</Chip>
 		{/each}
 	</div>
 </div>
