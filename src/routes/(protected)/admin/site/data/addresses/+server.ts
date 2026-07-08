@@ -3,8 +3,13 @@ import { PUBLIC_GEOSCAPE_GNAF_TILES_API_KEY } from '$env/static/public';
 import type { RequestHandler } from './$types';
 import * as mvt from '@mapbox/vector-tile';
 import Protobuf from 'pbf';
+import { requireUser } from '$lib/server/auth/apiGuard';
 
-export const GET: RequestHandler = async ({ fetch, url }) => {
+// `+server.ts` endpoints don't run the (protected) layout's authGuard, so the
+// upstream Geoscape proxy must validate the caller itself.
+export const GET: RequestHandler = async (event) => {
+	await requireUser(event);
+	const { fetch, url } = event;
 	const z = Number(url.searchParams.get('z'));
 	const x = Number(url.searchParams.get('x'));
 	const y = Number(url.searchParams.get('y'));

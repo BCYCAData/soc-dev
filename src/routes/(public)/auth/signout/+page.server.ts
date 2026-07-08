@@ -9,7 +9,7 @@ export const actions: Actions = {
 		if (logoutError) {
 			return {
 				success: false,
-				error: 'Failed to log out'
+				message: 'Failed to log out'
 			};
 		}
 

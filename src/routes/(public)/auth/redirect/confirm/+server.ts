@@ -68,10 +68,12 @@ export const GET: RequestHandler = async ({ url, cookies, locals: { supabase } }
 					redirect(REDIRECT_FOUND, redirectTo);
 					break;
 				case 'signup':
-					console.log('Is signup confirmed');
-					break;
 				case 'invite':
-					console.log('Is invite confirmed');
+					// Verified email via token_hash (e.g. admin invite): the account is
+					// confirmed — send the user to sign in rather than the error fallback.
+					redirectTo.pathname = '/auth/signin';
+					redirectTo.searchParams.set('message', 'email_confirmed');
+					redirect(REDIRECT_SEE_OTHER, redirectTo);
 					break;
 				case 'recovery':
 					markRecoverySession(cookies);

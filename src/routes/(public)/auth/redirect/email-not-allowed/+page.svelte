@@ -7,7 +7,9 @@
 >
 	<div class="bg-surface-50-950 w-full max-w-md space-y-8 rounded-xl p-8 shadow-lg">
 		<div class="space-y-4">
-			<h1 class="text-surface-900-100 mb-2 text-center text-3xl font-extrabold">Restricted Access</h1>
+			<h1 class="text-surface-900-100 mb-2 text-center text-3xl font-extrabold">
+				Restricted Access
+			</h1>
 			<div class="text-surface-600-300 space-y-4">
 				<p class="text-center font-medium">This application is currently under development.</p>
 				<p class="text-center font-medium">

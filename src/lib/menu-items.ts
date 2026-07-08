@@ -33,6 +33,8 @@ import {
 
 import TextIcon from '$components/page/navigation/TextIcon.svelte';
 
+import { PERMISSIONS } from '$lib/constants/permissions';
+
 import type { MenuItem } from './types';
 import type { PropertyProfile } from '$lib/form.types';
 
@@ -72,28 +74,28 @@ const baseKyngSidebarMenuItems: MenuItem[] = [
 		name: '{kyng_name}', // Will be replaced with actual area name
 		link: '/kyng-coordinator/{kyng_area}',
 		icon: { icon: Users },
-		permission: 'kyng',
+		permission: PERMISSIONS.KYNG,
 		subItems: [
 			{
 				id: 'area-unregistered-addresses',
 				name: 'Unregistered Addresses',
 				link: '/kyng-coordinator/{kyng_area}/unregistered-addresses',
 				icon: { icon: MessagesSquare },
-				permission: 'kyng'
+				permission: PERMISSIONS.KYNG
 			},
 			{
 				id: 'area-users-admin',
 				name: 'Area User Administration',
 				link: '/kyng-coordinator/{kyng_area}/user-admin',
 				icon: { icon: Users },
-				permission: 'kyng'
+				permission: PERMISSIONS.KYNG
 			},
 			{
 				id: 'area-map',
 				name: 'Area Map',
 				link: '/kyng-coordinator/{kyng_area}/map',
 				icon: { icon: MapPinned },
-				permission: 'kyng'
+				permission: PERMISSIONS.KYNG
 			}
 		]
 	}
@@ -149,35 +151,35 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 		name: 'Site Administration',
 		link: '/admin/site',
 		icon: { icon: SquareMenu },
-		permission: 'admin.site',
+		permission: PERMISSIONS.ADMIN_SITE,
 		subItems: [
 			{
 				id: 'site-messages',
 				name: 'Site Messages',
 				link: '/admin/site/messages',
 				icon: { icon: MessagesSquare },
-				permission: 'admin.site.messages'
+				permission: PERMISSIONS.ADMIN_SITE_MESSAGES
 			},
 			{
 				id: 'site-roles',
 				name: 'Role Management',
 				link: '/admin/site/roles',
 				icon: { icon: Shield },
-				permission: 'admin.site.roles',
+				permission: PERMISSIONS.ADMIN_SITE_ROLES,
 				subItems: [
 					{
 						id: 'site-roles-assignments',
 						name: 'Role Assignments',
 						link: '/admin/site/roles/assignments',
 						icon: { icon: UserCog },
-						permission: 'admin.site.roles'
+						permission: PERMISSIONS.ADMIN_SITE_ROLES
 					},
 					{
 						id: 'site-roles-permissions',
 						name: 'Permission Management',
 						link: '/admin/site/roles/permissions',
 						icon: { icon: KeyRound },
-						permission: 'admin.site.roles'
+						permission: PERMISSIONS.ADMIN_SITE_ROLES
 					}
 				]
 			},
@@ -186,21 +188,21 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				name: 'Data Management',
 				link: '/admin/site/data',
 				icon: { icon: Database },
-				permission: 'admin.site.data',
+				permission: PERMISSIONS.ADMIN_SITE_DATA,
 				subItems: [
 					{
 						id: 'site-data-spatial',
 						name: 'Spatial Data Management',
 						link: '/admin/site/data/spatial',
 						icon: { icon: Layers },
-						permission: 'admin.site.data'
+						permission: PERMISSIONS.ADMIN_SITE_DATA
 					},
 					{
 						id: 'site-data-addresses',
 						name: 'Custom Address Management',
 						link: '/admin/site/data/addresses',
 						icon: { icon: BookPlus },
-						permission: 'admin.site.data'
+						permission: PERMISSIONS.ADMIN_SITE_DATA
 					}
 				]
 			}
@@ -211,28 +213,28 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 		name: 'Project Administration',
 		link: '/admin/users',
 		icon: { icon: Users },
-		permission: 'admin.users',
+		permission: PERMISSIONS.ADMIN_USERS,
 		subItems: [
 			{
 				id: 'users-admin-new',
 				name: 'New Users',
 				link: '/admin/users/new',
 				icon: { icon: ChartBar },
-				permission: 'admin.users.newusers'
+				permission: PERMISSIONS.ADMIN_USERS_NEWUSERS
 			},
 			{
 				id: 'users-admin-kits',
 				name: 'Kits Delivered',
 				link: '/admin/users/kits',
 				icon: { icon: Hammer },
-				permission: 'admin.users.kits'
+				permission: PERMISSIONS.ADMIN_USERS_KITS
 			},
 			{
 				id: 'users-admin-kyngcoordinators',
 				name: 'KYNG Coordinator Management',
 				link: '/admin/users/kyng-coordinators',
 				icon: { icon: Crown },
-				permission: 'admin.users.kyngcoordinators'
+				permission: PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS
 			}
 		]
 	},
@@ -241,21 +243,21 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 		name: 'Emergency Administration',
 		link: '/admin/emergency',
 		icon: { icon: Ambulance },
-		permission: 'admin.emergency',
+		permission: PERMISSIONS.ADMIN_EMERGENCY,
 		subItems: [
 			{
 				id: 'emergency-admin-reports',
 				name: 'Reports',
 				link: '/admin/emergency/reports',
 				icon: { icon: BookUp },
-				permission: 'admin.emergency.reports'
+				permission: PERMISSIONS.ADMIN_EMERGENCY_REPORTS
 			},
 			{
 				id: 'emergency-admin-service-map',
 				name: 'Service Map',
 				link: '/admin/emergency/service-map',
 				icon: { icon: Map },
-				permission: 'admin.emergency.servicemap'
+				permission: PERMISSIONS.ADMIN_EMERGENCY_SERVICE_MAP
 			}
 		]
 	},
@@ -264,42 +266,42 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 		name: 'Communities Administration',
 		link: '/admin/community',
 		icon: { icon: Cog },
-		permission: 'admin.community',
+		permission: PERMISSIONS.ADMIN_COMMUNITY,
 		subItems: [
 			{
 				id: 'community-admin-bcyca',
 				name: 'BCYCA',
 				link: '/admin/community/bcyca',
 				icon: { icon: TextIcon, letter: 'B' },
-				permission: 'admin.community.bcyca',
+				permission: PERMISSIONS.ADMIN_COMMUNITY_BCYCA,
 				subItems: [
 					{
 						id: 'community-admin-bcyca-information',
 						name: 'BCYCA Information',
 						link: '/admin/community/bcyca/information',
 						icon: { icon: Info },
-						permission: 'admin.community.bcyca.information'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_BCYCA_INFORMATION
 					},
 					{
 						id: 'community-admin-bcyca-workshops',
 						name: 'BCYCA Workshops',
 						link: '/admin/community/bcyca/workshops',
 						icon: { icon: School },
-						permission: 'admin.community.bcyca.workshops'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_BCYCA_WORKSHOPS
 					},
 					{
 						id: 'community-admin-bcyca-events',
 						name: 'BCYCA Events',
 						link: '/admin/community/bcyca/events',
 						icon: { icon: CalendarDays },
-						permission: 'admin.community.bcyca.events'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_BCYCA_EVENTS
 					},
 					{
 						id: 'community-admin-bcyca-map',
 						name: 'BCYCA Community Map',
 						link: '/admin/community/bcyca/map',
 						icon: { icon: Map },
-						permission: 'admin.community.bcyca'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_BCYCA
 					}
 				]
 			},
@@ -308,35 +310,35 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				name: 'Tinonee',
 				link: '/admin/community/tinonee',
 				icon: { icon: TextIcon, letter: 'T' },
-				permission: 'admin.community.tinonee',
+				permission: PERMISSIONS.ADMIN_COMMUNITY_TINONEE,
 				subItems: [
 					{
 						id: 'community-admin-tinonee-information',
 						name: 'Tinonee Information',
 						link: '/admin/community/tinonee/information',
 						icon: { icon: Info },
-						permission: 'admin.community.tinonee.information'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_TINONEE_INFORMATION
 					},
 					{
 						id: 'community-admin-tinonee-workshops',
 						name: 'Tinonee Workshops',
 						link: '/admin/community/tinonee/workshops',
 						icon: { icon: School },
-						permission: 'admin.community.tinonee.workshops'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_TINONEE_WORKSHOPS
 					},
 					{
 						id: 'community-admin-tinonee-events',
 						name: 'Tinonee Events',
 						link: '/admin/community/tinonee/events',
 						icon: { icon: CalendarDays },
-						permission: 'admin.community.tinonee.events'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_TINONEE_EVENTS
 					},
 					{
 						id: 'community-admin-tinonee-map',
 						name: 'Tinonee Community Map',
 						link: '/admin/community/tinonee/map',
 						icon: { icon: Map },
-						permission: 'admin.community.tinonee'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_TINONEE
 					}
 				]
 			},
@@ -345,35 +347,35 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				name: 'Mondrook',
 				link: '/admin/community/mondrook',
 				icon: { icon: TextIcon, letter: 'M' },
-				permission: 'admin.community.mondrook',
+				permission: PERMISSIONS.ADMIN_COMMUNITY_MONDROOK,
 				subItems: [
 					{
 						id: 'community-admin-mondrook-information',
 						name: 'Mondrook Information',
 						link: '/admin/community/mondrook/information',
 						icon: { icon: Info },
-						permission: 'admin.community.mondrook.information'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_MONDROOK_INFORMATION
 					},
 					{
 						id: 'community-admin-mondrook-workshops',
 						name: 'Mondrook Workshops',
 						link: '/admin/community/mondrook/workshops',
 						icon: { icon: School },
-						permission: 'admin.community.mondrook.workshops'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_MONDROOK_WORKSHOPS
 					},
 					{
 						id: 'community-admin-mondrook-events',
 						name: 'Mondrook Events',
 						link: '/admin/community/mondrook/events',
 						icon: { icon: CalendarDays },
-						permission: 'admin.community.mondrook.events'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_MONDROOK_EVENTS
 					},
 					{
 						id: 'community-admin-mondrook-map',
 						name: 'Mondrook Community Map',
 						link: '/admin/community/mondrook/map',
 						icon: { icon: Map },
-						permission: 'admin.community.mondrook'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_MONDROOK
 					}
 				]
 			},
@@ -382,35 +384,35 @@ const baseAdminSidebarMenuItems: MenuItem[] = [
 				name: 'External',
 				link: '/admin/community/external',
 				icon: { icon: TextIcon, letter: 'E' },
-				permission: 'admin.community.external',
+				permission: PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL,
 				subItems: [
 					{
 						id: 'community-admin-external-information',
 						name: 'External Information',
 						link: '/admin/community/external/information',
 						icon: { icon: Info },
-						permission: 'admin.community.external.information'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL_INFORMATION
 					},
 					{
 						id: 'community-admin-external-workshops',
 						name: 'External Workshops',
 						link: '/admin/community/external/workshops',
 						icon: { icon: School },
-						permission: 'admin.community.external.workshops'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL_WORKSHOPS
 					},
 					{
 						id: 'community-admin-external-events',
 						name: 'External Events',
 						link: '/admin/community/external/events',
 						icon: { icon: CalendarDays },
-						permission: 'admin.community.external.events'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL_EVENTS
 					},
 					{
 						id: 'community-admin-external-map',
 						name: 'External Community Map',
 						link: '/admin/community/external/map',
 						icon: { icon: Map },
-						permission: 'admin.community.external'
+						permission: PERMISSIONS.ADMIN_COMMUNITY_EXTERNAL
 					}
 				]
 			}

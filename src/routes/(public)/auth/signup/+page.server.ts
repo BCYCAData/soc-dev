@@ -47,7 +47,7 @@ export const actions = {
 		);
 
 		if (validationError) {
-			console.log('validationError', validationError);
+			console.error('validationError', validationError);
 			await logSignUpSignInError(supabase, {
 				errorType: 'VALIDATION_ERROR',
 				errorMessage: validationError.message,
@@ -137,7 +137,7 @@ export const actions = {
 				}
 			});
 			if (signUpError) {
-				console.log('signUpError', signUpError);
+				console.error('signUpError', signUpError);
 				if (signUpError instanceof AuthApiError && signUpError.status === 400) {
 					await logSignUpSignInError(supabase, {
 						errorType: 'AUTH_ERROR',

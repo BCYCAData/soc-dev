@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
+	import { enhance } from '$app/forms';
+	import { Eye, EyeOff } from 'lucide-svelte';
 	import AuthErrorMessage from '$components/form/auth/AuthErrorMessage.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 	import type { ActionData } from './$types';
@@ -24,7 +26,8 @@
 		idle: 'You were signed out after a period of inactivity. Please sign in again.',
 		'session-refresh-failed': "We couldn't keep your session active. Please sign in again.",
 		email_changed:
-			'Your email address has been updated. Please sign in with your new email address.'
+			'Your email address has been updated. Please sign in with your new email address.',
+		email_confirmed: 'Your email address has been confirmed. Please sign in.'
 	};
 	let notice = $derived(
 		SIGNIN_NOTICES[page.url.searchParams.get('reason') ?? ''] ??
@@ -61,7 +64,17 @@
 				<span class="text-sm font-medium">{notice}</span>
 			</div>
 		{/if}
-		<form action="?/signin" method="POST">
+		<form
+			action="?/signin"
+			method="POST"
+			use:enhance={() => {
+				isSubmitting = true;
+				return async ({ update }) => {
+					await update();
+					isSubmitting = false;
+				};
+			}}
+		>
 			<input
 				id="email"
 				type="email"
@@ -86,10 +99,15 @@
 				<button
 					type="button"
 					class="text-surface-950 absolute top-1/2 right-3 -translate-y-1/2"
-					onmouseenter={() => (showPassword = true)}
-					onmouseleave={() => (showPassword = false)}
+					aria-label={showPassword ? 'Hide password' : 'Show password'}
+					aria-pressed={showPassword}
+					onclick={() => (showPassword = !showPassword)}
 				>
-					{showPassword ? '👁️' : '👁️'}
+					{#if showPassword}
+						<EyeOff class="h-5 w-5" aria-hidden="true" />
+					{:else}
+						<Eye class="h-5 w-5" aria-hidden="true" />
+					{/if}
 				</button>
 			</div>
 			<div class="mb-4 text-center">
@@ -110,7 +128,7 @@
 				class="text-scale-6 bg-secondary-500 text-secondary-50 hover:bg-secondary-700 w-full rounded-full py-2 text-center focus:outline-none"
 			>
 				{#if isSubmitting}
-					<Spinner size="sm" /> Signing in...
+					<Spinner size="16" /> Signing in...
 				{:else}
 					Sign In
 				{/if}
