@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
@@ -14,7 +15,7 @@
 	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">Tinonee Community Administration</h1>
 
 	<div class="mb-8 grid gap-6">
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_TINONEE_INFORMATION)}
@@ -50,9 +51,9 @@
 					</a>
 				{/if}
 			</div>
-		</section>
+		</Card>
 
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				<ul class="list-disc pl-4">
@@ -70,6 +71,6 @@
 					{/if}
 				</ul>
 			</div>
-		</section>
+		</Card>
 	</div>
 </div>

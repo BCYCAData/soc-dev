@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { resolve } from '$app/paths';
 </script>
 
@@ -21,7 +22,7 @@
 			</div>
 		</section>
 
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				<span class="flex-auto">
@@ -36,6 +37,6 @@
 					<dd class="text-sm opacity-90">View an interactive map.</dd>
 				</span>
 			</div>
-		</section>
+		</Card>
 	</div>
 </div>

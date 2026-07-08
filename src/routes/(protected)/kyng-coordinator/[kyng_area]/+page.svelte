@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
@@ -16,7 +17,7 @@
 	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">{kyngName} KYNG</h1>
 
 	<div class="mb-8 grid gap-6">
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid grid-cols-3 gap-4">
 				<a
@@ -42,9 +43,9 @@
 					{kyngName} KYNG User Management
 				</a>
 			</div>
-		</section>
+		</Card>
 
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				<ul class="list-disc pl-4">
@@ -53,6 +54,6 @@
 					<li>Reporting tools to help know the state of your KYNG group</li>
 				</ul>
 			</div>
-		</section>
+		</Card>
 	</div>
 </div>

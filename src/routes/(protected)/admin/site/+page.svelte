@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
@@ -13,7 +14,7 @@
 <div class="mx-auto max-w-4xl px-6">
 	<h1 class="text-secondary-700 mb-6 text-3xl font-bold">SOC Website Administration</h1>
 	<div class="mb-8 grid gap-6">
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
 			<div class="grid auto-rows-auto grid-cols-2 gap-4">
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_MESSAGES)}
@@ -55,9 +56,9 @@
 					</a>
 				{/if}
 			</div>
-		</section>
+		</Card>
 
-		<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Guidelines</h2>
 			<div class="prose">
 				{#if hasFeature('messages')}
@@ -106,6 +107,6 @@
 					</span>
 				{/if}
 			</div>
-		</section>
+		</Card>
 	</div>
 </div>

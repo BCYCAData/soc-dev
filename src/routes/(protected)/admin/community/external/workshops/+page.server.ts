@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (externalWorkshopsError) {
-		console.log('error get External Workshop Choices Data:', externalWorkshopsError);
+		console.error('error get External Workshop Choices Data:', externalWorkshopsError);
 		error(400, externalWorkshopsError.message);
 	}
 	return { externalWorkshopsData: externalWorkshopsData };

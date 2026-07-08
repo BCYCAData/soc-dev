@@ -154,12 +154,12 @@
 						{/if}
 						{#if hasFeature('information')}
 							<dd class="text-sm opacity-90">
-								Communication tools help reach community members efficiently
+								Manage the information sheets shared with community members
 							</dd>
 						{/if}
 						{#if hasFeature('map')}
 							<dd class="text-sm opacity-90">
-								Access detailed analytics about community engagement
+								Community maps show registered properties within each community area
 							</dd>
 						{/if}
 					</div>

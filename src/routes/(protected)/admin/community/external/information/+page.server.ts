@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (externalInformationError) {
-		console.log('error get External Information Sheet Choices Data:', externalInformationError);
+		console.error('error get External Information Sheet Choices Data:', externalInformationError);
 		error(400, externalInformationError.message);
 	}
 	return {

@@ -16,7 +16,7 @@ export const actions: Actions = {
 			})
 			.eq('id', pid);
 		if (myPlaceHazardsError) {
-			console.log('error profileMyPlaceHazards update property_profile: ', myPlaceHazardsError);
+			console.error('error profileMyPlaceHazards update property_profile: ', myPlaceHazardsError);
 			return {
 				profileMyPlaceHazardsFormData,
 				success: false,

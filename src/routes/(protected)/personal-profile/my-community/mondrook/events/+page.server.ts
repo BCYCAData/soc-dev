@@ -15,7 +15,7 @@ export const actions: Actions = {
 				})
 				.eq('mondrook_profile_id', mondrookId);
 			if (myMondrookCommunityEventsError) {
-				console.log(
+				console.error(
 					'error profileMyCommunityMondrookEvents update community_mondrook_profile: ',
 					myMondrookCommunityEventsError
 				);

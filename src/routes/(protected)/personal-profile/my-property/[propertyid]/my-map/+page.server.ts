@@ -20,14 +20,14 @@ export const load: PageServerLoad = async ({ locals: { supabase }, params, paren
 	]);
 
 	if (propertyGeometryError) {
-		console.log('error get Property Geometry:', propertyGeometryError);
+		console.error('error get Property Geometry:', propertyGeometryError);
 		throw error(400, propertyGeometryError);
 	}
 
 	if (templatesError || featuresError || attributesError) {
-		console.log('Spatial Feature Template Error:', templatesError);
-		console.log('Spatial Features Error:', featuresError);
-		console.log('Spatial Feature Attributes Error:', attributesError);
+		console.error('Spatial Feature Template Error:', templatesError);
+		console.error('Spatial Features Error:', featuresError);
+		console.error('Spatial Feature Attributes Error:', attributesError);
 		throw error(400, 'Error fetching feature data');
 	}
 	return {
@@ -76,7 +76,7 @@ export const actions: Actions = {
 		);
 
 		if (featureError) {
-			console.log('featureError', featureError.message);
+			console.error('featureError', featureError.message);
 			return fail(400, {
 				success: false,
 				message: 'Failed to save spatial feature'
@@ -121,7 +121,7 @@ export const actions: Actions = {
 			);
 
 			if (attributeError) {
-				console.log('attributeError', attributeError.message);
+				console.error('attributeError', attributeError.message);
 				return fail(400, {
 					success: false,
 					message: 'Failed to save feature attribute'
@@ -167,7 +167,7 @@ export const actions: Actions = {
 			p_property_id: propertyId
 		});
 		if (rpcError) {
-			console.log('deleteSpatialFeatureError', rpcError.message);
+			console.error('deleteSpatialFeatureError', rpcError.message);
 			return fail(400, {
 				success: false,
 				message: 'Failed to delete spatial feature'
@@ -212,7 +212,7 @@ export const actions: Actions = {
 			p_property_id: propertyId.toString()
 		});
 		if (rpcError) {
-			console.log('mergeFeaturesError', rpcError.message);
+			console.error('mergeFeaturesError', rpcError.message);
 			return fail(400, { success: false, message: 'Failed to merge features' });
 		}
 

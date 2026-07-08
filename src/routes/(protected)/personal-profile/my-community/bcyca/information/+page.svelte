@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
 	import FormWell from '$components/form/FormWell.svelte';
@@ -31,14 +32,12 @@
 	)?.options;
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			// Reset form to initial state
-			informationSheetChoices =
-				data?.userProfile?.community_bcyca_profile?.information_sheet_choices || [];
-			otherInformationSheet =
-				data?.userProfile?.community_bcyca_profile?.other_information_sheet || '';
-		}
+		unsaved = false;
+		// Reset form to initial state
+		informationSheetChoices =
+			data?.userProfile?.community_bcyca_profile?.information_sheet_choices || [];
+		otherInformationSheet =
+			data?.userProfile?.community_bcyca_profile?.other_information_sheet || '';
 	}
 </script>
 
@@ -53,6 +52,16 @@
 	}}
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isSubmitting = false;
+			if (result.type === 'success' && result.data?.success !== false) {
+				unsaved = false;
+			}
+		};
+	}}
 >
 	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">
 		Community Information Resources

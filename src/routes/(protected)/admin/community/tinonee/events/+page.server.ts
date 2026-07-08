@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (tinoneeEventsError) {
-		console.log('error get Tinonee Meeting Choices Data:', tinoneeEventsError);
+		console.error('error get Tinonee Meeting Choices Data:', tinoneeEventsError);
 		error(400, tinoneeEventsError.message);
 	}
 	return {

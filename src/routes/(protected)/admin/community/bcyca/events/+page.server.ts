@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (bcycaEventsError) {
-		console.log('error get BCYCA Meeting Choices Data:', bcycaEventsError);
+		console.error('error get BCYCA Meeting Choices Data:', bcycaEventsError);
 		error(400, bcycaEventsError.message);
 	}
 	return {

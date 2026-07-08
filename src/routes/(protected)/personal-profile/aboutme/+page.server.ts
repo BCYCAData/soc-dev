@@ -18,7 +18,7 @@ export const actions: Actions = {
 			.update(profileAboutMeFormData)
 			.eq('id', user?.id);
 		if (aboutMeDataError) {
-			console.log('error profileAboutMe update user_profile: ', aboutMeDataError);
+			console.error('error profileAboutMe update user_profile: ', aboutMeDataError);
 			return fail(400, {
 				success: false,
 				message: `Failed to update profile: ${aboutMeDataError?.message}`

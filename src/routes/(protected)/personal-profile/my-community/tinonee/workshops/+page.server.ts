@@ -18,7 +18,7 @@ export const actions: Actions = {
 				})
 				.eq('tinonee_profile_id', tinoneeId);
 			if (myCommunityTinoneeWorkshopsError) {
-				console.log(
+				console.error(
 					'error profileTinoneeMyCommunityWorkshops update community_tinonee_profile: ',
 					myCommunityTinoneeWorkshopsError
 				);

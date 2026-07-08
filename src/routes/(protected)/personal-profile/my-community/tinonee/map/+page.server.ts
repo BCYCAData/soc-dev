@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 		{ community_name: 'Tinonee' }
 	);
 	if (tinoneeCommunityMapDataError) {
-		console.log('error getting Tinonee Community Map Data:', tinoneeCommunityMapDataError);
+		console.error('error getting Tinonee Community Map Data:', tinoneeCommunityMapDataError);
 		error(400, tinoneeCommunityMapDataError);
 	}
 	const { community, mapExtent, addressPoints, registeredPoints } = tinoneeCommunityMapData;

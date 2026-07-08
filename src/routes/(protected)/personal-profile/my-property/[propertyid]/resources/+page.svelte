@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
@@ -41,15 +42,13 @@
 	let fireHazardReduction = $state(currentProperty.fire_hazard_reduction);
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			// Reset form to initial state
-			staticWaterAvailable = currentProperty.static_water_available;
-			haveStortz = currentProperty.have_stortz;
-			stortzSize = currentProperty.stortz_size;
-			fireFightingResources = currentProperty.fire_fighting_resources;
-			fireHazardReduction = currentProperty.fire_hazard_reduction;
-		}
+		unsaved = false;
+		// Reset form to initial state
+		staticWaterAvailable = currentProperty.static_water_available;
+		haveStortz = currentProperty.have_stortz;
+		stortzSize = currentProperty.stortz_size;
+		fireFightingResources = currentProperty.fire_fighting_resources;
+		fireHazardReduction = currentProperty.fire_hazard_reduction;
 	}
 </script>
 
@@ -64,6 +63,16 @@
 	}}
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isSubmitting = false;
+			if (result.type === 'success' && result.data?.success !== false) {
+				unsaved = false;
+			}
+		};
+	}}
 >
 	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Resources At My Place</h1>
 

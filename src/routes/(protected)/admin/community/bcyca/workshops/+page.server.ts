@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (bcycaWorkshopsError) {
-		console.log('error get BCYCA Workshop Choices Data:', bcycaWorkshopsError);
+		console.error('error get BCYCA Workshop Choices Data:', bcycaWorkshopsError);
 		error(400, bcycaWorkshopsError.message);
 	}
 	return { bcycaWorkshopsData: bcycaWorkshopsData };

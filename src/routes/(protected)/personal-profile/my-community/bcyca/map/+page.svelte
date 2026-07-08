@@ -1,4 +1,5 @@
 <script lang="ts">
+	import EmptyState from '$components/page/EmptyState.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 
 	import MapView from '$lib/map/MapView.svelte';
@@ -44,8 +45,12 @@
 		</MapView>
 	</div>
 {:else}
-	<div class="main-map mx-auto flex h-full w-5/6 flex-col">
-		<p class="text-surface-500 mt-4 text-center">Bugger!</p>
+	<div class="mx-auto flex h-full w-5/6 flex-col justify-center">
+		<EmptyState
+			title="Map unavailable"
+			message="We couldn't load the map area for your community. Please try again later."
+			icon="database"
+		/>
 	</div>
 {/if}
 
@@ -65,7 +70,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: rgba(255, 255, 255, 0.7);
+		background-color: color-mix(in srgb, var(--color-surface-50) 70%, transparent);
 		z-index: 1000;
+	}
+
+	:global(.dark) .spinner-overlay {
+		background-color: color-mix(in srgb, var(--color-surface-950) 70%, transparent);
 	}
 </style>

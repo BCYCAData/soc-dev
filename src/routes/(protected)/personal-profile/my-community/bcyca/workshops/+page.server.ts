@@ -17,7 +17,7 @@ export const actions: Actions = {
 				})
 				.eq('bcyca_profile_id', bcycaId);
 			if (myCommunityBCYCAWorkshopsError) {
-				console.log(
+				console.error(
 					'error profileMyCommunityBCYCAWorkshops update community_bcyca_profile: ',
 					myCommunityBCYCAWorkshopsError
 				);

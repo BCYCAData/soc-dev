@@ -1,6 +1,8 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { resolve } from '$app/paths';
 	import AddPropertyModal from '$components/page/modals/AddPropertyModal.svelte';
+	import EmptyState from '$components/page/EmptyState.svelte';
 	import RemovePropertyModal from '$components/page/modals/RemovePropertyModal.svelte';
 	import type { PageData } from './$types';
 
@@ -66,7 +68,7 @@
 
 	<div class="mb-8 grid gap-6">
 		{#each properties as property (property)}
-			<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+			<Card>
 				<div class="mb-4 flex items-center justify-between">
 					<div class="flex items-center gap-3">
 						<h2 class="text-xl font-semibold">{formatAddress(property)}</h2>
@@ -165,7 +167,15 @@
 						Property Resources
 					</a>
 				</div>
-			</section>
+			</Card>
+		{:else}
+			<EmptyState
+				title="No properties yet"
+				message="Add your property to start recording the details that help emergency services respond."
+				icon="inbox"
+				actionLabel="Add New Property"
+				onAction={() => (showAddPropertyModal = true)}
+			/>
 		{/each}
 	</div>
 

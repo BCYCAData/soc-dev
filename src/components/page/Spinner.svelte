@@ -21,9 +21,14 @@
 		message = ''
 	}: Props = $props();
 
+	// `size` must resolve to a number of `unit`s; named aliases keep call sites
+	// like size="sm" from producing --size: smpx / --scale: NaN.
+	const NAMED_SIZES: Record<string, string> = { sm: '16', md: '32', lg: '60' };
+	const resolvedSize = $derived(NAMED_SIZES[size] ?? size);
+
 	const style = $derived(`
-        --size: ${size}${unit};
-        --scale: ${Number(size) / 52};
+        --size: ${resolvedSize}${unit};
+        --scale: ${Number(resolvedSize) / 52};
         --ball-top-left: ${ballTopLeft};
         --ball-top-right: ${ballTopRight};
         --ball-bottom-left: ${ballBottomLeft};
@@ -32,10 +37,7 @@
     `);
 </script>
 
-<div
-	class="mt-4 flex flex-col items-center justify-center rounded-md p-2 whitespace-nowrap"
-	{style}
->
+<div class="flex flex-col items-center justify-center rounded-md whitespace-nowrap" {style}>
 	<div class="spinner" role="status" aria-label="Loading">
 		<div class="spinner-inner">
 			<div class="ball-container">

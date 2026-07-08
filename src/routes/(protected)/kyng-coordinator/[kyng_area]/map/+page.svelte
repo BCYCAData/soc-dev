@@ -77,7 +77,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: rgba(255, 255, 255, 0.7);
+		background-color: color-mix(in srgb, var(--color-surface-50) 70%, transparent);
 		z-index: 1000;
+	}
+
+	:global(.dark) .spinner-overlay {
+		background-color: color-mix(in srgb, var(--color-surface-950) 70%, transparent);
 	}
 </style>

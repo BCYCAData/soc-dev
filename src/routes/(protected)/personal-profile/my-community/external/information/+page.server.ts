@@ -17,7 +17,7 @@ export const actions: Actions = {
 				})
 				.eq('external_profile_id', externalId);
 			if (myCommunityExternalInformationError) {
-				console.log(
+				console.error(
 					'error profileMyCommunityExternalInformation update community_external_profile: ',
 					myCommunityExternalInformationError
 				);

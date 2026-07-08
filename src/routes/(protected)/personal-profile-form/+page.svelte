@@ -6,6 +6,8 @@
 
 	import { Loader } from 'lucide-svelte';
 
+	import { toastStore } from '$stores/toaststore';
+
 	import type { ActionData, PageData } from './$types';
 	import type { SvelteComponent } from 'svelte';
 
@@ -26,6 +28,7 @@
 	// see exactly what remains. (Reflects the profile as loaded; refreshes on next visit.)
 	const completion = $derived(data.completion);
 	const missingBySection = $derived.by(() => {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- rebuilt wholesale inside $derived
 		const map = new Map<string, string[]>();
 		for (const item of completion.missing) {
 			const list = map.get(item.section) ?? [];
@@ -88,9 +91,14 @@
 					// Re-run load so the completion banner reflects the just-saved answers.
 					await invalidateAll();
 					progressBar?.handleProgress(stepIncrement);
+				} else {
+					toastStore.error('Your answers could not be saved. Please try again.');
 				}
 			} catch (error) {
 				console.error('Error saving form data:', error);
+				toastStore.error(
+					'Your answers could not be saved. Please check your connection and try again.'
+				);
 			}
 		} else {
 			progressBar?.handleProgress(stepIncrement);
@@ -119,10 +127,13 @@
 					await invalidateAll();
 					progressBar?.skipTo(e);
 				} else {
-					console.error('Failed to save form data');
+					toastStore.error('Your answers could not be saved. Please try again.');
 				}
 			} catch (error) {
 				console.error('Error saving form data:', error);
+				toastStore.error(
+					'Your answers could not be saved. Please check your connection and try again.'
+				);
 			}
 		} else {
 			progressBar?.skipTo(e);
@@ -172,11 +183,9 @@
 			{steps}
 			onFormResult={({ success, message }) => {
 				if (success) {
-					// Show success notification
-					console.log('Survey Form submitted successfully:', message);
+					toastStore.success(message || 'Your profile has been submitted.');
 				} else {
-					// Show error notification
-					console.log('Failed to submit survey form:', message);
+					toastStore.error(message || 'Your profile could not be submitted. Please try again.');
 				}
 			}}
 		/>

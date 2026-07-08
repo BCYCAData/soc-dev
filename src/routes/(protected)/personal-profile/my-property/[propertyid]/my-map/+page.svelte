@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable @typescript-eslint/no-explicit-any -- RPC payload shapes are dynamic */
 	import { page } from '$app/state';
 
 	import PropertyCaptureMap from '$lib/map/capture/PropertyCaptureMap.svelte';
@@ -17,10 +18,7 @@
 	const propertyGeometry = $derived((data.propertyGeometryData?.[0] ?? {}) as any);
 	const templates = $derived(Object.values(data.featureTemplates ?? {}) as FeatureTemplate[]);
 	const featuresByTemplate = $derived(
-		transformFeaturesToGeoJSON(
-			data.spatialFeatures as any,
-			data.featureAttributes as any
-		)
+		transformFeaturesToGeoJSON(data.spatialFeatures as any, data.featureAttributes as any)
 	);
 </script>
 

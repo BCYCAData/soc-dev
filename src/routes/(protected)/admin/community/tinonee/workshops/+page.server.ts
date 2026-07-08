@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (tinoneeWorkshopsError) {
-		console.log('error get Tinonee Workshop Choices Data:', tinoneeWorkshopsError);
+		console.error('error get Tinonee Workshop Choices Data:', tinoneeWorkshopsError);
 		error(400, tinoneeWorkshopsError.message);
 	}
 	return { tinoneeWorkshopsData: tinoneeWorkshopsData };

@@ -25,7 +25,7 @@ export const actions: Actions = {
 				.eq('mondrook_profile_id', mondrookId);
 
 			if (myCommunityMondrookUserProfileError) {
-				console.log(
+				console.error(
 					'error profileMondrookMyCommunity update community_mondrook_profile: ',
 					myCommunityMondrookUserProfileError
 				);
@@ -51,7 +51,7 @@ export const actions: Actions = {
 					.eq('user_id', user.id);
 
 				if (userPostalAddressUpdateError) {
-					console.log(
+					console.error(
 						'error profileMondrookMyCommunity updateUserPostalAddress: ',
 						userPostalAddressUpdateError
 					);
@@ -69,7 +69,7 @@ export const actions: Actions = {
 					.eq('user_id', user.id);
 
 				if (userPostalAddressDeleteError) {
-					console.log(
+					console.error(
 						'error profileMondrookMyCommunity delete UserPostalAddress: ',
 						userPostalAddressDeleteError
 					);
@@ -94,7 +94,7 @@ export const actions: Actions = {
 					});
 
 				if (userPostalAddressUpsertError) {
-					console.log(
+					console.error(
 						'error profileMondrookMyCommunity upsertUserPostalAddress: ',
 						userPostalAddressUpsertError
 					);

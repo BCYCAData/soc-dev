@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (mondrookEventsError) {
-		console.log('error get Mondrook Meeting Choices Data:', mondrookEventsError);
+		console.error('error get Mondrook Meeting Choices Data:', mondrookEventsError);
 		error(400, mondrookEventsError.message);
 	}
 	return {

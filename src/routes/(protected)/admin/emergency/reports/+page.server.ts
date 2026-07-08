@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: streetsData, error: getStreetsError } = await supabase.rpc('get_street_list', {});
 
 	if (getStreetsError) {
-		console.log('error errorStreets:', getStreetsError);
+		console.error('error errorStreets:', getStreetsError);
 		error(400, getStreetsError.message);
 	}
 
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (getPropertyError) {
-		console.log('error propertyAddresses:', getPropertyError);
+		console.error('error propertyAddresses:', getPropertyError);
 		error(400, getPropertyError.message);
 	}
 

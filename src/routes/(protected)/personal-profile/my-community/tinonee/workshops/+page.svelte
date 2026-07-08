@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 	import FormActions from '$components/form/FormActions.svelte';
 	import FormAlerts from '$components/form/FormAlerts.svelte';
@@ -34,16 +35,13 @@
 	);
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			// Reset form to initial state
-			communityWorkshopChoices =
-				data.userProfile?.community_tinonee_profile?.community_workshop_choices;
-			otherCommunityWorkshop =
-				data.userProfile?.community_tinonee_profile?.other_community_workshop;
-			willRunCommunityWorkshops =
-				data.userProfile?.community_tinonee_profile?.will_run_community_workshops;
-		}
+		unsaved = false;
+		// Reset form to initial state
+		communityWorkshopChoices =
+			data.userProfile?.community_tinonee_profile?.community_workshop_choices;
+		otherCommunityWorkshop = data.userProfile?.community_tinonee_profile?.other_community_workshop;
+		willRunCommunityWorkshops =
+			data.userProfile?.community_tinonee_profile?.will_run_community_workshops;
 	}
 </script>
 
@@ -58,6 +56,16 @@
 	}}
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isSubmitting = false;
+			if (result.type === 'success' && result.data?.success !== false) {
+				unsaved = false;
+			}
+		};
+	}}
 >
 	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Community Workshops</h1>
 

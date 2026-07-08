@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (bcycaCommunityMapDataError) {
-		console.log('error getting BCYCA Community Map Data:', bcycaCommunityMapDataError);
+		console.error('error getting BCYCA Community Map Data:', bcycaCommunityMapDataError);
 		error(400, bcycaCommunityMapDataError);
 	}
 	const { community, mapExtent, addressPoints, registeredPoints } = bcycaCommunityMapData;

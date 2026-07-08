@@ -20,7 +20,7 @@ export const actions: Actions = {
 			})
 			.eq('id', pid);
 		if (myPlaceAssetsError) {
-			console.log('error profileMyPlaceAssets update property_profile: ', myPlaceAssetsError);
+			console.error('error profileMyPlaceAssets update property_profile: ', myPlaceAssetsError);
 			return {
 				profileMyPlaceAssetsFormData,
 				success: false,

@@ -18,7 +18,10 @@ export const actions: Actions = {
 			})
 			.eq('id', pid);
 		if (myPlaceResourcesError) {
-			console.log('error profileMyPlaceResources update property_profile: ', myPlaceResourcesError);
+			console.error(
+				'error profileMyPlaceResources update property_profile: ',
+				myPlaceResourcesError
+			);
 			return {
 				profileMyPlaceResourcesFormData,
 				success: false,

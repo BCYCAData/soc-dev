@@ -24,7 +24,7 @@ export const actions: Actions = {
 			})
 			.eq('id', pid);
 		if (myPlaceDataError) {
-			console.log('error profileMyPlace update property_profile: ', myPlaceDataError);
+			console.error('error profileMyPlace update property_profile: ', myPlaceDataError);
 			return {
 				profileMyPlaceFormData,
 				success: false,
@@ -44,7 +44,7 @@ export const actions: Actions = {
 						agent_phone: profileMyPlaceFormData.propertyAgentData?.agent_phone
 					});
 					if (agentUpsertError) {
-						console.log('error profileMyPlace upsertAgent:', agentUpsertError);
+						console.error('error profileMyPlace upsertAgent:', agentUpsertError);
 						return {
 							profileMyPlaceFormData,
 							success: false,
@@ -58,7 +58,7 @@ export const actions: Actions = {
 						.delete()
 						.eq('property_id', pid);
 					if (deleteAgentError) {
-						console.log('error profileMyPlace delete agent: ', deleteAgentError);
+						console.error('error profileMyPlace delete agent: ', deleteAgentError);
 						return {
 							profileMyPlaceFormData,
 							success: false,

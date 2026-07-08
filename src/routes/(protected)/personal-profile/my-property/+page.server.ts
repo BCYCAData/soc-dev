@@ -103,7 +103,7 @@ export const actions: Actions = {
 		});
 
 		if (error) {
-			console.log('error', error);
+			console.error('error', error);
 			return fail(400, {
 				success: false,
 				message: 'Failed to add property'

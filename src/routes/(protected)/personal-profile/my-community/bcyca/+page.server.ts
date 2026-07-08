@@ -24,7 +24,7 @@ export const actions: Actions = {
 				})
 				.eq('bcyca_profile_id', bcycaId);
 			if (myCommunityBCYCAUserProfileError) {
-				console.log(
+				console.error(
 					'error profileBCYCAMyCommunity update community_bcyca_profile: ',
 					myCommunityBCYCAUserProfileError
 				);
@@ -48,7 +48,7 @@ export const actions: Actions = {
 						})
 						.eq('user_id', user.id);
 					if (userPostalAddressUpdateError) {
-						console.log(
+						console.error(
 							'error profileBCYCAMyCommunityupdateUserPostalAddress: ',
 							userPostalAddressUpdateError
 						);
@@ -65,7 +65,7 @@ export const actions: Actions = {
 						.delete()
 						.eq('user_id', user.id);
 					if (userPostalAddressDeleteError) {
-						console.log(
+						console.error(
 							'error profileBCYCAMyCommunitydelete UserPostalAddress: ',
 							userPostalAddressDeleteError
 						);
@@ -89,7 +89,7 @@ export const actions: Actions = {
 								profileBCYCAMyCommunityBCYCAFormData.userPostalAddressData?.postal_address_postcode
 						});
 					if (userPostalAddressUpsertError) {
-						console.log(
+						console.error(
 							'error profileBCYCAMyCommunityupsertUserPostalAddress: ',
 							userPostalAddressUpsertError
 						);

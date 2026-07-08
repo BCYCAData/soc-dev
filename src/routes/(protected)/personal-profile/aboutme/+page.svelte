@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import {
 		residencyOptions,
 		yesNoOptions,
@@ -56,19 +57,17 @@
 	let rfs_survival_plan = $state(data.userProfile.rfs_survival_plan);
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			// Reset form to initial state
-			family_name = data.userProfile.family_name;
-			fire_fighting_experience = data.userProfile.fire_fighting_experience;
-			fire_trauma = data.userProfile.fire_trauma;
-			first_name = data.userProfile.first_name;
-			mobile = data.userProfile.mobile;
-			plan_to_leave_before_fire = data.userProfile.plan_to_leave_before_fire;
-			plan_to_leave_before_flood = data.userProfile.plan_to_leave_before_flood;
-			residency_profile = data.userProfile.residency_profile;
-			rfs_survival_plan = data.userProfile.rfs_survival_plan;
-		}
+		unsaved = false;
+		// Reset form to initial state
+		family_name = data.userProfile.family_name;
+		fire_fighting_experience = data.userProfile.fire_fighting_experience;
+		fire_trauma = data.userProfile.fire_trauma;
+		first_name = data.userProfile.first_name;
+		mobile = data.userProfile.mobile;
+		plan_to_leave_before_fire = data.userProfile.plan_to_leave_before_fire;
+		plan_to_leave_before_flood = data.userProfile.plan_to_leave_before_flood;
+		residency_profile = data.userProfile.residency_profile;
+		rfs_survival_plan = data.userProfile.rfs_survival_plan;
 	}
 </script>
 
@@ -84,6 +83,16 @@
 		}}
 		class="mx-auto w-full max-w-5xl space-y-2 py-2"
 		method="POST"
+		use:enhance={() => {
+			isSubmitting = true;
+			return async ({ update, result }) => {
+				await update({ reset: false });
+				isSubmitting = false;
+				if (result.type === 'success' && result.data?.success !== false) {
+					unsaved = false;
+				}
+			};
+		}}
 	>
 		<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">About Me</h1>
 

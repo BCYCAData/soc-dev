@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/state';
 
@@ -90,6 +91,16 @@
 		}}
 		class="mx-auto w-full max-w-5xl space-y-2 py-2"
 		method="POST"
+		use:enhance={() => {
+			isSubmitting = true;
+			return async ({ update, result }) => {
+				await update({ reset: false });
+				isSubmitting = false;
+				if (result.type === 'success' && result.data?.success !== false) {
+					unsaved = false;
+				}
+			};
+		}}
 	>
 		<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">My Place</h1>
 

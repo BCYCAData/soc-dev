@@ -21,7 +21,7 @@ export const actions: Actions = {
 			})
 			.eq('id', user.id);
 		if (myCommunityUserProfileError) {
-			console.log('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
+			console.error('error profileMyCommunity update user_profile: ', myCommunityUserProfileError);
 			return {
 				profileTinoneeMyCommunityFormData,
 				success: false,
@@ -42,7 +42,7 @@ export const actions: Actions = {
 					})
 					.eq('user_id', user.id);
 				if (userPostalAddressUpdateError) {
-					console.log(
+					console.error(
 						'error profileMyCommunity updateUserPostalAddress: ',
 						userPostalAddressUpdateError
 					);
@@ -59,7 +59,7 @@ export const actions: Actions = {
 					.delete()
 					.eq('user_id', user.id);
 				if (userPostalAddressDeleteError) {
-					console.log(
+					console.error(
 						'error profileMyCommunity delete UserPostalAddress: ',
 						userPostalAddressDeleteError
 					);
@@ -83,7 +83,7 @@ export const actions: Actions = {
 							profileTinoneeMyCommunityFormData.userPostalAddressData?.postal_address_postcode
 					});
 				if (userPostalAddressUpsertError) {
-					console.log(
+					console.error(
 						'error profileMyCommunity upsertUserPostalAddress: ',
 						userPostalAddressUpsertError
 					);

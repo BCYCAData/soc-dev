@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Card from '$components/page/Card.svelte';
 	import { untrack } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { PageProps } from './$types';
@@ -14,6 +15,7 @@
 
 	// Group the catalog by section, preserving catalog order.
 	const sections = $derived.by(() => {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- rebuilt wholesale inside $derived
 		const map = new Map<string, typeof data.catalog>();
 		for (const field of data.catalog) {
 			const list = map.get(field.section) ?? [];
@@ -24,6 +26,7 @@
 	});
 
 	function toggleSection(keys: string[], on: boolean) {
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- transient local copy
 		const set = new Set(checked);
 		for (const key of keys) {
 			if (on) set.add(key);
@@ -60,7 +63,9 @@
 		<div
 			class="bg-surface-50-950 sticky top-2 z-10 mb-6 flex items-center justify-between rounded-lg p-4 shadow"
 		>
-			<span class="font-semibold">{checked.length} question{checked.length === 1 ? '' : 's'} required</span>
+			<span class="font-semibold"
+				>{checked.length} question{checked.length === 1 ? '' : 's'} required</span
+			>
 			<button type="submit" class="btn preset-filled-primary-500" disabled={saving}>
 				{saving ? 'Saving…' : 'Save requirements'}
 			</button>
@@ -81,7 +86,7 @@
 			{#each sections as [section, fields] (section)}
 				{@const sectionKeys = fields.map((f) => f.key)}
 				{@const allOn = sectionKeys.every((k) => checked.includes(k))}
-				<section class="bg-surface-50-950 rounded-lg p-6 shadow">
+				<Card>
 					<div class="mb-3 flex items-center justify-between">
 						<h2 class="text-xl font-semibold">{section}</h2>
 						<button
@@ -106,7 +111,7 @@
 							</label>
 						{/each}
 					</div>
-				</section>
+				</Card>
 			{/each}
 		</div>
 	</form>

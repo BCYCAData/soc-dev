@@ -1,4 +1,5 @@
 <script lang="ts">
+	import EmptyState from '$components/page/EmptyState.svelte';
 	import Spinner from '$components/page/Spinner.svelte';
 
 	import MapView from '$lib/map/MapView.svelte';
@@ -43,6 +44,14 @@
 			{/if}
 		</MapView>
 	</div>
+{:else}
+	<div class="mx-auto flex h-full w-5/6 flex-col justify-center">
+		<EmptyState
+			title="Map unavailable"
+			message="No map extent was returned for this community. Check that the community boundary data is loaded."
+			icon="database"
+		/>
+	</div>
 {/if}
 
 <style>
@@ -61,7 +70,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: rgba(255, 255, 255, 0.7);
+		background-color: color-mix(in srgb, var(--color-surface-50) 70%, transparent);
 		z-index: 1000;
+	}
+
+	:global(.dark) .spinner-overlay {
+		background-color: color-mix(in srgb, var(--color-surface-950) 70%, transparent);
 	}
 </style>

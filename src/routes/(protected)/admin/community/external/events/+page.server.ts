@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (externalEventsError) {
-		console.log('error get External Meeting Choices Data:', externalEventsError);
+		console.error('error get External Meeting Choices Data:', externalEventsError);
 		error(400, externalEventsError.message);
 	}
 	return {

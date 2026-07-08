@@ -23,7 +23,7 @@ export const actions: Actions = {
 				})
 				.eq('external_profile_id', externalId);
 			if (myCommunityExternalUserProfileError) {
-				console.log(
+				console.error(
 					'error profileExtenalMyCommunity update community_external_profile: ',
 					myCommunityExternalUserProfileError
 				);
@@ -47,7 +47,7 @@ export const actions: Actions = {
 						})
 						.eq('user_id', user.id);
 					if (userPostalAddressUpdateError) {
-						console.log(
+						console.error(
 							'error profileExtenalMyCommunity updateUserPostalAddress: ',
 							userPostalAddressUpdateError
 						);
@@ -64,7 +64,7 @@ export const actions: Actions = {
 						.delete()
 						.eq('user_id', user.id);
 					if (userPostalAddressDeleteError) {
-						console.log(
+						console.error(
 							'error profileExtenalMyCommunity delete UserPostalAddress: ',
 							userPostalAddressDeleteError
 						);
@@ -88,7 +88,7 @@ export const actions: Actions = {
 								profileExternalMyCommunityFormData.userPostalAddressData?.postal_address_postcode
 						});
 					if (userPostalAddressUpsertError) {
-						console.log(
+						console.error(
 							'error profileExtenalMyCommunity upsertUserPostalAddress: ',
 							userPostalAddressUpsertError
 						);

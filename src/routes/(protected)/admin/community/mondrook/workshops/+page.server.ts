@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 		{}
 	);
 	if (mondrookWorkshopsError) {
-		console.log('error get Mondrook Workshop Choices Data:', mondrookWorkshopsError);
+		console.error('error get Mondrook Workshop Choices Data:', mondrookWorkshopsError);
 		error(400, mondrookWorkshopsError.message);
 	}
 	return { mondrookWorkshopsData: mondrookWorkshopsData };

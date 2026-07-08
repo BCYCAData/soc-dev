@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
@@ -41,17 +42,15 @@
 	let other_essential_assets = $state(currentProperty.other_essential_assets);
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			live_stock_present = currentProperty.live_stock_present;
-			live_stock_safe_area = currentProperty.live_stock_safe_area;
-			share_livestock_safe_area = currentProperty.share_livestock_safe_area;
-			number_birds = currentProperty.number_birds;
-			number_cats = currentProperty.number_cats;
-			number_dogs = currentProperty.number_dogs;
-			number_other_pets = currentProperty.number_other_pets;
-			other_essential_assets = currentProperty.other_essential_assets;
-		}
+		unsaved = false;
+		live_stock_present = currentProperty.live_stock_present;
+		live_stock_safe_area = currentProperty.live_stock_safe_area;
+		share_livestock_safe_area = currentProperty.share_livestock_safe_area;
+		number_birds = currentProperty.number_birds;
+		number_cats = currentProperty.number_cats;
+		number_dogs = currentProperty.number_dogs;
+		number_other_pets = currentProperty.number_other_pets;
+		other_essential_assets = currentProperty.other_essential_assets;
 	}
 </script>
 
@@ -66,6 +65,16 @@
 	}}
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isSubmitting = false;
+			if (result.type === 'success' && result.data?.success !== false) {
+				unsaved = false;
+			}
+		};
+	}}
 >
 	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Assets At My Place</h1>
 
