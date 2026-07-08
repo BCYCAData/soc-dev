@@ -24,7 +24,7 @@ export const GET: RequestHandler = async (event) => {
 	);
 
 	if (propertyError) {
-		console.log('propertyError', propertyError);
+		console.error('propertyError', propertyError);
 		throw error(500, { message: 'Error fetching property data' });
 	}
 

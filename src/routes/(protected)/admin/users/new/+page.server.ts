@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	);
 
 	if (usersAdminNewUsersError) {
-		console.log('error get New Users Admin Data:', usersAdminNewUsersError);
+		console.error('error get New Users Admin Data:', usersAdminNewUsersError);
 		error(400, usersAdminNewUsersError.message);
 	}
 	return {

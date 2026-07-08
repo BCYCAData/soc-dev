@@ -111,3 +111,34 @@ export const handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+/**
+ * Last-resort capture for unexpected server errors: record them in
+ * public.app_errors (INSERT-only for app roles) and return a sanitized
+ * message. Expected errors thrown with `error(status, …)` don't reach here.
+ */
+export const handleError = async ({ error, event, status, message }) => {
+	// 404s (unknown URLs, bot probes) are expected traffic — don't record them.
+	if (status === 404) {
+		return { message: 'Not found' };
+	}
+	const err = error as Error | undefined;
+	console.error('Unhandled server error:', err ?? message);
+	try {
+		const {
+			data: { user }
+		} = await event.locals.supabase.auth.getUser();
+		await event.locals.supabase.from('app_errors').insert({
+			source: 'server',
+			status,
+			message: err?.message?.slice(0, 2000) || message,
+			stack: err?.stack?.slice(0, 8000) ?? null,
+			url: event.url.pathname + event.url.search,
+			user_id: user?.id ?? null,
+			user_agent: event.request.headers.get('user-agent')?.slice(0, 500) ?? null
+		});
+	} catch (logError) {
+		console.error('Failed to record server error:', logError);
+	}
+	return { message: 'An unexpected error occurred. The team has been notified.' };
+};

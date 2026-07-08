@@ -18,7 +18,10 @@
 			? [
 					{
 						config: siteBoundaryLayer,
-						data: { type: 'FeatureCollection', features: [{ type: 'Feature', geometry: boundary, properties: {} }] }
+						data: {
+							type: 'FeatureCollection',
+							features: [{ type: 'Feature', geometry: boundary, properties: {} }]
+						}
 					}
 				]
 			: []

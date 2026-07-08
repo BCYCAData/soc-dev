@@ -22,9 +22,7 @@ const COMPLETE_FALLBACK: ProfileCompletion = {
 };
 
 /** Field keys an admin has marked required, in display order. */
-export async function getRequiredFieldKeys(
-	supabase: SupabaseClient<Database>
-): Promise<string[]> {
+export async function getRequiredFieldKeys(supabase: SupabaseClient<Database>): Promise<string[]> {
 	const { data, error } = await supabase
 		.from('profile_required_question')
 		.select('field_key')

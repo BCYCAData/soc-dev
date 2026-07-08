@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, params: { kyn
 	);
 
 	if (errorKyngGeoJson) {
-		console.log(`error get KYNG GeoJSON for ${kyng_area}:`, errorKyngGeoJson);
+		console.error(`error get KYNG GeoJSON for ${kyng_area}:`, errorKyngGeoJson);
 		error(400, errorKyngGeoJson);
 	}
 

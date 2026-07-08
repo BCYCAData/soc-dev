@@ -43,7 +43,7 @@ export const actions: Actions = {
 		});
 
 		if (revokeError) {
-			console.log('revokeError', revokeError);
+			console.error('revokeError', revokeError);
 
 			return fail(500, {
 				success: false,
@@ -73,7 +73,7 @@ export const actions: Actions = {
 		});
 
 		if (rpcError) {
-			console.log('assignKYNGCoordinatorError', rpcError);
+			console.error('assignKYNGCoordinatorError', rpcError);
 			return fail(400, {
 				success: false,
 				message: 'Failed to assign KYNG coordinator role'
@@ -106,7 +106,7 @@ export const actions: Actions = {
 		});
 
 		if (updateKYNGCoordinatorError) {
-			console.log('updateKYNGCoordinatorError', updateKYNGCoordinatorError);
+			console.error('updateKYNGCoordinatorError', updateKYNGCoordinatorError);
 			return fail(400, {
 				success: false,
 				message: 'Failed to change KYNG coordinator role'

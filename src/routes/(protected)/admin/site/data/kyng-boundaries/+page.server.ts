@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	// get_site_roads calls were unused here and made slow live NSW Spatial Services requests.)
 	const { data, error: boundaryError } = await supabase.rpc('get_site_boundary');
 	if (boundaryError) {
-		console.log('error get Project Boundary:', boundaryError);
+		console.error('error get Project Boundary:', boundaryError);
 		error(400, boundaryError.message);
 	}
 

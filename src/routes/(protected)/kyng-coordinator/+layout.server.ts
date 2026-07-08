@@ -19,7 +19,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) =
 	);
 
 	if (kyngMessagesError) {
-		console.log('error get KYNG Coordinator Messages for User:', kyngMessagesError);
+		console.error('error get KYNG Coordinator Messages for User:', kyngMessagesError);
 		error(400, kyngMessagesError.message);
 	}
 

@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals, params, parent }) => {
 	);
 
 	if (registeredPropertiesError) {
-		console.log('error registered Properties Data:', registeredPropertiesError);
+		console.error('error registered Properties Data:', registeredPropertiesError);
 		throw error(400, registeredPropertiesError.message);
 	}
 

@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals, params, parent }) => {
 		await supabase.rpc('get_unregistered_properties_by_kyng_area', { kyngarea_id: kyng_area });
 
 	if (unRegisteredPropertiesError) {
-		console.log('error Unregistered Properties Data:', unRegisteredPropertiesError);
+		console.error('error Unregistered Properties Data:', unRegisteredPropertiesError);
 		throw error(400, unRegisteredPropertiesError.message);
 	}
 

@@ -58,7 +58,7 @@ export const actions: Actions = {
 		const { error: assignError } = await supabase.from('user_roles').upsert({ user_id, role });
 
 		if (assignError) {
-			console.log('assignError', assignError);
+			console.error('assignError', assignError);
 			return fail(400, {
 				success: false,
 				message: 'Failed to assign role',

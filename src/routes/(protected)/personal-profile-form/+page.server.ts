@@ -30,7 +30,7 @@ export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) =>
 		}
 	);
 	if (userProfileError) {
-		console.log('GET data error Personal Profile:', userProfileError);
+		console.error('GET data error Personal Profile:', userProfileError);
 		throw redirect(303, '/auth/signin?error=profile_load_failed');
 	}
 
@@ -47,7 +47,10 @@ export const load: PageServerLoad = (async ({ locals: { supabase }, parent }) =>
 	// payload (property_profile is still an array here — what the engine expects), so
 	// no second profile fetch is needed.
 	const requiredKeys = await getRequiredFieldKeys(supabase);
-	const completion = computeProfileCompletion(user_profile as Record<string, unknown>, requiredKeys);
+	const completion = computeProfileCompletion(
+		user_profile as Record<string, unknown>,
+		requiredKeys
+	);
 
 	const userOptionsData = await getCommunityRequestOptions(supabase);
 
@@ -178,7 +181,7 @@ export const actions: Actions = {
 					agent_phone: bodyObject.agentData?.agent_phone
 				});
 				if (agentUpsertError) {
-					console.log('error Personal Profile Form upsert agent: ', agentUpsertError);
+					console.error('error Personal Profile Form upsert agent: ', agentUpsertError);
 					return fail(400, {
 						success: false,
 						message: `Failed to save agent data: ${agentUpsertError.message}`
@@ -190,7 +193,7 @@ export const actions: Actions = {
 					.delete()
 					.eq('property_id', bodyObject.propertyId);
 				if (deleteAgentError) {
-					console.log('error Personal Profile Form delete agent: ', deleteAgentError);
+					console.error('error Personal Profile Form delete agent: ', deleteAgentError);
 					return fail(400, {
 						success: false,
 						message: `Failed to delete agent data: ${deleteAgentError.message}`
@@ -208,7 +211,7 @@ export const actions: Actions = {
 					postal_address_postcode: bodyObject.userPostalAddressData.postal_address_postcode
 				});
 			if (userPostalAddressUpsertError) {
-				console.log(
+				console.error(
 					'error Personal Profile Form upsert User Postal Address Data Error: ',
 					userPostalAddressUpsertError
 				);
@@ -235,7 +238,7 @@ export const actions: Actions = {
 			})
 			.eq('id', user.id);
 		if (userProfileUpdateError) {
-			console.log('userProfileUpdateError', userProfileUpdateError);
+			console.error('userProfileUpdateError', userProfileUpdateError);
 			return fail(400, {
 				success: false,
 				message: `Failed to update user profile: ${userProfileUpdateError.message}`
@@ -255,7 +258,7 @@ export const actions: Actions = {
 				})
 				.eq('bcyca_profile_id', bodyObject.communityProfileId);
 			if (userBCYCAProfileUpdateError) {
-				console.log('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
+				console.error('userBCYCAProfileUpdateError', userBCYCAProfileUpdateError);
 				return fail(400, {
 					success: false,
 					message: `Failed to update BCYCA profile: ${userBCYCAProfileUpdateError.message}`
@@ -277,7 +280,7 @@ export const actions: Actions = {
 				})
 				.eq('tinonee_profile_id', bodyObject.communityProfileId);
 			if (userTinoneeProfileUpdateError) {
-				console.log('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
+				console.error('userTinoneeProfileUpdateError', userTinoneeProfileUpdateError);
 				return fail(400, {
 					success: false,
 					message: `Failed to update Tinonee profile: ${userTinoneeProfileUpdateError.message}`
@@ -299,7 +302,7 @@ export const actions: Actions = {
 				})
 				.eq('mondrook_profile_id', bodyObject.communityProfileId);
 			if (userMondrookProfileUpdateError) {
-				console.log('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
+				console.error('userMondrookProfileUpdateError', userMondrookProfileUpdateError);
 				return fail(400, {
 					success: false,
 					message: `Failed to update Mondrook profile: ${userMondrookProfileUpdateError.message}`
@@ -321,7 +324,7 @@ export const actions: Actions = {
 				})
 				.eq('external_profile_id', bodyObject.communityProfileId);
 			if (userExternalProfileUpdateError) {
-				console.log('userExternalProfileUpdateError', userExternalProfileUpdateError);
+				console.error('userExternalProfileUpdateError', userExternalProfileUpdateError);
 				return fail(400, {
 					success: false,
 					message: `Failed to update External profile: ${userExternalProfileUpdateError.message}`
@@ -429,7 +432,7 @@ export const actions: Actions = {
 			.eq('principaladdresssiteoid', user.app_metadata.principaladdresssiteoid);
 
 		if (propertyProfileUpdateError) {
-			console.log('propertyProfileUpdateError', propertyProfileUpdateError);
+			console.error('propertyProfileUpdateError', propertyProfileUpdateError);
 			return fail(400, {
 				success: false,
 				message: `Failed to update property profile: ${propertyProfileUpdateError.message}`
