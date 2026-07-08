@@ -1,12 +1,7 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { browser } from '$app/environment';
-	import { helpContent } from '$stores/helpstore';
-	import { loadHelpContent } from '$lib/utility';
 	import Breadcrumbs from '$components/page/navigation/Breadcrumbs.svelte';
-	import HelpPanel from '$components/page/help/HelpPanel.svelte';
+	import ProtectedAppShell from '$components/page/ProtectedAppShell.svelte';
 	import AdminSideMenu from '$components/page/navigation/sidemenu/AdminSideMenu.svelte';
-	import MenuToggleIcon from '$components/icons/MenuToggleIcon.svelte';
 	import { adminSidebarPathLables } from '$lib/menu-items';
 
 	interface Props {
@@ -14,116 +9,24 @@
 	}
 
 	let { children }: Props = $props();
-	// let adminMessages = $state(data.adminMessages);
-	let isSidebarCollapsed = $state(
-		browser ? localStorage.getItem('sidebarCollapsed') === 'true' : false
-	);
-	let isHelpbarCollapsed = $state(
-		browser ? localStorage.getItem('helpbarCollapsed') === 'true' : false
-	);
-
-	function toggleSidebar() {
-		isSidebarCollapsed = !isSidebarCollapsed;
-		if (browser) {
-			localStorage.setItem('sidebarCollapsed', isSidebarCollapsed.toString());
-		}
-	}
-
-	function handleKeyboardShortcut(event: KeyboardEvent) {
-		if (event.ctrlKey && event.key === '[') {
-			toggleSidebar();
-		}
-		if (event.ctrlKey && event.key === ']') {
-			isHelpbarCollapsed = !isHelpbarCollapsed;
-			if (browser) {
-				localStorage.setItem('helpbarCollapsed', isHelpbarCollapsed.toString());
-			}
-		}
-	}
-
-	$effect(() => {
-		const path = page.url.pathname.slice(1);
-		loadHelpContent(path).then((content) => ($helpContent = content));
-	});
 </script>
 
-<svelte:window on:keydown={handleKeyboardShortcut} />
-
-<div class="app-shell">
-	<div class="app-shell-breadcrumbs">
+<ProtectedAppShell sidebarTitle="Admin Menu">
+	{#snippet breadcrumbs()}
 		<Breadcrumbs pathLables={adminSidebarPathLables} />
-	</div>
+	{/snippet}
 
-	<div class="app-shell-main">
-		<div
-			class="app-shell-sidebar-left {isSidebarCollapsed
-				? 'w-16'
-				: 'w-1/6'} transition-all duration-300"
-		>
-			<div class="flex w-full flex-col p-1">
-				<button class="collapse-toggle text-secondary-700-300 self-end p-2" onclick={toggleSidebar}>
-					<MenuToggleIcon
-						isMenuCollapsed={isSidebarCollapsed}
-						color="var(--color-surface-50)"
-						size={20}
-					/>
-				</button>
-				<div class="flex flex-row justify-around pt-2 text-xl">
-					{#if !isSidebarCollapsed}Admin Menu{/if}
-				</div>
-				<div class="sidebar-menu flex flex-col rounded-lg">
-					<AdminSideMenu {isSidebarCollapsed} />
-				</div>
-				{#if !isSidebarCollapsed}
-					<p class="ml-2">
-						Please make sure you have the correct permissions <br />
-						<b>before</b>
-						accessing admin features.
-					</p>
-				{/if}
-			</div>
-		</div>
+	{#snippet sidebar(isSidebarCollapsed)}
+		<AdminSideMenu {isSidebarCollapsed} />
+	{/snippet}
 
-		<div class="app-shell-content mx-4">
-			{@render children?.()}
-		</div>
+	{#snippet sidebarFooter()}
+		<p class="ml-2">
+			Please make sure you have the correct permissions <br />
+			<b>before</b>
+			accessing admin features.
+		</p>
+	{/snippet}
 
-		<HelpPanel isCollapsed={isHelpbarCollapsed} />
-	</div>
-</div>
-
-<style>
-	.app-shell {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		/* secondary-200 → surface-900 is cross-family, so not a Color Pairing. */
-		background-color: var(--color-secondary-200);
-	}
-	:global(.dark) .app-shell {
-		background-color: var(--color-surface-900);
-	}
-
-	/* secondary-800 → secondary-900 (non-balanced), so not a Color Pairing. */
-	.sidebar-menu {
-		background-color: var(--color-secondary-800);
-	}
-	:global(.dark) .sidebar-menu {
-		background-color: var(--color-secondary-900);
-	}
-
-	.app-shell-main {
-		display: flex;
-		flex: 1;
-		overflow: hidden;
-	}
-
-	.app-shell-sidebar-left {
-		overflow-y: auto;
-	}
-
-	.app-shell-content {
-		flex: 1;
-		overflow-y: auto;
-	}
-</style>
+	{@render children?.()}
+</ProtectedAppShell>

@@ -13,11 +13,9 @@
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
 <a
-	role="button"
-	tabindex="0"
 	{href}
 	class="menu-item relative flex cursor-pointer items-center rounded-full p-2 {isActive
-		? 'bg-secondary-950 ring-1 ring-inset ring-secondary-400'
+		? 'bg-secondary-950 ring-secondary-400 ring-1 ring-inset'
 		: ''} {isCollapsed ? 'justify-center' : ''}"
 >
 	{@render icon?.()}

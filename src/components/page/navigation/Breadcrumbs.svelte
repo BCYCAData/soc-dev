@@ -69,10 +69,10 @@
 	}
 	#breadcrumb {
 		list-style: none;
-		display: inline-block;
-	}
-	#breadcrumb li {
-		float: left;
+		display: flex;
+		flex-wrap: wrap;
+		row-gap: 6px;
+		padding: 2px 0;
 	}
 	#breadcrumb li a {
 		color: var(--color-surface-50);

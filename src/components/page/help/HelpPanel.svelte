@@ -20,7 +20,12 @@
 
 <div class="help-panel {isCollapsed ? 'w-16' : 'w-1/6'} transition-all duration-300">
 	{#if $helpContent && $helpContent.hasHelp}
-		<button class="collapse-toggle self-end p-2" onclick={toggleHelp}>
+		<button
+			class="collapse-toggle self-end p-2"
+			onclick={toggleHelp}
+			aria-label={isCollapsed ? 'Show help panel' : 'Hide help panel'}
+			aria-expanded={!isCollapsed}
+		>
 			<div
 				class="help-toggle-label flex text-sm {!isCollapsed
 					? 'flex-row items-center gap-2'
