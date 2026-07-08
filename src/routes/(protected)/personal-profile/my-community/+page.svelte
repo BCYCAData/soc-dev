@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { setUpperCase } from '$lib/svelte-actions.js';
+	import { toastStore } from '$stores/toaststore';
 
 	import TextAreaInput from '$components/form/inputs/TextAreaInput.svelte';
 
@@ -9,12 +11,6 @@
 
 	import type { ActionData, PageData } from './$types';
 	import type { UserPostalAddress } from '$lib/form.types';
-
-	//TODO: Implement requestAccess()
-
-	function requestAccess(id: string) {
-		alert(`Requesting access to ${id}`);
-	}
 
 	interface Props {
 		data: PageData;
@@ -28,6 +24,38 @@
 	let formError = $derived(form?.error || false);
 	let formErrorMessage = $derived(form?.errorMessage || '');
 	let formSuccess = $derived(form?.success || false);
+
+	const COMMUNITIES = [
+		{ slug: 'bcyca', label: 'BCYCA' },
+		{ slug: 'external', label: 'External' },
+		{ slug: 'mondrook', label: 'Mondrook' },
+		{ slug: 'tinonee', label: 'Tinonee' }
+	] as const;
+
+	let isRequesting = $state(false);
+
+	// Submit handler for the per-community "connect" forms below.
+	const requestAccessEnhance: import('@sveltejs/kit').SubmitFunction = () => {
+		isRequesting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isRequesting = false;
+			if (result.type === 'success') {
+				const payload = result.data as
+					| { success?: boolean; errorMessage?: string; requestedCommunity?: string }
+					| undefined;
+				if (payload?.success) {
+					toastStore.success(
+						`Your request to connect with the ${payload.requestedCommunity} community has been sent for approval.`
+					);
+				} else if (payload?.errorMessage) {
+					toastStore.error(payload.errorMessage);
+				}
+			} else if (result.type === 'failure' || result.type === 'error') {
+				toastStore.error('Your request could not be sent. Please try again.');
+			}
+		};
+	};
 
 	let otherComments: string | null = $state(data.userProfile.other_comments);
 	let stayInTouchChoices: number[] | null = $state(data.userProfile.stay_in_touch_choices);
@@ -43,14 +71,12 @@
 		)?.options || [];
 
 	function handleReset() {
-		if (confirm('Are you sure you want to undo? All unsaved changes will be lost.')) {
-			unsaved = false;
-			// Reset form to initial state
-			otherComments = data.userProfile.other_comments;
-			stayInTouchChoices = data.userProfile.stay_in_touch_choices;
-			userPostalAddress = data.userProfile.user_postal_address;
-			hadUserPostalAddress = data.hadUserPostalAddress;
-		}
+		unsaved = false;
+		// Reset form to initial state
+		otherComments = data.userProfile.other_comments;
+		stayInTouchChoices = data.userProfile.stay_in_touch_choices;
+		userPostalAddress = data.userProfile.user_postal_address;
+		hadUserPostalAddress = data.hadUserPostalAddress;
 	}
 </script>
 
@@ -65,6 +91,17 @@
 	}}
 	class="mx-auto w-full max-w-5xl space-y-2 py-2"
 	method="POST"
+	action="?/save"
+	use:enhance={() => {
+		isSubmitting = true;
+		return async ({ update, result }) => {
+			await update({ reset: false });
+			isSubmitting = false;
+			if (result.type === 'success' && result.data?.success !== false) {
+				unsaved = false;
+			}
+		};
+	}}
 >
 	<h1 class="text-surface-600 mb-2 text-right text-2xl font-semibold">Your Community Profile</h1>
 
@@ -156,7 +193,6 @@
 	<input type="text" name="had_user_postal_address" value={hadUserPostalAddress} hidden />
 	<FormActions onReset={handleReset} isUnsaved={unsaved} {isSubmitting} />
 </form>
-<!-- <pre>Community: {JSON.stringify(data.userProfile, null, 2)}</pre> -->
 <h2 class="h2 text-surface-900 pt-2 text-center text-base font-semibold">
 	We have determined that you are part of the <span class="text-secondary-600">
 		{intergratedCommunity}
@@ -178,38 +214,21 @@
 {#if data.communityProfiles}
 	<div class="pill-container mt-4 flex h-12 flex-row items-center justify-center">
 		<div class="button-bar">
-			<button
-				id="bcyca-button"
-				onclick={() => requestAccess('bcyca')}
-				disabled={data.communityProfiles.community_bcyca_profile_id !== null}
-				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
-			>
-				BCYCA
-			</button>
-			<button
-				id="external-button"
-				onclick={() => requestAccess('external')}
-				disabled={data.communityProfiles.community_external_profile_id !== null}
-				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
-			>
-				External
-			</button>
-			<button
-				id="mondrook-button"
-				onclick={() => requestAccess('mondrook')}
-				disabled={data.communityProfiles.community_mondrook_profile_id !== null}
-				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
-			>
-				Mondrook
-			</button>
-			<button
-				id="tinonee-button"
-				onclick={() => requestAccess('tinonee')}
-				disabled={data.communityProfiles.community_tinonee_profile_id !== null}
-				class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
-			>
-				Tinonee
-			</button>
+			{#each COMMUNITIES as { slug, label } (slug)}
+				{@const isMember = data.communityProfiles[`community_${slug}_profile_id`] !== null}
+				{@const isPending = data.requestStatusByCommunity?.[slug] === 'pending'}
+				<form method="POST" action="?/requestAccess" use:enhance={requestAccessEnhance}>
+					<input type="hidden" name="community" value={slug} />
+					<button
+						id="{slug}-button"
+						type="submit"
+						disabled={isMember || isPending || isRequesting}
+						class="bg-secondary-500 text-surface-100 disabled:bg-secondary-100 disabled:text-surface-400 m-2 inline-block h-12 w-32 cursor-pointer rounded-lg border-0 px-4 py-2 shadow-md transition duration-300 disabled:cursor-not-allowed"
+					>
+						{isPending ? `${label} (pending)` : label}
+					</button>
+				</form>
+			{/each}
 		</div>
 	</div>
 {/if}
@@ -243,13 +262,4 @@
 		border-width: 2px;
 		border-color: var(--color-surface-50);
 	}
-
-	/* .selector-checkbox:not(:disabled):checked + .button-bar button,
-	.selector-checkbox:not(:disabled):not(:checked) + .button-bar button {
-		background-color: var(--color-error-500); 
-	}
-
-	.selector-checkbox:not(:disabled):checked + .button-bar button {
-		background-color: var(--color-secondary-300);
-	} */
 </style>
