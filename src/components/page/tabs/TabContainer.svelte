@@ -39,10 +39,10 @@
 				>
 					<button
 						type="button"
-						class="block w-full cursor-pointer rounded-t-lg border-b-2 px-3 py-2 text-center text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500 sm:w-auto sm:px-4 sm:text-base
+						class="focus-visible:outline-secondary-500 block w-full cursor-pointer rounded-t-lg border-b-2 px-3 py-2 text-center text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-4 sm:text-base
 							{activeTabValue === item.value
 							? 'border-secondary-300 bg-secondary-300 text-secondary-900 border-b-4 font-bold'
-							: 'border-transparent bg-secondary-200 text-secondary-900 hover:border-secondary-300'}"
+							: 'bg-secondary-200 text-secondary-900 hover:border-secondary-300 border-transparent'}"
 						onclick={handleTabChange(item.value)}
 						onkeydown={(e) => handleKeyPress(item.value, e)}
 					>

@@ -72,13 +72,15 @@ function isAnswered(value: unknown, answerType: ProfileAnswerType): boolean {
 	}
 }
 
-const COMMUNITY_PROFILE_KEY: Record<NonNullable<ProfileFieldDefinition['communityScope']>, string> =
-	{
-		bcyca: 'community_bcyca_profile',
-		tinonee: 'community_tinonee_profile',
-		mondrook: 'community_mondrook_profile',
-		external: 'community_external_profile'
-	};
+const COMMUNITY_PROFILE_KEY: Record<
+	NonNullable<ProfileFieldDefinition['communityScope']>,
+	string
+> = {
+	bcyca: 'community_bcyca_profile',
+	tinonee: 'community_tinonee_profile',
+	mondrook: 'community_mondrook_profile',
+	external: 'community_external_profile'
+};
 
 /** Whether a question is in scope for this particular user's profile. */
 function isInScope(profile: RawProfile, field: ProfileFieldDefinition): boolean {

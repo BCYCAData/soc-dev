@@ -74,67 +74,320 @@ function communityQuestions(
 
 export const PROFILE_FIELD_CATALOG: ProfileFieldDefinition[] = [
 	// --- Personal details ---
-	{ key: 'first_name', jsonPath: ['first_name'], label: 'First name', section: 'Personal Details', answerType: 'text' },
-	{ key: 'family_name', jsonPath: ['family_name'], label: 'Family name', section: 'Personal Details', answerType: 'text' },
-	{ key: 'mobile', jsonPath: ['mobile'], label: 'Mobile number', section: 'Personal Details', answerType: 'text' },
-	{ key: 'residency_profile', jsonPath: ['residency_profile'], label: 'Residency status', section: 'Personal Details', answerType: 'number' },
+	{
+		key: 'first_name',
+		jsonPath: ['first_name'],
+		label: 'First name',
+		section: 'Personal Details',
+		answerType: 'text'
+	},
+	{
+		key: 'family_name',
+		jsonPath: ['family_name'],
+		label: 'Family name',
+		section: 'Personal Details',
+		answerType: 'text'
+	},
+	{
+		key: 'mobile',
+		jsonPath: ['mobile'],
+		label: 'Mobile number',
+		section: 'Personal Details',
+		answerType: 'text'
+	},
+	{
+		key: 'residency_profile',
+		jsonPath: ['residency_profile'],
+		label: 'Residency status',
+		section: 'Personal Details',
+		answerType: 'number'
+	},
 
 	// --- Survival planning ---
-	{ key: 'fire_fighting_experience', jsonPath: ['fire_fighting_experience'], label: 'Fire-fighting experience', section: 'Survival Planning', answerType: 'number' },
-	{ key: 'fire_trauma', jsonPath: ['fire_trauma'], label: 'Previous fire trauma', section: 'Survival Planning', answerType: 'boolean' },
-	{ key: 'plan_to_leave_before_fire', jsonPath: ['plan_to_leave_before_fire'], label: 'Plan to leave before fire', section: 'Survival Planning', answerType: 'number' },
-	{ key: 'plan_to_leave_before_flood', jsonPath: ['plan_to_leave_before_flood'], label: 'Plan to leave before flood', section: 'Survival Planning', answerType: 'number' },
-	{ key: 'rfs_survival_plan', jsonPath: ['rfs_survival_plan'], label: 'RFS survival plan', section: 'Survival Planning', answerType: 'text' },
+	{
+		key: 'fire_fighting_experience',
+		jsonPath: ['fire_fighting_experience'],
+		label: 'Fire-fighting experience',
+		section: 'Survival Planning',
+		answerType: 'number'
+	},
+	{
+		key: 'fire_trauma',
+		jsonPath: ['fire_trauma'],
+		label: 'Previous fire trauma',
+		section: 'Survival Planning',
+		answerType: 'boolean'
+	},
+	{
+		key: 'plan_to_leave_before_fire',
+		jsonPath: ['plan_to_leave_before_fire'],
+		label: 'Plan to leave before fire',
+		section: 'Survival Planning',
+		answerType: 'number'
+	},
+	{
+		key: 'plan_to_leave_before_flood',
+		jsonPath: ['plan_to_leave_before_flood'],
+		label: 'Plan to leave before flood',
+		section: 'Survival Planning',
+		answerType: 'number'
+	},
+	{
+		key: 'rfs_survival_plan',
+		jsonPath: ['rfs_survival_plan'],
+		label: 'RFS survival plan',
+		section: 'Survival Planning',
+		answerType: 'text'
+	},
 
 	// --- Staying in touch ---
-	{ key: 'stay_in_touch_choices', jsonPath: ['stay_in_touch_choices'], label: 'Stay-in-touch preferences', section: 'Staying in Touch', answerType: 'choices' },
+	{
+		key: 'stay_in_touch_choices',
+		jsonPath: ['stay_in_touch_choices'],
+		label: 'Stay-in-touch preferences',
+		section: 'Staying in Touch',
+		answerType: 'choices'
+	},
 
 	// --- Property: people ---
-	{ key: 'property_rented', jsonPath: PROPERTY('property_rented'), label: 'Is the property rented?', section: 'Property — People', answerType: 'boolean' },
-	{ key: 'residents0_18', jsonPath: PROPERTY('residents0_18'), label: 'Residents aged 0–18', section: 'Property — People', answerType: 'number' },
-	{ key: 'residents19_50', jsonPath: PROPERTY('residents19_50'), label: 'Residents aged 19–50', section: 'Property — People', answerType: 'number' },
-	{ key: 'residents51_70', jsonPath: PROPERTY('residents51_70'), label: 'Residents aged 51–70', section: 'Property — People', answerType: 'number' },
-	{ key: 'residents71_', jsonPath: PROPERTY('residents71_'), label: 'Residents aged 71+', section: 'Property — People', answerType: 'number' },
-	{ key: 'vulnerable_residents', jsonPath: PROPERTY('vulnerable_residents'), label: 'Vulnerable residents present', section: 'Property — People', answerType: 'boolean' },
+	{
+		key: 'property_rented',
+		jsonPath: PROPERTY('property_rented'),
+		label: 'Is the property rented?',
+		section: 'Property — People',
+		answerType: 'boolean'
+	},
+	{
+		key: 'residents0_18',
+		jsonPath: PROPERTY('residents0_18'),
+		label: 'Residents aged 0–18',
+		section: 'Property — People',
+		answerType: 'number'
+	},
+	{
+		key: 'residents19_50',
+		jsonPath: PROPERTY('residents19_50'),
+		label: 'Residents aged 19–50',
+		section: 'Property — People',
+		answerType: 'number'
+	},
+	{
+		key: 'residents51_70',
+		jsonPath: PROPERTY('residents51_70'),
+		label: 'Residents aged 51–70',
+		section: 'Property — People',
+		answerType: 'number'
+	},
+	{
+		key: 'residents71_',
+		jsonPath: PROPERTY('residents71_'),
+		label: 'Residents aged 71+',
+		section: 'Property — People',
+		answerType: 'number'
+	},
+	{
+		key: 'vulnerable_residents',
+		jsonPath: PROPERTY('vulnerable_residents'),
+		label: 'Vulnerable residents present',
+		section: 'Property — People',
+		answerType: 'boolean'
+	},
 
 	// --- Property: animals ---
-	{ key: 'number_dogs', jsonPath: PROPERTY('number_dogs'), label: 'Number of dogs', section: 'Property — Animals', answerType: 'number' },
-	{ key: 'number_cats', jsonPath: PROPERTY('number_cats'), label: 'Number of cats', section: 'Property — Animals', answerType: 'number' },
-	{ key: 'number_birds', jsonPath: PROPERTY('number_birds'), label: 'Number of birds', section: 'Property — Animals', answerType: 'number' },
-	{ key: 'number_other_pets', jsonPath: PROPERTY('number_other_pets'), label: 'Number of other pets', section: 'Property — Animals', answerType: 'number' },
-	{ key: 'live_stock_present', jsonPath: PROPERTY('live_stock_present'), label: 'Livestock present', section: 'Property — Animals', answerType: 'boolean' },
-	{ key: 'live_stock_safe_area', jsonPath: PROPERTY('live_stock_safe_area'), label: 'Livestock safe area', section: 'Property — Animals', answerType: 'text' },
-	{ key: 'share_livestock_safe_area', jsonPath: PROPERTY('share_livestock_safe_area'), label: 'Willing to share livestock safe area', section: 'Property — Animals', answerType: 'text' },
+	{
+		key: 'number_dogs',
+		jsonPath: PROPERTY('number_dogs'),
+		label: 'Number of dogs',
+		section: 'Property — Animals',
+		answerType: 'number'
+	},
+	{
+		key: 'number_cats',
+		jsonPath: PROPERTY('number_cats'),
+		label: 'Number of cats',
+		section: 'Property — Animals',
+		answerType: 'number'
+	},
+	{
+		key: 'number_birds',
+		jsonPath: PROPERTY('number_birds'),
+		label: 'Number of birds',
+		section: 'Property — Animals',
+		answerType: 'number'
+	},
+	{
+		key: 'number_other_pets',
+		jsonPath: PROPERTY('number_other_pets'),
+		label: 'Number of other pets',
+		section: 'Property — Animals',
+		answerType: 'number'
+	},
+	{
+		key: 'live_stock_present',
+		jsonPath: PROPERTY('live_stock_present'),
+		label: 'Livestock present',
+		section: 'Property — Animals',
+		answerType: 'boolean'
+	},
+	{
+		key: 'live_stock_safe_area',
+		jsonPath: PROPERTY('live_stock_safe_area'),
+		label: 'Livestock safe area',
+		section: 'Property — Animals',
+		answerType: 'text'
+	},
+	{
+		key: 'share_livestock_safe_area',
+		jsonPath: PROPERTY('share_livestock_safe_area'),
+		label: 'Willing to share livestock safe area',
+		section: 'Property — Animals',
+		answerType: 'text'
+	},
 
 	// --- Property: hazards & resources ---
-	{ key: 'fire_fighting_resources', jsonPath: PROPERTY('fire_fighting_resources'), label: 'Fire-fighting resources', section: 'Property — Hazards & Resources', answerType: 'array' },
-	{ key: 'fire_hazard_reduction', jsonPath: PROPERTY('fire_hazard_reduction'), label: 'Fire hazard reduction', section: 'Property — Hazards & Resources', answerType: 'array' },
-	{ key: 'site_hazards', jsonPath: PROPERTY('site_hazards'), label: 'Site hazards', section: 'Property — Hazards & Resources', answerType: 'array' },
-	{ key: 'static_water_available', jsonPath: PROPERTY('static_water_available'), label: 'Static water available', section: 'Property — Hazards & Resources', answerType: 'array' },
-	{ key: 'have_stortz', jsonPath: PROPERTY('have_stortz'), label: 'Storz fitting available', section: 'Property — Hazards & Resources', answerType: 'text' },
-	{ key: 'stortz_size', jsonPath: PROPERTY('stortz_size'), label: 'Storz size', section: 'Property — Hazards & Resources', answerType: 'number' },
-	{ key: 'land_adjacent_hazard', jsonPath: PROPERTY('land_adjacent_hazard'), label: 'Adjacent land hazard', section: 'Property — Hazards & Resources', answerType: 'text' },
-	{ key: 'other_hazards', jsonPath: PROPERTY('other_hazards'), label: 'Other hazards', section: 'Property — Hazards & Resources', answerType: 'text' },
-	{ key: 'other_site_hazards', jsonPath: PROPERTY('other_site_hazards'), label: 'Other site hazards', section: 'Property — Hazards & Resources', answerType: 'text' },
-	{ key: 'other_essential_assets', jsonPath: PROPERTY('other_essential_assets'), label: 'Other essential assets', section: 'Property — Hazards & Resources', answerType: 'text' },
+	{
+		key: 'fire_fighting_resources',
+		jsonPath: PROPERTY('fire_fighting_resources'),
+		label: 'Fire-fighting resources',
+		section: 'Property — Hazards & Resources',
+		answerType: 'array'
+	},
+	{
+		key: 'fire_hazard_reduction',
+		jsonPath: PROPERTY('fire_hazard_reduction'),
+		label: 'Fire hazard reduction',
+		section: 'Property — Hazards & Resources',
+		answerType: 'array'
+	},
+	{
+		key: 'site_hazards',
+		jsonPath: PROPERTY('site_hazards'),
+		label: 'Site hazards',
+		section: 'Property — Hazards & Resources',
+		answerType: 'array'
+	},
+	{
+		key: 'static_water_available',
+		jsonPath: PROPERTY('static_water_available'),
+		label: 'Static water available',
+		section: 'Property — Hazards & Resources',
+		answerType: 'array'
+	},
+	{
+		key: 'have_stortz',
+		jsonPath: PROPERTY('have_stortz'),
+		label: 'Storz fitting available',
+		section: 'Property — Hazards & Resources',
+		answerType: 'text'
+	},
+	{
+		key: 'stortz_size',
+		jsonPath: PROPERTY('stortz_size'),
+		label: 'Storz size',
+		section: 'Property — Hazards & Resources',
+		answerType: 'number'
+	},
+	{
+		key: 'land_adjacent_hazard',
+		jsonPath: PROPERTY('land_adjacent_hazard'),
+		label: 'Adjacent land hazard',
+		section: 'Property — Hazards & Resources',
+		answerType: 'text'
+	},
+	{
+		key: 'other_hazards',
+		jsonPath: PROPERTY('other_hazards'),
+		label: 'Other hazards',
+		section: 'Property — Hazards & Resources',
+		answerType: 'text'
+	},
+	{
+		key: 'other_site_hazards',
+		jsonPath: PROPERTY('other_site_hazards'),
+		label: 'Other site hazards',
+		section: 'Property — Hazards & Resources',
+		answerType: 'text'
+	},
+	{
+		key: 'other_essential_assets',
+		jsonPath: PROPERTY('other_essential_assets'),
+		label: 'Other essential assets',
+		section: 'Property — Hazards & Resources',
+		answerType: 'text'
+	},
 
 	// --- Property: access & contact ---
-	{ key: 'phone', jsonPath: PROPERTY('phone'), label: 'Property phone', section: 'Property — Access & Contact', answerType: 'text' },
-	{ key: 'mobile_reception', jsonPath: PROPERTY('mobile_reception'), label: 'Mobile reception quality', section: 'Property — Access & Contact', answerType: 'number' },
-	{ key: 'sign_posted', jsonPath: PROPERTY('sign_posted'), label: 'Property sign-posted', section: 'Property — Access & Contact', answerType: 'boolean' },
-	{ key: 'truck_access', jsonPath: PROPERTY('truck_access'), label: 'Truck access', section: 'Property — Access & Contact', answerType: 'number' },
-	{ key: 'truck_access_other_information', jsonPath: PROPERTY('truck_access_other_information'), label: 'Truck access — other information', section: 'Property — Access & Contact', answerType: 'text' },
+	{
+		key: 'phone',
+		jsonPath: PROPERTY('phone'),
+		label: 'Property phone',
+		section: 'Property — Access & Contact',
+		answerType: 'text'
+	},
+	{
+		key: 'mobile_reception',
+		jsonPath: PROPERTY('mobile_reception'),
+		label: 'Mobile reception quality',
+		section: 'Property — Access & Contact',
+		answerType: 'number'
+	},
+	{
+		key: 'sign_posted',
+		jsonPath: PROPERTY('sign_posted'),
+		label: 'Property sign-posted',
+		section: 'Property — Access & Contact',
+		answerType: 'boolean'
+	},
+	{
+		key: 'truck_access',
+		jsonPath: PROPERTY('truck_access'),
+		label: 'Truck access',
+		section: 'Property — Access & Contact',
+		answerType: 'number'
+	},
+	{
+		key: 'truck_access_other_information',
+		jsonPath: PROPERTY('truck_access_other_information'),
+		label: 'Truck access — other information',
+		section: 'Property — Access & Contact',
+		answerType: 'text'
+	},
 
 	// --- Rental / agent (only when property is rented) ---
-	{ key: 'agent_name', jsonPath: AGENT('agent_name'), label: 'Managing agent name', section: 'Rental / Agent', answerType: 'text', appliesWhenRented: true },
-	{ key: 'agent_mobile', jsonPath: AGENT('agent_mobile'), label: 'Managing agent mobile', section: 'Rental / Agent', answerType: 'text', appliesWhenRented: true },
-	{ key: 'agent_phone', jsonPath: AGENT('agent_phone'), label: 'Managing agent phone', section: 'Rental / Agent', answerType: 'text', appliesWhenRented: true },
+	{
+		key: 'agent_name',
+		jsonPath: AGENT('agent_name'),
+		label: 'Managing agent name',
+		section: 'Rental / Agent',
+		answerType: 'text',
+		appliesWhenRented: true
+	},
+	{
+		key: 'agent_mobile',
+		jsonPath: AGENT('agent_mobile'),
+		label: 'Managing agent mobile',
+		section: 'Rental / Agent',
+		answerType: 'text',
+		appliesWhenRented: true
+	},
+	{
+		key: 'agent_phone',
+		jsonPath: AGENT('agent_phone'),
+		label: 'Managing agent phone',
+		section: 'Rental / Agent',
+		answerType: 'text',
+		appliesWhenRented: true
+	},
 
 	// --- Community questions (per-community, only count when in that community) ---
 	...communityQuestions('community_meeting_choices', 'Community meeting preferences', 'choices'),
 	...communityQuestions('community_workshop_choices', 'Community workshop preferences', 'choices'),
 	...communityQuestions('information_sheet_choices', 'Information sheet preferences', 'choices'),
-	...communityQuestions('will_run_community_workshops', 'Willing to run community workshops', 'text')
+	...communityQuestions(
+		'will_run_community_workshops',
+		'Willing to run community workshops',
+		'text'
+	)
 ];
 
 /** Fast lookup by key. */

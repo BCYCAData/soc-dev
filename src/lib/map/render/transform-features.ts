@@ -29,19 +29,20 @@ export function transformFeaturesToGeoJSON(
 	const attrList = Object.values(attributes);
 
 	for (const feature of Object.values(features)) {
-		(byTemplate[feature.template_id] ??= { type: 'FeatureCollection', features: [] }).features.push({
-			type: 'Feature',
-			geometry: feature.geom,
-			properties: {
-				id: feature.id,
-				...attrList
-					.filter((attr) => attr.feature_id === feature.id)
-					.reduce<Record<string, unknown>>(
-						(acc, attr) => ({ ...acc, [attr.field_id]: attr.value }),
-						{}
-					)
+		(byTemplate[feature.template_id] ??= { type: 'FeatureCollection', features: [] }).features.push(
+			{
+				type: 'Feature',
+				geometry: feature.geom,
+				properties: {
+					id: feature.id,
+					...attrList
+						.filter((attr) => attr.feature_id === feature.id)
+						.reduce<
+							Record<string, unknown>
+						>((acc, attr) => ({ ...acc, [attr.field_id]: attr.value }), {})
+				}
 			}
-		});
+		);
 	}
 
 	return byTemplate;

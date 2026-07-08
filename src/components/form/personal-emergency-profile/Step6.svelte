@@ -86,8 +86,9 @@
 				bind:group={formState.fire_hazard_reduction}
 				value={Number(value)}
 			/>
-			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="fire_hazard_reduction"
-				>{lable}</label
+			<label
+				class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
+				for="fire_hazard_reduction">{lable}</label
 			>
 		</div>
 	{/each}

@@ -29,10 +29,10 @@ Two enforcement layers + one config source of truth:
 
 ### What "idle" and "absolute" need
 
-| Window | Needs | Source |
-| ------ | ----- | ------ |
-| Idle (sliding) | `lastActivity` timestamp | `LAST_ACTIVITY` cookie, bumped per server request; client also tracks activity for the warning |
-| Absolute (hard) | `sessionStart` timestamp | `SESSION_START` HttpOnly cookie, set once at sign-in |
+| Window          | Needs                    | Source                                                                                         |
+| --------------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| Idle (sliding)  | `lastActivity` timestamp | `LAST_ACTIVITY` cookie, bumped per server request; client also tracks activity for the warning |
+| Absolute (hard) | `sessionStart` timestamp | `SESSION_START` HttpOnly cookie, set once at sign-in                                           |
 
 Supabase exposes no reliable "session created at" to the client, which is why we record
 `sessionStart` ourselves at sign-in.
@@ -48,16 +48,13 @@ Supabase exposes no reliable "session created at" to the client, which is why we
       → coordinator; everything else → resident.
 - [x] **Supabase baseline — WALKED (2026-06-25, on `supabase-newprod`, the dev backend).**
       Current `config/auth`: `refresh_token_rotation_enabled=true` (reuse interval 10s) ✅,
-      `jwt_exp=3600`, `sessions_timebox=0`, `sessions_inactivity_timeout=0`.
-      - **Rotation** is already on (available on free tier) — the key security control. No change.
-      - **Inactivity timeout** stays `0`: it's global-only, so it can't express the per-role
-        policy; the app enforces idle per role instead.
-      - **Absolute time-box backstop** (31d, ≥ all app caps) was chosen but is **blocked on
-        free tier** — PATCH `sessions_timebox` returns HTTP 402 "User sessions can only be
-        configured on Pro Plans and up." So there is **no platform backstop**; the app's
-        per-role enforcement is the sole mechanism. A 31-day backstop becomes available only
-        if the prod project is upgraded to Pro (same gate as B6 leaked-password). Recorded in
-        the [[soc-migration-projects]] memory.
+      `jwt_exp=3600`, `sessions_timebox=0`, `sessions_inactivity_timeout=0`. - **Rotation** is already on (available on free tier) — the key security control. No change. - **Inactivity timeout** stays `0`: it's global-only, so it can't express the per-role
+      policy; the app enforces idle per role instead. - **Absolute time-box backstop** (31d, ≥ all app caps) was chosen but is **blocked on
+      free tier** — PATCH `sessions_timebox` returns HTTP 402 "User sessions can only be
+      configured on Pro Plans and up." So there is **no platform backstop**; the app's
+      per-role enforcement is the sole mechanism. A 31-day backstop becomes available only
+      if the prod project is upgraded to Pro (same gate as B6 leaked-password). Recorded in
+      the [[soc-migration-projects]] memory.
 - [x] **Idle enforcement strength — RESOLVED:** server-enforces both idle and absolute
       (`hooks.server.ts`), with the client warning as UX only. Done in Phase 2/3.
 

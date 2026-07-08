@@ -33,11 +33,11 @@ This document is the audit + target design + phased roadmap to get there.
 
 Per [[soc-migration-projects]] there are three Supabase projects, and the mapping code spans them:
 
-| Project | Role | Map-relevant contents (verified via MCP) |
-| --- | --- | --- |
-| `supabase-prod` (old prod) | Legacy source-data + geocoding | `get_addresspoint_from_address`, `process_geoscape_geocoder_response`, `saveextractedaddresspoints`, `get_registered_addresspoints`; tables `address_point_extract_wgs84`, `custom_address`, `kyng_areas`. **No `spatial_features` schema.** |
-| `supabase-dev` (active app backend) | Current application DB | Full spatial stack: `get_spatial_features`, `get_spatial_feature_templates`, `get_spatial_feature_attributes`, `upsert_spatial_feature`, `upsert_feature_attributes`, `delete_spatial_feature`, `get_property_geometry`/`get_property_geometries`, `get_property_features_by_category`, `get_kyngs_geojson`, `get_site_roads(_in_suburb)`, `generate_custom_geojson_features`, `refresh_spatial_data`, KYNG view builders. |
-| `supabase-newprod` | Cutover target | Destination for the dev schema at go-live. |
+| Project                             | Role                           | Map-relevant contents (verified via MCP)                                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `supabase-prod` (old prod)          | Legacy source-data + geocoding | `get_addresspoint_from_address`, `process_geoscape_geocoder_response`, `saveextractedaddresspoints`, `get_registered_addresspoints`; tables `address_point_extract_wgs84`, `custom_address`, `kyng_areas`. **No `spatial_features` schema.**                                                                                                                                                                               |
+| `supabase-dev` (active app backend) | Current application DB         | Full spatial stack: `get_spatial_features`, `get_spatial_feature_templates`, `get_spatial_feature_attributes`, `upsert_spatial_feature`, `upsert_feature_attributes`, `delete_spatial_feature`, `get_property_geometry`/`get_property_geometries`, `get_property_features_by_category`, `get_kyngs_geojson`, `get_site_roads(_in_suburb)`, `generate_custom_geojson_features`, `refresh_spatial_data`, KYNG view builders. |
+| `supabase-newprod`                  | Cutover target                 | Destination for the dev schema at go-live.                                                                                                                                                                                                                                                                                                                                                                                 |
 
 **Implication:** the validation/merge RPCs proposed in [postgis-editing-workflow.md](./postgis-editing-workflow.md)
 (`validate_spatial_feature`, `merge_spatial_features`, enhanced `upsert_spatial_feature`) **do not
@@ -72,17 +72,17 @@ editing + snapping, filters, property schemas).
 
 ### 2.3 Map use-cases inventory (different requirements)
 
-| # | Route(s) | Purpose | Access | Data source | R/W |
-| --- | --- | --- | --- | --- | --- |
-| 1 | `personal-profile/my-property/[propertyid]/my-map` | Property **data capture** — draw/edit hazards, assets, operational features | Owner (RLS by `property_ids`) | `get_property_geometry`, `get_spatial_feature_templates`, `get_spatial_features`, `get_spatial_feature_attributes`; writes via `upsert_spatial_feature`/`upsert_feature_attributes`/`delete_spatial_feature` | RW |
-| 2 | `personal-profile/my-community/{bcyca,tinonee,mondrook,external}/map` | Community visualization — extent, address points, registered points | Member | `get_community_data` | R |
-| 3 | `kyng-coordinator/[kyng_area]/map` | Coordinator view — registered/unregistered properties per KYNG area | Coordinator | `get_registered_properties_by_kyng_area`, `get_kyngs_geojson` | R |
-| 4 | `admin/community/*/map`, `admin/emergency/service-map` | Admin oversight | Admin | community/service RPCs | R |
-| 5 | `api/reports/rfs/properties`, `api/spatial/*` | RFS export / suburb roads | Service/role | `get_rfs_property_data_for_street`, `get_site_roads_in_suburb` | R |
+| #   | Route(s)                                                              | Purpose                                                                     | Access                        | Data source                                                                                                                                                                                                  | R/W |
+| --- | --------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --- |
+| 1   | `personal-profile/my-property/[propertyid]/my-map`                    | Property **data capture** — draw/edit hazards, assets, operational features | Owner (RLS by `property_ids`) | `get_property_geometry`, `get_spatial_feature_templates`, `get_spatial_features`, `get_spatial_feature_attributes`; writes via `upsert_spatial_feature`/`upsert_feature_attributes`/`delete_spatial_feature` | RW  |
+| 2   | `personal-profile/my-community/{bcyca,tinonee,mondrook,external}/map` | Community visualization — extent, address points, registered points         | Member                        | `get_community_data`                                                                                                                                                                                         | R   |
+| 3   | `kyng-coordinator/[kyng_area]/map`                                    | Coordinator view — registered/unregistered properties per KYNG area         | Coordinator                   | `get_registered_properties_by_kyng_area`, `get_kyngs_geojson`                                                                                                                                                | R   |
+| 4   | `admin/community/*/map`, `admin/emergency/service-map`                | Admin oversight                                                             | Admin                         | community/service RPCs                                                                                                                                                                                       | R   |
+| 5   | `api/reports/rfs/properties`, `api/spatial/*`                         | RFS export / suburb roads                                                   | Service/role                  | `get_rfs_property_data_for_street`, `get_site_roads_in_suburb`                                                                                                                                               | R   |
 
 These have genuinely different needs — capture needs editing + validation + per-feature attribute
 forms; community/KYNG/admin need fast read-only rendering of potentially dense point sets;
-reports need server-side extraction. A single map *engine* with per-purpose *profiles* serves all
+reports need server-side extraction. A single map _engine_ with per-purpose _profiles_ serves all
 five without one-size-fits-all compromises.
 
 ### 2.4 Source data & the caching pipeline
@@ -227,17 +227,17 @@ Layer       =  LayerConfig (declarative; sourced by RPC name)
   the param to `jsonb`/`text` and `ST_GeomFromGeoJSON` inside) — this is a latent bug to validate
   before building on top of it.
 
-### 4.5 SRID & the client/DB data contract *(implemented, G5 done)*
+### 4.5 SRID & the client/DB data contract _(implemented, G5 done)_
 
 - **Client / Leaflet / GeoJSON over the wire = EPSG:4326 (WGS84).**
-- **Cached NSW SS *reference* geometry = EPSG:7844 (GDA2020)** — `property_geometry`, `project_*`,
+- **Cached NSW SS _reference_ geometry = EPSG:7844 (GDA2020)** — `property_geometry`, `project_*`,
   `project_area`. Read RPCs return `ST_AsGeoJSON(ST_Transform(geom,4326))`.
-- **User-authored *editable* features (`spatial_features.geom`) = EPSG:4326** — their native
+- **User-authored _editable_ features (`spatial_features.geom`) = EPSG:4326** — their native
   capture CRS (drawn in Leaflet, served back as 4326). The column is declared `geometry(Geometry,
-  4326)` (was an unconstrained SRID 0). Storing these in 7844 would add read+write transforms for
+4326)` (was an unconstrained SRID 0). Storing these in 7844 would add read+write transforms for
   no benefit at property scale (7844↔4326 differ <2 m).
 - **Transform at the comparison boundary:** where the two CRSs meet, transform once — e.g.
-  `validate_spatial_feature` transforms the 7844 property boundary *to* 4326 to check/snap 4326
+  `validate_spatial_feature` transforms the 7844 property boundary _to_ 4326 to check/snap 4326
   features. No transforms in the browser; no 7844 GeoJSON leaves the DB.
 
 ### 4.6 Caching & provenance model
@@ -254,20 +254,20 @@ Layer       =  LayerConfig (declarative; sourced by RPC name)
 
 ## 5. Gap & issue register
 
-| # | Issue | Where | Severity | Action |
-| --- | --- | --- | --- | --- |
-| G1 | Two incompatible map stacks; v2 unwired | `components/map/leaflet/*` vs `lib/map/*` | High | **Done** — all routes on v2; v1 deleted |
-| G2 | Validation/snapping/merge RPCs don't exist | dev/newprod | High | Build as migrations (§4.4) |
-| G3 | Two editing libs loaded at once | `Leafletmap.svelte` | Med | **Done** — Leaflet.Editable only (v1 deleted) |
-| G4 | `upsert_spatial_feature` geometry-vs-GeoJSON contract | `my-map/+page.server.ts` + RPC | High | Verify/repair coercion |
-| G5 | SRID handling implicit/mixed (7844 vs 4326) | RPCs + docs | High | **Done** — `spatial_features.geom` declared 4326; reference caches 7844; transform at boundary (§4.5) |
-| G6 | `transformFeaturesToGeoJSON` duplicated | utils + page | Low | Single shared util |
-| G7 | Type defs scattered | `lib/data`, `lib/map` | Med | **Done** — v1 dup type files removed; engine types via barrel [`lib/map/types.ts`](../src/lib/map/types.ts); data-shapes stay in `lib/data/spatial` |
-| G8 | Geoscape tiles uncached; live dependency | geoscape proxy | Med | Done — edge-cached; no PostGIS cache (cadastre commercial) |
-| G9 | Module-level `$state` singletons | `spatialutilities.svelte.ts` | Med | **Done** — per-map state in `MapView`; v1 deleted |
-| G10 | `location.reload()` in save UX | proposed `my-map` flow | Low | `invalidateAll()` |
-| G11 | No provenance/refresh policy on cached geometry | cached tables | Med | Add columns + `pg_cron` refresh |
-| G12 | Licensing of persistent source caching | SS + Geoscape | High (go-live gate) | Clear: all live sources CC BY 4.0 (NSW SS + G-NAF geocoder/tiles); no commercial Geoscape data used. Open: confirm G-NAF tier + Geocoding API ToU (account owner) |
+| #   | Issue                                                 | Where                                     | Severity            | Action                                                                                                                                                            |
+| --- | ----------------------------------------------------- | ----------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| G1  | Two incompatible map stacks; v2 unwired               | `components/map/leaflet/*` vs `lib/map/*` | High                | **Done** — all routes on v2; v1 deleted                                                                                                                           |
+| G2  | Validation/snapping/merge RPCs don't exist            | dev/newprod                               | High                | **Done** — `spatial_validation` migration (validate/merge/hardened upsert), live in newprod                                                                       |
+| G3  | Two editing libs loaded at once                       | `Leafletmap.svelte`                       | Med                 | **Done** — Leaflet.Editable only (v1 deleted)                                                                                                                     |
+| G4  | `upsert_spatial_feature` geometry-vs-GeoJSON contract | `my-map/+page.server.ts` + RPC            | High                | **Done** — `upsert_spatial_feature_geojson` wrapper; action calls it                                                                                              |
+| G5  | SRID handling implicit/mixed (7844 vs 4326)           | RPCs + docs                               | High                | **Done** — `spatial_features.geom` declared 4326; reference caches 7844; transform at boundary (§4.5)                                                             |
+| G6  | `transformFeaturesToGeoJSON` duplicated               | utils + page                              | Low                 | **Done** — single util in `lib/map/render/transform-features.ts`                                                                                                  |
+| G7  | Type defs scattered                                   | `lib/data`, `lib/map`                     | Med                 | **Done** — v1 dup type files removed; engine types via barrel [`lib/map/types.ts`](../src/lib/map/types.ts); data-shapes stay in `lib/data/spatial`               |
+| G8  | Geoscape tiles uncached; live dependency              | geoscape proxy                            | Med                 | Done — edge-cached; no PostGIS cache (cadastre commercial)                                                                                                        |
+| G9  | Module-level `$state` singletons                      | `spatialutilities.svelte.ts`              | Med                 | **Done** — per-map state in `MapView`; v1 deleted                                                                                                                 |
+| G10 | `location.reload()` in save UX                        | proposed `my-map` flow                    | Low                 | **Done** — save flow uses `invalidateAll()`                                                                                                                       |
+| G11 | No provenance/refresh policy on cached geometry       | cached tables                             | Med                 | **Done** — provenance columns + monthly `pg_cron` refresh                                                                                                         |
+| G12 | Licensing of persistent source caching                | SS + Geoscape                             | High (go-live gate) | Clear: all live sources CC BY 4.0 (NSW SS + G-NAF geocoder/tiles); no commercial Geoscape data used. Open: confirm G-NAF tier + Geocoding API ToU (account owner) |
 
 ---
 
@@ -298,7 +298,7 @@ Build `validate_spatial_feature`, `merge_spatial_features`, hardened `upsert_spa
 (G2) as dev migrations with the SRID contract baked in (G5); repair G4. Surface validation
 issues/warnings in the UI. Add snapping (Leaflet.GeometryUtil) and the merge control.
 
-**Phase 5 — Caching hardening.** *Done.*
+**Phase 5 — Caching hardening.** _Done._
 Provenance columns (`source`/`source_layer`/`fetched_at`) + scheduled monthly `refresh_spatial_data`
 via `pg_cron` (G11); HTTP edge-cache on the Geoscape GNAF tile/metadata proxy (G8). Licensing (G12)
 assessed against actual usage: all live sources are CC BY 4.0 — NSW SS (property/address geometry)
@@ -306,7 +306,7 @@ and Geoscape **G-NAF** (geocoder + tiles); no commercial Geoscape data is consum
 redistribution blocker. Lifecycle + licensing documented in
 [source-data-lifecycle.md](./source-data-lifecycle.md).
 
-**Phase 6 — Decommission v1 & document.** *Done.*
+**Phase 6 — Decommission v1 & document.** _Done._
 The last three v1 holdouts were re-platformed onto the engine — the public About project map and
 the admin KYNG-boundaries map (GeoJSON, on `siteStreetsProfile`), and the admin address-data map
 (live ArcGIS + Geoscape GNAF layers, via the new MapView-child pattern in `lib/map/layers/live/`).
@@ -369,4 +369,4 @@ adjust to the 4326-in / 7844-store SRID contract before deploying).
 - Live/viewport layers: [layers/live/](../src/lib/map/layers/live/) (ArcGIS FeatureServer, Geoscape GNAF)
 - Schema: [layer-config.types.ts](../src/lib/map/layers/schemas/layer-config.types.ts)
 - Source caching: [geoscape.service.ts](../src/lib/server/services/geoscape.service.ts), [api/geoscape/](../src/routes/api/geoscape/); lifecycle in [source-data-lifecycle.md](./source-data-lifecycle.md)
-- Data capture: [capture/](../src/lib/map/capture/) + [my-map/+page.server.ts](../src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts)
+- Data capture: [capture/](../src/lib/map/capture/) + [my-map/+page.server.ts](<../src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts>)

@@ -42,4 +42,9 @@ export type {
 } from '$lib/map/profiles/types';
 
 // Runtime layer registry / descriptors
-export type { MapLayerDescriptor, LayerMeta, MapLayerRegistry, MapContext } from '$lib/map/map-types';
+export type {
+	MapLayerDescriptor,
+	LayerMeta,
+	MapLayerRegistry,
+	MapContext
+} from '$lib/map/map-types';

@@ -2,7 +2,10 @@
 	import type { AddressPointsGeoJSON } from '$lib/data/spatial/types';
 	import MapView from '$lib/map/MapView.svelte';
 	import { siteStreetsProfile } from '$lib/map/profiles/site';
-	import { projectAddressPointsLayer, registeredAddressPointsLayer } from '$lib/map/profiles/community';
+	import {
+		projectAddressPointsLayer,
+		registeredAddressPointsLayer
+	} from '$lib/map/profiles/community';
 	import type { ResolvedLayer } from '$lib/map/profiles/types';
 
 	interface Props {
@@ -13,7 +16,10 @@
 
 	let layers = $derived<ResolvedLayer[]>([
 		{ config: projectAddressPointsLayer, data: addressPointsGeoJSON?.allAddresspoints ?? null },
-		{ config: registeredAddressPointsLayer, data: addressPointsGeoJSON?.registeredAddresspoints ?? null }
+		{
+			config: registeredAddressPointsLayer,
+			data: addressPointsGeoJSON?.registeredAddresspoints ?? null
+		}
 	]);
 
 	const focusAreas = [
@@ -82,7 +88,9 @@
 		{#if addressPointsGeoJSON}
 			<MapView
 				profile={siteStreetsProfile}
-				view={{ extent: addressPointsGeoJSON.initialExtent as [[number, number], [number, number]] }}
+				view={{
+					extent: addressPointsGeoJSON.initialExtent as [[number, number], [number, number]]
+				}}
 				{layers}
 				class="h-full"
 			/>

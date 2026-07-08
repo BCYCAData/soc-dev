@@ -61,9 +61,7 @@
 <main class="flex min-h-full flex-col">
 	<Tabs items={tabItems} />
 	<footer class="mt-auto">
-		<div
-			class="flex flex-col-reverse items-center justify-between gap-2 px-2 sm:flex-row md:px-24"
-		>
+		<div class="flex flex-col-reverse items-center justify-between gap-2 px-2 sm:flex-row md:px-24">
 			<picture>
 				<source srcset="/images/ag.webp" type="image/webp" />
 				<img

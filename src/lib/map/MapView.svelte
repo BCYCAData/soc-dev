@@ -40,6 +40,7 @@
 	const registry = $state<MapLayerRegistry>({});
 
 	// Non-reactive bookkeeping: layer id → the data reference last built from.
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity -- intentionally non-reactive
 	const builtFrom = new Map<string, GeoJSON.FeatureCollection | null>();
 	let layersControl: L.Control.Layers | undefined;
 

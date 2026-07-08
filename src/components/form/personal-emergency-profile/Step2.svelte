@@ -179,8 +179,9 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 text-secondary-700-300 ml-2 font-medium" for="property_rented"
-							>{lable}</label
+						<label
+							class="text-scale-6 text-secondary-700-300 ml-2 font-medium"
+							for="property_rented">{lable}</label
 						>
 					</div>
 				{:else}
@@ -196,8 +197,9 @@
 							bind:group={formData.property_profile.property_rented}
 							{value}
 						/>
-						<label class="text-scale-6 text-secondary-700-300 ml-2 font-medium" for="property_rented"
-							>{lable}</label
+						<label
+							class="text-scale-6 text-secondary-700-300 ml-2 font-medium"
+							for="property_rented">{lable}</label
 						>
 					</div>
 				{/if}
@@ -284,8 +286,9 @@
 					bind:group={formData.property_profile.sign_posted}
 					{value}
 				/>
-				<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="sign_posted"
-					>{lable}</label
+				<label
+					class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
+					for="sign_posted">{lable}</label
 				>
 			</div>
 		{/each}
@@ -307,8 +310,9 @@
 						bind:group={formData.property_profile.truck_access}
 						{value}
 					/>
-					<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="truck_access"
-						>{lable}</label
+					<label
+						class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
+						for="truck_access">{lable}</label
 					>
 					<input
 						type="text"
@@ -333,8 +337,9 @@
 						bind:group={formData.property_profile.truck_access}
 						{value}
 					/>
-					<label class="text-primary-700-300 flex-initial px-3 text-lg font-semibold" for="truck_access"
-						>{lable}</label
+					<label
+						class="text-primary-700-300 flex-initial px-3 text-lg font-semibold"
+						for="truck_access">{lable}</label
 					>
 				</div>
 			{/if}
@@ -382,10 +387,7 @@
 						e.preventDefault();
 						formData.property_profile.phone = e.currentTarget.value;
 						if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(e.key)) {
-							formData.property_profile.phone = formatPhone(
-								formData.property_profile.phone,
-								e.key
-							);
+							formData.property_profile.phone = formatPhone(formData.property_profile.phone, e.key);
 						}
 					}
 				}}

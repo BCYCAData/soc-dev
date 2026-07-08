@@ -10,15 +10,20 @@ This project uses an AI-assisted development system for design documentation, co
 
 ## Before Responding to Implementation Questions
 
-1. **Read the grounding protocol**: `~/ai-dev-system/core/prompts/grounding-protocol.md`
-2. **Check project design docs**: `~/ai-dev-system/projects/soc-dev/design/`
-3. **Follow conventions**: `~/ai-dev-system/core/conventions/`
-4. **Reference domain knowledge**: `~/ai-dev-system/domains/community-environmental-management/`
+1. **Check the repo design docs first**: `docs/` in this repository is the
+   source of truth (database.md, gis-mapping-strategy.md,
+   styling-conventions.md, session-management-implementation-plan.md,
+   user-testing-checklist.md, cutover-checklist.md).
+2. **Repo conventions beat shared conventions**: `.prettierrc`, `eslint.config`,
+   and `docs/styling-conventions.md` are authoritative. The shared
+   `~/ai-dev-system/core/conventions/` docs are written for a different project
+   (Skeleton v4 / bendev theme) — treat them as background only.
+3. **Reference domain knowledge**: `~/ai-dev-system/domains/community-environmental-management/`
 
 ## Source Priority (highest to lowest)
 
-1. Project design documents and ADRs in `~/ai-dev-system/projects/soc-dev/design/`
-2. Code conventions in `~/ai-dev-system/core/conventions/`
+1. Design docs in this repo: `docs/` (plus `llms.txt` for a high-level tour)
+2. Repo tooling config: `.prettierrc`, `eslint.config.js`, `scripts/check-styles.sh`
 3. Library documentation (via GitHub MCP or Fetch MCP)
 4. Domain knowledge in `~/ai-dev-system/domains/community-environmental-management/`
 5. General knowledge (flag as unverified)
@@ -33,19 +38,19 @@ This project uses an AI-assisted development system for design documentation, co
 
 ## Project Context
 
-| Attribute             | Value                                      |
-| --------------------- | ------------------------------------------ |
-| **Project name**      | soc-dev                                    |
-| **Domain**            | Community Environmental Management         |
-| **Design docs**       | `~/ai-dev-system/projects/soc-dev/design/` |
-| **Current iteration** | v0.1                                       |
+| Attribute             | Value                              |
+| --------------------- | ---------------------------------- |
+| **Project name**      | soc-dev                            |
+| **Domain**            | Community Environmental Management |
+| **Design docs**       | `docs/` (in this repository)       |
+| **Current iteration** | v0.1                               |
 
 ## Technology Stack
 
 - **Frontend**: SvelteKit + Skeleton UI (Svelte 5 runes)
 - **Backend**: Supabase (PostgreSQL + PostGIS)
 - **Spatial**: PostGIS
-- **Mapping**: [Leaflet/OpenLayers]
+- **Mapping**: Leaflet (config-driven MapView engine in `src/lib/map/`)
 
 ## Key Commands
 

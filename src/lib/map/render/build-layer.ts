@@ -67,7 +67,8 @@ function resolvePointStyle(
 	const s = config.styling;
 	if (s.mode === 'categorized' && s.categorized) {
 		const { property, categories, default: def } = s.categorized;
-		return (feature) => toHelperPointStyle(L, pickCategory(feature, property, categories, def)?.point);
+		return (feature) =>
+			toHelperPointStyle(L, pickCategory(feature, property, categories, def)?.point);
 	}
 	if (s.mode === 'dynamic' && s.styleFn) {
 		const fn = s.styleFn;
@@ -84,7 +85,8 @@ function resolveLineStyle(
 		const { property, categories, default: def } = s.categorized;
 		return (feature) => pickCategory(feature, property, categories, def)?.line ?? {};
 	}
-	if (s.mode === 'dynamic' && s.styleFn) return s.styleFn as (f: GeoJSON.Feature) => HelperLineStyle;
+	if (s.mode === 'dynamic' && s.styleFn)
+		return s.styleFn as (f: GeoJSON.Feature) => HelperLineStyle;
 	return s.base?.line ?? {};
 }
 

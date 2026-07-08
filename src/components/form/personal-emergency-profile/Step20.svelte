@@ -58,7 +58,9 @@
 				value={Number(value)}
 				checked={userProfile?.stay_in_touch_choices?.includes(Number(value))}
 			/>
-			<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="stay_in_touch_choices"
+			<label
+				class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
+				for="stay_in_touch_choices"
 				>{lable}
 			</label>
 		</div>

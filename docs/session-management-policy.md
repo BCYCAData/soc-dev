@@ -63,16 +63,16 @@ Reaching either limit ends the session and bounces protected routes to `/auth/si
 The code that exists today does **not** implement this policy. It is a single, global
 **access-token-expiry warning**, not an idle timeout and not role-aware. Concretely:
 
-| Aspect | Proposed policy | As built today |
-| ------ | --------------- | -------------- |
-| Trigger | User **inactivity** (idle timer) | Supabase `session.expires_at` — the **access-token (JWT) lifetime** (~1 hr default), refreshed on any client activity |
-| Warning lead time | 2 min | **5 min** (`remaining < 300`, `secondsRemaining` starts at 300) |
-| Role scoping | Resident / Coordinator / Admin tiers | **None** — identical for every user |
-| Absolute cap | 30 d / 7 d / 12 h | **None** — nothing bounds total session age |
-| Idle detection | Yes (reset on activity) | **No** — there is no activity listener; it only reads token expiry |
-| Extend | `/api/extend-session` | ✅ matches — POSTs to `/api/extend-session`, which calls `supabase.auth.refreshSession()` |
-| Expiry action | Sign out + bounce to `/auth/signin` | Redirects to `/auth/signin?reason=expired` (client-side `window.location`) |
-| "Sign Out Now" button | Revoke session server-side | ⚠️ **Only navigates** to `/auth/signin` (an `<a href>`); it does **not** call `signOut()`, so the refresh token is not revoked |
+| Aspect                | Proposed policy                      | As built today                                                                                                                 |
+| --------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Trigger               | User **inactivity** (idle timer)     | Supabase `session.expires_at` — the **access-token (JWT) lifetime** (~1 hr default), refreshed on any client activity          |
+| Warning lead time     | 2 min                                | **5 min** (`remaining < 300`, `secondsRemaining` starts at 300)                                                                |
+| Role scoping          | Resident / Coordinator / Admin tiers | **None** — identical for every user                                                                                            |
+| Absolute cap          | 30 d / 7 d / 12 h                    | **None** — nothing bounds total session age                                                                                    |
+| Idle detection        | Yes (reset on activity)              | **No** — there is no activity listener; it only reads token expiry                                                             |
+| Extend                | `/api/extend-session`                | ✅ matches — POSTs to `/api/extend-session`, which calls `supabase.auth.refreshSession()`                                      |
+| Expiry action         | Sign out + bounce to `/auth/signin`  | Redirects to `/auth/signin?reason=expired` (client-side `window.location`)                                                     |
+| "Sign Out Now" button | Revoke session server-side           | ⚠️ **Only navigates** to `/auth/signin` (an `<a href>`); it does **not** call `signOut()`, so the refresh token is not revoked |
 
 Additional caveats:
 

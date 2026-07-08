@@ -7,10 +7,10 @@ caching) and **G11** (provenance + refresh policy).
 
 ## 1. Sources
 
-| Source | Endpoint | What | How it enters | Cache |
-| --- | --- | --- | --- | --- |
+| Source                        | Endpoint                                                  | What                                                                     | How it enters                                                         | Cache                                                 |
+| ----------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------------- |
 | **NSW Spatial Services (SS)** | `portal.spatial.nsw.gov.au/server/rest/...` (ArcGIS REST) | Cadastre / property, address points, address strings, proways, waypoints | `refresh_spatial_data()` → `extract_*()` (server-side `http_*` calls) | **Cached to PostGIS** (`project_*` tables), SRID 7844 |
-| **Geoscape / PSMA** | `api.psma.com.au/v1/maps/{layer}/{z}/{x}/{y}.pbf` | Incidental basemap vector tiles (address / roads / parcels) | `api/geoscape/[layerId]/tiles/...` proxy → `geoscape.service.ts` | **Proxy + HTTP edge-cache** (not persisted) |
+| **Geoscape / PSMA**           | `api.psma.com.au/v1/maps/{layer}/{z}/{x}/{y}.pbf`         | Incidental basemap vector tiles (address / roads / parcels)              | `api/geoscape/[layerId]/tiles/...` proxy → `geoscape.service.ts`      | **Proxy + HTTP edge-cache** (not persisted)           |
 
 SRID contract is uniform: **store 7844 (GDA2020), serve 4326 (WGS84) to Leaflet, transform at
 the RPC boundary.** See [gis-mapping-strategy.md §4.5](./gis-mapping-strategy.md).
@@ -84,7 +84,7 @@ incremental — `fetched_at`/`source_id` make a future incremental refresh feasi
 
 ## 3. Geoscape / PSMA — proxy + edge-cache (G8)
 
-Geoscape tiles are **incidental basemap context**, not authoritative anchors, so they are *not*
+Geoscape tiles are **incidental basemap context**, not authoritative anchors, so they are _not_
 persisted. The proxy (`api/geoscape/[layerId]/tiles/[z]/[x]/[y]` and `.../metadata`) keeps the
 `PUBLIC_GEOSCAPE_GNAF_TILES_API_KEY` server-side and now sets HTTP cache headers so the CDN and
 browser absorb repeat requests:
@@ -104,18 +104,18 @@ tier/ToU confirmations below are escalated to the Geoscape account owner).
 
 What the app actually uses (verified in code):
 
-| Source | Endpoint | Used by | Dataset | Persist + redistribute? |
-| --- | --- | --- | --- | --- |
-| NSW SS | ArcGIS REST (`portal.spatial.nsw.gov.au`) | `project_*` cache, address map property theme | CC BY 4.0 (NSW Open Data) | **Yes** — attribution + currency date |
-| Geoscape geocoder | `/v2/addresses/geocoder` | signup, my-property, admin addresses | **G-NAF** | **Yes** — operational storage; API returns the attribution string (displayed) |
-| Geoscape GNAF tiles | `/v1/maps/.../gnaf/...` | address map GNAF layer | **G-NAF**, CC BY 4.0 | **Yes** (+ no mail-list compilation rule) |
-| ~~Geoscape cadastre~~ | `/api/geoscape/cadastre` | **none — dead v1 code** (`CadastreGeoJSON.svelte`, no importer; removed in Phase 6) | Commercial | n/a — not used |
+| Source                | Endpoint                                  | Used by                                                                             | Dataset                   | Persist + redistribute?                                                       |
+| --------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------- |
+| NSW SS                | ArcGIS REST (`portal.spatial.nsw.gov.au`) | `project_*` cache, address map property theme                                       | CC BY 4.0 (NSW Open Data) | **Yes** — attribution + currency date                                         |
+| Geoscape geocoder     | `/v2/addresses/geocoder`                  | signup, my-property, admin addresses                                                | **G-NAF**                 | **Yes** — operational storage; API returns the attribution string (displayed) |
+| Geoscape GNAF tiles   | `/v1/maps/.../gnaf/...`                   | address map GNAF layer                                                              | **G-NAF**, CC BY 4.0      | **Yes** (+ no mail-list compilation rule)                                     |
+| ~~Geoscape cadastre~~ | `/api/geoscape/cadastre`                  | **none — dead v1 code** (`CadastreGeoJSON.svelte`, no importer; removed in Phase 6) | Commercial                | n/a — not used                                                                |
 
 Conclusions:
 
 - **No commercial-licensing blocker exists.** All live Geoscape usage is **G-NAF** (geocoder +
   tiles), which is open CC BY 4.0; property polygons come from **NSW SS** (also CC BY 4.0).
-  Geoscape's *commercial* cadastre/property/buildings are **not used** — the earlier "Derived
+  Geoscape's _commercial_ cadastre/property/buildings are **not used** — the earlier "Derived
   Material" blocker was based on the assumption cadastre was consumed; it is not.
 - **What Phase 5 persists is all NSW SS data → licence-clear.** Attribution + currency are wired:
   every NSW SS map shows a data attribution (`MapProfile.attribution` →
@@ -137,10 +137,10 @@ Remaining confirmations (account owner, not engineering — verify against the G
 
 ## 4. Status
 
-| Gap | Item | State |
-| --- | --- | --- |
-| G11 | Provenance columns on `project_*` | Done (`20260628100000_spatial_provenance.sql`) |
-| G11 | Scheduled `refresh_spatial_data` | Done (`20260628101000_schedule_refresh_spatial_data.sql`, monthly) |
-| G8 | Geoscape edge-cache headers | Done (tiles + metadata `+server.ts`) |
-| G8 | Geoscape cache-to-PostGIS | Edge-cache the GNAF tiles; no commercial Geoscape data is consumed |
-| G12 | Licensing for persistent caching | Clear — all live sources are CC BY 4.0 (NSW SS + G-NAF); no commercial Geoscape data used. Open (account owner): confirm G-NAF tier + Geocoding API ToU |
+| Gap | Item                              | State                                                                                                                                                   |
+| --- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| G11 | Provenance columns on `project_*` | Done (`20260628100000_spatial_provenance.sql`)                                                                                                          |
+| G11 | Scheduled `refresh_spatial_data`  | Done (`20260628101000_schedule_refresh_spatial_data.sql`, monthly)                                                                                      |
+| G8  | Geoscape edge-cache headers       | Done (tiles + metadata `+server.ts`)                                                                                                                    |
+| G8  | Geoscape cache-to-PostGIS         | Edge-cache the GNAF tiles; no commercial Geoscape data is consumed                                                                                      |
+| G12 | Licensing for persistent caching  | Clear — all live sources are CC BY 4.0 (NSW SS + G-NAF); no commercial Geoscape data used. Open (account owner): confirm G-NAF tier + Geocoding API ToU |

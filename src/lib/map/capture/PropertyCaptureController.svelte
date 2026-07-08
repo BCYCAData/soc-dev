@@ -73,7 +73,9 @@
 	let pendingGeometry: GeoJSON.Geometry | null = null;
 	let tempDrawLayer: any = null; // the in-progress drawn layer
 	let selectedLayer: any = null; // an existing feature layer being edited
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity -- imperative Leaflet handle registry
 	const featureLayers = new Map<string, any>(); // templateId → L.GeoJSON
+	// eslint-disable-next-line svelte/prefer-svelte-reactivity -- imperative Leaflet handle registry
 	const mergeSelected = new Map<string, { layer: any; template: FeatureTemplate }>(); // id → layer
 
 	const MERGE_HIGHLIGHT = { color: '#f59e0b', weight: 4, fillColor: '#f59e0b', fillOpacity: 0.35 };
@@ -495,7 +497,9 @@
 			>
 				<input type="hidden" name="propertyId" value={propertyId} />
 				<input type="hidden" name="featureId" value={editingFeatureId} />
-				<button type="submit" class="capture-btn capture-btn--danger" disabled={saving}>Delete</button>
+				<button type="submit" class="capture-btn capture-btn--danger" disabled={saving}
+					>Delete</button
+				>
 			</form>
 		{/if}
 	</div>

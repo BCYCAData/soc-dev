@@ -17,7 +17,13 @@ export const siteStreetsProfile: MapProfile = {
 	id: 'site-streets',
 	label: 'Site',
 	baseLayers: [
-		{ id: 'nsw-streets', name: 'NSW Streets', url: NSW_STREETS_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION, visible: true }
+		{
+			id: 'nsw-streets',
+			name: 'NSW Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		}
 	],
 	controls: { scale: 'bottomleft', legend: false, layers: 'topright', attribution: true },
 	attribution: NSW_SS_DATA_ATTRIBUTION,
@@ -34,7 +40,9 @@ export const siteBoundaryLayer: LayerConfig = {
 	source: { rpcFunction: 'get_site_boundary' },
 	styling: {
 		mode: 'static',
-		base: { polygon: { fillColor: '#3388ff', fillOpacity: 0.15, color: '#000', weight: 1.5, opacity: 1 } }
+		base: {
+			polygon: { fillColor: '#3388ff', fillOpacity: 0.15, color: '#000', weight: 1.5, opacity: 1 }
+		}
 	},
 	interaction: {},
 	display: { defaultVisible: true }
@@ -50,8 +58,19 @@ export const addressMapProfile: MapProfile = {
 	id: 'admin-addresses',
 	label: 'Addresses',
 	baseLayers: [
-		{ id: 'nsw-streets', name: 'NSW Streets', url: NSW_STREETS_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION, visible: true },
-		{ id: 'nsw-aerial', name: 'NSW Aerial', url: NSW_AERIAL_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION },
+		{
+			id: 'nsw-streets',
+			name: 'NSW Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		},
+		{
+			id: 'nsw-aerial',
+			name: 'NSW Aerial',
+			url: NSW_AERIAL_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION
+		},
 		{
 			id: 'osm',
 			name: 'OpenStreetMap',

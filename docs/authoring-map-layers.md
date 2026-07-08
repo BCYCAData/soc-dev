@@ -46,11 +46,18 @@ A `MapProfile` (see `profiles/types.ts`) declares basemaps + controls + view + a
 ```ts
 export const myProfile: MapProfile = {
 	id: 'my-map',
-	baseLayers: [{ id: 'nsw-streets', name: 'NSW Streets', url: NSW_STREETS_URL,
-		attribution: NSW_SS_BASEMAP_ATTRIBUTION, visible: true }],
+	baseLayers: [
+		{
+			id: 'nsw-streets',
+			name: 'NSW Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		}
+	],
 	controls: { scale: 'bottomleft', legend: 'bottomright', layers: 'topright', attribution: true },
 	attribution: NSW_SS_DATA_ATTRIBUTION, // data-source attribution (see §5)
-	showDataCurrency: true,               // appends the cached-data "as at" date
+	showDataCurrency: true, // appends the cached-data "as at" date
 	view: { zoomSnap: 0.25, zoomable: true }
 };
 ```
@@ -121,7 +128,8 @@ appears in the layers control; it `unregisterLayer`s on destroy:
 const ctx = getContext<LeafletContext>(LEAFLET_CONTEXT_KEY);
 $effect(() => {
 	if (!ready || initialized) return;
-	const L = ctx.getLeaflet(); const map = ctx.getLeafletMap();
+	const L = ctx.getLeaflet();
+	const map = ctx.getLeafletMap();
 	if (!L || !map) return;
 	initialized = true;
 	/* build layer, attach map.on('moveend', …), ctx.registerLayer({ id, name, type, visible, leafletLayer }) */

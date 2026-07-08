@@ -17,8 +17,19 @@ export const kyngMapProfile: MapProfile = {
 	id: 'kyng',
 	label: 'KYNG Coordinator',
 	baseLayers: [
-		{ id: 'nsw-aerial', name: 'Air Photo', url: NSW_AERIAL_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION, visible: true },
-		{ id: 'nsw-streets', name: 'Streets', url: NSW_STREETS_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION }
+		{
+			id: 'nsw-aerial',
+			name: 'Air Photo',
+			url: NSW_AERIAL_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		},
+		{
+			id: 'nsw-streets',
+			name: 'Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION
+		}
 	],
 	controls: { scale: 'bottomleft', legend: 'bottomright', layers: 'topright', attribution: true },
 	attribution: NSW_SS_DATA_ATTRIBUTION,
@@ -112,8 +123,14 @@ export const kyngAddressPointsLayer: LayerConfig = {
 		categorized: {
 			property: 'Address Point Type',
 			categories: {
-				Property: { point: { shape: 'square', fillColor: 'blue', size: 9 }, label: 'Property Address' },
-				Building: { point: { shape: 'diamond', fillColor: 'green', size: 8 }, label: 'Building Address' },
+				Property: {
+					point: { shape: 'square', fillColor: 'blue', size: 9 },
+					label: 'Property Address'
+				},
+				Building: {
+					point: { shape: 'diamond', fillColor: 'green', size: 8 },
+					label: 'Building Address'
+				},
 				Default: { point: { shape: 'diamond', fillColor: 'black', size: 10 }, label: 'Address' }
 			},
 			// v1 falls back to the first group (Property) for unknown values.

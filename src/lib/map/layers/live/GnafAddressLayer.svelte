@@ -70,9 +70,7 @@
 		});
 
 		const duplicatedGroups = Object.values(colocated).filter((g) => g.length > 1);
-		const dupPids = new Set(
-			duplicatedGroups.flat().map((f) => f.properties?.ADDRESS_DETAIL_PID)
-		);
+		const dupPids = new Set(duplicatedGroups.flat().map((f) => f.properties?.ADDRESS_DETAIL_PID));
 		const nonColocated = uniqueFeatures.filter(
 			(f) => !dupPids.has(f.properties?.ADDRESS_DETAIL_PID)
 		);

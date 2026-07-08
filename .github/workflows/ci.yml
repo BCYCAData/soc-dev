@@ -11,24 +11,18 @@ concurrency:
 
 jobs:
   quality:
-    name: Lint, typecheck & build (informational)
+    name: Lint, typecheck & build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
-      # These currently surface pre-existing debt (prettier drift across docs/configs, a
-      # couple of unused-var type errors), so they run but do not fail the build yet. Flip
-      # continue-on-error off per step as each is cleaned up.
       - run: npm run lint
-        continue-on-error: true
       - run: npm run check
-        continue-on-error: true
       - run: npm run build
-        continue-on-error: true
         env:
           # Placeholder public env so the build doesn't fail on missing vars.
           PUBLIC_SUPABASE_URL: https://placeholder.supabase.co

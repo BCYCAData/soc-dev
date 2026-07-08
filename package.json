@@ -16,7 +16,7 @@
 		"format": "prettier --write .",
 		"lint": "npm run lint:styles && prettier --check . && eslint .",
 		"lint:styles": "sh scripts/check-styles.sh",
-		"update-db-types": "npx --yes supabase gen types typescript --project-id \"swyytxokzdqqitszxaep\" > src/lib/db.types.ts",
+		"update-db-types": "npx --yes supabase gen types typescript --project-id \"rcnccgyvdgmcnomwcaja\" > src/lib/db.types.ts",
 		"vercel-build": "ls -la src/lib/server/pdf/fonts && vite build"
 	},
 	"devDependencies": {

@@ -15,8 +15,19 @@ export const propertyCaptureProfile: MapProfile = {
 	id: 'property-capture',
 	label: 'Property Capture',
 	baseLayers: [
-		{ id: 'nsw-streets', name: 'NSW Streets', url: NSW_STREETS_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION, visible: true },
-		{ id: 'nsw-aerial', name: 'NSW Aerial', url: NSW_AERIAL_URL, attribution: NSW_SS_BASEMAP_ATTRIBUTION },
+		{
+			id: 'nsw-streets',
+			name: 'NSW Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		},
+		{
+			id: 'nsw-aerial',
+			name: 'NSW Aerial',
+			url: NSW_AERIAL_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION
+		},
 		{
 			id: 'osm',
 			name: 'OpenStreetMap',
@@ -47,7 +58,9 @@ export const propertyBoundaryLayer: LayerConfig = {
 	source: { rpcFunction: 'get_property_geometry' },
 	styling: {
 		mode: 'static',
-		base: { polygon: { fillColor: '#eee908', fillOpacity: 0.2, color: '#000', weight: 1, opacity: 1 } }
+		base: {
+			polygon: { fillColor: '#eee908', fillOpacity: 0.2, color: '#000', weight: 1, opacity: 1 }
+		}
 	},
 	interaction: {},
 	display: { defaultVisible: true }
@@ -60,7 +73,10 @@ export const addressPointLayer: LayerConfig = {
 	geometryType: 'Point',
 	category: 'Context',
 	source: { rpcFunction: 'get_property_geometry' },
-	styling: { mode: 'static', base: { point: { shape: 'diamond', fillColor: '#f97316', size: 12 } } },
+	styling: {
+		mode: 'static',
+		base: { point: { shape: 'diamond', fillColor: '#f97316', size: 12 } }
+	},
 	interaction: {},
 	display: { defaultVisible: true }
 };
@@ -72,7 +88,10 @@ export const wayPointLayer: LayerConfig = {
 	geometryType: 'Point',
 	category: 'Context',
 	source: { rpcFunction: 'get_property_geometry' },
-	styling: { mode: 'static', base: { point: { shape: 'diamond', fillColor: '#a5a5a5', size: 12 } } },
+	styling: {
+		mode: 'static',
+		base: { point: { shape: 'diamond', fillColor: '#a5a5a5', size: 12 } }
+	},
 	interaction: {},
 	display: { defaultVisible: true }
 };

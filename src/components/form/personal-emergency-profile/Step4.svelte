@@ -110,8 +110,9 @@
 					bind:group={formState.live_stock_safe_area}
 					{value}
 				/>
-				<label class="text-scale-6 text-secondary-900-100 ml-2 font-medium" for="live_stock_safe_area"
-					>{lable}</label
+				<label
+					class="text-scale-6 text-secondary-900-100 ml-2 font-medium"
+					for="live_stock_safe_area">{lable}</label
 				>
 			</div>
 		{/each}

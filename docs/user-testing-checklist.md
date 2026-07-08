@@ -39,28 +39,28 @@ test cases as the document matures.
    5. Email change
    6. Email-not-allowed / ineligible-address handling
    7. Session lifetime (timeout warning, extend session, expiry)
-2. **Public site** — _not yet written_
+2. **Public site** — _detailed below_
    1. Home / landing
    2. About
    3. Contact (and mailto actions)
    4. Policies — Privacy, Terms of Service
-3. **Personal profile (authenticated)** — _not yet written_
+3. **Personal profile (authenticated)** — _detailed below_
    1. Profile landing / completion tracking
    2. About me
    3. My settings
    4. My property — list, detail, property map (PostGIS editing)
    5. My community — BCYCA, Mondrook (information / map / events), Tinonee, External
-4. **KYNG coordinator** — _not yet written_
+4. **KYNG coordinator** — _detailed below_
    1. Area dashboard
    2. Area map
    3. Unregistered addresses
    4. User admin
-5. **Admin** — _not yet written_
+5. **Admin** — _detailed below_
    1. Community management — BCYCA, Mondrook, Tinonee, External
    2. Site — roles, data, profile requirements, messages
    3. Emergency — service map, reports
    4. Users — new, kits, KYNG coordinators
-6. **Cross-cutting concerns** — _not yet written_
+6. **Cross-cutting concerns** — _detailed below_
    1. Navigation / navbar (auth-aware, permission-gated items)
    2. Route protection & authorization (allow-list, permission denial, KYNG area scoping)
    3. Toasts / notifications
@@ -68,7 +68,7 @@ test cases as the document matures.
    5. Accessibility — keyboard nav, focus, `aria-live` regions, colour contrast
    6. Responsive layout — mobile / tablet / desktop breakpoints
    7. Error pages — `/auth/error`, `+error.svelte`, 404
-7. **API endpoints (indirect / integration)** — _not yet written_
+7. **API endpoints (indirect / integration)** — _detailed below_
    1. Geoscape tiles & metadata
    2. Spatial (suburb / roads)
    3. Reports (RFS properties / street)
@@ -313,9 +313,9 @@ Routes involved:
 
 ### Auth section — run log
 
-| Date | Tester | Env | Build / commit | Result | Notes |
-| ---- | ------ | --- | -------------- | ------ | ----- |
-| 2026-06-25 | Claude (HTTP smoke) | dev (`supabase-newprod`) | working tree | PASS (6/6) | Server-side integration only: signin `?reason=idle\|expired\|session-refresh-failed` and `?message=email_changed` notices render via SSR; no param → no banner; `POST /api/session/keepalive` → 204, `GET` → 405; unauth `/personal-profile` → 303 `/auth/signin`. Browser/auth-gated items (§1.7.A/B UX, hooks expiry) NOT covered — need manual browser run. |
+| Date       | Tester              | Env                      | Build / commit | Result     | Notes                                                                                                                                                                                                                                                                                                                                                          |
+| ---------- | ------------------- | ------------------------ | -------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-06-25 | Claude (HTTP smoke) | dev (`supabase-newprod`) | working tree   | PASS (6/6) | Server-side integration only: signin `?reason=idle\|expired\|session-refresh-failed` and `?message=email_changed` notices render via SSR; no param → no banner; `POST /api/session/keepalive` → 204, `GET` → 405; unauth `/personal-profile` → 303 `/auth/signin`. Browser/auth-gated items (§1.7.A/B UX, hooks expiry) NOT covered — need manual browser run. |
 
 ---
 
@@ -426,12 +426,223 @@ through `upsert_spatial_feature_geojson`, which validates server-side
 
 | Date | Tester | Env | Build / commit | Result | Notes |
 | ---- | ------ | --- | -------------- | ------ | ----- |
-| | | | | | |
+|      |        |     |                |        |       |
 
 ---
 
-## Remaining sections (2; 3.1–3.3; 4.1, 4.3–4.4; 5.2–5.3; 6; 7)
+## 2. Public site
 
-_Not yet written._ Use Section 1 as the template: list the routes/actions involved, state
-the domain rules, then enumerate happy-path and failure-path tests with Preconditions /
-Steps / Expected, and finish with a cross-checks list and a run-log table.
+Routes involved: `/` (landing), `/about`, `/contact`, `/policies/privacy`, `/policies/terms-of-service`.
+
+### 2.1 Home / landing
+
+- [ ] **Signed out:** landing renders; navbar shows Sign In / Create an Account; no protected links visible.
+- [ ] **Signed in:** navbar shows profile-aware items (Personal Profile, Sign Out) and permission-gated items only for roles that hold them (Admin, KYNG).
+- [ ] **Responsive:** at 375px and 768px widths the landing lays out without horizontal scroll.
+
+### 2.2 About
+
+- [ ] The about map loads (public `get_addresspoints_geojson` RPC — anon EXECUTE must work signed out).
+- [ ] Data attribution + currency date render on the map.
+
+### 2.3 Contact
+
+- [ ] Contact details render from `PUBLIC_CONTACT_EMAIL`; mailto link opens a compose window.
+
+### 2.4 Policies
+
+- [ ] Privacy and Terms pages render and are reachable from the footer while signed out.
+
+### Section 2 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
+
+---
+
+## 3. Personal profile (authenticated)
+
+Routes involved: `/personal-profile-form` (onboarding), `/personal-profile/aboutme`,
+`/personal-profile/my-settings`, `/personal-profile/my-property[/…]`,
+`/personal-profile/my-community[/…]`.
+
+> **Key domain rules:** every profile form uses the shared `FormActions` (Undo confirmation
+> dialog + Save with spinner) and progressive enhancement (`use:enhance`) — failed saves
+> must show an error (FormAlerts and/or toast), never silence. The profile-completion nag
+> appears after login until required questions (admin-configured) are answered or dismissed.
+
+### 3.1 Onboarding form (`/personal-profile-form`)
+
+- [ ] **Completion banner:** outstanding required questions listed by section; updates after Next/Prev saves (`invalidateAll`).
+- [ ] **Next/Prev saves:** answers persist between steps; a failed save shows an error toast and does not advance.
+- [ ] **Skip via progress bar:** clicking a step saves current answers first, then jumps.
+- [ ] **Final submit:** success toast on completion; error toast with message on failure.
+
+### 3.2 About me / My community / community sub-pages (information, events, workshops)
+
+- [ ] **Dirty tracking:** editing any field shows the unsaved-changes alert; Save enables.
+- [ ] **Save:** success alert renders; `unsaved` clears; values survive a reload.
+- [ ] **Undo:** opens the themed confirm dialog; Confirm restores loaded values; Cancel keeps edits.
+- [ ] **Failure path:** with the network offline, Save shows an error (no silent failure).
+- [ ] **Request community access (my-community):** buttons disabled for communities already joined; clicking sends a request (toast confirms); button shows “(pending)” after reload; duplicate request shows the already-pending error.
+
+### 3.3 My settings
+
+- [ ] Change Email / Change Password links route to the auth flows (covered by §1.4–1.5).
+
+### 3.4 My property
+
+- [ ] **List:** each property renders as a card; linked-users popup opens/closes; zero-property account shows the empty state with a working “Add New Property” action.
+- [ ] **Add property:** address challenge inside the modal validates and creates/links a property; claims/nav update after next token refresh or reload.
+- [ ] **Detail / assets / hazards / resources forms:** same dirty/save/undo behaviour as §3.2.
+- [ ] **My map (capture):** draw a point/line/polygon feature from a template; save persists (validate/upsert RPCs); reload shows the feature; edit + delete round-trip; merge of two same-template polygons produces one feature.
+- [ ] **Validation feedback:** drawing outside the property boundary or an invalid geometry surfaces the validation message rather than saving.
+
+### 3.5 Community map (`my-community/<community>/map`)
+
+- [ ] Map renders boundary + clustered address points + registered points; spinner overlay clears on ready.
+- [ ] Missing extent (e.g. community with no boundary) renders the “Map unavailable” empty state, not a blank page.
+
+### Section 3 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
+
+---
+
+## 4. KYNG coordinator
+
+Routes involved: `/kyng-coordinator`, `/kyng-coordinator/[kyng_area]`,
+`…/map`, `…/unregistered-addresses`, `…/user-admin`.
+
+> **Key domain rule:** a coordinator only sees areas present in their
+> `coordinates_kyng` claim; visiting another area’s URL must 403.
+
+### 4.1 Dashboard & area scoping
+
+- [ ] Coordinator with one area sees only that area in the sidebar; multi-area coordinators see each.
+- [ ] Direct navigation to a non-assigned `[kyng_area]` URL returns the 403 page.
+- [ ] A plain user (no `coordinates_kyng`) gets 403 on any `/kyng-coordinator` route.
+
+### 4.2 Area map
+
+- [ ] Map renders the area’s GeoJSON layers (`get_kyngs_geojson`); legend/layer toggles work; spinner clears.
+
+### 4.3 Unregistered addresses
+
+- [ ] Table lists unregistered properties for the area only; search/filter works; CSV download (if present) produces rows matching the table.
+
+### 4.4 User admin
+
+- [ ] Registered users for the area list correctly; contact details render; no users from other areas appear.
+
+### Section 4 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
+
+---
+
+## 5. Admin
+
+Routes involved: `/admin`, `/admin/community[/…]`, `/admin/site[/…]`,
+`/admin/emergency[/…]`, `/admin/users[/…]`.
+
+> **Key domain rule:** route authorization is derived from the URL path
+> (e.g. `/admin/users/kits` requires `admin.users.kits`, hierarchically). Test both a full
+> admin and a leaf-permission-only account where noted.
+
+### 5.1 Community management
+
+- [ ] Hub shows only communities the account may manage; guidelines copy matches features.
+- [ ] **Access requests:** with a pending request present, Approve creates the community profile (user sees the new community section on next load) and removes the request; Reject removes it without granting; both toast.
+- [ ] Information / events / workshops managers create + update entries; community map renders (blank-extent shows the empty state).
+
+### 5.2 Site administration
+
+- [ ] **Roles:** assignments and permissions pages list users/roles; granting a leaf permission (e.g. `admin.users.kits`) makes only that menu item + route accessible to that user.
+- [ ] **Data:** spatial data manager lists templates/fields; custom address manager loads the GNAF tile layer (endpoint requires sign-in — signed-out fetch of `/admin/site/data/addresses?z=…` returns 401).
+- [ ] **Profile requirements:** toggling required questions changes the onboarding completion banner for a test user.
+- [ ] **Messages:** site messages CRUD round-trips.
+
+### 5.3 Emergency
+
+- [ ] **Service map:** street picker adds all its properties; individual picker works; Show on Map renders boundaries, address/way points and captured feature layers with popups (address, phone, truck access, vulnerable residents, residents list); Clear resets; a selection with no geometry shows the “No mappable data” empty state; the `?ids=` URL is shareable.
+- [ ] **Reports:** street report and property report download PDFs with the expected properties.
+
+### 5.4 Users
+
+- [ ] **New users:** vetting table lists confirmed users pending action.
+- [ ] **Kits delivered:** table lists confirmed users without a kit date; “Mark delivered” with a chosen date removes the row (toast confirms); the user’s `kit_date` appears in auth metadata; a non-kits admin cannot invoke the action (403 / error toast).
+- [ ] **KYNG coordinators:** assign / update / end a coordinator; the user gains/loses the KYNG menu on next sign-in.
+
+### Section 5 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
+
+---
+
+## 6. Cross-cutting concerns
+
+### 6.1 Navigation
+
+- [ ] Navbar items follow auth state and permissions; active route is highlighted; footer links resolve.
+- [ ] Breadcrumbs render labels (not raw ids) for property and KYNG-area segments, and wrap on narrow screens.
+
+### 6.2 Route protection
+
+- [ ] Signed-out access to any `(protected)` route redirects to sign-in.
+- [ ] Permission-denied admin route renders the 403 page with contextual copy.
+
+### 6.3 Toasts / notifications
+
+- [ ] Success and error toasts appear top-of-stack, auto-dismiss, and are screen-reader announced (`aria-live`).
+
+### 6.4 Forms
+
+- [ ] Dirty-state alert, disabled Save when clean, spinner while submitting, error surfaced on failure — spot-check one form per section (3.2 table above).
+
+### 6.5 Accessibility
+
+- [ ] Keyboard-only pass: sidebar + drawer toggles, password reveal, dialogs (Escape cancels), skip/focus order sane.
+- [ ] Icon-only controls have accessible names (menu toggles, help panel, password eye).
+
+### 6.6 Responsive layout
+
+- [ ] At 375px: protected pages show the hamburger; the drawer opens/closes and closes on navigation; content has no horizontal scroll; maps remain usable (pan/zoom, popups).
+- [ ] At 768px and 1280px: sidebar rail collapse/expand persists across reloads (localStorage).
+
+### 6.7 Error pages
+
+- [ ] Unknown URL → styled 404 with “Return to Home”.
+- [ ] `/auth/error?error=otp_verification_failed` → styled auth error page with recovery links.
+- [ ] A thrown server error renders the sanitized message and inserts a row into `app_errors` (server source); a client-side error report round-trips via `/api/log-error` (client source).
+
+### Section 6 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
+
+---
+
+## 7. API endpoints (indirect / integration)
+
+- [ ] `/api/geoscape/[layerId]/tiles/... ` and `/metadata`: 401 signed out; tiles render signed in.
+- [ ] `/admin/site/data/addresses?z=…&x=…&y=…`: 401 signed out (Geoscape quota protection); GeoJSON signed in.
+- [ ] `/api/reports/rfs/street/[streetname]` and `/api/reports/rfs/properties/[ids]`: 401/403 without permission; PDF with it.
+- [ ] `/api/spatial-data-currency`: 401 signed out; `{ asAt }` signed in.
+- [ ] `/api/extend-session` + keepalive: extend the idle window (see §1.7).
+- [ ] `/api/cron`: 401 without the `CRON_SECRET` bearer; with it, refresh completes and logs.
+- [ ] `/api/log-error`: POST inserts an `app_errors` row; malformed JSON returns 400.
+
+### Section 7 run log
+
+| Date | Tester | Env | Build / commit | Result | Notes |
+| ---- | ------ | --- | -------------- | ------ | ----- |
+|      |        |     |                |        |       |
