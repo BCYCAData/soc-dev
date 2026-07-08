@@ -3,6 +3,8 @@ import type { Layer } from 'leaflet';
 import type {
 	CategoryStyle,
 	LayerConfig,
+	LineStyle,
+	PolygonStyle,
 	PointStyle as ConfigPointStyle
 } from '$lib/map/layers/schemas/layer-config.types';
 import {
@@ -167,6 +169,63 @@ export async function buildLeafletLayer(
 	}
 
 	return geoLayer;
+}
+
+export type LegendSymbol =
+	| { kind: 'point'; point: ConfigPointStyle }
+	| { kind: 'line'; line: LineStyle }
+	| { kind: 'polygon'; polygon: PolygonStyle };
+
+function firstCategorizedStyle(config: LayerConfig): CategoryStyle | undefined {
+	const cat = config.styling.categorized?.categories;
+	return cat ? Object.values(cat)[0] : undefined;
+}
+
+function dynamicLegendStyle(config: LayerConfig): ReturnType<NonNullable<typeof config.styling.styleFn>> | null {
+	if (!config.styling.styleFn) return null;
+	return config.styling.styleFn({
+		type: 'Feature',
+		properties: {},
+		geometry: { type: 'Point', coordinates: [0, 0] }
+	});
+}
+
+export function getLegendSymbol(config: LayerConfig): LegendSymbol {
+	const override = config.display?.legendSymbol;
+	const firstCategory = firstCategorizedStyle(config);
+	const dynamicStyle = config.styling.mode === 'dynamic' ? dynamicLegendStyle(config) : null;
+
+	if (isPoint(config.geometryType)) {
+		return {
+			kind: 'point',
+			point:
+				override?.point ??
+				firstCategory?.point ??
+				(dynamicStyle as ConfigPointStyle | null) ??
+				config.styling.base?.point ??
+				{}
+		};
+	}
+	if (isLine(config.geometryType)) {
+		return {
+			kind: 'line',
+			line:
+				override?.line ??
+				firstCategory?.line ??
+				(dynamicStyle as LineStyle | null) ??
+				config.styling.base?.line ??
+				{}
+		};
+	}
+	return {
+		kind: 'polygon',
+		polygon:
+			override?.polygon ??
+			firstCategory?.polygon ??
+			(dynamicStyle as PolygonStyle | null) ??
+			config.styling.base?.polygon ??
+			{}
+	};
 }
 
 /** Best-effort legend swatch colour for a layer, derived from its static style. */

@@ -23,7 +23,20 @@ export interface ControlPolicy {
 	scale?: ControlPosition | false;
 	legend?: ControlPosition | false;
 	layers?: ControlPosition | false;
+	addressSearch?: ControlPosition | false;
 	attribution?: boolean;
+}
+
+/** Searchable address entry used by the map address-search control. */
+export interface AddressSearchEntry {
+	id: string;
+	label: string;
+	keywords?: string[];
+	/** Optional point to highlight on the map after selection. */
+	highlightPoint?: [number, number];
+	/** Optional bounds to zoom to on selection. */
+	zoomBounds?: [[number, number], [number, number]];
+	zoomMax?: number;
 }
 
 /**

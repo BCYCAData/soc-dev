@@ -9,6 +9,16 @@ const NSW_AERIAL_URL =
 const NSW_STREETS_URL =
 	'https://maps.six.nsw.gov.au/arcgis/rest/services/public/NSW_Base_Map/MapServer/tile/{z}/{y}/{x}';
 
+function kyngAddressPointTooltipTemplate(feature: GeoJSON.Feature) {
+	const p = feature.properties ?? {};
+	return `
+		<strong>${escapeHtml(p['Address'] ?? '')}</strong><br>
+		<i>Type: </i> ${escapeHtml(p['Address Type'] ?? 'N/A')}<br>
+		<i>Principal Address Type: </i> ${escapeHtml(p['Principal Address Type'] ?? 'N/A')}<br>
+		<i>Address Point Type: </i> ${escapeHtml(p['Address Point Type'] ?? 'N/A')}
+	`;
+}
+
 /**
  * KYNG coordinator map profile — aerial (default) + street basemaps, mirroring
  * the v1 `streetAerialBaseLayer` + `kyngCoordinatorKyngAreaMapConfig`.
@@ -31,7 +41,13 @@ export const kyngMapProfile: MapProfile = {
 			attribution: NSW_SS_BASEMAP_ATTRIBUTION
 		}
 	],
-	controls: { scale: 'bottomleft', legend: 'bottomright', layers: 'topright', attribution: true },
+	controls: {
+		scale: 'bottomleft',
+		legend: 'bottomright',
+		layers: 'topright',
+		addressSearch: 'topleft',
+		attribution: true
+	},
 	attribution: NSW_SS_DATA_ATTRIBUTION,
 	showDataCurrency: true,
 	view: { zoomSnap: 0.25, zoomable: true, defaultZoom: 13 }
@@ -52,7 +68,12 @@ export const kyngAreaLayer: LayerConfig = {
 		base: { polygon: { fillColor: 'transparent', fillOpacity: 0, weight: 5, color: 'magenta' } }
 	},
 	interaction: {},
-	display: { defaultVisible: true }
+	display: {
+		defaultVisible: true,
+		legendSymbol: {
+			polygon: { fillColor: 'transparent', fillOpacity: 0, weight: 5, color: 'magenta' }
+		}
+	}
 };
 
 /** Property areas — unique fill colour per Principal Address Site OID
@@ -76,7 +97,12 @@ export const kyngPropertyAreasLayer: LayerConfig = {
 		})
 	},
 	interaction: {},
-	display: { defaultVisible: true }
+	display: {
+		defaultVisible: true,
+		legendSymbol: {
+			polygon: { fillColor: 'transparent', fillOpacity: 0, weight: 1, color: 'black' }
+		}
+	}
 };
 
 /** Proway lines — steelblue (v1 kyngProwayGeoJsonOptions, width→weight). */
@@ -88,10 +114,14 @@ export const kyngProwayLinesLayer: LayerConfig = {
 	source: { rpcFunction: 'get_kyngs_geojson' },
 	styling: {
 		mode: 'static',
-		base: { line: { color: 'steelblue', weight: 1, lineCap: 'round', lineJoin: 'round' } }
+		base: { line: { color: '#38bdf8', weight: 1.5, lineCap: 'round', lineJoin: 'round' } }
 	},
 	interaction: {},
-	display: { defaultVisible: false }
+	display: {
+		defaultVisible: true,
+		scaleLineMaxMeters: 105,
+		legendSymbol: { line: { color: '#38bdf8', weight: 1.5, lineCap: 'round', lineJoin: 'round' } }
+	}
 };
 
 /** Way points — red circle markers (v1 kyngWayPointsGeoJsonOptions). */
@@ -105,8 +135,17 @@ export const kyngWayPointsLayer: LayerConfig = {
 		mode: 'static',
 		base: { point: { radius: 3, fillColor: 'red', color: 'black', weight: 1, fillOpacity: 1 } }
 	},
-	interaction: {},
-	display: { defaultVisible: false }
+	interaction: {
+		tooltip: {
+			enabled: true,
+			template: kyngAddressPointTooltipTemplate
+		}
+	},
+	display: {
+		defaultVisible: true,
+		scaleLineMaxMeters: 105,
+		legendSymbol: { point: { radius: 3, fillColor: 'red', color: 'black', weight: 1, fillOpacity: 1 } }
+	}
 };
 
 /** Address points — grouped divIcon shapes by Address Point Type
@@ -140,17 +179,7 @@ export const kyngAddressPointsLayer: LayerConfig = {
 	interaction: {
 		tooltip: {
 			enabled: true,
-			template: (feature) => {
-				const p = feature.properties ?? {};
-				// Values come from cached NSW SS data — escape before interpolating into
-				// tooltip HTML (XSS defense-in-depth).
-				return `
-					<strong>${escapeHtml(p['Address'] ?? '')}</strong><br>
-					<i>Type: </i> ${escapeHtml(p['Address Type'] ?? 'N/A')}<br>
-					<i>Principal Address Type: </i> ${escapeHtml(p['Principal Address Type'] ?? 'N/A')}<br>
-					<i>Address Point Type: </i> ${escapeHtml(p['Address Point Type'] ?? 'N/A')}
-				`;
-			}
+			template: (feature) => kyngAddressPointTooltipTemplate(feature)
 		}
 	},
 	display: { defaultVisible: true }

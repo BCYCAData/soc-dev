@@ -10,8 +10,23 @@
 		type MapLayerDescriptor,
 		type MapLayerRegistry
 	} from '$lib/map/map-types';
-	import { buildLeafletLayer, legendColor } from '$lib/map/render/build-layer';
-	import type { MapProfile, MapViewTarget, ResolvedLayer } from '$lib/map/profiles/types';
+	import { buildLeafletLayer, getLegendSymbol } from '$lib/map/render/build-layer';
+	import type {
+		AddressSearchEntry,
+		MapProfile,
+		MapViewTarget,
+		ResolvedLayer
+	} from '$lib/map/profiles/types';
+
+	interface AddressSearchConfig {
+		entries: AddressSearchEntry[];
+		placeholder?: string;
+		minQueryLength?: number;
+		maxResults?: number;
+		position?: L.ControlPosition;
+		noResultsText?: string;
+		onSelect?: (entry: AddressSearchEntry, map: L.Map) => void;
+	}
 
 	interface Props {
 		profile: MapProfile;
@@ -20,6 +35,7 @@
 		onReady?: (map: L.Map) => void;
 		/** Enable Leaflet.Editable (drawing/geometry editing) on the map. */
 		editable?: boolean;
+		addressSearch?: AddressSearchConfig;
 		class?: string;
 		children?: Snippet;
 	}
@@ -30,6 +46,7 @@
 		layers,
 		onReady,
 		editable = false,
+		addressSearch,
 		class: className = '',
 		children
 	}: Props = $props();
@@ -42,7 +59,37 @@
 	// Non-reactive bookkeeping: layer id → the data reference last built from.
 	// eslint-disable-next-line svelte/prefer-svelte-reactivity -- intentionally non-reactive
 	const builtFrom = new Map<string, GeoJSON.FeatureCollection | null>();
+	const layerConfigs = new Map<string, ResolvedLayer['config']>();
 	let layersControl: L.Control.Layers | undefined;
+	let addressSearchControl: L.Control | undefined;
+	let addressPointHighlightLayer: L.Layer | undefined;
+	let legendContainer: HTMLDivElement | undefined;
+	let updateLegendVisibility: (() => void) | undefined;
+	let highlightedZoom = $state<number | undefined>(undefined);
+	let mapZoom = $state<number | undefined>(undefined);
+	let clearHighlightOnZoomChange: (() => void) | undefined;
+
+	function normalizeSearchText(value: string) {
+		return value.replace(/\s+/g, ' ').trim().toLowerCase();
+	}
+
+	function currentScaleLineMeters(m: L.Map): number {
+		const { y } = m.getSize();
+		const midY = y / 2;
+		const left = m.containerPointToLatLng([0, midY]);
+		const right = m.containerPointToLatLng([100, midY]);
+		return m.distance(left, right);
+	}
+
+	function isLayerVisibleAtCurrentZoom(config: ResolvedLayer['config'], m: L.Map): boolean {
+		const zoom = mapZoom ?? m.getZoom();
+		if (config.display?.minZoom !== undefined && zoom < config.display.minZoom) return false;
+		if (config.display?.maxZoom !== undefined && zoom > config.display.maxZoom) return false;
+		if (config.display?.scaleLineMaxMeters !== undefined) {
+			if (currentScaleLineMeters(m) > config.display.scaleLineMaxMeters) return false;
+		}
+		return true;
+	}
 
 	// ── Typed registration API (kept on the v2 Symbol context) ──
 	function registerLayer(layer: MapLayerDescriptor) {
@@ -118,15 +165,274 @@
 		const legend = new L.Control({ position });
 		legend.onAdd = () => {
 			const div = L.DomUtil.create('div', 'mapview-legend');
+			legendContainer = div;
 			for (const { config } of layers) {
+				const symbol = getLegendSymbol(config);
 				const row = L.DomUtil.create('div', 'mapview-legend__row', div);
+				row.dataset.layerId = config.id;
 				const swatch = L.DomUtil.create('span', 'mapview-legend__swatch', row);
-				swatch.style.background = legendColor(config);
+				const glyph = L.DomUtil.create(
+					'span',
+					`mapview-legend__glyph mapview-legend__glyph--${symbol.kind}`,
+					swatch
+				);
+				if (symbol.kind === 'point') {
+					glyph.style.background = symbol.point.fillColor ?? '#3388ff';
+					glyph.style.borderColor = symbol.point.color ?? 'rgba(0, 0, 0, 0.5)';
+					glyph.style.borderWidth = `${symbol.point.weight ?? 1}px`;
+					if (symbol.point.shape && symbol.point.shape !== 'circle') {
+						glyph.classList.add(`mapview-legend__glyph--${symbol.point.shape}`);
+					}
+				} else if (symbol.kind === 'line') {
+					glyph.style.background = symbol.line.color ?? '#3388ff';
+					glyph.style.height = `${Math.max(symbol.line.weight ?? 2, 2)}px`;
+				} else {
+					const polygon = symbol.polygon;
+					glyph.style.background = polygon.fillColor ?? 'transparent';
+					glyph.style.borderColor = polygon.color ?? '#3388ff';
+					glyph.style.borderWidth = `${polygon.weight ?? 1}px`;
+					if ((polygon.fillOpacity ?? 1) === 0) {
+						glyph.style.background = 'transparent';
+					}
+				}
 				row.appendChild(document.createTextNode(config.name));
 			}
+			updateLegendVisibility = () => {
+				if (!legendContainer) return;
+				for (const row of legendContainer.querySelectorAll<HTMLElement>('.mapview-legend__row')) {
+					const layerId = row.dataset.layerId;
+					const config = layerId ? layerConfigs.get(layerId) : undefined;
+					const shouldShow =
+						!!config &&
+						(config.display?.defaultVisible ?? true) &&
+						isLayerVisibleAtCurrentZoom(config, m);
+						row.style.display = shouldShow ? 'flex' : 'none';
+				}
+			};
+			updateLegendVisibility();
 			return div;
 		};
 		legend.addTo(m);
+	}
+
+	function buildAddressSearchControl(
+		L: typeof import('leaflet'),
+		m: L.Map,
+		position: L.ControlPosition
+	) {
+		function clearAddressPointHighlight() {
+			if (clearHighlightOnZoomChange) {
+				m.off('zoomend', clearHighlightOnZoomChange);
+				clearHighlightOnZoomChange = undefined;
+			}
+			if (addressPointHighlightLayer) {
+				m.removeLayer(addressPointHighlightLayer);
+				addressPointHighlightLayer = undefined;
+			}
+			highlightedZoom = undefined;
+		}
+
+		function highlightAddressPoint(entry: AddressSearchEntry) {
+			if (!entry.highlightPoint) return;
+			clearAddressPointHighlight();
+			addressPointHighlightLayer = L.circleMarker(entry.highlightPoint, {
+				radius: 10,
+				color: '#f59e0b',
+				weight: 3,
+				fillColor: '#f59e0b',
+				fillOpacity: 0.2,
+				pane: 'markerPane'
+			});
+			addressPointHighlightLayer.addTo(m);
+			if ('bringToFront' in addressPointHighlightLayer) {
+				(addressPointHighlightLayer as L.Path).bringToFront();
+			}
+		}
+
+		function lockHighlightToCurrentZoom() {
+			highlightedZoom = m.getZoom();
+			clearHighlightOnZoomChange = () => {
+				if (highlightedZoom === undefined) return;
+				if (m.getZoom() !== highlightedZoom) clearAddressPointHighlight();
+			};
+			m.on('zoomend', clearHighlightOnZoomChange);
+		}
+
+		const control = new L.Control({ position });
+		let onDocumentClick: ((event: MouseEvent) => void) | undefined;
+		control.onAdd = () => {
+			const container = L.DomUtil.create('div', 'mapview-address-search');
+			container.setAttribute('role', 'search');
+			container.setAttribute('aria-label', 'Address search');
+			container.classList.add('is-collapsed');
+
+			const toggle = L.DomUtil.create('button', 'mapview-address-search__toggle', container);
+			toggle.setAttribute('type', 'button');
+			toggle.setAttribute('aria-label', 'Toggle address search');
+			toggle.setAttribute('aria-expanded', 'false');
+			const glyph = L.DomUtil.create('span', 'mapview-address-search__glyph', toggle);
+			glyph.setAttribute('aria-hidden', 'true');
+
+			const panel = L.DomUtil.create('div', 'mapview-address-search__panel', container);
+			const topRow = L.DomUtil.create('div', 'mapview-address-search__top', panel);
+			const input = L.DomUtil.create('input', 'mapview-address-search__input', topRow);
+			input.setAttribute('type', 'text');
+			input.setAttribute('placeholder', addressSearch?.placeholder ?? 'Search address');
+			input.setAttribute('aria-label', 'Search address');
+
+			const clear = L.DomUtil.create('button', 'mapview-address-search__clear', topRow);
+			clear.setAttribute('type', 'button');
+			clear.setAttribute('aria-label', 'Clear search');
+			clear.textContent = 'Clear';
+
+			const results = L.DomUtil.create('ul', 'mapview-address-search__results', panel);
+			results.setAttribute('role', 'listbox');
+
+			L.DomEvent.disableClickPropagation(container);
+			L.DomEvent.disableScrollPropagation(container);
+
+			let filtered: AddressSearchEntry[] = [];
+			let selectedIndex = -1;
+			let collapsed = true;
+
+			const minQueryLength = () => addressSearch?.minQueryLength ?? 2;
+			const maxResults = () => addressSearch?.maxResults ?? 12;
+			const allEntries = () => addressSearch?.entries ?? [];
+
+			function setCollapsed(next: boolean) {
+				collapsed = next;
+				container.classList.toggle('is-collapsed', collapsed);
+				toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+				if (collapsed) {
+					results.style.display = 'none';
+				} else {
+					input.focus();
+				}
+			}
+
+			function select(entry: AddressSearchEntry) {
+				input.value = entry.label;
+				highlightAddressPoint(entry);
+				if (entry.zoomBounds) {
+					m.fitBounds(entry.zoomBounds, {
+						padding: [24, 24],
+						maxZoom: entry.zoomMax ?? 18
+					});
+					m.once('moveend', lockHighlightToCurrentZoom);
+				} else {
+					lockHighlightToCurrentZoom();
+				}
+				addressSearch?.onSelect?.(entry, m);
+				results.style.display = 'none';
+				results.innerHTML = '';
+				selectedIndex = -1;
+				setCollapsed(true);
+			}
+
+			function renderResults() {
+				results.innerHTML = '';
+				if (!filtered.length) {
+					const noResult = L.DomUtil.create('li', 'mapview-address-search__item', results);
+					noResult.textContent = addressSearch?.noResultsText ?? 'No matching addresses';
+					results.style.display = 'block';
+					return;
+				}
+				for (const [index, entry] of filtered.entries()) {
+					const item = L.DomUtil.create('li', 'mapview-address-search__item', results);
+					if (index === selectedIndex) item.classList.add('is-active');
+					const button = L.DomUtil.create('button', 'mapview-address-search__option', item);
+					button.setAttribute('type', 'button');
+					button.setAttribute('role', 'option');
+					button.textContent = entry.label;
+					button.addEventListener('click', () => select(entry));
+				}
+				results.style.display = 'block';
+			}
+
+			function runFilter() {
+				const query = normalizeSearchText(input.value);
+				if (query.length < minQueryLength()) {
+					results.style.display = 'none';
+					results.innerHTML = '';
+					selectedIndex = -1;
+					return;
+				}
+				filtered = allEntries()
+					.filter((entry) => {
+						const haystack = normalizeSearchText([entry.label, ...(entry.keywords ?? [])].join(' '));
+						return haystack.includes(query);
+					})
+					.slice(0, maxResults());
+				selectedIndex = filtered.length ? 0 : -1;
+				renderResults();
+			}
+
+			input.addEventListener('input', runFilter);
+			input.addEventListener('keydown', (event) => {
+				if (event.key === 'ArrowDown') {
+					event.preventDefault();
+					if (!filtered.length) return;
+					selectedIndex = Math.min(selectedIndex + 1, filtered.length - 1);
+					renderResults();
+					return;
+				}
+				if (event.key === 'ArrowUp') {
+					event.preventDefault();
+					if (!filtered.length) return;
+					selectedIndex = Math.max(selectedIndex - 1, 0);
+					renderResults();
+					return;
+				}
+				if (event.key === 'Enter') {
+					event.preventDefault();
+					const query = normalizeSearchText(input.value);
+					const exactMatches = allEntries().filter(
+						(entry) => normalizeSearchText(entry.label) === query
+					);
+					if (exactMatches.length === 1) {
+						select(exactMatches[0]);
+						return;
+					}
+					if (selectedIndex < 0 || selectedIndex >= filtered.length) return;
+					select(filtered[selectedIndex]);
+					return;
+				}
+				if (event.key === 'Escape') {
+					event.preventDefault();
+					input.value = '';
+					results.style.display = 'none';
+					results.innerHTML = '';
+					selectedIndex = -1;
+				}
+			});
+
+			clear.addEventListener('click', () => {
+				input.value = '';
+				results.style.display = 'none';
+				results.innerHTML = '';
+				selectedIndex = -1;
+				input.focus();
+			});
+
+			toggle.addEventListener('click', () => {
+				setCollapsed(!collapsed);
+			});
+
+			onDocumentClick = (event: MouseEvent) => {
+				if (!container.contains(event.target as Node)) {
+					setCollapsed(true);
+				}
+			};
+			document.addEventListener('click', onDocumentClick);
+
+			return container;
+		};
+		control.onRemove = () => {
+			clearAddressPointHighlight();
+			if (onDocumentClick) document.removeEventListener('click', onDocumentClick);
+		};
+		control.addTo(m);
+		return control;
 	}
 
 	/** Bind Leaflet to the DOM node: create the map, base layers, controls and
@@ -158,6 +464,10 @@
 				keyboard: interactive,
 				editable
 			} as L.MapOptions);
+			mapZoom = m.getZoom();
+			m.on('zoomend', () => {
+				mapZoom = m.getZoom();
+			});
 
 			// Base layers
 			const baseLayersForControl: Record<string, L.Layer> = {};
@@ -190,6 +500,10 @@
 			if (profile.controls.legend) {
 				buildLegend(L, m, profile.controls.legend);
 			}
+			const searchControlPosition = addressSearch?.position ?? profile.controls.addressSearch;
+			if (searchControlPosition && addressSearch) {
+				addressSearchControl = buildAddressSearchControl(L, m, searchControlPosition);
+			}
 
 			// Data-source attribution (distinct from basemap-tile attribution). Required by
 			// the NSW SS CC BY 4.0 licence; the currency date is appended once fetched.
@@ -205,10 +519,16 @@
 
 		return () => {
 			cancelled = true;
+			legendContainer = undefined;
+			updateLegendVisibility = undefined;
 			layersControl = undefined;
+			addressSearchControl?.remove();
+			addressSearchControl = undefined;
 			builtFrom.clear();
+			layerConfigs.clear();
 			map?.remove();
 			map = undefined;
+			mapZoom = undefined;
 			leaflet = undefined;
 			for (const id of Object.keys(registry)) delete registry[id];
 		};
@@ -226,6 +546,8 @@
 			// Diff against `builtFrom` (non-reactive) so this effect never reads the
 			// `registry` $state it writes to — avoiding a self-triggering re-run.
 			const desiredIds = new Set(desired.map((d) => d.config.id));
+			layerConfigs.clear();
+			for (const rl of desired) layerConfigs.set(rl.config.id, rl.config);
 			for (const id of [...builtFrom.keys()]) {
 				if (!desiredIds.has(id)) {
 					unregisterLayer(id);
@@ -242,16 +564,31 @@
 					id,
 					name: rl.config.name,
 					type: 'geojson',
-					visible: rl.config.display?.defaultVisible ?? true,
+					visible:
+						(rl.config.display?.defaultVisible ?? true) && isLayerVisibleAtCurrentZoom(rl.config, m),
 					leafletLayer
 				});
 				builtFrom.set(id, rl.data);
 			}
+			updateLegendVisibility?.();
 		})();
 
 		return () => {
 			active = false;
 		};
+	});
+
+	$effect(() => {
+		const m = map;
+		const zoom = mapZoom;
+		if (!m || zoom === undefined) return;
+
+		for (const [id, config] of layerConfigs.entries()) {
+			updateLayer(id, {
+				visible: (config.display?.defaultVisible ?? true) && isLayerVisibleAtCurrentZoom(config, m)
+			});
+		}
+		updateLegendVisibility?.();
 	});
 </script>
 
@@ -291,10 +628,182 @@
 		gap: 6px;
 	}
 	:global(.mapview-legend__swatch) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 18px;
+		height: 14px;
+		flex: 0 0 18px;
+	}
+	:global(.mapview-legend__glyph) {
 		display: inline-block;
-		width: 12px;
+		box-sizing: border-box;
+	}
+	:global(.mapview-legend__glyph--polygon) {
+		width: 16px;
 		height: 12px;
-		border: 1px solid rgba(0, 0, 0, 0.4);
+		border-style: solid;
 		border-radius: 2px;
+	}
+	:global(.mapview-legend__glyph--line) {
+		width: 16px;
+		border-radius: 999px;
+	}
+	:global(.mapview-legend__glyph--point) {
+		width: 10px;
+		height: 10px;
+		border-style: solid;
+		border-radius: 999px;
+	}
+	:global(.mapview-legend__glyph--square) {
+		border-radius: 2px;
+	}
+	:global(.mapview-legend__glyph--diamond) {
+		transform: rotate(45deg);
+		border-radius: 1px;
+	}
+	:global(.mapview-legend__glyph--triangle) {
+		width: 0;
+		height: 0;
+		background: transparent !important;
+		border-left: 6px solid transparent;
+		border-right: 6px solid transparent;
+		border-bottom: 10px solid currentColor;
+	}
+	:global(.mapview-address-search) {
+		min-width: 280px;
+		max-width: min(90vw, 360px);
+		background: var(--color-surface-100);
+		color: var(--color-surface-900);
+		padding: 8px;
+		border-radius: 6px;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+		display: flex;
+		align-items: flex-start;
+		gap: 6px;
+	}
+	:global(.mapview-address-search.is-collapsed) {
+		min-width: 0;
+		max-width: none;
+		padding: 6px;
+	}
+	:global(.dark .mapview-address-search) {
+		background: var(--color-surface-800);
+		color: var(--color-surface-50);
+	}
+	:global(.mapview-address-search__toggle) {
+		width: 32px;
+		height: 32px;
+		border-radius: 4px;
+		border: 1px solid color-mix(in srgb, var(--color-surface-700) 35%, transparent);
+		background: var(--color-surface-200);
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+	}
+	:global(.dark .mapview-address-search__toggle) {
+		background: var(--color-surface-700);
+	}
+	:global(.mapview-address-search__glyph) {
+		position: relative;
+		width: 14px;
+		height: 14px;
+	}
+	:global(.mapview-address-search__glyph::before) {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border: 2px solid currentColor;
+		border-radius: 50%;
+	}
+	:global(.mapview-address-search__glyph::after) {
+		content: '';
+		position: absolute;
+		width: 6px;
+		height: 2px;
+		background: currentColor;
+		bottom: -1px;
+		right: -3px;
+		transform: rotate(45deg);
+		transform-origin: left center;
+	}
+	:global(.mapview-address-search__panel) {
+		flex: 1;
+		min-width: 0;
+	}
+	:global(.mapview-address-search.is-collapsed .mapview-address-search__panel) {
+		display: none;
+	}
+	:global(.mapview-address-search__top) {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+	:global(.mapview-address-search__input) {
+		flex: 1;
+		padding: 6px 8px;
+		border: 1px solid color-mix(in srgb, var(--color-surface-700) 35%, transparent);
+		border-radius: 4px;
+		background: var(--color-surface-50);
+		color: inherit;
+	}
+	:global(.dark .mapview-address-search__input) {
+		background: var(--color-surface-900);
+	}
+	:global(.mapview-address-search__clear) {
+		padding: 6px 8px;
+		font-size: 0.75rem;
+		border-radius: 4px;
+		border: 1px solid color-mix(in srgb, var(--color-surface-700) 35%, transparent);
+		background: var(--color-surface-200);
+		cursor: pointer;
+	}
+	:global(.dark .mapview-address-search__clear) {
+		background: var(--color-surface-700);
+		color: var(--color-surface-50);
+	}
+	:global(.mapview-address-search__results) {
+		list-style: none;
+		margin: 6px 0 0;
+		padding: 0;
+		max-height: 220px;
+		overflow: auto;
+		display: none;
+		border: 1px solid color-mix(in srgb, var(--color-surface-700) 25%, transparent);
+		border-radius: 4px;
+		background: var(--color-surface-50);
+	}
+	:global(.dark .mapview-address-search__results) {
+		background: var(--color-surface-900);
+	}
+	:global(.mapview-address-search__item) {
+		margin: 0;
+	}
+	:global(.mapview-address-search__option) {
+		display: block;
+		width: 100%;
+		text-align: left;
+		padding: 8px;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+	}
+	:global(.mapview-address-search__item + .mapview-address-search__item) {
+		border-top: 1px solid color-mix(in srgb, var(--color-surface-700) 20%, transparent);
+	}
+	:global(.mapview-address-search__item.is-active .mapview-address-search__option) {
+		background: color-mix(in srgb, var(--color-primary-500) 22%, transparent);
+	}
+	:global(.leaflet-control-attribution) {
+		max-width: min(60vw, 460px);
+		white-space: normal;
+		line-height: 1.35;
+		text-wrap: balance;
+	}
+	:global(.leaflet-control-attribution a) {
+		word-break: break-word;
 	}
 </style>

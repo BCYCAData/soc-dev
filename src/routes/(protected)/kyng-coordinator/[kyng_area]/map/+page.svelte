@@ -11,7 +11,8 @@
 		kyngWayPointsLayer,
 		kyngAddressPointsLayer
 	} from '$lib/map/profiles/kyng';
-	import type { MapViewTarget, ResolvedLayer } from '$lib/map/profiles/types';
+	import type { AddressSearchEntry, MapViewTarget, ResolvedLayer } from '$lib/map/profiles/types';
+	import { buildKyngAddressSearchEntries } from '$lib/map/search/kyng-address-search';
 
 	import type { PageData } from './$types';
 
@@ -22,6 +23,44 @@
 	let { data }: Props = $props();
 
 	const kyngGeoJsonData = $derived(data.kyngGeoJsonData);
+
+	function getPropertyString(
+		properties: GeoJSON.GeoJsonProperties | null | undefined,
+		key: string
+	): string {
+		const value = properties?.[key];
+		return value === null || value === undefined ? '' : String(value);
+	}
+
+	function enrichWayPointsWithAddressPointProps(
+		wayPoints: GeoJSON.FeatureCollection | null,
+		addressPoints: GeoJSON.FeatureCollection | null
+	): GeoJSON.FeatureCollection | null {
+		if (!wayPoints?.features?.length || !addressPoints?.features?.length) return wayPoints;
+
+		const addressPointByOid = new Map<string, GeoJSON.GeoJsonProperties>();
+		for (const feature of addressPoints.features) {
+			const oid = getPropertyString(feature.properties, 'Address Point OID');
+			if (!oid) continue;
+			addressPointByOid.set(oid, feature.properties ?? {});
+		}
+
+		return {
+			...wayPoints,
+			features: wayPoints.features.map((feature) => {
+				const waypointAddressPointOid = getPropertyString(feature.properties, 'Address Point OID');
+				const addressPointProps = addressPointByOid.get(waypointAddressPointOid);
+				if (!addressPointProps) return feature;
+				return {
+					...feature,
+					properties: {
+						...feature.properties,
+						...addressPointProps
+					}
+				};
+			})
+		};
+	}
 
 	// View: explicit lat/lng/zoom search params win; otherwise fit the area bounds.
 	const view = $derived.by<MapViewTarget>(() => {
@@ -38,9 +77,22 @@
 		{ config: kyngAreaLayer, data: kyngGeoJsonData.kyngArea },
 		{ config: kyngPropertyAreasLayer, data: kyngGeoJsonData.propertyAreas },
 		{ config: kyngProwayLinesLayer, data: kyngGeoJsonData.prowayLines },
-		{ config: kyngWayPointsLayer, data: kyngGeoJsonData.wayPoints },
+		{
+			config: kyngWayPointsLayer,
+			data: enrichWayPointsWithAddressPointProps(
+				kyngGeoJsonData.wayPoints,
+				kyngGeoJsonData.addressPoints
+			)
+		},
 		{ config: kyngAddressPointsLayer, data: kyngGeoJsonData.addressPoints }
 	]);
+
+	const addressSearchEntries = $derived.by<AddressSearchEntry[]>(() =>
+		buildKyngAddressSearchEntries({
+			propertyAreas: kyngGeoJsonData.propertyAreas,
+			addressPoints: kyngGeoJsonData.addressPoints
+		})
+	);
 
 	let mapLoaded = $state(false);
 </script>
@@ -51,7 +103,19 @@
 
 {#if kyngGeoJsonData}
 	<div class="map-container mx-auto flex w-5/6 flex-col">
-		<MapView profile={kyngMapProfile} {view} {layers} onReady={() => (mapLoaded = true)}>
+		<MapView
+			profile={kyngMapProfile}
+			{view}
+			{layers}
+			addressSearch={{
+				entries: addressSearchEntries,
+				placeholder: 'Search property address',
+				minQueryLength: 2,
+				maxResults: 12,
+				noResultsText: 'No matching property address'
+			}}
+			onReady={() => (mapLoaded = true)}
+		>
 			{#if !mapLoaded}
 				<div class="spinner-overlay">
 					<Spinner size="50" />

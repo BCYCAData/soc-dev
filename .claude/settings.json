@@ -1,0 +1,13 @@
+{
+	"permissions": {
+		"allow": [
+			"mcp__supabase-newprod__execute_sql",
+			"mcp__supabase-newprod__apply_migration",
+			"mcp__supabase-newprod__list_migrations",
+			"mcp__supabase-newprod__generate_typescript_types",
+			"Bash(npx prettier *)",
+			"Bash(npx eslint *)",
+			"Bash(echo \"eslint-exit: $?\")"
+		]
+	}
+}

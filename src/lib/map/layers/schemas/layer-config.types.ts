@@ -45,8 +45,16 @@ export interface LayerConfig {
 		defaultVisible?: boolean;
 		minZoom?: number;
 		maxZoom?: number;
+			/** Hide the layer until the current ~100px map scale is at or below this distance in metres. */
+			scaleLineMaxMeters?: number;
 		pane?: string;
 		zIndex?: number;
+		/** Optional explicit legend symbol override when the default swatch is insufficient. */
+		legendSymbol?: {
+			point?: PointStyle;
+			line?: LineStyle;
+			polygon?: PolygonStyle;
+		};
 		/** Wrap point features in a Leaflet.markercluster group (dense layers). */
 		cluster?: boolean;
 	};
