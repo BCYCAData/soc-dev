@@ -11,11 +11,12 @@ This project uses an AI-assisted development system for design documentation, co
 ## Before Responding to Implementation Questions
 
 1. **Check the repo design docs first**: `docs/` in this repository is the
-   source of truth (database.md, gis-mapping-strategy.md,
-   styling-conventions.md, session-management-implementation-plan.md,
-   user-testing-checklist.md, cutover-checklist.md).
+   source of truth. It is organised into `docs/design/` (database.md,
+   gis-mapping.md, auth-and-session.md, styling-conventions.md), `docs/testing/`
+   (user-testing-checklist.md, cutover-checklist.md), and `docs/setup/`
+   (mcp-setup.md). See `docs/README.md` for the index.
 2. **Repo conventions beat shared conventions**: `.prettierrc`, `eslint.config`,
-   and `docs/styling-conventions.md` are authoritative. The shared
+   and `docs/design/styling-conventions.md` are authoritative. The shared
    `~/ai-dev-system/core/conventions/` docs are written for a different project
    (Skeleton v4 / bendev theme) — treat them as background only.
 3. **Reference domain knowledge**: `~/ai-dev-system/domains/community-environmental-management/`

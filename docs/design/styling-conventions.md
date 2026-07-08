@@ -1,8 +1,8 @@
 # Styling Conventions
 
 This project uses **Skeleton UI v3** (`@skeletonlabs/skeleton` + `@skeletonlabs/skeleton-svelte`)
-on **Tailwind v4**, with a custom theme (`socTheme`) defined in [`soc-theme.css`](../soc-theme.css)
-and global styles in [`src/app.css`](../src/app.css).
+on **Tailwind v4**, with a custom theme (`socTheme`) defined in [`soc-theme.css`](../../soc-theme.css)
+and global styles in [`src/app.css`](../../src/app.css).
 
 Goal: consistent, simple, maintainable styling. Prefer **theme tokens + Skeleton presets** over raw
 Tailwind palette colors and bespoke CSS. The guardrail `npm run lint:styles` (chained into
@@ -27,7 +27,7 @@ For text/icons on a colored fill, use the contrast tokens: `text-primary-contras
 
 ### Dark mode → Color Pairings
 
-We use the `.dark` selector strategy (toggled by [`src/stores/mode.svelte.ts`](../src/stores/mode.svelte.ts)).
+We use the `.dark` selector strategy (toggled by [`src/stores/mode.svelte.ts`](../../src/stores/mode.svelte.ts)).
 **Do not write `dark:` variants.** Use Skeleton Color Pairings, which resolve via CSS `light-dark()`:
 
 ```html
@@ -54,7 +54,7 @@ Sizes: `btn-sm`, `btn-base` (default), `btn-lg`.
 
 ### Shared presets (defined in `src/app.css`)
 
-- `.preset-nav-link` / `.preset-nav-link-surface` — top-nav links (see [`Navbar.svelte`](../src/components/page/navigation/Navbar.svelte)).
+- `.preset-nav-link` / `.preset-nav-link-surface` — top-nav links (see [`Navbar.svelte`](../../src/components/page/navigation/Navbar.svelte)).
 - `.preset-chip-token` — removable selection chips / tags.
 
 Add new reusable combinations as custom presets in `src/app.css` under `@layer components`, named
@@ -64,7 +64,7 @@ Add new reusable combinations as custom presets in `src/app.css` under `@layer c
 
 Use the skeleton-svelte **`Modal`** component (this version does **not** have the docs' `Dialog`/`Portal`
 compound API). For an externally-controlled modal, omit the `trigger` snippet and drive `open` /
-`onOpenChange`. See [`ConfirmDialogue.svelte`](../src/components/page/modals/ConfirmDialogue.svelte).
+`onOpenChange`. See [`ConfirmDialogue.svelte`](../../src/components/page/modals/ConfirmDialogue.svelte).
 
 ## Don't
 

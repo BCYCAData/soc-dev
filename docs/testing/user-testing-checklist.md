@@ -22,7 +22,7 @@
 - **Expected** — the observable, user-visible result (URL, message, redirect, UI state).
 - Test both the **happy path** and the **failure/edge paths** for every interaction.
 - Where a flow sends email, use a real inbox you control (the dev allow-list gates which
-  addresses can sign up — see [auth-system.md](auth-system.md)).
+  addresses can sign up — see [auth-and-session.md](../design/auth-and-session.md)).
 
 ---
 
@@ -261,7 +261,7 @@ Routes involved:
 ### 1.7 Session lifetime
 
 > Code: `SessionTimeoutWarning.svelte`, `/api/extend-session`. Full policy and the
-> as-built reconciliation are in [session-management-policy.md](session-management-policy.md).
+> as-built reconciliation are in [auth-and-session.md](../design/auth-and-session.md#session-lifetime--auto-logout).
 >
 > ⚠️ **Implementation gap.** The role-scoped **idle timeout** + **absolute cap** policy
 > below is **🚧 not yet implemented**. What ships today is a single, global **access-token
@@ -281,7 +281,7 @@ Routes involved:
 
 #### 1.7.B Policy target — role-scoped idle + absolute cap (✅ implemented, ⏳ pending manual test)
 
-> Target thresholds (per [session-management-policy.md](session-management-policy.md)).
+> Target thresholds (per [auth-and-session.md](../design/auth-and-session.md#session-lifetime--auto-logout)).
 > The feature is built (hooks enforcement, `sessionPolicy`, reworked `SessionTimeoutWarning`,
 > `/api/session/keepalive`) and passes type/build checks; these boxes track **manual
 > verification**, still to be done. **Exception: B.7 (unsaved work) is not yet implemented** —

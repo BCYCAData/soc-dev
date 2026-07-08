@@ -38,6 +38,7 @@
 	): GeoJSON.FeatureCollection | null {
 		if (!wayPoints?.features?.length || !addressPoints?.features?.length) return wayPoints;
 
+		// eslint-disable-next-line svelte/prefer-svelte-reactivity -- transient local lookup, not reactive state
 		const addressPointByOid = new Map<string, GeoJSON.GeoJsonProperties>();
 		for (const feature of addressPoints.features) {
 			const oid = getPropertyString(feature.properties, 'Address Point OID');

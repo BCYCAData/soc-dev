@@ -3,19 +3,19 @@
 One consolidated, ordered list for switching production from the old Supabase
 project ("StrengthenOurCommunity", `oiwbamoupmoudqwautha`) to the new
 **SOCData-Prod** project. Sources: `scripts/migrate-reference/README.md`,
-`scripts/migrate-legacy/README.md`, `docs/gis-mapping-strategy.md` §7,
-`docs/session-management-implementation-plan.md`.
+`scripts/migrate-legacy/README.md`, `docs/design/gis-mapping.md` §7,
+`docs/design/auth-and-session.md` (session lifetime & auto-logout).
 
 Status column: fill in date/initials as each step is verified.
 
 ## A. Pre-cutover gates (owner decisions — cannot be done in code)
 
-| #   | Gate                                                                                                                                | Status |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| A1  | Supabase **Pro plan** decision for SOCData-Prod (absolute session time-box + leaked-password protection are 402-gated on free tier) |        |
-| A2  | Licensing confirmations: G-NAF product tier, Geocoding API ToU, mail-compilation caveat (`docs/source-data-lifecycle.md` §3)        |        |
-| A3  | Enable **leaked-password protection** (Dashboard → Auth → Passwords) once Pro                                                       |        |
-| A4  | Unpause / decommission decision for the old dev project (`swyytxokzdqqitszxaep`) — currently paused                                 |        |
+| #   | Gate                                                                                                                                             | Status |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| A1  | Supabase **Pro plan** decision for SOCData-Prod (absolute session time-box + leaked-password protection are 402-gated on free tier)              |        |
+| A2  | Licensing confirmations: G-NAF product tier, Geocoding API ToU, mail-compilation caveat (`docs/design/gis-mapping.md`, source-data lifecycle §3) |        |
+| A3  | Enable **leaked-password protection** (Dashboard → Auth → Passwords) once Pro                                                                    |        |
+| A4  | Unpause / decommission decision for the old dev project (`swyytxokzdqqitszxaep`) — currently paused                                              |        |
 
 ## B. Database state (SOCData-Prod)
 
@@ -47,7 +47,7 @@ Status column: fill in date/initials as each step is verified.
 | D2  | New-account smoke: full signup (address challenge → email confirm → onboarding form)                                                                       |        |
 | D3  | Admin smoke: users/kits, community access-request approve, emergency service map, RFS PDF                                                                  |        |
 | D4  | KYNG smoke: coordinator sees only their area; area map renders                                                                                             |        |
-| D5  | Full run of `docs/user-testing-checklist.md` §1–§7 recorded in the run logs                                                                                |        |
+| D5  | Full run of `docs/testing/user-testing-checklist.md` §1–§7 recorded in the run logs                                                                        |        |
 | D6  | `app_errors` receiving rows (force one client + one server error) and being reviewed                                                                       |        |
 
 ## E. Rollback plan
