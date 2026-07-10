@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 </script>
 
@@ -12,14 +14,14 @@
 	<div class="mb-8 grid gap-6">
 		<section class="bg-surface-50-950 rounded-lg px-6 pb-6 shadow">
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-2 gap-4">
-				<a href={resolve('/admin/emergency/reports')} class=" btn preset-filled-secondary-500">
+			<QuickActionsGrid>
+				<QuickActionTile href={resolve('/admin/emergency/reports')}>
 					Generate Reports for Emergency Services
-				</a>
-				<a href={resolve('/admin/emergency/service-map')} class=" btn preset-filled-secondary-500">
+				</QuickActionTile>
+				<QuickActionTile href={resolve('/admin/emergency/service-map')}>
 					View Emergency Sevices Map
-				</a>
-			</div>
+				</QuickActionTile>
+			</QuickActionsGrid>
 		</section>
 
 		<Card>

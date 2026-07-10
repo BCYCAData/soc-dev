@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
@@ -16,34 +18,28 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-2 gap-4">
+			<QuickActionsGrid>
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KITS)}
-					<a href={resolve('/admin/users/kits')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/users/kits')}>
 						Generate Reports on Kit Delivery
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_NEWUSERS)}
-					<a href={resolve('/admin/users/new')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/users/new')}>
 						Generate Reports on New Users
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)}
-					<a
-						href={resolve('/admin/users/kyng-coordinators')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/users/kyng-coordinators')}>
 						Manage KYNG Coordinators
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_DATA_KYNG_BOUNDARIES)}
-					<a
-						href={resolve('/admin/site/data/kyng-boundaries')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/site/data/kyng-boundaries')}>
 						Manage KYNG Area Boundaries
-					</a>
+					</QuickActionTile>
 				{/if}
-			</div>
+			</QuickActionsGrid>
 		</Card>
 
 		<Card>

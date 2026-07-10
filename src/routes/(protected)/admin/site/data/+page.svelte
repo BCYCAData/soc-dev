@@ -12,7 +12,7 @@
 	<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 		<a
 			href={resolve('/admin/site/data/spatial')}
-			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
+			class="card preset-filled-secondary-500 p-6 transition-all hover:shadow-lg"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Manage Site Data</h2>
 			<ul class="list-inside list-disc space-y-2">
@@ -24,7 +24,7 @@
 
 		<a
 			href={resolve('/admin/site/data/addresses')}
-			class="card bg-secondary-50 hover:bg-secondary-100 p-6 transition-all"
+			class="card preset-filled-secondary-500 p-6 transition-all hover:shadow-lg"
 		>
 			<h2 class="mb-3 text-xl font-semibold">Manage Custom Addresses</h2>
 			<ul class="list-inside list-disc space-y-2">

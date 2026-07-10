@@ -3,6 +3,8 @@
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 
 	const { hasPermission, hasAnyPermission, hasFeature } = usePermissions();
 
@@ -37,31 +39,27 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-2 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-2 gap-4">
+			<QuickActionsGrid>
 				{#if canAccessRoute('/admin/site')}
-					<a href={resolve('/admin/site')} class="btn preset-filled-secondary-500">
-						Manage Site Settings
-					</a>
+					<QuickActionTile href={resolve('/admin/site')}>Manage Site Settings</QuickActionTile>
 				{/if}
 
 				{#if canAccessRoute('/admin/users')}
-					<a href={resolve('/admin/users')} class="btn preset-filled-secondary-500">
-						Manage Registered Users
-					</a>
+					<QuickActionTile href={resolve('/admin/users')}>Manage Registered Users</QuickActionTile>
 				{/if}
 
 				{#if canAccessRoute('/admin/emergency')}
-					<a href={resolve('/admin/emergency')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/emergency')}>
 						Manage Emergency Services Reports
-					</a>
+					</QuickActionTile>
 				{/if}
 
 				{#if canAccessRoute('/admin/community')}
-					<a href={resolve('/admin/community')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/community')}>
 						Manage Community Data Settings
-					</a>
+					</QuickActionTile>
 				{/if}
-			</div>
+			</QuickActionsGrid>
 		</Card>
 
 		<Card>

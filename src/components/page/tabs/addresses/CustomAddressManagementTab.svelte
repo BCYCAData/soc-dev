@@ -24,7 +24,6 @@
 
 	let { customAddresses }: Props = $props();
 
-	let value = $state(['']);
 	let validatedData = $state<any>(null);
 	let formMessage = $state('');
 	let formStatus = $state<'success' | 'error' | ''>('');
@@ -91,7 +90,7 @@
 
 <div class="container mx-auto p-4">
 	<h1 class="mb-2 text-2xl font-bold">Custom Address Management</h1>
-	<Accordion {value} collapsible={true} spaceY="space-y-1">
+	<Accordion defaultValue={[]} collapsible={true} spaceY="space-y-1">
 		<Accordion.Item
 			value="0"
 			controlClasses="bg-primary-400 text-xl"

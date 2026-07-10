@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
@@ -17,40 +19,28 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-3 gap-4">
+			<QuickActionsGrid>
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA_INFORMATION)}
-					<a
-						href={resolve('/admin/community/bcyca/information')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/community/bcyca/information')}>
 						Manage Information Requests
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA_EVENTS)}
-					<a
-						href={resolve('/admin/community/bcyca/events')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/community/bcyca/events')}>
 						Manage Community Events
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA_WORKSHOPS)}
-					<a
-						href={resolve('/admin/community/bcyca/workshops')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/community/bcyca/workshops')}>
 						Manage Workshops
-					</a>
+					</QuickActionTile>
 				{/if}
 				{#if hasPermission(PERMISSIONS.ADMIN_COMMUNITY_BCYCA)}
-					<a
-						href={resolve('/admin/community/bcyca/map')}
-						class="btn preset-filled-secondary-500 col-start-2"
-					>
+					<QuickActionTile href={resolve('/admin/community/bcyca/map')}>
 						BCYCA Community At A Glance
-					</a>
+					</QuickActionTile>
 				{/if}
-			</div>
+			</QuickActionsGrid>
 		</Card>
 
 		<Card>

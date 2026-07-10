@@ -130,8 +130,6 @@
 			isSavingFields = false;
 		};
 	};
-
-	const value = $state(['']);
 </script>
 
 <svelte:head>
@@ -256,7 +254,7 @@
 	{/if}
 
 	<!-- Existing Templates Accordion -->
-	<Accordion {value} collapsible={true} spaceY="space-y-1">
+	<Accordion defaultValue={[]} collapsible={true} spaceY="space-y-1">
 		{#each templates as template (template)}
 			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={template.id.toString()}>
 				{#snippet control()}

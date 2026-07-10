@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
@@ -15,16 +17,15 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-3 gap-4">
+			<QuickActionsGrid>
 				{#each coordinatesKYNG as { kyngAreaId, kyngName } (kyngAreaId)}
-					<a
+					<QuickActionTile
 						href={resolve('/(protected)/kyng-coordinator/[kyng_area]', { kyng_area: kyngAreaId })}
-						class="btn preset-filled-secondary-500"
 					>
 						{kyngName}
-					</a>
+					</QuickActionTile>
 				{/each}
-			</div>
+			</QuickActionsGrid>
 		</Card>
 	</div>
 </div>

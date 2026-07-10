@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 	import { usePermissions } from '$lib/permissions.svelte';
 	import { PERMISSIONS } from '$lib/constants/permissions';
@@ -16,46 +18,37 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid auto-rows-auto grid-cols-2 gap-4">
+			<QuickActionsGrid>
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_MESSAGES)}
-					<a href={resolve('/admin/site/messages')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/site/messages')}>
 						Manage User Messages
-					</a>
+					</QuickActionTile>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_ROLES)}
-					<a href={resolve('/admin/site/roles')} class="btn preset-filled-secondary-500">
+					<QuickActionTile href={resolve('/admin/site/roles')}>
 						Manage User Privleges
-					</a>
+					</QuickActionTile>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_PROFILE_REQUIREMENTS)}
-					<a
-						href={resolve('/admin/site/profile-requirements')}
-						class="btn preset-filled-secondary-500"
-					>
+					<QuickActionTile href={resolve('/admin/site/profile-requirements')}>
 						Manage Profile Requirements
-					</a>
+					</QuickActionTile>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_USERS_KYNG_COORDINATORS)}
-					<a
-						href={resolve('/admin/users/kyng-coordinators')}
-						class="btn preset-filled-secondary-500 col-span-2 mx-auto w-[calc(50%-0.5rem)]"
-					>
+					<QuickActionTile href={resolve('/admin/users/kyng-coordinators')}>
 						Manage KYNG Coordinators
-					</a>
+					</QuickActionTile>
 				{/if}
 
 				{#if hasPermission(PERMISSIONS.ADMIN_SITE_DATA)}
-					<a
-						href={resolve('/admin/site/data')}
-						class="btn preset-filled-secondary-500 col-span-2 mx-auto w-[calc(50%-0.5rem)]"
-					>
+					<QuickActionTile href={resolve('/admin/site/data')}>
 						Manage Site Spatial Data and Address Validation Settings
-					</a>
+					</QuickActionTile>
 				{/if}
-			</div>
+			</QuickActionsGrid>
 		</Card>
 
 		<Card>

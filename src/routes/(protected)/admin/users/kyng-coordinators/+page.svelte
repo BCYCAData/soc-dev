@@ -12,7 +12,6 @@
 	import { invalidateAll } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
-	let value = $state(['']);
 	let selectedUser = $state<string[]>([]);
 	let selectedKYNG = $state('');
 	let selectedUserEmail = $state('');
@@ -134,7 +133,7 @@
 	<title>Site Admin-KYNG Coordinators</title>
 </svelte:head>
 
-<Accordion spaceY="space-y-1" {value} collapsible={true}>
+<Accordion spaceY="space-y-1" defaultValue={[]} collapsible={true}>
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"

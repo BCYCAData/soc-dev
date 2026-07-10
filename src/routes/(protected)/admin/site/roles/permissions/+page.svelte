@@ -4,6 +4,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import type { PageData } from './$types';
+	import { PERMISSIONS } from '$lib/constants/permissions';
 	import { toast } from '$stores/toaststore';
 	import Spinner from '$components/page/Spinner.svelte';
 	import ConfirmDialogue from '$components/page/modals/ConfirmDialogue.svelte';
@@ -41,7 +42,11 @@
 		});
 	}
 
-	const allPermissions = $derived(flattenPermissions(data.permissionTree));
+	// Catalog of assignable permissions = the PERMISSIONS constant (source of truth) unioned
+	// with any permissions already stored on a role (so nothing currently assigned is hidden).
+	const allPermissions = $derived(
+		[...new Set([...Object.values(PERMISSIONS), ...flattenPermissions(data.permissionTree)])].sort()
+	);
 
 	$effect(() => {
 		const roleData = data.rolePermissions.find((r: RolePermission) => r.role === selectedRole);
@@ -116,11 +121,9 @@
 			isAssigning = false;
 		};
 	};
-
-	const value = $state(['']);
 </script>
 
-<Accordion spaceY="space-y-1" {value} collapsible={true}>
+<Accordion spaceY="space-y-1" defaultValue={['0']} collapsible={true}>
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
@@ -284,8 +287,6 @@
 						{/each}
 					</div>
 				</div>
-
-				<input type="hidden" name="permissions" value={selectedPermissions.join(',')} />
 
 				<div class="flex justify-end">
 					<button

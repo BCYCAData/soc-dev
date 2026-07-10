@@ -3,6 +3,8 @@
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import type { CellComponent } from 'tabulator-tables';
 	import { invalidateAll } from '$app/navigation';
+	import { deserialize } from '$app/forms';
+	import type { ActionResult } from '@sveltejs/kit';
 	import { toast } from '$stores/toaststore';
 	import ConfirmDialogue from '$components/page/modals/ConfirmDialogue.svelte';
 
@@ -42,14 +44,21 @@
 
 		try {
 			const formData = new FormData(pendingForm);
+			// The row <form> is injected as a Tabulator HTML string, so use:enhance can't
+			// attach. Call the action directly: the x-sveltekit-action header makes
+			// SvelteKit return the serialised ActionResult instead of re-rendering the page.
 			const response = await fetch(pendingForm.action, {
 				method: 'POST',
+				headers: { 'x-sveltekit-action': 'true' },
 				body: formData
 			});
+			const result: ActionResult = deserialize(await response.text());
 
-			if (response.ok) {
+			if (result.type === 'success') {
 				toast.success(`Role removed from ${roleToRemove.email} successfully`);
 				await invalidateAll();
+			} else if (result.type === 'failure') {
+				toast.error((result.data?.message as string) || 'Failed to remove role. Please try again.');
 			} else {
 				toast.error('Failed to remove role. Please try again.');
 			}

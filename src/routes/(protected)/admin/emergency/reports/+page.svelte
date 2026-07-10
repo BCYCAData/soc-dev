@@ -23,6 +23,19 @@
 
 	const date = new Date();
 	let tabSet = $state('0');
+
+	let streetReportHref = $derived(
+		selectedStreet
+			? resolve('/api/reports/rfs/street/[streetname]', { streetname: selectedStreet })
+			: undefined
+	);
+	let propertyReportHref = $derived(
+		selectedPropertyIds.length
+			? resolve('/api/reports/rfs/properties/[ids]', {
+					ids: encodeURIComponent(JSON.stringify(selectedPropertyIds))
+				})
+			: undefined
+	);
 </script>
 
 <svelte:head>
@@ -66,9 +79,10 @@
 						bind:selectedStreet
 					/>
 					<a
-						href={resolve('/api/reports/rfs/street/[streetname]', { streetname: selectedStreet })}
+						href={streetReportHref}
+						aria-disabled={!streetReportHref}
 						download={`${selectedStreet?.toLocaleLowerCase().replaceAll(' ', '_')}_${date.toLocaleDateString()}.pdf`}
-						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
+						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50"
 					>
 						Generate Report
 					</a>
@@ -92,11 +106,10 @@
 					/>
 					<pre>{JSON.stringify(selectedPropertyIds, null, 2)}</pre>
 					<a
-						href={resolve('/api/reports/rfs/properties/[ids]', {
-							ids: encodeURIComponent(JSON.stringify(selectedPropertyIds))
-						})}
+						href={propertyReportHref}
+						aria-disabled={!propertyReportHref}
 						download={`property_report_${date.toLocaleDateString()}.pdf`}
-						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold"
+						class="btn border-primary-700 bg-tertiary-500 text-surface-100 m-3 w-1/4 rounded-lg border text-base font-semibold aria-disabled:pointer-events-none aria-disabled:opacity-50"
 					>
 						Generate Report
 					</a>

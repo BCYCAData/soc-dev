@@ -65,11 +65,9 @@
 			isAssigning = false;
 		};
 	};
-
-	const value = $state(['']);
 </script>
 
-<Accordion spaceY="space-y-1" {value} collapsible={true}>
+<Accordion spaceY="space-y-1" defaultValue={['0']} collapsible={true}>
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
@@ -116,7 +114,7 @@
 					<button
 						type="submit"
 						class="bg-tertiary-400 hover:bg-secondary-700 mt-4 rounded-full px-6 py-2 text-center text-base focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-						disabled={isAssigning || !(selectedUser && selectedRole)}
+						disabled={isAssigning || !(selectedUser.length && selectedRole)}
 						aria-busy={isAssigning}
 					>
 						{#if isAssigning}

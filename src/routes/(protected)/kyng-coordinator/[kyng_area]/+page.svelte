@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Card from '$components/page/Card.svelte';
+	import QuickActionsGrid from '$components/page/QuickActionsGrid.svelte';
+	import QuickActionTile from '$components/page/QuickActionTile.svelte';
 	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
@@ -19,30 +21,27 @@
 	<div class="mb-8 grid gap-6">
 		<Card>
 			<h2 class="mb-4 text-xl font-semibold">Quick Actions</h2>
-			<div class="grid grid-cols-3 gap-4">
-				<a
+			<QuickActionsGrid>
+				<QuickActionTile
 					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/map', { kyng_area: kyngAreaId })}
-					class=" btn preset-filled-secondary-500"
 				>
 					{kyngName} KYNG Map
-				</a>
-				<a
+				</QuickActionTile>
+				<QuickActionTile
 					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/unregistered-addresses', {
 						kyng_area: kyngAreaId
 					})}
-					class=" btn preset-filled-secondary-500"
 				>
 					{kyngName} Un-registered Addresses
-				</a>
-				<a
+				</QuickActionTile>
+				<QuickActionTile
 					href={resolve('/(protected)/kyng-coordinator/[kyng_area]/user-admin', {
 						kyng_area: kyngAreaId
 					})}
-					class=" btn preset-filled-secondary-500"
 				>
 					{kyngName} KYNG User Management
-				</a>
-			</div>
+				</QuickActionTile>
+			</QuickActionsGrid>
 		</Card>
 
 		<Card>

@@ -88,8 +88,6 @@
 		}
 	];
 
-	const value = $state(['CompletingFirePlan']); // Default open section
-
 	const workshopItems = [
 		{
 			id: 'CompletingFirePlan',
@@ -111,7 +109,7 @@
 	<title>BCYCA Admin-Workshops</title>
 </svelte:head>
 
-<Accordion {value} collapsible={true} spaceY="space-y-1">
+<Accordion defaultValue={['CompletingFirePlan']} collapsible={true} spaceY="space-y-1">
 	{#each workshopItems as item (item)}
 		<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
 			{#snippet control()}{item.summary}{/snippet}

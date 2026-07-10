@@ -45,17 +45,20 @@ export const actions: Actions = {
 			throw error(403, 'Insufficient permissions to assign roles');
 		}
 		const formData = await request.formData();
-		const target_data = formData.get('target_data');
-		if (!target_data) {
+		const user_id = formData.get('userId')?.toString();
+		const role = formData.get('role')?.toString();
+		if (!user_id || !role) {
 			return fail(400, {
 				success: false,
-				message: 'Target data is missing'
+				message: 'Both a user and a role are required'
 			});
 		}
-		const user_id = JSON.parse(target_data as string)[0];
-		const role = formData.get('role');
 
-		const { error: assignError } = await supabase.from('user_roles').upsert({ user_id, role });
+		// UNIQUE(user_id, role): re-assigning an existing role is a no-op, not an error.
+		// The user_roles_materialize trigger rebuilds user_permissions/user_roles_primary.
+		const { error: assignError } = await supabase
+			.from('user_roles')
+			.upsert({ user_id, role }, { onConflict: 'user_id,role', ignoreDuplicates: true });
 
 		if (assignError) {
 			console.error('assignError', assignError);
@@ -90,30 +93,6 @@ export const actions: Actions = {
 		return {
 			success: true,
 			message: 'Role removed successfully'
-		};
-	},
-	updatePermissions: async ({ request, locals: { supabase, permissions } }) => {
-		if (!hasPermission(permissions, PERMISSIONS.ADMIN_SITE_ROLES_PERMISSIONS)) {
-			throw error(403, 'Insufficient permissions to update role permissions');
-		}
-		const formData = await request.formData();
-
-		const role = formData.get('role');
-		const rolePermissions = formData.getAll('permissions').join(',');
-		const { error: updateError } = await supabase
-			.from('role_permissions')
-			.upsert({ role, permission: rolePermissions });
-
-		if (updateError) {
-			return fail(400, {
-				success: false,
-				message: 'Failed to update permissions'
-			});
-		}
-
-		return {
-			success: true,
-			message: 'Permissions updated successfully'
 		};
 	}
 };

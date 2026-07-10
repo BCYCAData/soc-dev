@@ -41,8 +41,24 @@ export const handle = async ({ event, resolve }) => {
 
 	// 2. Get user (secure - validates with Supabase Auth server)
 	const {
-		data: { user }
+		data: { user },
+		error: userError
 	} = await event.locals.supabase.auth.getUser();
+
+	// A stale or revoked refresh token surfaces here as an AuthApiError with
+	// code 'refresh_token_not_found' (e.g. cookies minted by a different Supabase
+	// project, or a session wiped server-side). getUser() *returns* this rather
+	// than throwing, so if we ignore it the invalid sb-*-auth-token cookie
+	// survives and the error repeats on every request. Clear it locally
+	// (no network round-trip) and let the request continue as anonymous.
+	//
+	// We intentionally scope this to 'refresh_token_not_found' only: transient
+	// network failures (AuthRetryableFetchError) must not log a user out, and
+	// 'refresh_token_already_used' is the rotation-race case where a sibling
+	// request may have just set a valid new cookie we'd otherwise clobber.
+	if (userError?.code === 'refresh_token_not_found') {
+		await event.locals.supabase.auth.signOut({ scope: 'local' });
+	}
 
 	let claims: AppClaims = {};
 

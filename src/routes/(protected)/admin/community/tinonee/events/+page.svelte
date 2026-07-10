@@ -71,8 +71,6 @@
 
 	let { tinoneeEventsData } = $derived(data);
 
-	const value = $state(['FireSeasonPreparation']);
-
 	const accordionItems = [
 		{
 			id: 'FireSeasonPreparation',
@@ -169,7 +167,7 @@
 </svelte:head>
 
 <div>
-	<Accordion {value} collapsible={true} spaceY="space-y-1">
+	<Accordion defaultValue={['FireSeasonPreparation']} collapsible={true} spaceY="space-y-1">
 		{#each accordionItems as item (item)}
 			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
 				{#snippet control()}{item.summary}{/snippet}
