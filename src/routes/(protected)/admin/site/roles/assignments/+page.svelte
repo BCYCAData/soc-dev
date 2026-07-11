@@ -71,7 +71,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Current Role Assignments{/snippet}
 		{#snippet panel()}
@@ -82,7 +82,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Assign New Role{/snippet}
 		{#snippet panel()}
@@ -90,7 +90,9 @@
 				<input
 					type="hidden"
 					name="userId"
-					value={selectedUser.length > 0 ? selectedUser[0] : ''}
+					value={usersListData.find(
+						(item: { item_id: string; lut_text: string }) => item.lut_text === selectedUser[0]
+					)?.item_id || ''}
 					required
 				/>
 				<input type="hidden" name="role" value={selectedRole} required />

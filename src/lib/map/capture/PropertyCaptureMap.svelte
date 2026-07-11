@@ -12,6 +12,7 @@
 	import PropertyCaptureController, {
 		type FeatureTemplate
 	} from '$lib/map/capture/PropertyCaptureController.svelte';
+	import CaptureLegend from '$lib/map/capture/CaptureLegend.svelte';
 
 	interface PropertyGeometry {
 		property?: GeoJSON.Feature | null;
@@ -57,6 +58,7 @@
 	onReady={() => (mapReady = true)}
 >
 	<PropertyCaptureController {propertyId} {templates} {featuresByTemplate} ready={mapReady} />
+	<CaptureLegend {templates} {featuresByTemplate} {contextLayers} ready={mapReady} />
 	{#if !mapReady}
 		<div class="spinner-overlay">
 			<Spinner size="100" />

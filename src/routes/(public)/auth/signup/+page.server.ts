@@ -30,8 +30,8 @@ interface AddressValidationResponse {
 export const actions = {
 	validate: async ({ request, locals: { supabase } }): Promise<ValidateActionResponse> => {
 		const formData = await request.formData();
-		const searchaddressstreet = String(formData.get('streetaddress')).toUpperCase();
-		const searchaddresssuburb = String(formData.get('suburb')).toUpperCase();
+		const searchaddressstreet = String(formData.get('streetaddress')).trim().toUpperCase();
+		const searchaddresssuburb = String(formData.get('suburb')).trim().toUpperCase();
 		const clientIp =
 			request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 		const userAgent = request.headers.get('user-agent') || 'unknown';

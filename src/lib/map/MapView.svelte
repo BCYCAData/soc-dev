@@ -161,6 +161,44 @@
 		}
 	}
 
+	/** Make the credits (attribution) collapsible behind a persistent ⓘ toggle.
+	 * Licensing: OSM's attribution guidelines require the credit to be visible on
+	 * load, so it always starts expanded and only the user can collapse it — never
+	 * auto-collapse or default to collapsed. The attribution element itself stays
+	 * Leaflet-managed (only reparented into the wrapper), so base-layer switches
+	 * and the data-currency update keep rendering into it. */
+	function buildAttributionToggle(L: typeof import('leaflet'), m: L.Map) {
+		const attribEl = m.attributionControl?.getContainer();
+		if (!attribEl) return;
+
+		const Toggle = L.Control.extend({
+			options: { position: 'bottomright' },
+			onAdd: () => {
+				const wrap = L.DomUtil.create('div', 'mapview-attrib');
+				wrap.appendChild(attribEl);
+				const btn = L.DomUtil.create('button', 'mapview-attrib__toggle', wrap);
+				btn.type = 'button';
+				btn.textContent = 'i';
+				const setCollapsed = (collapsed: boolean) => {
+					wrap.classList.toggle('is-collapsed', collapsed);
+					btn.setAttribute('aria-expanded', String(!collapsed));
+					const label = collapsed ? 'Show map credits' : 'Hide map credits';
+					btn.setAttribute('aria-label', label);
+					btn.title = label;
+				};
+				setCollapsed(false);
+				L.DomEvent.disableClickPropagation(wrap);
+				L.DomEvent.on(btn, 'click', () => setCollapsed(!wrap.classList.contains('is-collapsed')));
+				return wrap;
+			}
+		});
+		const toggle = new Toggle().addTo(m);
+		// Bottom corners stack newest-first; move the credits back to the very
+		// bottom so profiles with a bottomright legend keep their order.
+		const el = toggle.getContainer();
+		el?.parentElement?.appendChild(el);
+	}
+
 	function buildLegend(L: typeof import('leaflet'), m: L.Map, position: L.ControlPosition) {
 		const legend = new L.Control({ position });
 		legend.onAdd = () => {
@@ -178,6 +216,9 @@
 				);
 				if (symbol.kind === 'point') {
 					glyph.style.background = symbol.point.fillColor ?? '#3388ff';
+					// Triangle glyphs draw via `border-bottom: ... currentColor` (see the
+					// --triangle CSS), so carry the fill on `color` too.
+					glyph.style.color = symbol.point.fillColor ?? '#3388ff';
 					glyph.style.borderColor = symbol.point.color ?? 'rgba(0, 0, 0, 0.5)';
 					glyph.style.borderWidth = `${symbol.point.weight ?? 1}px`;
 					if (symbol.point.shape && symbol.point.shape !== 'circle') {
@@ -206,7 +247,7 @@
 						!!config &&
 						(config.display?.defaultVisible ?? true) &&
 						isLayerVisibleAtCurrentZoom(config, m);
-						row.style.display = shouldShow ? 'flex' : 'none';
+					row.style.display = shouldShow ? 'flex' : 'none';
 				}
 			};
 			updateLegendVisibility();
@@ -359,7 +400,9 @@
 				}
 				filtered = allEntries()
 					.filter((entry) => {
-						const haystack = normalizeSearchText([entry.label, ...(entry.keywords ?? [])].join(' '));
+						const haystack = normalizeSearchText(
+							[entry.label, ...(entry.keywords ?? [])].join(' ')
+						);
 						return haystack.includes(query);
 					})
 					.slice(0, maxResults());
@@ -511,6 +554,9 @@
 				m.attributionControl.addAttribution(profile.attribution);
 				if (profile.showDataCurrency) addDataCurrency(m, profile.attribution);
 			}
+			if (profile.controls.attribution !== false) {
+				buildAttributionToggle(L, m);
+			}
 
 			leaflet = L;
 			map = m;
@@ -565,7 +611,8 @@
 					name: rl.config.name,
 					type: 'geojson',
 					visible:
-						(rl.config.display?.defaultVisible ?? true) && isLayerVisibleAtCurrentZoom(rl.config, m),
+						(rl.config.display?.defaultVisible ?? true) &&
+						isLayerVisibleAtCurrentZoom(rl.config, m),
 					leafletLayer
 				});
 				builtFrom.set(id, rl.data);
@@ -805,5 +852,38 @@
 	}
 	:global(.leaflet-control-attribution a) {
 		word-break: break-word;
+	}
+	:global(.mapview-attrib) {
+		display: flex;
+		align-items: flex-end;
+		gap: 4px;
+	}
+	/* Extra .mapview-root class so this outranks leaflet.css's corner margins
+	   (leaflet.css is dynamically imported after component styles). Keeps the
+	   credits flush in the corner like the stock control. */
+	:global(.mapview-root .mapview-attrib.leaflet-control) {
+		margin: 0;
+	}
+	:global(.mapview-attrib__toggle) {
+		width: 20px;
+		height: 20px;
+		flex: 0 0 20px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		margin: 0 2px 2px 0;
+		border: 0;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.8);
+		color: #333;
+		font:
+			italic bold 12px/1 Georgia,
+			'Times New Roman',
+			serif;
+		cursor: pointer;
+	}
+	:global(.mapview-attrib.is-collapsed .leaflet-control-attribution) {
+		display: none;
 	}
 </style>

@@ -28,7 +28,7 @@
 	}
 </script>
 
-<Accordion.Item controlClasses="bg-secondary-100 font-medium" {value}>
+<Accordion.Item controlClasses="bg-secondary-100-900 font-medium" {value}>
 	{#snippet control()}{summary}{/snippet}
 	{#snippet panel()}
 		{#if getFilteredData().length > 0}

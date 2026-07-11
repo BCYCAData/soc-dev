@@ -48,7 +48,11 @@ export const GET: RequestHandler = async (event) => {
 		});
 
 		return new Response(pdf);
-	} catch {
+	} catch (err) {
+		console.error(
+			'Error generating RFS street report PDF:',
+			err instanceof Error ? (err.stack ?? err.message) : err
+		);
 		throw error(500, { message: 'Error generating PDF report' });
 	}
 };

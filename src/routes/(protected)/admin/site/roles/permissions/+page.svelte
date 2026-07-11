@@ -127,7 +127,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Current Roles{/snippet}
 		{#snippet panel()}
@@ -213,7 +213,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Add New Role{/snippet}
 		{#snippet panel()}

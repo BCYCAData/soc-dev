@@ -40,7 +40,7 @@
 <Accordion.Item
 	value="2"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-secondary-100 font-medium"
+	classes="bg-secondary-100-900 font-medium"
 >
 	{#snippet control()}Individual Property - (street address){/snippet}
 	{#snippet panel()}
@@ -89,7 +89,7 @@
 <Accordion.Item
 	value="3"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-secondary-100 font-medium"
+	classes="bg-secondary-100-900 font-medium"
 >
 	{#snippet control()}All in a Street{/snippet}
 	{#snippet panel()}
@@ -137,7 +137,7 @@
 <Accordion.Item
 	value="4"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-secondary-100 font-medium"
+	classes="bg-secondary-100-900 font-medium"
 >
 	{#snippet control()}All in a Community{/snippet}
 	{#snippet panel()}
@@ -185,7 +185,7 @@
 <Accordion.Item
 	value="5"
 	controlClasses="bg-primary-400 text-xl"
-	classes="bg-secondary-100 font-medium"
+	classes="bg-secondary-100-900 font-medium"
 >
 	{#snippet control()}All in a Suburb{/snippet}
 	{#snippet panel()}

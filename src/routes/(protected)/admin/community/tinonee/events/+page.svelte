@@ -169,7 +169,7 @@
 <div>
 	<Accordion defaultValue={['FireSeasonPreparation']} collapsible={true} spaceY="space-y-1">
 		{#each accordionItems as item (item)}
-			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
+			<Accordion.Item controlClasses="bg-secondary-100-900 font-medium" value={item.id}>
 				{#snippet control()}{item.summary}{/snippet}
 				{#snippet panel()}
 					<div class="table-container" id={item.id}>

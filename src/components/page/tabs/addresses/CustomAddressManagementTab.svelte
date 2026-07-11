@@ -94,7 +94,7 @@
 		<Accordion.Item
 			value="0"
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-secondary-100 font-medium"
+			classes="bg-secondary-100-900 font-medium"
 		>
 			{#snippet control()}All Custom Addresses{/snippet}
 			{#snippet panel()}
@@ -107,7 +107,7 @@
 		<Accordion.Item
 			value="1"
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-secondary-100 font-medium"
+			classes="bg-secondary-100-900 font-medium"
 		>
 			{#snippet control()}Edit Custom Address Details{/snippet}
 			{#snippet panel()}
@@ -119,7 +119,7 @@
 		<Accordion.Item
 			value="2"
 			controlClasses="bg-primary-400 text-xl"
-			classes="bg-secondary-100 font-medium"
+			classes="bg-secondary-100-900 font-medium"
 		>
 			{#snippet control()}Add New Custom Address{/snippet}
 			{#snippet panel()}

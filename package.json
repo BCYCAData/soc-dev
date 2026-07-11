@@ -16,7 +16,7 @@
 		"format": "prettier --write .",
 		"lint": "npm run lint:styles && prettier --check . && eslint .",
 		"lint:styles": "sh scripts/check-styles.sh",
-		"update-db-types": "npx --yes supabase gen types typescript --project-id \"rcnccgyvdgmcnomwcaja\" > src/lib/db.types.ts",
+		"update-db-types": "SUPABASE_ACCESS_TOKEN=\"$SUPABASE_NEWPROD_ACCESS_TOKEN\" npx --yes supabase gen types typescript --project-id \"rcnccgyvdgmcnomwcaja\" > db.types.tmp && grep -q 'export type Json' db.types.tmp && mv db.types.tmp src/lib/db.types.ts && prettier --write src/lib/db.types.ts || (rm -f db.types.tmp && echo 'gen types failed - src/lib/db.types.ts left unchanged' && exit 1)",
 		"vercel-build": "ls -la src/lib/server/pdf/fonts && vite build"
 	},
 	"devDependencies": {
@@ -70,6 +70,7 @@
 		"vite": "^6.3.5"
 	},
 	"dependencies": {
+		"@vercel/analytics": "^2.0.1",
 		"leaflet-geometryutil": "^0.10.3",
 		"leaflet.markercluster": "^1.5.3"
 	}

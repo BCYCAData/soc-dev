@@ -111,7 +111,7 @@
 
 <Accordion defaultValue={['CompletingFirePlan']} collapsible={true} spaceY="space-y-1">
 	{#each workshopItems as item (item)}
-		<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={item.id}>
+		<Accordion.Item controlClasses="bg-secondary-100-900 font-medium" value={item.id}>
 			{#snippet control()}{item.summary}{/snippet}
 			{#snippet panel()}
 				<div class="table-container" id={item.id}>
@@ -126,9 +126,12 @@
 		</Accordion.Item>
 	{/each}
 
-	<Accordion.Item controlClasses="bg-secondary-100 font-medium" value="OtherWorkshopSuggestions">
+	<Accordion.Item
+		controlClasses="bg-secondary-100-900 font-medium"
+		value="OtherWorkshopSuggestions"
+	>
 		{#snippet control()}Other Workshop Suggestions{/snippet}
-		{#snippet panel()}"
+		{#snippet panel()}
 			<div class="table-container" id="OtherWorkshopSuggestions">
 				<CommunityRequestsTable
 					columns={externalOtherWorkshopsColumns}
@@ -140,9 +143,9 @@
 		{/snippet}
 	</Accordion.Item>
 
-	<Accordion.Item controlClasses="bg-secondary-100 font-medium" value="WillRunWorkshops">
+	<Accordion.Item controlClasses="bg-secondary-100-900 font-medium" value="WillRunWorkshops">
 		{#snippet control()}Will Run Workshops{/snippet}
-		{#snippet panel()}"
+		{#snippet panel()}
 			<div class="table-container" id="WillRunWorkshops">
 				<CommunityRequestsTable
 					columns={externalWillRunWorkshopsColumns}

@@ -96,26 +96,5 @@ export const wayPointLayer: LayerConfig = {
 	display: { defaultVisible: true }
 };
 
-// ── Feature category styling (asset / operational / hazard) ──
-// Colours from v1 `featureStyles` in $lib/leaflet/mapconfig.ts.
-
-export type TemplateCategory = 'asset' | 'operational' | 'hazard';
-
-export const CATEGORY_COLORS: Record<TemplateCategory, string> = {
-	asset: '#2196F3',
-	operational: '#4CAF50',
-	hazard: '#F44336'
-};
-
-/** Leaflet path/point options for a captured feature, coloured by its template category. */
-export function templateLeafletStyle(category: string) {
-	const color = CATEGORY_COLORS[category as TemplateCategory] ?? '#3388ff';
-	return {
-		color,
-		weight: 3,
-		opacity: 0.8,
-		fillColor: color,
-		fillOpacity: 0.4,
-		radius: 6
-	};
-}
+// Feature category styling moved to $lib/map/capture/template-styles.ts
+// (hybrid code-default + per-template DB override).

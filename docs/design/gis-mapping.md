@@ -375,6 +375,7 @@ further `upsert_spatial_feature` hardening. See
 - Schema: [layer-config.types.ts](../../src/lib/map/layers/schemas/layer-config.types.ts)
 - Source caching: [geoscape.service.ts](../../src/lib/server/services/geoscape.service.ts), [api/geoscape/](../../src/routes/api/geoscape/); lifecycle in [Source-data lifecycle](#source-data-lifecycle) below
 - Data capture: [capture/](../../src/lib/map/capture/) + [my-map/+page.server.ts](<../../src/routes/(protected)/personal-profile/my-property/[propertyid]/my-map/+page.server.ts>)
+- Capture feature styling: [capture/template-styles.ts](../../src/lib/map/capture/template-styles.ts) (defaults + DB override + legend contract; see [Feature-template styling](#feature-template-styling-hybrid-default--override))
 
 ---
 
@@ -397,16 +398,16 @@ Key files:
 
 ```svelte
 <script lang="ts">
- import MapView from '$lib/map/MapView.svelte';
- import { communityMapProfile, communityLayers } from '$lib/map/profiles/community';
- import type { ResolvedLayer } from '$lib/map/profiles/types';
+	import MapView from '$lib/map/MapView.svelte';
+	import { communityMapProfile, communityLayers } from '$lib/map/profiles/community';
+	import type { ResolvedLayer } from '$lib/map/profiles/types';
 
- let { data } = $props(); // GeoJSON FeatureCollections from the server load (EPSG:4326)
+	let { data } = $props(); // GeoJSON FeatureCollections from the server load (EPSG:4326)
 
- let layers = $derived<ResolvedLayer[]>([
-  { config: communityLayers[0], data: data.community },
-  { config: communityLayers[1], data: data.addressPoints }
- ]);
+	let layers = $derived<ResolvedLayer[]>([
+		{ config: communityLayers[0], data: data.community },
+		{ config: communityLayers[1], data: data.addressPoints }
+	]);
 </script>
 
 <MapView profile={communityMapProfile} view={{ extent: data.mapExtent }} {layers} class="h-full" />
@@ -425,20 +426,20 @@ A `MapProfile` (see `profiles/types.ts`) declares basemaps + controls + view + a
 
 ```ts
 export const myProfile: MapProfile = {
- id: 'my-map',
- baseLayers: [
-  {
-   id: 'nsw-streets',
-   name: 'NSW Streets',
-   url: NSW_STREETS_URL,
-   attribution: NSW_SS_BASEMAP_ATTRIBUTION,
-   visible: true
-  }
- ],
- controls: { scale: 'bottomleft', legend: 'bottomright', layers: 'topright', attribution: true },
- attribution: NSW_SS_DATA_ATTRIBUTION, // data-source attribution (see §5)
- showDataCurrency: true, // appends the cached-data "as at" date
- view: { zoomSnap: 0.25, zoomable: true }
+	id: 'my-map',
+	baseLayers: [
+		{
+			id: 'nsw-streets',
+			name: 'NSW Streets',
+			url: NSW_STREETS_URL,
+			attribution: NSW_SS_BASEMAP_ATTRIBUTION,
+			visible: true
+		}
+	],
+	controls: { scale: 'bottomleft', legend: 'bottomright', layers: 'topright', attribution: true },
+	attribution: NSW_SS_DATA_ATTRIBUTION, // data-source attribution (see §5)
+	showDataCurrency: true, // appends the cached-data "as at" date
+	view: { zoomSnap: 0.25, zoomable: true }
 };
 ```
 
@@ -451,25 +452,29 @@ A `LayerConfig` declares one layer's geometry type, styling and interaction:
 
 ```ts
 export const myLayer: LayerConfig = {
- id: 'my-layer',
- name: 'My Layer',
- geometryType: 'Point', // 'Point' | 'LineString' | 'Polygon'
- category: 'Community',
- source: { rpcFunction: 'get_my_data' },
- styling: {
-  mode: 'static', // 'static' | 'dynamic' (styleFn) | 'categorized'
-  base: { point: { radius: 4, fillColor: '#f97316', weight: 0, fillOpacity: 0.8 } }
- },
- interaction: {
-  tooltip: { enabled: true, property: 'name' } // or template: (feature) => '...'
- },
- display: { defaultVisible: true, cluster: true } // cluster for dense point layers
+	id: 'my-layer',
+	name: 'My Layer',
+	geometryType: 'Point', // 'Point' | 'LineString' | 'Polygon'
+	category: 'Community',
+	source: { rpcFunction: 'get_my_data' },
+	styling: {
+		mode: 'static', // 'static' | 'dynamic' (styleFn) | 'categorized'
+		base: { point: { radius: 4, fillColor: '#f97316', weight: 0, fillOpacity: 0.8 } }
+	},
+	interaction: {
+		tooltip: { enabled: true, property: 'name' } // or template: (feature) => '...'
+	},
+	display: { defaultVisible: true, cluster: true } // cluster for dense point layers
 };
 ```
 
 Styling modes: **static** (one `base` style), **dynamic** (`styleFn: (feature) => style`),
 **categorized** (per-value styles). Non-circle point shapes (`shape: 'square'|'diamond'|'triangle'`)
 render as SVG divIcons. `display.cluster` enables marker clustering for dense point layers.
+
+Note: capture features (user-drawn, template-based) intentionally bypass `LayerConfig` but share
+the same `PointStyle`/`LineStyle`/`PolygonStyle` and `LegendSymbol` types via
+`capture/template-styles.ts` — see "Feature-template styling" under the data-capture design intent.
 
 #### Tooltip/popup templates — escape interpolated values
 
@@ -507,12 +512,12 @@ appears in the layers control; it `unregisterLayer`s on destroy:
 ```ts
 const ctx = getContext<LeafletContext>(LEAFLET_CONTEXT_KEY);
 $effect(() => {
- if (!ready || initialized) return;
- const L = ctx.getLeaflet();
- const map = ctx.getLeafletMap();
- if (!L || !map) return;
- initialized = true;
- /* build layer, attach map.on('moveend', …), ctx.registerLayer({ id, name, type, visible, leafletLayer }) */
+	if (!ready || initialized) return;
+	const L = ctx.getLeaflet();
+	const map = ctx.getLeafletMap();
+	if (!L || !map) return;
+	initialized = true;
+	/* build layer, attach map.on('moveend', …), ctx.registerLayer({ id, name, type, visible, leafletLayer }) */
 });
 onDestroy(() => ctx.unregisterLayer(id));
 ```
@@ -689,7 +694,7 @@ boundary, and merge of same-template features — integrated with existing RLS, 
 **As built (differs from the original component sketch):**
 
 - Capture UI is the v2 engine's `capture/` components — `PropertyCaptureController.svelte`,
-  `PropertyCaptureMap.svelte`, `snapping.ts` — **not** the roadmap's `LeafletDrawControl` /
+  `PropertyCaptureMap.svelte`, `snapping.ts`, `CaptureLegend.svelte` — **not** the roadmap's `LeafletDrawControl` /
   `LeafletValidationPanel` / `LeafletMergeControl` (those were never built).
 - Server RPCs `validate_spatial_feature` + `merge_spatial_features` shipped in
   `20260628000000_spatial_validation.sql`; GeoJSON `upsert_spatial_feature` in
@@ -698,6 +703,37 @@ boundary, and merge of same-template features — integrated with existing RLS, 
   `ST_Union` for merges, topology checks (gaps/overlaps/self-intersection); RLS enforces
   property-level access; `SECURITY DEFINER` for controlled access. Enforce the 4326-in / 7844-store
   SRID contract on anything new.
+
+**Capture interaction model** (toolbar in the map's top-left, all state in
+`PropertyCaptureController.svelte`):
+
+- **Context layers are pointer-transparent** — `build-layer.ts` sets `interactive: false` on any
+  layer whose config enables no interaction (popup/tooltip/sidePanel/click/hover). Without this the
+  filled property-boundary polygon — added _after_ the capture layers because MapView builds its
+  layers asynchronously — swallowed every click/hover inside the property. The controller also
+  `bringToFront()`s the capture layers as context layers register, so features stay visually on top.
+- **Maptip** — while no tool is engaged (no draw/form open; Edit/Merge/Paste all off), hovering a
+  saved feature shows a tooltip with its template name and non-empty attributes. One reusable
+  `L.tooltip` driven by explicit mouseover/-move/-out handlers (not `bindTooltip`, which can't be
+  mode-gated); content built as DOM nodes so attribute text can't inject HTML.
+- **Add feature** — template picker → leaflet-editable draw → attribute form → `?/saveFeature`.
+- **Edit features** — explicit mode toggle; only while it is on does clicking a saved feature
+  select it (blue `SELECT_HIGHLIGHT` stroke / `.capture-selected` outline on divIcon points) and
+  open the attribute panel with **Save**/**Delete**/**Copy** plus **Edit shape** (lines/polygons,
+  leaflet-editable vertices) or **Move point**. Feature clicks are ignored mid-draw, so drawing
+  over existing features can't hijack the draw.
+- **Move point** — leaflet-editable can't drag `circleMarker`s (no Path.Drag dependency), so a
+  draggable proxy marker (`.capture-point-handle`, styled from the template) stands in; its drag
+  runs through editable's `editable:drawing:move`, so the shared snapping hook applies to point
+  moves as well. The original point is dimmed until Save/Cancel.
+- **Copy / Paste** — Copy (in the panel) captures template + attribute values + live geometry to
+  an in-memory clipboard; Paste (toolbar, enabled once something is copied) arms a one-shot map
+  click that recentres the copied geometry on the clicked spot and opens it as a **new** feature —
+  vertices immediately editable (or point handle draggable) — through the normal save flow.
+- **Merge features** — pick 2+ same-template line/area features → `?/mergeFeatures`
+  (`merge_spatial_features`). Merge, Edit and Paste modes are mutually exclusive.
+- **Snap** — toggle + settings flyout (tolerance px/m, vertex preference, per-layer opt-out);
+  applies to drawing, vertex edits and point moves alike.
 
 **Still to build:** `snap_to_property_boundary` RPC; further `upsert_spatial_feature` hardening;
 optional audit-trail table + composite GIST indexes for validation/merge performance (budget
@@ -710,6 +746,45 @@ audit trail for compliance.
 
 **Future (post-MVP):** split (cut-line) ops, undo/redo, bulk Shapefile/GeoJSON import, GeoPackage
 export, PostGIS topology extension, offline/PWA sync, shared template library, AI-assisted digitising.
+
+### Feature-template styling (hybrid default + override)
+
+Capture features are styled per feature template: a **code default** derived from the template's
+`(category, geometry_type)` deep-merged with an optional **admin-set override** stored as jsonb on
+`feature_templates.style` (migration `20260710000000_feature_template_styles.sql`; surfaced by
+`get_spatial_feature_templates`). Module: [`capture/template-styles.ts`](../../src/lib/map/capture/template-styles.ts).
+
+- `CATEGORY_COLORS` — typed `Record<FeatureCategory, string>` off the generated DB enum
+  (`db.types.ts`), so extending `feature_category` fails `npm run check` until a colour is added;
+  unknown categories fall back to `FALLBACK_COLOR` at runtime.
+- `defaultTemplateStyle(category, geometry)` — asset `#2196F3` / operational `#4CAF50` / hazard
+  `#F44336`; weight 3, opacity 0.8, fillOpacity 0.4, circle radius 6 (parity with the retired
+  `templateLeafletStyle`).
+- `sanitizeTemplateStyleOverride(raw, geometry)` — whitelist per geometry (point:
+  fillColor/fillOpacity/color/weight/opacity/radius/shape/size; line: color/weight/opacity/dashArray;
+  polygon: fillColor/fillOpacity/color/weight/opacity). Runs **twice**: authoritatively in the admin
+  actions (`admin/site/data/spatial/+page.server.ts`, invalid input → 400) and defensively inside
+  `resolveTemplateStyle` at read time (junk keys degrade to defaults). Keys under a non-matching
+  geometry are silently dropped, so changing a template's geometry cannot leave stale style keys.
+- `resolveTemplateStyle(template)` — default ⊕ override; consumed by
+  `PropertyCaptureController.buildFeatureLayers` via `templateToLeafletOptions` (path options) and
+  `templatePointToLayer` (circle → circleMarker, shapes → `createShapeDivIcon` divIcon).
+- `templateLegendSymbol(template): LegendSymbol` — consumed by the **dynamic legend**
+  ([`capture/CaptureLegend.svelte`](../../src/lib/map/capture/CaptureLegend.svelte)): a
+  Svelte-rendered Leaflet control (bottom-right, above the credits) showing one row per template
+  with features on the property (`resolveTemplateStyle` output _is_ a `LegendSymbol`) plus
+  `getLegendSymbol()` rows for the context layers that have data. Rows re-render reactively as
+  features are saved/deleted; it reuses the `.mapview-legend` styles, so it matches the
+  profile-driven legends on other maps.
+- Admin editing: `TemplateStyleEditor.svelte` (route-private) renders constrained controls + an SVG
+  preview through the real resolve path; it stores only the **delta** vs the default
+  (`diffFromDefault`), so untouched keys track future default changes, and "Reset to default"
+  persists `NULL`.
+
+Drift safety: new template → NULL style → pure default; enum extension → compile error;
+stale/invalid overrides → double sanitisation + DB `jsonb_typeof` CHECK; deactivated templates drop
+out of the RPC (features stop rendering — pre-existing behaviour); RPC/client deploy order —
+`style` is optional on both sides.
 
 ---
 

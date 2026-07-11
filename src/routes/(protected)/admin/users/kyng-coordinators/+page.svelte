@@ -137,7 +137,7 @@
 	<Accordion.Item
 		value="0"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Current KYNG Coordinators{/snippet}
 		{#snippet panel()}
@@ -147,7 +147,7 @@
 	<Accordion.Item
 		value="1"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Add KYNG Coordinator{/snippet}
 		{#snippet panel()}
@@ -208,7 +208,7 @@
 	<Accordion.Item
 		value="2"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}Edit KYNG Coordinator Details{/snippet}
 		{#snippet panel()}
@@ -333,7 +333,7 @@
 	<Accordion.Item
 		value="3"
 		controlClasses="bg-primary-400 text-xl"
-		classes="bg-secondary-100 font-medium"
+		classes="bg-secondary-100-900 font-medium"
 	>
 		{#snippet control()}All KYNG Coordinators{/snippet}
 		{#snippet panel()}

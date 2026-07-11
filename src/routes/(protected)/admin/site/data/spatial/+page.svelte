@@ -6,6 +6,8 @@
 	import { Accordion } from '@skeletonlabs/skeleton-svelte';
 	import { toast } from '$stores/toaststore';
 	import Spinner from '$components/page/Spinner.svelte';
+	import TemplateEditForm from './TemplateEditForm.svelte';
+	import TemplateStyleEditor from './TemplateStyleEditor.svelte';
 	import type { PageData } from './$types';
 
 	interface Props {
@@ -13,12 +15,14 @@
 	}
 
 	interface Template {
-		id: number;
+		id: string;
 		name: string;
-		description: string;
+		description: string | null;
 		geometry_type: string;
 		category: string;
-		is_active: boolean;
+		is_active: boolean | null;
+		/** feature_templates.style jsonb override (null = code default). */
+		style?: unknown;
 		template_fields?: any[];
 	}
 
@@ -26,7 +30,6 @@
 	let showFieldsModal = $state(false);
 	let templateFields = $state<any[]>([]);
 	let currentTemplate = $state<Template | null>(null);
-	let isUpdating = $state(false);
 	let isCreating = $state(false);
 	let isSavingFields = $state(false);
 	let showCreateForm = $state(false);
@@ -78,24 +81,6 @@
 			is_active: true
 		};
 	}
-
-	const handleUpdateSubmit: SubmitFunction = ({ formData }) => {
-		isUpdating = true;
-		const templateName = formData.get('name') as string;
-
-		return async ({ result, update }) => {
-			if (result.type === 'success') {
-				toast.success(result.data?.message || `Template '${templateName}' updated successfully`);
-				await invalidateAll();
-				await update();
-			} else if (result.type === 'error') {
-				toast.error(result.error?.message || 'Failed to update template. Please try again.');
-			} else if (result.type === 'failure') {
-				toast.error(result.data?.message || 'Failed to update template. Please try again.');
-			}
-			isUpdating = false;
-		};
-	};
 
 	const handleCreateSubmit: SubmitFunction = () => {
 		isCreating = true;
@@ -150,7 +135,7 @@
 
 	<!-- Create Template Form -->
 	{#if showCreateForm}
-		<div class="bg-secondary-50 mb-6 rounded-lg border p-6">
+		<div class="bg-secondary-50-950 mb-6 rounded-lg border p-6">
 			<h2 class="mb-4 text-xl font-bold">Create New Template</h2>
 			<form
 				method="POST"
@@ -187,7 +172,7 @@
 						id="new_geometry_type"
 						name="geometry_type"
 						bind:value={newTemplate.geometry_type}
-						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
+						class="border-surface-300 bg-surface-50-950 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
 						{#each geometryTypes as type (type)}
@@ -202,7 +187,7 @@
 						id="new_category"
 						name="category"
 						bind:value={newTemplate.category}
-						class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
+						class="border-surface-300 bg-surface-50-950 mt-1 block w-full rounded-md shadow-sm"
 						required
 					>
 						{#each categories as category (category)}
@@ -210,6 +195,15 @@
 						{/each}
 					</select>
 				</div>
+
+				{#if newTemplate.geometry_type && newTemplate.category}
+					{#key `${newTemplate.geometry_type}:${newTemplate.category}`}
+						<TemplateStyleEditor
+							geometryType={newTemplate.geometry_type}
+							category={newTemplate.category}
+						/>
+					{/key}
+				{/if}
 
 				<div>
 					<label class="flex items-center">
@@ -256,121 +250,30 @@
 	<!-- Existing Templates Accordion -->
 	<Accordion defaultValue={[]} collapsible={true} spaceY="space-y-1">
 		{#each templates as template (template)}
-			<Accordion.Item controlClasses="bg-secondary-100 font-medium" value={template.id.toString()}>
+			<Accordion.Item
+				controlClasses="bg-secondary-100-900 font-medium"
+				value={template.id.toString()}
+			>
 				{#snippet control()}
 					<div class="flex items-center justify-between">
 						<span>{template.name}</span>
 						<div class="flex gap-2">
-							<span class="bg-tertiary-100 rounded px-2 py-1 text-xs">
+							<span class="bg-tertiary-100-900 rounded px-2 py-1 text-xs">
 								{template.geometry_type}
 							</span>
-							<span class="bg-success-100 rounded px-2 py-1 text-xs">
+							<span class="bg-success-100-900 rounded px-2 py-1 text-xs">
 								{template.category}
 							</span>
 						</div>
 					</div>
 				{/snippet}
 				{#snippet panel()}
-					<form
-						method="POST"
-						action="?/updateTemplate"
-						use:enhance={handleUpdateSubmit}
-						class="mx-auto max-w-lg rounded-lg border p-6"
-					>
-						<input type="hidden" name="id" value={template.id} />
-
-						<div class="space-y-4">
-							<div>
-								<label for="name" class="block text-sm font-medium">Name</label>
-								<input
-									type="text"
-									id="name"
-									name="name"
-									value={template.name}
-									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
-									required
-								/>
-							</div>
-
-							<div>
-								<label for="description" class="block text-sm font-medium">Description</label>
-								<textarea
-									id="description"
-									name="description"
-									value={template.description}
-									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
-									rows="3"
-								></textarea>
-							</div>
-
-							<div>
-								<label for="geometry_type" class="block text-sm font-medium">Geometry Type</label>
-								<select
-									id="geometry_type"
-									name="geometry_type"
-									value={template.geometry_type}
-									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
-									required
-								>
-									{#each geometryTypes as type (type)}
-										<option value={type}>{type}</option>
-									{/each}
-								</select>
-							</div>
-
-							<div>
-								<label for="category" class="block text-sm font-medium">Category</label>
-								<select
-									id="category"
-									name="category"
-									value={template.category}
-									class="border-surface-300 mt-1 block w-full rounded-md shadow-sm"
-									required
-								>
-									{#each categories as category (category)}
-										<option value={category}>{category}</option>
-									{/each}
-								</select>
-							</div>
-
-							<div>
-								<label class="flex items-center">
-									<input
-										type="checkbox"
-										name="is_active"
-										checked={template.is_active}
-										class="border-surface-300 rounded"
-									/>
-									<span class="ml-2 text-sm">Active</span>
-								</label>
-							</div>
-
-							<div class="flex gap-4">
-								<button
-									type="submit"
-									class="btn preset-filled-tertiary-500 disabled:cursor-not-allowed disabled:opacity-50"
-									disabled={isUpdating}
-									aria-busy={isUpdating}
-								>
-									{#if isUpdating}
-										<span class="inline-flex items-center gap-2">
-											<Spinner size="16" /> Updating...
-										</span>
-									{:else}
-										Update Template
-									{/if}
-								</button>
-
-								<button
-									type="button"
-									onclick={() => openFieldsModal(template)}
-									class="btn preset-filled-success-500"
-								>
-									Manage Fields
-								</button>
-							</div>
-						</div>
-					</form>
+					<TemplateEditForm
+						{template}
+						{geometryTypes}
+						{categories}
+						onManageFields={openFieldsModal}
+					/>
 				{/snippet}
 			</Accordion.Item>
 		{/each}
@@ -403,7 +306,7 @@
 									placeholder="Default Value"
 									class="rounded border p-2"
 								/>
-								<select bind:value={field.field_type} class="rounded border p-2">
+								<select bind:value={field.field_type} class="bg-surface-50-950 rounded border p-2">
 									{#each fieldTypes as type (type)}
 										<option value={type}>{type}</option>
 									{/each}

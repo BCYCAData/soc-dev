@@ -6,6 +6,31 @@ export type Database = {
 	__InternalSupabase: {
 		PostgrestVersion: '14.5';
 	};
+	graphql_public: {
+		Tables: {
+			[_ in never]: never;
+		};
+		Views: {
+			[_ in never]: never;
+		};
+		Functions: {
+			graphql: {
+				Args: {
+					extensions?: Json;
+					operationName?: string;
+					query?: string;
+					variables?: Json;
+				};
+				Returns: Json;
+			};
+		};
+		Enums: {
+			[_ in never]: never;
+		};
+		CompositeTypes: {
+			[_ in never]: never;
+		};
+	};
 	public: {
 		Tables: {
 			address_response: {
@@ -65,6 +90,45 @@ export type Database = {
 					user_agent?: string | null;
 					user_id?: string | null;
 					validation_status?: number | null;
+				};
+				Relationships: [];
+			};
+			app_errors: {
+				Row: {
+					details: Json;
+					id: number;
+					message: string;
+					occurred_at: string;
+					source: string;
+					stack: string | null;
+					status: number | null;
+					url: string | null;
+					user_agent: string | null;
+					user_id: string | null;
+				};
+				Insert: {
+					details?: Json;
+					id?: never;
+					message: string;
+					occurred_at?: string;
+					source: string;
+					stack?: string | null;
+					status?: number | null;
+					url?: string | null;
+					user_agent?: string | null;
+					user_id?: string | null;
+				};
+				Update: {
+					details?: Json;
+					id?: never;
+					message?: string;
+					occurred_at?: string;
+					source?: string;
+					stack?: string | null;
+					status?: number | null;
+					url?: string | null;
+					user_agent?: string | null;
+					user_id?: string | null;
 				};
 				Relationships: [];
 			};
@@ -604,6 +668,7 @@ export type Database = {
 					is_active: boolean | null;
 					last_edited: string | null;
 					name: string;
+					style: Json | null;
 				};
 				Insert: {
 					category: Database['public']['Enums']['feature_category'];
@@ -614,6 +679,7 @@ export type Database = {
 					is_active?: boolean | null;
 					last_edited?: string | null;
 					name: string;
+					style?: Json | null;
 				};
 				Update: {
 					category?: Database['public']['Enums']['feature_category'];
@@ -624,6 +690,7 @@ export type Database = {
 					is_active?: boolean | null;
 					last_edited?: string | null;
 					name?: string;
+					style?: Json | null;
 				};
 				Relationships: [];
 			};
@@ -3437,6 +3504,9 @@ export type CompositeTypes<
 		: never;
 
 export const Constants = {
+	graphql_public: {
+		Enums: {}
+	},
 	public: {
 		Enums: {
 			app_role: [

@@ -4,6 +4,28 @@ import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { PERMISSIONS } from '$lib/constants/permissions';
 import { hasPermission } from '$lib/server/permissions';
+import {
+	sanitizeTemplateStyleOverride,
+	type TemplateGeometry
+} from '$lib/map/capture/template-styles';
+
+/** Parse + whitelist the optional `style` field posted by TemplateStyleEditor,
+ * validated against the *submitted* geometry_type so a geometry change strips
+ * stale keys. Empty field → null (use the code default). */
+function parseStyleField(formData: FormData): { style: unknown; error?: string } {
+	const raw = ((formData.get('style') as string | null) ?? '').trim();
+	if (!raw) return { style: null };
+	let parsed: unknown;
+	try {
+		parsed = JSON.parse(raw);
+	} catch {
+		return { style: null, error: 'Style is not valid JSON' };
+	}
+	const geometry = formData.get('geometry_type') as TemplateGeometry;
+	const { override, errors } = sanitizeTemplateStyleOverride(parsed, geometry);
+	if (errors.length) return { style: null, error: `Invalid style: ${errors.join('; ')}` };
+	return { style: override };
+}
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: templates, error: templatesError } = await supabase
@@ -38,11 +60,16 @@ export const actions: Actions = {
 			});
 		}
 		const formData = await request.formData();
+		const styleResult = parseStyleField(formData);
+		if (styleResult.error) {
+			return fail(400, { success: false, message: styleResult.error });
+		}
 		const template = {
 			name: formData.get('name'),
 			description: formData.get('description'),
 			geometry_type: formData.get('geometry_type'),
 			category: formData.get('category'),
+			style: styleResult.style,
 			is_active: true
 		};
 
@@ -74,11 +101,16 @@ export const actions: Actions = {
 		}
 		const formData = await request.formData();
 		const templateId = formData.get('id');
+		const styleResult = parseStyleField(formData);
+		if (styleResult.error) {
+			return fail(400, { success: false, message: styleResult.error });
+		}
 		const updates = {
 			name: formData.get('name'),
 			description: formData.get('description'),
 			geometry_type: formData.get('geometry_type'),
 			category: formData.get('category'),
+			style: styleResult.style,
 			is_active: formData.get('is_active') === 'true'
 		};
 

@@ -1,6 +1,8 @@
 import { error, fail } from '@sveltejs/kit';
+import { dev } from '$app/environment';
 
 import type { PageServerLoad, Actions } from './$types';
+import type { PostgrestError } from '@supabase/supabase-js';
 import { PERMISSIONS } from '$lib/constants/permissions';
 import { hasPermission } from '$lib/server/permissions';
 
@@ -15,6 +17,11 @@ interface SiteUser {
 	id: string;
 	email: string;
 }
+
+// In dev, append the underlying Postgres error to the toast message so failures
+// are visible without digging through Supabase logs. Prod stays generic.
+const withDevDetail = (message: string, err: PostgrestError): string =>
+	dev ? `${message}: ${err.message}${err.code ? ` (${err.code})` : ''}` : message;
 
 export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	const { data: siteRoles, error: siteRolesError } = await supabase.rpc('get_user_roles');
@@ -64,7 +71,7 @@ export const actions: Actions = {
 			console.error('assignError', assignError);
 			return fail(400, {
 				success: false,
-				message: 'Failed to assign role',
+				message: withDevDetail('Failed to assign role', assignError),
 				errors: { role: assignError.details }
 			});
 		}
@@ -84,9 +91,10 @@ export const actions: Actions = {
 		const { error: removeError } = await supabase.from('user_roles').delete().eq('id', roleId);
 
 		if (removeError) {
+			console.error('removeError', removeError);
 			return fail(400, {
 				success: false,
-				message: 'Failed to remove role'
+				message: withDevDetail('Failed to remove role', removeError)
 			});
 		}
 

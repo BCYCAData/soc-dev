@@ -136,6 +136,17 @@ export async function buildLeafletLayer(
 		? resolveTemplate(interaction.tooltip.template, interaction.tooltip.property)
 		: undefined;
 	const hover = { enabled: interaction.hover?.enabled === true && interaction.hover?.highlight };
+	// A layer with no enabled interaction must not intercept pointer events:
+	// Leaflet's default interactive:true would make e.g. a filled context
+	// boundary swallow clicks/hovers meant for layers stacked beneath it (the
+	// property-capture features under the property boundary).
+	const interactive = !!(
+		interaction.popup?.enabled ||
+		interaction.tooltip?.enabled ||
+		interaction.sidePanel?.enabled ||
+		interaction.click?.enabled ||
+		interaction.hover?.enabled
+	);
 
 	let options;
 	if (isPoint(config.geometryType)) {
@@ -158,7 +169,16 @@ export async function buildLeafletLayer(
 		});
 	}
 
-	const geoLayer = L.geoJSON(data ?? EMPTY, options);
+	const geoLayer = L.geoJSON(data ?? EMPTY, { ...options, interactive });
+	if (!interactive) {
+		// `interactive` in the group options reaches polylines/polygons, but
+		// pointToLayer-created markers/circleMarkers don't inherit it. Flipping
+		// their options before the layer is added to the map is enough — Leaflet
+		// wires up interactivity at add time.
+		geoLayer.eachLayer((l: any) => {
+			l.options.interactive = false;
+		});
+	}
 	if (config.display?.pane) geoLayer.options.pane = config.display.pane;
 
 	if (config.display?.cluster && isPoint(config.geometryType)) {
@@ -181,7 +201,9 @@ function firstCategorizedStyle(config: LayerConfig): CategoryStyle | undefined {
 	return cat ? Object.values(cat)[0] : undefined;
 }
 
-function dynamicLegendStyle(config: LayerConfig): ReturnType<NonNullable<typeof config.styling.styleFn>> | null {
+function dynamicLegendStyle(
+	config: LayerConfig
+): ReturnType<NonNullable<typeof config.styling.styleFn>> | null {
 	if (!config.styling.styleFn) return null;
 	return config.styling.styleFn({
 		type: 'Feature',
