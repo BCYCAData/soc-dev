@@ -494,6 +494,29 @@ This decision tree checks multiple sources to find the most accurate location.
   (`project_area.geom`, SRID 7844 → 4326), used by the admin KYNG-boundaries map.
 - Full lifecycle, licensing and operator commands: [gis-mapping.md](./gis-mapping.md#source-data-lifecycle).
 
+### KYNG boundary fabric (assignment model)
+
+Full design + as-built record: [kyng-boundary-editor.md](./kyng-boundary-editor.md).
+
+- **`cadastre_fabric_src`** — raw NSW Land Parcel Property Theme fabric primitives
+  (Lot/Road/Rail/Water/WaterCorridor/Unidentified) harvested in-database by
+  `extract_cadastre_fabric()` (same `http`-extension pattern as `extract_properties`).
+- **`cadastre_fabric`** — the noded, gap-free tessellation built from those boundaries by
+  `build_cadastre_fabric()` (SRID 7844 + prebuilt 7856 copy for metric ops).
+- **`kyng_fabric_assignment`** — fabric face → KYNG area; `PRIMARY KEY (fabric_id)` makes
+  overlapping KYNGs structurally impossible. `kyng_areas.geom` is re-derived as the union of a
+  KYNG's assigned faces on promote — never hand-edited.
+- **`kyng_edit_session`** + **`kyng_fabric_assignment_candidate`** — draft workspace for the
+  boundary editor (`start/propose/validate/promote/discard_kyng_edit_session` RPCs, all gated by
+  `jwt_can('admin.site.data.kyng-boundaries')`); candidate geometry goes to
+  `kyng_areas_candidate`. `promote_kyng_edit_session` also recomputes `property_profile.kyng`
+  for affected properties (address point → containing face → assignment).
+- **`kyng_fabric_border_review`** view — faces straddling KYNG borders or unassigned; the
+  review queue after backfills and cadastre refreshes.
+- Monthly `pg_cron` refresh (`refresh-cadastre-fabric-monthly`) re-harvests and rebuilds the
+  fabric; assignments are re-inherited by point-on-surface containment, so boundary decisions
+  survive subdivisions. The refresh never changes `kyng_areas.geom` itself.
+
 ---
 
 ## Important Data Patterns

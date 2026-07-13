@@ -2542,6 +2542,7 @@ export type Database = {
 					urbanity: string;
 				}[];
 			};
+			discard_kyng_edit_session: { Args: { p_session_id: string }; Returns: Json };
 			end_kyng_area_user: {
 				Args: { p_kyng_area_id: string; p_user_id: string };
 				Returns: string;
@@ -2625,6 +2626,7 @@ export type Database = {
 					geom: unknown;
 				}[];
 			};
+			get_active_kyng_edit_session: { Args: never; Returns: Json };
 			get_address_status: {
 				Args: {
 					address_text: string;
@@ -2692,8 +2694,19 @@ export type Database = {
 			};
 			get_community_data: { Args: { community_name: string }; Returns: Json };
 			get_enum_values: { Args: { enum_names: string[] }; Returns: Json };
+			get_fabric_geojson: {
+				Args: {
+					p_min_lng: number;
+					p_min_lat: number;
+					p_max_lng: number;
+					p_max_lat: number;
+					p_simplify_m?: number;
+				};
+				Returns: Json;
+			};
 			get_geojson: { Args: { uuid: string }; Returns: Json };
 			get_geometry_info_html: { Args: never; Returns: string };
+			get_kyng_boundaries_geojson: { Args: never; Returns: Json };
 			get_kyng_coordinator_messages_for_user: {
 				Args: { id_input: string };
 				Returns: {
@@ -3223,12 +3236,21 @@ export type Database = {
 				Returns: Json;
 			};
 			process_kyng_areas: { Args: never; Returns: undefined };
+			promote_kyng_edit_session: { Args: { p_session_id: string }; Returns: Json };
 			property_in_kyng_area: {
 				Args: { property_kyng_area: string };
 				Returns: boolean;
 			};
 			raise_log: { Args: { message: string }; Returns: undefined };
 			read_secret: { Args: { secret_name: string }; Returns: string };
+			propose_kyng_boundary: {
+				Args: {
+					p_session_id: string;
+					p_control_lines: Json;
+					p_region_assignments?: Json;
+				};
+				Returns: Json;
+			};
 			refresh_spatial_data: {
 				Args: {
 					initial_backoff?: number;
@@ -3244,6 +3266,7 @@ export type Database = {
 				Args: { p_kit_date?: string; p_user_ids: string[] };
 				Returns: number;
 			};
+			start_kyng_edit_session: { Args: { p_kyng_ids: string[] }; Returns: Json };
 			sync_kyng_coordinator_role: {
 				Args: { p_user_id: string };
 				Returns: undefined;
@@ -3301,6 +3324,7 @@ export type Database = {
 			};
 			user_in_community: { Args: { community_slug: string }; Returns: boolean };
 			user_owns_property: { Args: { property_id: string }; Returns: boolean };
+			validate_kyng_edit_session: { Args: { p_session_id: string }; Returns: Json };
 			validate_spatial_feature: {
 				Args: {
 					p_geojson: string;

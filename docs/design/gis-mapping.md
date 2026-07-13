@@ -616,6 +616,26 @@ Cadastre changes (subdivision, re-survey, address re-allocation) propagate only 
 refresh; monthly is ample for this reference data. Refresh is currently wholesale, not
 incremental — `fetched_at`/`source_id` make a future incremental refresh feasible if volume grows.
 
+#### Cadastral fabric (KYNG boundary editor)
+
+A second cached NSW SS dataset backs the KYNG boundary editor (design + as-built:
+[kyng-boundary-editor.md](./kyng-boundary-editor.md)): the Land Parcel Property Theme fabric
+layers (Lot/Road/Rail/Water corridors/Unidentified) harvested into `cadastre_fabric_src` and
+tessellated into `cadastre_fabric` (same provenance columns and licensing as the other caches).
+Its own monthly job runs two hours after the spatial refresh, and skips (logged) while a
+boundary edit session is active:
+
+```text
+jobname:  refresh-cadastre-fabric-monthly
+schedule: 0 19 1 * *
+command:  SELECT public.refresh_cadastre_fabric();   -- extract → build → backfill → QA
+```
+
+The editor itself is a v2-engine map: fabric served as viewport-bbox GeoJSON through
+`get_fabric_geojson` (no tile server — the whole AOI is ~2.3k faces), control lines drawn with
+leaflet-editable + the capture snapping hook, mounted at `admin/site/data/kyng-boundaries` via
+[kyng-editor/KyngBoundaryEditorController.svelte](../../src/lib/map/kyng-editor/KyngBoundaryEditorController.svelte).
+
 ### 3. Geoscape / PSMA — proxy + edge-cache (G8)
 
 Geoscape tiles are **incidental basemap context**, not authoritative anchors, so they are _not_

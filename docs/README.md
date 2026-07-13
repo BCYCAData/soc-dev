@@ -14,6 +14,9 @@ Design, testing, and setup docs for soc-dev. `docs/` is the source of truth for 
   the route → permission map, and the session lifetime / auto-logout policy with as-built status.
 - [styling-conventions.md](design/styling-conventions.md) — Skeleton UI v3 + Tailwind v4 styling
   guardrails (tokens, presets, dark-mode pairings) enforced by `npm run lint:styles`.
+- [kyng-boundary-editor.md](design/kyng-boundary-editor.md) — interactive KYNG boundary
+  reconfiguration (fabric parcel-assignment model): design, validation register, and as-built
+  status — fabric harvested/assigned on `newprod`, editor live at `admin/site/data/kyng-boundaries`.
 
 ## Testing (`testing/`)
 

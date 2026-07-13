@@ -19,16 +19,17 @@ Status column: fill in date/initials as each step is verified.
 
 ## B. Database state (SOCData-Prod)
 
-| #   | Step                                                                                                                                 | Status |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| B1  | Migration line applied through `20260707231000_app_errors_table` (`supabase migration list` matches repo)                            |        |
-| B2  | Reference/spatial data loaded (17 tables — `scripts/migrate-reference`; counts spot-checked)                                         |        |
-| B3  | Legacy users + properties loaded (`scripts/migrate-legacy` transform + backfill; 181 property_profiles / 134 geometries at last run) |        |
-| B4  | **Custom access token hook enabled** in Dashboard → Auth → Hooks (NOT captured in SQL dumps — this bit us before)                    |        |
-| B5  | Auth URL configuration: Site URL + redirect URLs point at the production domain                                                      |        |
-| B6  | SMTP / email templates configured (confirmation, recovery, email change) and send from the production domain                         |        |
-| B7  | `get_advisors` (security + performance) re-run; remaining lints match the documented accepted list                                   |        |
-| B8  | pg_cron jobs present (monthly spatial refresh) and `read_secret` secrets set in Vault                                                |        |
+| #   | Step                                                                                                                                                                                                                                                                                                                                         | Status |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| B1  | Migration line applied through `20260712105000_kyng_fabric_refresh_and_gates` (`supabase migration list` matches repo)                                                                                                                                                                                                                       |        |
+| B2  | Reference/spatial data loaded (17 tables — `scripts/migrate-reference`; counts spot-checked)                                                                                                                                                                                                                                                 |        |
+| B3  | Legacy users + properties loaded (`scripts/migrate-legacy` transform + backfill; 181 property_profiles / 134 geometries at last run)                                                                                                                                                                                                         |        |
+| B4  | **Custom access token hook enabled** in Dashboard → Auth → Hooks (NOT captured in SQL dumps — this bit us before)                                                                                                                                                                                                                            |        |
+| B5  | Auth URL configuration: Site URL + redirect URLs point at the production domain                                                                                                                                                                                                                                                              |        |
+| B6  | SMTP / email templates configured (confirmation, recovery, email change) and send from the production domain                                                                                                                                                                                                                                 |        |
+| B7  | `get_advisors` (security + performance) re-run; remaining lints match the documented accepted list                                                                                                                                                                                                                                           |        |
+| B8  | pg_cron jobs present (monthly spatial refresh `refresh-spatial-data-monthly` + monthly cadastral-fabric refresh `refresh-cadastre-fabric-monthly`) and `read_secret` secrets set in Vault                                                                                                                                                    |        |
+| B9  | External QGIS maps repointed to SOCData-Prod: `ALTER ROLE qgis_reader LOGIN PASSWORD ...` set; documents moved to the six `kyng_*_view` consumer views (filter/Atlas, see `docs/design/kyng-boundary-editor.md` § External consumers); pilot map verified vs old dev original. **Must complete before A4 decommissions the old dev project** |        |
 
 ## C. Application deployment (Vercel)
 

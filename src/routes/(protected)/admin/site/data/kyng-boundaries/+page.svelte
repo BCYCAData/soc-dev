@@ -1,8 +1,14 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import MapView from '$lib/map/MapView.svelte';
-	import { siteStreetsProfile, siteBoundaryLayer } from '$lib/map/profiles/site';
+	import {
+		kyngBoundaryEditorProfile,
+		kyngBoundariesLayer
+	} from '$lib/map/profiles/kyng-boundary-editor';
 	import type { ResolvedLayer } from '$lib/map/profiles/types';
+	import KyngBoundaryEditorController, {
+		type KyngEditSession
+	} from '$lib/map/kyng-editor/KyngBoundaryEditorController.svelte';
 
 	interface Props {
 		data: PageData;
@@ -10,28 +16,18 @@
 
 	let { data }: Props = $props();
 
-	let boundary = $derived(data?.boundaryGeometry ?? null);
+	let boundaries = $derived(data?.boundaries ?? null);
+	let activeSession = $derived((data?.activeSession ?? null) as KyngEditSession | null);
 
-	// Wrap the boundary geometry (EPSG:4326) as a FeatureCollection for the engine.
 	let layers = $derived<ResolvedLayer[]>(
-		boundary
-			? [
-					{
-						config: siteBoundaryLayer,
-						data: {
-							type: 'FeatureCollection',
-							features: [{ type: 'Feature', geometry: boundary, properties: {} }]
-						}
-					}
-				]
-			: []
+		boundaries ? [{ config: kyngBoundariesLayer, data: boundaries }] : []
 	);
 
-	/** Leaflet bounds [[S,W],[N,E]] from a GeoJSON geometry's coordinates. */
-	function geometryExtent(
-		geom: GeoJSON.Geometry | null
+	/** Leaflet bounds [[S,W],[N,E]] over every boundary feature. */
+	function collectionExtent(
+		fc: GeoJSON.FeatureCollection | null
 	): [[number, number], [number, number]] | null {
-		if (!geom || !('coordinates' in geom)) return null;
+		if (!fc?.features?.length) return null;
 		let minLat = Infinity,
 			minLng = Infinity,
 			maxLat = -Infinity,
@@ -47,7 +43,11 @@
 				for (const child of c) walk(child);
 			}
 		};
-		walk((geom as { coordinates: unknown }).coordinates);
+		for (const f of fc.features) {
+			if (f.geometry && 'coordinates' in f.geometry) {
+				walk((f.geometry as { coordinates: unknown }).coordinates);
+			}
+		}
 		if (minLat === Infinity) return null;
 		return [
 			[minLat, minLng],
@@ -55,15 +55,23 @@
 		];
 	}
 
-	let extent = $derived(geometryExtent(boundary));
+	let extent = $derived(collectionExtent(boundaries));
+	let mapReady = $state(false);
 </script>
 
-<article class="grid h-full grid-rows-[auto_auto_auto_1fr] gap-4 overflow-hidden">
-	<section
-		class="mx-auto flex h-[calc(100vh-400px)] w-full max-w-3xl flex-col overflow-hidden px-4"
-	>
-		{#if boundary}
-			<MapView profile={siteStreetsProfile} view={{ extent }} {layers} class="h-full" />
+<article class="grid h-full grid-rows-[1fr] gap-2 overflow-hidden">
+	<section class="mx-auto flex h-[calc(100vh-220px)] w-full flex-col overflow-hidden px-4">
+		{#if boundaries}
+			<MapView
+				profile={kyngBoundaryEditorProfile}
+				view={{ extent }}
+				{layers}
+				editable
+				onReady={() => (mapReady = true)}
+				class="h-full"
+			>
+				<KyngBoundaryEditorController ready={mapReady} {boundaries} {activeSession} />
+			</MapView>
 		{:else}
 			<p class="text-surface-500 mt-4 text-center">Unable to load map data</p>
 		{/if}
