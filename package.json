@@ -17,7 +17,8 @@
 		"lint": "npm run lint:styles && prettier --check . && eslint .",
 		"lint:styles": "sh scripts/check-styles.sh",
 		"update-db-types": "SUPABASE_ACCESS_TOKEN=\"$SUPABASE_NEWPROD_ACCESS_TOKEN\" npx --yes supabase gen types typescript --project-id \"rcnccgyvdgmcnomwcaja\" > db.types.tmp && grep -q 'export type Json' db.types.tmp && mv db.types.tmp src/lib/db.types.ts && prettier --write src/lib/db.types.ts || (rm -f db.types.tmp && echo 'gen types failed - src/lib/db.types.ts left unchanged' && exit 1)",
-		"vercel-build": "ls -la src/lib/server/pdf/fonts && vite build"
+		"vercel-build": "ls -la src/lib/server/pdf/fonts && vite build",
+		"docs:screenshots": "node scripts/docs-screenshots.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -58,9 +59,11 @@
 		"lucide-svelte": "^0.511.0",
 		"pbf": "^4.0.1",
 		"pdfmake": "^0.2.20",
+		"playwright": "^1.61.1",
 		"prettier": "3.6.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.12",
+		"sharp": "^0.35.3",
 		"svelte": "^5.33.11",
 		"svelte-check": "^4.2.1",
 		"tabulator-tables": "^6.3.1",
